@@ -50,7 +50,7 @@ const ButtonFilled = styled(Button)`
 `
 const InlineTextButton = styled(TextButton)`
   display: inline;
-  font-size: 1rem;
+  font-size: inherit;
 `
 
 type SetupFailedModalProps = Omit<ModalProps, 'onClose'> & {
@@ -78,7 +78,7 @@ export const CheckoutErrorModal = ({
     <ErrorModal {...props}>
       <ErrorHeading>{textKeys.GENERIC_ERROR_HEADING()}</ErrorHeading>
       <ErrorText>
-        {textKeys.CHECKOUT_ERROR_TEXT_PART_1()}
+        {textKeys.CHECKOUT_ERROR_TEXT_PART_1()}{' '}
         <InlineTextButton onClick={openIntercomChat}>
           {textKeys.CHECKOUT_ERROR_TEXT_PART_2()}
         </InlineTextButton>{' '}
@@ -92,6 +92,23 @@ export const CheckoutErrorModal = ({
         <ButtonOutlined onClick={goToOfferPage}>
           {textKeys.GENERIC_ERROR_ACTION()}
         </ButtonOutlined>
+      </ButtonContainer>
+    </ErrorModal>
+  )
+}
+
+export const ThreeDSErrorModal = ({ onClose, ...props }: ModalProps) => {
+  const textKeys = useTextKeys()
+
+  return (
+    <ErrorModal {...props}>
+      <ErrorHeading>{textKeys['3D_SECURE_ERROR_HEADING']()}</ErrorHeading>
+      <ErrorText>{textKeys['3D_SECURE_ERROR_DESCRIPTION']()}</ErrorText>
+
+      <ButtonContainer>
+        <ButtonFilled onClick={onClose}>
+          {textKeys['3D_SECURE_ERROR_BUTTON']()}
+        </ButtonFilled>
       </ButtonContainer>
     </ErrorModal>
   )

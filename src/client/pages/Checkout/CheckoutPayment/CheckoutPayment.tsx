@@ -5,6 +5,7 @@ import { useFormik, FormikHelpers } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router'
+import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -25,10 +26,8 @@ import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { useStorage } from 'utils/StorageContainer'
 import { useVariation } from 'utils/hooks/useVariation'
-import { LoadingPage } from 'components/LoadingPage'
-import { EventName } from 'utils/tracking/gtm'
+import { ErrorEventType, EventName } from 'utils/tracking/gtm'
 
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
@@ -43,7 +42,11 @@ import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDet
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutSuccessRedirect } from '../../Offer/CheckoutSuccessRedirect'
-import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
+import {
+  CheckoutErrorModal,
+  ThreeDSErrorModal,
+  onRetry,
+} from '../shared/ErrorModal'
 import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 
@@ -96,6 +99,22 @@ const AdyenContainer = styled.div`
           width: 50%;
         }
       }
+    }
+
+    .adyen-checkout__button {
+      background-color: ${colorsV3.purple500};
+      color: ${colorsV3.gray900};
+      transition: transform 300ms;
+
+      &:hover {
+        background-color: ${colorsV3.purple500};
+        transform: translateY(-2px);
+        box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
+      }
+    }
+
+    .adyen-checkout__button__icon {
+      display: none;
     }
 
     js-iframe-input input-field {
@@ -177,17 +196,20 @@ export const CheckoutPayment = ({
   const is3DsError = search.includes('error')
   const is3DsComplete = search.includes('3dsSuccess')
   const [isDataLoading, setIsDataLoading] = useState(false)
-  const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [is3dsError, setIs3dsError] = useState(false)
 
   useScrollToTop()
 
-  //handle 3ds error redirect
+  //handle 3ds error
   useEffect(() => {
     if (is3DsError) {
       history.replace('?')
-      trackOfferEvent({ eventName: EventName.CheckoutError3DS })
-      setIsError(true)
+      trackOfferEvent({
+        eventName: EventName.SignError,
+        options: { errorType: ErrorEventType.threeDS },
+      })
+      setIs3dsError(true)
     }
   }, [is3DsError, history, trackOfferEvent])
 
@@ -203,8 +225,8 @@ export const CheckoutPayment = ({
         })
       } catch (error) {
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorPaymentTokenMutation,
-          options: { error },
+          eventName: EventName.SignError,
+          options: { error, errorType: ErrorEventType.PaymentTokenMutation },
         })
         console.error('Failed to add Payment Token :', error.message, error)
       }
@@ -221,7 +243,8 @@ export const CheckoutPayment = ({
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
         console.error('Could not start checkout')
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorBasicError,
+          eventName: EventName.SignError,
+          options: { errorType: ErrorEventType.BasicError },
         })
         setIsError(true)
       }
@@ -237,31 +260,26 @@ export const CheckoutPayment = ({
       )
       if (isManualReviewRequired) {
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorManualReviewRequired,
-          options: { error },
+          eventName: EventName.SignError,
+          options: { error, errorType: ErrorEventType.ManualReviewRequired },
         })
         throw new Error('Manual Review required')
       }
       setIsDataLoading(false)
       trackOfferEvent({
-        eventName: EventName.CheckoutErrorCheckoutStart,
-        options: { error },
+        eventName: EventName.SignError,
+        options: { error, errorType: ErrorEventType.CheckoutStart },
       })
       console.error('Could not start checkout')
       setIsError(true)
     }
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
 
-  useEffect(() => {
-    if (isPaymentConnected && checkoutStatus === undefined) {
-      performCheckout()
-    }
-  }, [isPaymentConnected, performCheckout, checkoutStatus])
-
-  const checkoutAPI = useAdyenCheckout({
+  useAdyenCheckout({
     adyenRef,
     onSuccess: addPaymentToCart,
     quoteCartId,
+    isSuccess: isPaymentConnected,
   })
 
   const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
@@ -302,11 +320,12 @@ export const CheckoutPayment = ({
   const isFormikError = Object.keys(formik.errors).length > 0
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
-      setIsPageLoading(true)
+      trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) {
         trackOfferEvent({
-          eventName: EventName.CheckoutErrorPaymentTokenIDMissing,
+          eventName: EventName.SignError,
+          options: { errorType: ErrorEventType.PaymentTokenIDMissing },
         })
         throw new Error('No token payment id')
       }
@@ -319,6 +338,12 @@ export const CheckoutPayment = ({
     storage.session,
     trackOfferEvent,
   ])
+
+  useEffect(() => {
+    if (isPaymentConnected) {
+      trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
+    }
+  }, [isPaymentConnected, trackOfferEvent])
 
   const completeCheckout = useCallback(async () => {
     try {
@@ -341,7 +366,10 @@ export const CheckoutPayment = ({
         quoteCartId,
       })
     } catch (error) {
-      trackOfferEvent({ eventName: EventName.CheckoutErrorQuoteCartSetup })
+      trackOfferEvent({
+        eventName: EventName.SignError,
+        options: { errorType: ErrorEventType.QuoteCartSetup },
+      })
       throw new Error('Setup quote cart session failed')
     }
   }, [
@@ -399,6 +427,13 @@ export const CheckoutPayment = ({
   }
 
   const handleClickCompletePurchase = async () => {
+    if (!isPaymentConnected) return
+
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+      options: { buttonId: 'complete_purchase' },
+    })
+
     const { validateForm, submitForm, dirty: isFormDataUpdated } = formik
 
     const errors = await validateForm()
@@ -410,12 +445,7 @@ export const CheckoutPayment = ({
       if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
     }
 
-    checkoutAPI?.submit()
-
-    trackOfferEvent({
-      eventName: EventName.ButtonClick,
-      options: { buttonId: 'complete_purchase' },
-    })
+    await performCheckout()
   }
 
   useEffect(() => {
@@ -423,6 +453,7 @@ export const CheckoutPayment = ({
       completeCheckout()
     }
   }, [checkoutStatus, completeCheckout])
+
   if (checkoutStatus === CheckoutStatus.Completed) {
     return (
       <CheckoutSuccessRedirect
@@ -436,16 +467,16 @@ export const CheckoutPayment = ({
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
   }
 
-  if (isPageLoading) {
-    return <LoadingPage loading />
-  }
-
   const handleClickBackButton = () => {
     trackOfferEvent({ eventName: EventName.ContactInformationPageGoBack })
   }
 
   return (
     <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
+      <ThreeDSErrorModal
+        isVisible={is3dsError}
+        onClose={() => setIs3dsError(false)}
+      />
       <ContactInformation formikProps={formik} />
       <AdyenContainer>
         <Wrapper>
@@ -465,7 +496,7 @@ export const CheckoutPayment = ({
           buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
           buttonOnClick={handleClickCompletePurchase}
           isLoading={isBundleCreationInProgress || isDataLoading}
-          disabled={isFormikError}
+          disabled={isFormikError || !isPaymentConnected}
         >
           <PaymentInfo {...priceData} />
         </Footer>
