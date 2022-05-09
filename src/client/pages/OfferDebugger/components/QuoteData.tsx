@@ -446,6 +446,18 @@ export const QuoteData = ({ quoteCartId }: OfferProps) => {
         >
           {(props) => (
             <Form>
+              <Button
+                type="submit"
+                size="lg"
+                background={colorsV3.purple500}
+                foreground={colorsV3.gray900}
+                disabled={props.isSubmitting}
+              >
+                Create quote
+                {props.isSubmitting && (
+                  <ButtonLoadingIndicator color={colorsV3.gray900} />
+                )}
+              </Button>
               {!props.isSubmitting && (
                 <>
                   <InputField
@@ -504,19 +516,6 @@ export const QuoteData = ({ quoteCartId }: OfferProps) => {
                   )}
                 </>
               )}
-
-              <Button
-                type="submit"
-                size="lg"
-                background={colorsV3.purple500}
-                foreground={colorsV3.gray900}
-                disabled={props.isSubmitting}
-              >
-                Create quote
-                {props.isSubmitting && (
-                  <ButtonLoadingIndicator color={colorsV3.gray900} />
-                )}
-              </Button>
             </Form>
           )}
         </Formik>
