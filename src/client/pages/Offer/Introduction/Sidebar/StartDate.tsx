@@ -160,7 +160,7 @@ const getDefaultDateValue = (
     return parse(startDate, 'yyyy-MM-dd', new Date())
   }
 
-  if (currentInsurer) {
+  if (currentInsurer?.switchable) {
     return null
   }
 
@@ -250,7 +250,7 @@ const DateForm = ({
           )}
           {!loading && (
             <>
-              {!dateValue && currentInsurer && (
+              {currentInsurer?.switchable && !dateValue && (
                 <StartDateLabelSwitcher dataCollectionId={dataCollectionId} />
               )}
               {dateValue && getDateLabel()}
@@ -399,7 +399,7 @@ export const StartDate = ({
             disabled={
               loadingQuoteIds.length > 0 ||
               Boolean(
-                selectedQuotes[0].currentInsurer &&
+                selectedQuotes[0].currentInsurer?.switchable &&
                   !selectedQuotes[0].startDate,
               )
             }
@@ -429,7 +429,9 @@ export const StartDate = ({
                   modal={modal}
                   disabled={
                     loadingQuoteIds.length > 0 ||
-                    Boolean(quote.currentInsurer && !quote.startDate)
+                    Boolean(
+                      quote.currentInsurer?.switchable && !quote.startDate,
+                    )
                   }
                   fieldLayout={
                     isExpandedFirstItem
