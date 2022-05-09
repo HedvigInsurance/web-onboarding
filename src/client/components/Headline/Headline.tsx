@@ -11,16 +11,17 @@ export type Props = {
   variant: 'xl' | 'l' | 'm' | 's' | 'xs' | 'overline'
   headingLevel: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   colorVariant: 'dark' | 'light'
+  textAlign?: 'center'
   children: React.ReactNode
 }
 
-type ColorProp = Pick<Props, 'colorVariant'>
+type BaseStyles = Pick<Props, 'colorVariant' | 'textAlign'>
 
 type StyleProps = {
   as: Props['headingLevel']
-} & ColorProp
+} & BaseStyles
 
-const getBaseStyles = ({ colorVariant }: ColorProp) => {
+const getBaseStyles = ({ colorVariant, textAlign }: BaseStyles) => {
   const color = colorVariant === 'light' ? gray100 : gray900
 
   return css`
@@ -29,11 +30,12 @@ const getBaseStyles = ({ colorVariant }: ColorProp) => {
     font-family: ${HEDVIG_LETTERS_STANDARD};
     font-weight: 400;
     color: ${color};
+    text-align: ${textAlign};
   `
 }
 
 const HeadlineXL = styled.span<StyleProps>`
-  ${({ colorVariant }) => getBaseStyles({ colorVariant })}
+  ${(props) => getBaseStyles(props)}
   font-size: 3.5rem;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -43,7 +45,7 @@ const HeadlineXL = styled.span<StyleProps>`
   }
 `
 const HeadlineL = styled.span<StyleProps>`
-  ${({ colorVariant }) => getBaseStyles({ colorVariant })}
+  ${(props) => getBaseStyles(props)}
   font-size: 2.5rem;
   line-height: 1.2;
   letter-spacing: -0.01em;
@@ -54,7 +56,7 @@ const HeadlineL = styled.span<StyleProps>`
   }
 `
 const HeadlineM = styled.span<StyleProps>`
-  ${({ colorVariant }) => getBaseStyles({ colorVariant })}
+  ${(props) => getBaseStyles(props)}
   font-size: 2rem;
   line-height: 1.2;
   letter-spacing: -0.01em;
@@ -64,7 +66,7 @@ const HeadlineM = styled.span<StyleProps>`
   }
 `
 const HeadlineS = styled.span<StyleProps>`
-  ${({ colorVariant }) => getBaseStyles({ colorVariant })}
+  ${(props) => getBaseStyles(props)}
   font-size: 1.5rem;
   line-height: 1.2;
 
@@ -74,7 +76,7 @@ const HeadlineS = styled.span<StyleProps>`
   }
 `
 const HeadlineXS = styled.span<StyleProps>`
-  ${({ colorVariant }) => getBaseStyles({ colorVariant })}
+  ${(props) => getBaseStyles(props)}
   font-size: 1.25rem;
   line-height: 1.2;
 
@@ -83,7 +85,7 @@ const HeadlineXS = styled.span<StyleProps>`
   }
 `
 const HeadlineOverline = styled.span<StyleProps>`
-  ${({ colorVariant }) => getBaseStyles({ colorVariant })}
+  ${(props) => getBaseStyles(props)}
   font-size: 0.875rem;
   line-height: 1.375rem;
   letter-spacing: 0;
@@ -114,12 +116,17 @@ export const Headline = ({
   variant,
   headingLevel,
   colorVariant,
+  textAlign,
   children,
 }: Props) => {
   const HeadlineComponent = headlines[variant]
 
   return (
-    <HeadlineComponent as={headingLevel} colorVariant={colorVariant}>
+    <HeadlineComponent
+      as={headingLevel}
+      colorVariant={colorVariant}
+      textAlign={textAlign}
+    >
       {children}
     </HeadlineComponent>
   )
