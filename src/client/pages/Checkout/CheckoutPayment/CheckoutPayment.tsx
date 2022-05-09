@@ -320,6 +320,7 @@ export const CheckoutPayment = ({
   const isFormikError = Object.keys(formik.errors).length > 0
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
+      trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) {
         trackOfferEvent({
@@ -337,6 +338,12 @@ export const CheckoutPayment = ({
     storage.session,
     trackOfferEvent,
   ])
+
+  useEffect(() => {
+    if (isPaymentConnected) {
+      trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
+    }
+  }, [isPaymentConnected, trackOfferEvent])
 
   const completeCheckout = useCallback(async () => {
     try {
@@ -448,7 +455,6 @@ export const CheckoutPayment = ({
   }, [checkoutStatus, completeCheckout])
 
   if (checkoutStatus === CheckoutStatus.Completed) {
-    trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
     return (
       <CheckoutSuccessRedirect
         bundle={selectedQuoteBundleVariant.bundle}
