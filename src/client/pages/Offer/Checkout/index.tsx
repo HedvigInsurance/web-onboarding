@@ -39,6 +39,7 @@ import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEven
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from 'components/DetailsModal/types'
+import { useDebounce } from 'utils/hooks/useDebounce'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -48,7 +49,6 @@ import {
 } from './UserDetailsForm'
 import { Sign } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
-import { useDebounce } from './useDebounce'
 
 export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED' | 'MANUAL_REVIEW'
 

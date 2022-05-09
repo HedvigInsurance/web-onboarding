@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { useFormik, FormikHelpers } from 'formik'
+import { useFormik, FormikHelpers, FormikProps } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router'
@@ -29,6 +29,7 @@ import { useVariation } from 'utils/hooks/useVariation'
 import { ErrorEventType, EventName } from 'utils/tracking/gtm'
 
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
+import { useDebounce } from 'utils/hooks/useDebounce'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -149,6 +150,17 @@ const Terms = styled.div`
     text-decoration: none;
   }
 `
+
+const useSubmitFormOnSsnChange = (formik: FormikProps<QuoteInput>) => {
+  const debouncedSsn = useDebounce(formik.values.ssn, 500)
+  const formikInitialSsn = formik.initialValues.ssn
+  const formikSubmitForm = formik.submitForm
+  useEffect(() => {
+    if (debouncedSsn !== formikInitialSsn) {
+      formikSubmitForm()
+    }
+  }, [debouncedSsn, formikInitialSsn, formikSubmitForm])
+}
 
 type Props = {
   bundleVariants: QuoteBundleVariant[]
@@ -440,6 +452,8 @@ export const CheckoutPayment = ({
 
     await performCheckout()
   }
+
+  useSubmitFormOnSsnChange(formik)
 
   useEffect(() => {
     if (checkoutStatus === CheckoutStatus.Signed) {
