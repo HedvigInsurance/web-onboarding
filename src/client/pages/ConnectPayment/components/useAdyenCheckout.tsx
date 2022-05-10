@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { match } from 'matchly'
 import { useHistory } from 'react-router'
+import { datadogRum } from '@datadog/browser-rum'
 import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -377,7 +378,11 @@ const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {
   script.onload = () => setAdyenLoaded(true)
   document.body.append(script)
   return () => {
-    document.body.removeChild(script)
+    try {
+      document.body.contains(script) && document.body.removeChild(script)
+    } catch (error) {
+      datadogRum.addError(error)
+    }
   }
 }
 const mountAdyenCss = () => {
@@ -392,6 +397,10 @@ const mountAdyenCss = () => {
 
   document.body.append(link)
   return () => {
-    document.body.removeChild(link)
+    try {
+      document.body.contains(link) && document.body.removeChild(link)
+    } catch (error) {
+      datadogRum.addError(error)
+    }
   }
 }
