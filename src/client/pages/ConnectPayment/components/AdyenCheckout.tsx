@@ -4,6 +4,7 @@ import { match } from 'matchly'
 import color from 'color'
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
+import { datadogRum } from '@datadog/browser-rum'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleData, LocaleLabel } from 'l10n/locales'
@@ -375,7 +376,11 @@ const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {
   script.onload = () => setAdyenLoaded(true)
   document.body.append(script)
   return () => {
-    document.body.removeChild(script)
+    try {
+      document.body.contains(script) && document.body.removeChild(script)
+    } catch (error) {
+      datadogRum.addError(error)
+    }
   }
 }
 const mountAdyenCss = () => {
@@ -390,6 +395,10 @@ const mountAdyenCss = () => {
 
   document.body.append(link)
   return () => {
-    document.body.removeChild(link)
+    try {
+      document.body.contains(link) && document.body.removeChild(link)
+    } catch (error) {
+      datadogRum.addError(error)
+    }
   }
 }
