@@ -15,6 +15,7 @@ import {
   PaymentConnectChannel,
   usePaymentMethodsQuery,
   PaymentMethodsQuery,
+  useAddPaymentTokenMutation,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
 import { EventName, ErrorEventType } from 'utils/tracking/gtm'
@@ -58,6 +59,7 @@ export const useAdyenCheckout = ({
   const [adyenState, setAdyenState] = useState<ADYEN_STATE>('NOT_LOADED')
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const storage = useStorage()
+  const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
 
   const [
     submitAdditionalPaymentDetails,
@@ -111,6 +113,7 @@ export const useAdyenCheckout = ({
       quoteCartId,
       history,
       onSuccess,
+      addPaymentTokenMutation,
       storage,
       onError: (error) =>
         trackOfferEvent({
@@ -136,6 +139,7 @@ export const useAdyenCheckout = ({
     storage,
     trackOfferEvent,
     successMessage,
+    addPaymentTokenMutation,
   ])
 
   useEffect(() => {
@@ -151,6 +155,7 @@ interface AdyenCheckoutProps {
   currentLocale: LocaleData
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   connectPaymentMutation: any
+  addPaymentTokenMutation: any
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
   onSuccess?: (paymentTokenId?: string) => void
@@ -167,6 +172,7 @@ const createAdyenCheckout = ({
   paymentMethodsResponse,
   connectPaymentMutation,
   submitAdditionalPaymentDetails,
+  addPaymentTokenMutation,
   quoteCartId,
   storage,
   onSuccess = () => {
@@ -270,6 +276,14 @@ const createAdyenCheckout = ({
           ...storage.session.getSession(),
           paymentTokenId,
           quoteCartId,
+        })
+
+        await addPaymentTokenMutation({
+          variables: {
+            id: quoteCartId,
+            paymentTokenId,
+          },
+          refetchQueries: ['QuoteCart'],
         })
 
         if (

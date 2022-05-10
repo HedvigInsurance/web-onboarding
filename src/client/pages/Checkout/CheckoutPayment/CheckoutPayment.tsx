@@ -16,7 +16,6 @@ import {
   QuoteBundleVariant,
   BundledQuote,
   CheckoutStatus,
-  useAddPaymentTokenMutation,
 } from 'data/graphql'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
@@ -158,7 +157,6 @@ type Props = {
   selectedQuoteBundleVariant: QuoteBundleVariant
   quoteIds: string[]
   checkoutStatus?: CheckoutStatus
-  isPaymentConnected: boolean
 }
 
 export const CheckoutPayment = ({
@@ -169,7 +167,6 @@ export const CheckoutPayment = ({
   quoteIds,
   selectedQuoteBundleVariant,
   checkoutStatus,
-  isPaymentConnected,
 }: Props) => {
   const textKeys = useTextKeys()
 
@@ -185,7 +182,6 @@ export const CheckoutPayment = ({
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
   const [startCheckout] = useStartCheckoutMutation()
-  const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
@@ -198,6 +194,7 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
+  const [isPaymentConnected, setIsPaymentConnected] = useState(false)
 
   useScrollToTop()
 
@@ -213,26 +210,9 @@ export const CheckoutPayment = ({
     }
   }, [is3DsError, history, trackOfferEvent])
 
-  const addPaymentToCart = useCallback(
-    async (paymentTokenId) => {
-      try {
-        await addPaymentTokenMutation({
-          variables: {
-            id: quoteCartId,
-            paymentTokenId,
-          },
-          refetchQueries: ['QuoteCart'],
-        })
-      } catch (error) {
-        trackOfferEvent({
-          eventName: EventName.SignError,
-          options: { error, errorType: ErrorEventType.PaymentTokenMutation },
-        })
-        console.error('Failed to add Payment Token :', error.message, error)
-      }
-    },
-    [addPaymentTokenMutation, quoteCartId, trackOfferEvent],
-  )
+  const addPaymentToCart = useCallback(async () => {
+    setIsPaymentConnected(true)
+  }, [])
 
   const performCheckout = useCallback(async () => {
     try {
@@ -274,7 +254,6 @@ export const CheckoutPayment = ({
       setIsError(true)
     }
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
-
   useAdyenCheckout({
     adyenRef,
     onSuccess: addPaymentToCart,
@@ -321,22 +300,14 @@ export const CheckoutPayment = ({
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
-      const paymentTokenId = storage.session.getSession()?.paymentTokenId
-      if (!paymentTokenId) {
-        trackOfferEvent({
-          eventName: EventName.SignError,
-          options: { errorType: ErrorEventType.PaymentTokenIDMissing },
-        })
-        throw new Error('No token payment id')
-      }
-      addPaymentToCart(paymentTokenId)
+      addPaymentToCart()
     }
   }, [
     is3DsComplete,
-    addPaymentToCart,
     checkoutStatus,
     storage.session,
     trackOfferEvent,
+    addPaymentToCart,
   ])
 
   useEffect(() => {
