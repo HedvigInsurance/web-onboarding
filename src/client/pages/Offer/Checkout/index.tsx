@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { useFormik, FormikHelpers } from 'formik'
+import { useFormik, FormikHelpers, FormikProps } from 'formik'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -39,6 +39,7 @@ import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEven
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from 'components/DetailsModal/types'
+import { useDebounce } from 'utils/hooks/useDebounce'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -192,6 +193,17 @@ const getSignUiStateFromCheckoutStatus = (
   }
 }
 
+const useSubmitFormOnSsnChange = (formik: FormikProps<QuoteInput>) => {
+  const debouncedSsn = useDebounce(formik.values.ssn, 500)
+  const formikInitialSsn = formik.initialValues.ssn
+  const formikSubmitForm = formik.submitForm
+  useEffect(() => {
+    if (debouncedSsn !== formikInitialSsn) {
+      formikSubmitForm()
+    }
+  }, [debouncedSsn, formikInitialSsn, formikSubmitForm])
+}
+
 export type CheckoutProps = {
   quoteCartId: string
   offerData: OfferData
@@ -286,7 +298,14 @@ export const Checkout = ({
       { setErrors }: FormikHelpers<QuoteInput>,
     ) => {
       try {
-        return await reCreateQuoteBundle(form)
+        const result = await reCreateQuoteBundle(form)
+
+        if (isQuoteBundleError(result.data)) {
+          setErrors({ ssn: textKeys.INVALID_FIELD() })
+          return undefined
+        }
+
+        return result
       } catch (error) {
         if (isSsnInvalid(error.graphQLErrors)) {
           setErrors({ ssn: textKeys.INVALID_FIELD() })
@@ -381,6 +400,8 @@ export const Checkout = ({
       completeCheckout()
     }
   }, [checkoutStatus, completeCheckout])
+
+  useSubmitFormOnSsnChange(formik)
 
   const startSign = async () => {
     setSignUiState('STARTED')

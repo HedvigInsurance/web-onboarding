@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import * as Yup from 'yup'
 import { FormikProps } from 'formik'
 import { LocaleData } from 'l10n/locales'
@@ -8,16 +8,6 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { CreditCheckInfo } from '../../OfferNew/Checkout/CreditCheckInfo'
 import { TextInput, SsnInput } from './inputFields'
-
-const debounce = (func: (...args: any[]) => any, timeout: number) => {
-  let timer: number
-  return function(this: any, ...args: any[]) {
-    clearTimeout(timer)
-    timer = window.setTimeout(() => {
-      func.apply(this, args)
-    }, timeout)
-  }
-}
 
 export const getCheckoutDetailsValidationSchema = (
   locale: LocaleData,
@@ -60,23 +50,6 @@ export const CheckoutDetailsForm: React.FC<{
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
   )
-
-  const {
-    values: { ssn },
-    initialValues,
-    submitForm,
-  } = formikProps
-
-  const debouncedSubmitForm = useCallback(
-    debounce(() => {
-      submitForm()
-    }, 500),
-    [],
-  )
-
-  useEffect(() => {
-    if (ssn !== initialValues.ssn) debouncedSubmitForm()
-  }, [ssn, initialValues.ssn, debouncedSubmitForm])
 
   return (
     <form onSubmit={formikProps.handleSubmit}>
