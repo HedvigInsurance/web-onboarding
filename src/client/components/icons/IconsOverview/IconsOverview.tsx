@@ -18,6 +18,7 @@ import { Tick } from '../Tick'
 import { Telephone } from '../Telephone'
 import { UnselectedOptionCircle } from '../UnselectedOptionCircle'
 import { ChevronDown } from '../ChevronDown'
+import { ThinTick } from '../ThinTick'
 
 const { gray100, gray300, gray900 } = colorsV3
 
@@ -92,7 +93,10 @@ export const IconsOverview = ({ background }: Props) => {
         <WarningTriangle />
       </IconWrapper>
       <IconWrapper title="Tick">
-        <Tick />
+        <Tick color={colorsV3.gray900} />
+      </IconWrapper>
+      <IconWrapper title="ThinTick">
+        <ThinTick color={colorsV3.gray900} />
       </IconWrapper>
       <IconWrapper title="Telephone">
         <Telephone />

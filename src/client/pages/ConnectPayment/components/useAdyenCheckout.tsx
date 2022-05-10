@@ -23,13 +23,14 @@ interface Params {
   onSuccess?: (id?: string) => void
   adyenRef: React.MutableRefObject<HTMLDivElement | null>
   quoteCartId: string
+  isSuccess: boolean
 }
 
-type CheckoutAPI = {
-  submit: () => void
-  create: (type: 'dropin') => CheckoutAPI
-  mount: (element: HTMLElement) => void
-  onComplete: () => void
+type DropinApi = {
+  setStatus: (
+    status: 'loading' | 'success' | 'error' | 'ready',
+    options?: { message: string },
+  ) => void
 }
 
 const getAvailablePaymentMethods = (
@@ -44,13 +45,17 @@ const getAvailablePaymentMethods = (
     }
   }
 }
+
+type ADYEN_STATE = 'NOT_LOADED' | 'LOADED' | 'MOUNTED'
+
 export const useAdyenCheckout = ({
   onSuccess,
   adyenRef,
   quoteCartId,
+  isSuccess,
 }: Params) => {
-  const [checkoutAPI, setCheckoutAPI] = useState<CheckoutAPI | null>(null)
-  const [adyenLoaded, setAdyenLoaded] = useState(false)
+  const [dropinComponent, setDropinComponent] = useState<DropinApi | null>(null)
+  const [adyenState, setAdyenState] = useState<ADYEN_STATE>('NOT_LOADED')
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const storage = useStorage()
 
@@ -73,18 +78,32 @@ export const useAdyenCheckout = ({
 
   const trackOfferEvent = useTrackOfferEvent()
 
+  const successMessage = textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()
+  // @ts-ignore only need to clean up timeout
+  useEffect(() => {
+    if (isSuccess && adyenState === 'MOUNTED') {
+      // Delay success message until dropin is fully loaded
+      const timeout = setTimeout(() => {
+        dropinComponent?.setStatus('success', { message: successMessage })
+      }, 300)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [isSuccess, dropinComponent, adyenState, successMessage])
+
   useEffect(() => {
     if (
-      !quoteCartId ||
       !paymentMethodsResponse ||
-      !adyenLoaded ||
-      !adyenRef.current ||
-      checkoutAPI !== null
+      adyenState === 'NOT_LOADED' ||
+      adyenState === 'MOUNTED' ||
+      !adyenRef.current
     ) {
       return
     }
-    const newCheckoutAPI = createAdyenCheckout({
+
+    const dropinApi = createAdyenCheckout({
       payButtonText: textKeys.ONBOARDING_CONNECT_DD_CTA(),
+      successMessage,
       currentLocale,
       paymentMethodsResponse,
       connectPaymentMutation,
@@ -100,11 +119,12 @@ export const useAdyenCheckout = ({
         }),
     })
 
-    newCheckoutAPI.mount(adyenRef.current)
-    setCheckoutAPI(newCheckoutAPI)
+    dropinApi.mount(adyenRef.current)
+    setDropinComponent(dropinApi)
+    setAdyenState('MOUNTED')
   }, [
     paymentMethodsResponse,
-    adyenLoaded,
+    adyenState,
     textKeys,
     currentLocale,
     connectPaymentMutation,
@@ -114,21 +134,20 @@ export const useAdyenCheckout = ({
     adyenRef,
     onSuccess,
     storage,
-    checkoutAPI,
     trackOfferEvent,
+    successMessage,
   ])
 
   useEffect(() => {
-    mountAdyenJs(setAdyenLoaded)()
+    mountAdyenJs(() => setAdyenState('LOADED'))()
   }, [])
 
   useEffect(mountAdyenCss, [])
-
-  return checkoutAPI
 }
 
 interface AdyenCheckoutProps {
   payButtonText: string
+  successMessage: string
   currentLocale: LocaleData
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   connectPaymentMutation: any
@@ -143,6 +162,7 @@ interface AdyenCheckoutProps {
 
 const createAdyenCheckout = ({
   payButtonText,
+  successMessage,
   currentLocale,
   paymentMethodsResponse,
   connectPaymentMutation,
@@ -169,7 +189,7 @@ const createAdyenCheckout = ({
   ) => {
     if (['AUTHORISED', 'PENDING'].includes(status)) {
       // history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
-      dropinComponent.setStatus('success', { message: 'Payment successful!' })
+      dropinComponent.setStatus('success', { message: successMessage })
       onSuccess(paymentTokenId)
     } else {
       console.error(
@@ -193,7 +213,6 @@ const createAdyenCheckout = ({
         payButton: payButtonText,
       },
     },
-    showPayButton: false,
     environment: window.hedvigClientConfig.adyenEnvironment,
     clientKey: window.hedvigClientConfig.adyenClientKey,
     paymentMethodsResponse: paymentMethodsResponse,

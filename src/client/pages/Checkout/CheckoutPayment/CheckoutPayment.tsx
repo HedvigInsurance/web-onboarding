@@ -101,6 +101,22 @@ const AdyenContainer = styled.div`
       }
     }
 
+    .adyen-checkout__button {
+      background-color: ${colorsV3.purple500};
+      color: ${colorsV3.gray900};
+      transition: transform 300ms;
+
+      &:hover {
+        background-color: ${colorsV3.purple500};
+        transform: translateY(-2px);
+        box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
+      }
+    }
+
+    .adyen-checkout__button__icon {
+      display: none;
+    }
+
     js-iframe-input input-field {
       background: ${gray100};
     }
@@ -180,10 +196,8 @@ export const CheckoutPayment = ({
   const is3DsError = search.includes('error')
   const is3DsComplete = search.includes('3dsSuccess')
   const [isDataLoading, setIsDataLoading] = useState(false)
-  const [isPageLoading, setIsPageLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
-  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false)
 
   useScrollToTop()
 
@@ -221,8 +235,6 @@ export const CheckoutPayment = ({
   )
 
   const performCheckout = useCallback(async () => {
-    setIsCheckoutLoading(true)
-
     try {
       setIsDataLoading(true)
       const { data } = await startCheckout({
@@ -235,7 +247,6 @@ export const CheckoutPayment = ({
           options: { errorType: ErrorEventType.BasicError },
         })
         setIsError(true)
-        setIsCheckoutLoading(false)
       }
       // Poll for Status
       getStatus({
@@ -264,20 +275,11 @@ export const CheckoutPayment = ({
     }
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
 
-  useEffect(() => {
-    if (
-      isPaymentConnected &&
-      checkoutStatus === undefined &&
-      !isCheckoutLoading
-    ) {
-      performCheckout()
-    }
-  }, [isPaymentConnected, performCheckout, checkoutStatus, isCheckoutLoading])
-
-  const checkoutAPI = useAdyenCheckout({
+  useAdyenCheckout({
     adyenRef,
     onSuccess: addPaymentToCart,
     quoteCartId,
+    isSuccess: isPaymentConnected,
   })
 
   const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
@@ -318,7 +320,7 @@ export const CheckoutPayment = ({
   const isFormikError = Object.keys(formik.errors).length > 0
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
-      setIsPageLoading(true)
+      trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
       const paymentTokenId = storage.session.getSession()?.paymentTokenId
       if (!paymentTokenId) {
         trackOfferEvent({
@@ -336,6 +338,12 @@ export const CheckoutPayment = ({
     storage.session,
     trackOfferEvent,
   ])
+
+  useEffect(() => {
+    if (isPaymentConnected) {
+      trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
+    }
+  }, [isPaymentConnected, trackOfferEvent])
 
   const completeCheckout = useCallback(async () => {
     try {
@@ -401,6 +409,13 @@ export const CheckoutPayment = ({
   }
 
   const handleClickCompletePurchase = async () => {
+    if (!isPaymentConnected) return
+
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+      options: { buttonId: 'complete_purchase' },
+    })
+
     const { validateForm, submitForm, dirty: isFormDataUpdated } = formik
 
     const errors = await validateForm()
@@ -412,12 +427,7 @@ export const CheckoutPayment = ({
       if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
     }
 
-    checkoutAPI?.submit()
-
-    trackOfferEvent({
-      eventName: EventName.ButtonClick,
-      options: { buttonId: 'complete_purchase' },
-    })
+    await performCheckout()
   }
 
   useEffect(() => {
@@ -427,7 +437,6 @@ export const CheckoutPayment = ({
   }, [checkoutStatus, completeCheckout])
 
   if (checkoutStatus === CheckoutStatus.Completed) {
-    trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
     return (
       <CheckoutSuccessRedirect
         bundle={selectedQuoteBundleVariant.bundle}
@@ -438,10 +447,6 @@ export const CheckoutPayment = ({
 
   if (isError) {
     return <CheckoutErrorModal isVisible onRetry={onRetry} />
-  }
-
-  if (isPageLoading) {
-    return <LoadingPage loading />
   }
 
   const handleClickBackButton = () => {
@@ -473,7 +478,7 @@ export const CheckoutPayment = ({
           buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
           buttonOnClick={handleClickCompletePurchase}
           isLoading={isBundleCreationInProgress || isDataLoading}
-          disabled={isFormikError}
+          disabled={isFormikError || !isPaymentConnected}
         >
           <PaymentInfo {...priceData} />
         </Footer>
