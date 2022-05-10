@@ -3,6 +3,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
 import React, { ReactNode, useRef } from 'react'
 import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from '../utils/mediaQueries'
 import { CloseButton } from './CloseButton/CloseButton'
 
 export type ModalProps = {
@@ -163,6 +164,14 @@ export const Modal = ({
     </Wrapper>
   )
 }
+
+export const ModalContent = styled.div(() => ({
+  padding: '3rem 1rem',
+
+  [MEDIUM_SCREEN_MEDIA_QUERY]: {
+    padding: '3rem 3.5rem',
+  },
+}))
 
 type ModalFooterProps = {
   sticky?: boolean
