@@ -19,7 +19,9 @@ const Template: Story<TextButtonProps> = (args) => {
   return (
     <>
       This is some text
-      <TextButtonComponent {...args}>I'm a text button!</TextButtonComponent>
+      <TextButtonComponent {...args}>
+        I&apos;m a text button!
+      </TextButtonComponent>
       and here is some more text
     </>
   )
