@@ -2,9 +2,9 @@ import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import React from 'react'
 import { ErrorBoundary } from '@sentry/react'
-import { OfferData } from 'pages/OfferNew/types'
-import { getMainQuote } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
+import * as quoteBundleSelectors from 'api/quoteBundleSelectors'
+import { QuoteBundle } from 'data/graphql'
 import { InsuranceSummaryDetails } from './InsuranceSummaryDetails'
 import { InsuranceSummaryTermsLinks } from './InsuranceSummaryTermsLinks'
 
@@ -41,13 +41,14 @@ export const Row = styled.div`
 `
 
 type Props = {
-  offerData: OfferData
+  quoteBundle: QuoteBundle
 }
 
-export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
+export const InsuranceSummary: React.FC<Props> = ({ quoteBundle }) => {
   const textKeys = useTextKeys()
 
-  const mainQuote = getMainQuote(offerData)
+  const mainQuote = quoteBundleSelectors.getMainQuote(quoteBundle)
+  const personalDetails = quoteBundleSelectors.getOfferPersonInfo(quoteBundle)
 
   return (
     <Wrapper>
@@ -57,14 +58,14 @@ export const InsuranceSummary: React.FC<Props> = ({ offerData }) => {
           fallback={<p>{textKeys.CONNECT_PAYMENT_ERROR_HEADLINE()}</p>}
         >
           <InsuranceSummaryDetails
-            personalDetails={offerData.person}
+            personalDetails={personalDetails}
             mainQuote={mainQuote}
           />
         </ErrorBoundary>
       </Table>
       <Title>{textKeys.CHECKOUT_TERMS_HEADLINE()}</Title>
       <Table>
-        <InsuranceSummaryTermsLinks offerData={offerData} />
+        <InsuranceSummaryTermsLinks quotes={quoteBundle.quotes} />
       </Table>
     </Wrapper>
   )

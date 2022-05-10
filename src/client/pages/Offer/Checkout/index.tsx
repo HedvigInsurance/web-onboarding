@@ -537,7 +537,9 @@ export const Checkout = ({
                   onUpsellAccepted={onUpsellAccepted}
                 />
               )}
-              <InsuranceSummary offerData={offerData} />
+              <InsuranceSummary
+                quoteBundle={selectedQuoteBundleVariant.bundle}
+              />
             </Section>
             <SignDisclaimer
               privacyPolicyLink={privacyPolicyLink}
