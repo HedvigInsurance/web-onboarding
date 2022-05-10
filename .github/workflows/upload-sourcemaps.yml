@@ -1,0 +1,38 @@
+name: Upload Sourcemaps to Datadog
+
+on:
+  push:
+    branches: [master]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  upload-sourcemaps:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Upload sourcemaps to Datadog
+        run: |
+          npx datadog-ci sourcemaps upload ./build \
+            --service=web-onboarding \
+            --release-version=$GITHUB_SHA \
+            --minified-path-prefix=https://www.hedvig.com \
+            --repository-url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+        env:
+          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+          DATADOG_SITE: datadoghq.eu
