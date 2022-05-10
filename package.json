@@ -112,7 +112,7 @@
     "@datadog/browser-rum": "^4.7.0",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
-    "@hedviginsurance/brand": "^5.0.0",
+    "@hedviginsurance/brand": "^5.0.3",
     "@hedviginsurance/embark": "^2.9.1",
     "@segment/snippet": "^4.4.0",
     "@sentry/node": "^6.10.0",
