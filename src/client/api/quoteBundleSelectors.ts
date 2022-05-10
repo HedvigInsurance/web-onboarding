@@ -1,4 +1,9 @@
-import { QuoteBundle, TypeOfContract, BundledQuote } from 'data/graphql'
+import {
+  QuoteBundle,
+  TypeOfContract,
+  BundledQuote,
+  PerilV2,
+} from 'data/graphql'
 import { MarketLabel } from 'shared/clientConfig'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { OfferPersonInfo, Address } from '../pages/OfferNew/types'
@@ -161,4 +166,33 @@ const getAddressFromBundledQuotes = (
   }
 
   return null
+}
+
+export const getAllPerilsForQuoteBundle = (bundle: QuoteBundle) => {
+  return bundle.quotes.reduce(
+    (accumulatedPerils, quote) =>
+      accumulatedPerils.concat(quote.contractPerils),
+    [] as PerilV2[],
+  )
+}
+
+export const getUniquePerilsForQuoteBundles = (bundles: QuoteBundle[]) => {
+  const uniquePerils = bundles
+    .reduce(
+      (accumulated, bundle) =>
+        accumulated.concat(getAllPerilsForQuoteBundle(bundle)),
+      [] as PerilV2[],
+    )
+    .filter(
+      (peril, index, allPerils) =>
+        allPerils.findIndex((p) => p.title === peril.title) === index,
+    )
+
+  return uniquePerils
+}
+
+export const bundleHasPeril = (bundle: QuoteBundle, peril: PerilV2) => {
+  return bundle.quotes.some((quote) =>
+    quote.contractPerils.find((p) => p.title === peril.title),
+  )
 }
