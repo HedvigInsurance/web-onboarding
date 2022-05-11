@@ -3,12 +3,20 @@ jest.mock('../apolloClient', () => ({
     subscriptionClient: {},
     client: {},
     httpLink: { options: { headers: {} } },
+    runQuery: (_opts: QueryOptions) => {
+      return undefined
+    },
   },
 }))
 jest.useFakeTimers()
 
 import { MockedResponse, MockLink } from '@apollo/react-testing'
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  QueryOptions,
+} from '@apollo/client'
 import { Provider } from 'constate'
 import React from 'react'
 import { StaticRouter } from 'react-router'
@@ -149,6 +157,9 @@ const renderWithApolloClient = ({
   })
   const subscriptionClient = { close: jest.fn() } as any
   const httpLink = { options: { headers: {} } } as HttpLink
+  const runQuery = async (_opts: QueryOptions) => {
+    return undefined
+  }
 
   return render(
     <StorageContext.Provider value={{ session }}>
@@ -158,7 +169,7 @@ const renderWithApolloClient = ({
           context={{}}
         >
           <ExchangeTokenRetrieval
-            apolloClient={{ client, subscriptionClient, httpLink }}
+            apolloClient={{ client, subscriptionClient, httpLink, runQuery }}
           >
             {({ exchangeTokenState }) => <>{exchangeTokenState.toString()}</>}
           </ExchangeTokenRetrieval>
