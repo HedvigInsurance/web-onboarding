@@ -221,9 +221,9 @@ export const CheckoutPayment = ({
     }
   }, [is3DsError, history, trackOfferEvent])
 
-  const addPaymentToCart = useCallback(async () => {
+  const addPaymentToCart = () => {
     setIsPaymentConnected(true)
-  }, [])
+  }
 
   const performCheckout = useCallback(async () => {
     try {
@@ -313,13 +313,7 @@ export const CheckoutPayment = ({
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
       addPaymentToCart()
     }
-  }, [
-    is3DsComplete,
-    checkoutStatus,
-    storage.session,
-    trackOfferEvent,
-    addPaymentToCart,
-  ])
+  }, [is3DsComplete, checkoutStatus, storage.session, trackOfferEvent])
 
   useEffect(() => {
     if (isPaymentConnected) {
