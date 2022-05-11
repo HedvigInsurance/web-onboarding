@@ -1621,7 +1621,7 @@ export type BundledQuote = {
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
-  perils: Array<PerilV2>
+  perils: Array<PerilV2> // undefined???
   detailsTable: Table
 }
 

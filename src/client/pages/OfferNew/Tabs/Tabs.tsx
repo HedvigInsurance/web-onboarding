@@ -44,7 +44,7 @@ type Props = {
   }[]
   onChange: (id: string) => void
 }
-type TabItem = {
+export type TabItem = {
   id: string
   name: string
   content: React.ReactNode

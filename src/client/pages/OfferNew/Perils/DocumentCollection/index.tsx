@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useTextKeys } from 'utils/textKeys'
-import { OfferQuote } from '../../types'
+import { BundledQuote } from 'data/graphql'
 import { HeadingXS } from '../../components'
 import { CollapsingList, ExternalLink } from './CollapsingList'
 
@@ -16,17 +16,17 @@ const Container = styled.div`
 `
 
 type Props = {
-  offer: OfferQuote
+  quote: BundledQuote
 }
 
-export const DocumentCollection: React.FC<Props> = ({ offer }) => {
+export const DocumentCollection = ({ quote }: Props) => {
   const textKeys = useTextKeys()
 
   return (
     <Container>
       <HeadingXS>{textKeys.WEB_OFFER_DOCUMENTS_SECTION_TITLE()}</HeadingXS>
       <CollapsingList>
-        {offer.insuranceTerms.map(({ url, displayName }) => (
+        {quote.insuranceTerms.map(({ url, displayName }) => (
           <ExternalLink key={url} href={url}>
             {displayName}
           </ExternalLink>

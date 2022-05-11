@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { OfferQuote } from 'pages/OfferNew/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { BundledQuote } from 'data/graphql'
 import { PerilModal } from './PerilModal'
 import { PerilCollection } from './PerilCollection'
 import { AmountCollection } from './AmountCollection'
@@ -16,32 +16,32 @@ const Spacer = styled.div`
 `
 
 type Props = {
-  offerQuote: OfferQuote
+  quote: BundledQuote
 }
 
-export const PerilRow: React.FC<Props> = ({ offerQuote }) => {
+export const PerilRow = ({ quote }: Props) => {
   const [isShowingPeril, setIsShowingPeril] = React.useState(false)
   const [currentPeril, setCurrentPeril] = React.useState(0)
 
   return (
     <>
       <PerilCollection
-        perils={offerQuote.perils}
+        perils={quote.contractPerils}
         setCurrentPeril={setCurrentPeril}
         setIsShowingPeril={setIsShowingPeril}
       />
 
       <Spacer />
 
-      <AmountCollection offer={offerQuote} />
+      <AmountCollection quote={quote} />
 
       <Spacer />
 
-      <DocumentCollection offer={offerQuote} />
+      <DocumentCollection quote={quote} />
 
-      {offerQuote.perils.length > 0 && (
+      {quote.contractPerils.length > 0 && (
         <PerilModal
-          perils={offerQuote.perils}
+          perils={quote.contractPerils}
           currentPerilIndex={currentPeril}
           setCurrentPeril={setCurrentPeril}
           isVisible={isShowingPeril}

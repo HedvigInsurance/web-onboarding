@@ -2,8 +2,8 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useTextKeys } from 'utils/textKeys'
+import { BundledQuote } from 'data/graphql'
 import { HeadingXS } from '../../components'
-import { OfferQuote } from '../../types'
 import { AmountItem } from './AmountItem'
 import { Grid } from './Grid'
 
@@ -17,13 +17,13 @@ const Container = styled.div`
 `
 
 type Props = {
-  offer: OfferQuote
+  quote: BundledQuote
 }
 
-export const AmountCollection: React.FC<Props> = ({ offer }) => {
+export const AmountCollection = ({ quote }: Props) => {
   const textKeys = useTextKeys()
 
-  const limits = [...offer.insurableLimits.entries()]
+  const limits = [...quote.insurableLimits.entries()]
 
   return (
     <Container>

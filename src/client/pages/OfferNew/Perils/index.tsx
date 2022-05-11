@@ -11,14 +11,14 @@ import {
   HeadingWrapper,
 } from 'pages/OfferNew/components'
 import { PerilRow } from 'pages/OfferNew/Perils/PerilRow'
-import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { pushToGTMDataLayer } from 'utils/tracking/gtm/dataLayer'
-import { Tabs } from '../Tabs/Tabs'
+import { BundledQuote, QuoteBundleVariant } from 'data/graphql'
+import { TabItem, Tabs } from '../Tabs/Tabs'
 
 interface Props {
-  offerData: OfferData
+  variants: QuoteBundleVariant[]
 }
 
 const Wrapper = styled.div`
@@ -31,17 +31,29 @@ const Wrapper = styled.div`
   }
 `
 
-export const Perils: React.FC<Props> = ({ offerData }) => {
+export const Perils = ({ variants }: Props) => {
   const textKeys = useTextKeys()
 
   const tabItems = React.useMemo(
     () =>
-      offerData.quotes.map((quote) => ({
-        id: quote.id,
-        name: quote.displayName,
-        content: <PerilRow offerQuote={quote} />,
-      })),
-    [offerData.quotes],
+      variants
+        .reduce((accumulated, variant) => {
+          return accumulated.concat(variant.bundle.quotes)
+        }, ([] as unknown) as BundledQuote[])
+        // remove duplicates
+        .filter(
+          (quote, index, allQuotes) =>
+            index === allQuotes.findIndex((q) => q.id === quote.id),
+        )
+        .map(
+          (quote) =>
+            ({
+              id: quote.id,
+              name: quote.displayName,
+              content: <PerilRow quote={quote} />,
+            } as TabItem),
+        ),
+    [variants],
   )
 
   const handleChangeTab = (name: string) => {

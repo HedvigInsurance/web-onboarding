@@ -236,7 +236,7 @@ export const OfferPage = ({
             onChange={onInsuranceSelectorChange}
           />
         )}
-        <Perils offerData={offerData} />
+        <Perils variants={bundleVariants} />
         <AppPromotionSection />
         <FaqSection />
         <Checkout
