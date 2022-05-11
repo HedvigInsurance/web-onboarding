@@ -20,6 +20,7 @@ import {
 } from 'components/inputs'
 import { MarketLabel } from 'l10n/locales'
 import { useTextKeys } from 'utils/textKeys'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from '../../types'
 import { ContentColumnTitle, ContentColumnTitleButton } from './Details.styles'
 
@@ -154,6 +155,45 @@ export const AreaInput: React.FC<AreaInputProps> = ({
     formikProps={formikProps}
   />
 )
+
+type MileageInputProps = {
+  name: string
+  label: string
+  formikProps: FormikProps<QuoteInput>
+}
+
+export const MileageInput: React.FC<MileageInputProps> = ({
+  name,
+  label,
+  formikProps,
+}) => {
+  const { isoLocale } = useCurrentLocale()
+  const textKeys = useTextKeys()
+  const unitMultipler = isoLocale.toLowerCase().includes('en') ? 10 : 1
+  const options = [1000, 1500, 2000, 2500, 2501].map((value) => {
+    return value !== 2501
+      ? {
+          label: `${value *
+            unitMultipler} ${textKeys.CAR_INSURANCE_MILEAGE_UNIT()}`,
+          value: value.toString(),
+        }
+      : {
+          label: 'CAR_INSURANCE_MILEAGE_EXCEEDS_MAXIMUM',
+          value: value.toString(),
+        }
+  })
+  return (
+    <DetailInput
+      name={name}
+      field={{
+        label: label,
+        placeholder: '',
+        options,
+      }}
+      formikProps={formikProps}
+    />
+  )
+}
 
 type HomeOwnershipTypeInputProps = {
   name: string
