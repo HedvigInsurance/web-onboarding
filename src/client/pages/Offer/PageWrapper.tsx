@@ -18,11 +18,7 @@ type PageWrapperProps = {
   children: React.ReactNode
 }
 
-export const PageWrapper = ({
-  quoteCartId,
-  bundle,
-  children,
-}: PageWrapperProps) => {
+export const PageWrapper = ({ quoteCartId, children }: PageWrapperProps) => {
   const history = useHistory()
   const { phoneNumber } = useCurrentLocale()
   const variation = useVariation()
@@ -31,14 +27,12 @@ export const PageWrapper = ({
   ])
   const trackOfferEvent = useTrackOfferEvent()
   const handleClickPhoneNumber = (status: 'opened' | 'closed') => {
-    if (bundle) {
-      trackOfferEvent({
-        eventName: EventName.ClickCallNumber,
-        options: {
-          phoneNumberData: { path: history.location.pathname, status },
-        },
-      })
-    }
+    trackOfferEvent({
+      eventName: EventName.ClickCallNumber,
+      options: {
+        phoneNumberData: { path: history.location.pathname, status },
+      },
+    })
   }
 
   return (
