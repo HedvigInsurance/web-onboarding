@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { match } from 'matchly'
 import { useHistory } from 'react-router'
 import { datadogRum } from '@datadog/browser-rum'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleData, LocaleLabel } from 'l10n/locales'
@@ -19,7 +19,7 @@ import {
   useAddPaymentTokenMutation,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
-import { EventName, ErrorEventType } from 'utils/tracking/gtm'
+import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
 
 interface Params {
   onSuccess?: (id?: string) => void
