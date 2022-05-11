@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { FormikProps } from 'formik'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
@@ -12,8 +12,6 @@ import { QuoteInput } from 'components/DetailsModal/types'
 import { EventName } from 'utils/tracking/gtm/types'
 import { Divider } from '../../shared/Divider'
 import { WrapperWidth } from '../../shared/CheckoutPageWrapper'
-
-const DONE_TYPING_INTERVAL = 1500
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -53,34 +51,13 @@ type Props = {
 
 export const ContactInformation = ({ formikProps }: Props) => {
   const textKeys = useTextKeys()
+  const { ssn: ssnFormat } = useCurrentLocale()
   const trackOfferEvent = useTrackOfferEvent()
 
   useEffect(
     () => trackOfferEvent({ eventName: EventName.ContactInformationPageOpen }),
     [trackOfferEvent],
   )
-  const {
-    values: { ssn },
-    handleChange,
-    initialValues,
-    submitForm,
-  } = formikProps
-
-  const timerRef = useRef<number>()
-  const handlePersonalNumberKeyUp = () => {
-    clearTimeout(timerRef.current)
-    timerRef.current = window.setTimeout(() => {
-      if (ssn !== initialValues.ssn) {
-        submitForm()
-      }
-    }, DONE_TYPING_INTERVAL)
-  }
-
-  const handlePersonNumberKeyDown = () => {
-    clearTimeout(timerRef.current)
-  }
-
-  const { ssn: ssnFormat } = useCurrentLocale()
 
   return (
     <Wrapper>
@@ -96,7 +73,6 @@ export const ContactInformation = ({ formikProps }: Props) => {
             type="text"
             name="firstName"
             formikProps={formikProps}
-            onChange={handleChange}
           />
           <TextInput
             label={textKeys.CHECKOUT_LASTNAME_LABEL()}
@@ -104,7 +80,6 @@ export const ContactInformation = ({ formikProps }: Props) => {
             type="text"
             name="lastName"
             formikProps={formikProps}
-            onChange={handleChange}
           />
 
           <TextInput
@@ -112,10 +87,7 @@ export const ContactInformation = ({ formikProps }: Props) => {
             formikProps={formikProps}
             label={textKeys.CHECKOUT_SSN_LABEL_GLOBAL()}
             placeholder={ssnFormat.formatExample}
-            onChange={handleChange}
             helperText={textKeys.CHECKOUT_CONTACT_INFO_CREDIT_CHECK_HELPER()}
-            onKeyUp={handlePersonalNumberKeyUp}
-            onKeyDown={handlePersonNumberKeyDown}
           />
 
           <div>

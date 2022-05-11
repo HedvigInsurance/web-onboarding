@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { match } from 'matchly'
 import { useHistory } from 'react-router'
+import { datadogRum } from '@datadog/browser-rum'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -15,6 +16,7 @@ import {
   PaymentConnectChannel,
   usePaymentMethodsQuery,
   PaymentMethodsQuery,
+  useAddPaymentTokenMutation,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
 import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
@@ -58,6 +60,7 @@ export const useAdyenCheckout = ({
   const [adyenState, setAdyenState] = useState<ADYEN_STATE>('NOT_LOADED')
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const storage = useStorage()
+  const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
 
   const [
     submitAdditionalPaymentDetails,
@@ -111,6 +114,7 @@ export const useAdyenCheckout = ({
       quoteCartId,
       history,
       onSuccess,
+      addPaymentTokenMutation,
       storage,
       onError: (error) =>
         trackOfferEvent({
@@ -136,6 +140,7 @@ export const useAdyenCheckout = ({
     storage,
     trackOfferEvent,
     successMessage,
+    addPaymentTokenMutation,
   ])
 
   useEffect(() => {
@@ -151,6 +156,7 @@ interface AdyenCheckoutProps {
   currentLocale: LocaleData
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   connectPaymentMutation: any
+  addPaymentTokenMutation: any
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
   onSuccess?: (paymentTokenId?: string) => void
@@ -167,6 +173,7 @@ const createAdyenCheckout = ({
   paymentMethodsResponse,
   connectPaymentMutation,
   submitAdditionalPaymentDetails,
+  addPaymentTokenMutation,
   quoteCartId,
   storage,
   onSuccess = () => {
@@ -272,6 +279,14 @@ const createAdyenCheckout = ({
           quoteCartId,
         })
 
+        await addPaymentTokenMutation({
+          variables: {
+            id: quoteCartId,
+            paymentTokenId,
+          },
+          refetchQueries: ['QuoteCart'],
+        })
+
         if (
           result.data?.paymentConnection_connectPayment?.__typename ===
           'ActionRequired'
@@ -363,7 +378,11 @@ const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {
   script.onload = () => setAdyenLoaded(true)
   document.body.append(script)
   return () => {
-    document.body.removeChild(script)
+    try {
+      document.body.contains(script) && document.body.removeChild(script)
+    } catch (error) {
+      datadogRum.addError(error)
+    }
   }
 }
 const mountAdyenCss = () => {
@@ -378,6 +397,10 @@ const mountAdyenCss = () => {
 
   document.body.append(link)
   return () => {
-    document.body.removeChild(link)
+    try {
+      document.body.contains(link) && document.body.removeChild(link)
+    } catch (error) {
+      datadogRum.addError(error)
+    }
   }
 }

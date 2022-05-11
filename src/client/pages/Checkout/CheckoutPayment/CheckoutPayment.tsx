@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { useFormik, FormikHelpers } from 'formik'
+import { useFormik, FormikHelpers, FormikProps } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router'
@@ -17,7 +17,6 @@ import {
   QuoteBundleVariant,
   BundledQuote,
   CheckoutStatus,
-  useAddPaymentTokenMutation,
 } from 'data/graphql'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
@@ -28,6 +27,7 @@ import { useStorage } from 'utils/StorageContainer'
 import { ErrorEventType, EventName } from 'utils/tracking/gtm/types'
 
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
+import { useDebounce } from 'utils/hooks/useDebounce'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -149,6 +149,17 @@ const Terms = styled.div`
   }
 `
 
+const useSubmitFormOnSsnChange = (formik: FormikProps<QuoteInput>) => {
+  const debouncedSsn = useDebounce(formik.values.ssn, 500)
+  const formikInitialSsn = formik.initialValues.ssn
+  const formikSubmitForm = formik.submitForm
+  useEffect(() => {
+    if (debouncedSsn !== formikInitialSsn) {
+      formikSubmitForm()
+    }
+  }, [debouncedSsn, formikInitialSsn, formikSubmitForm])
+}
+
 type Props = {
   bundleVariants: QuoteBundleVariant[]
   quoteCartId: string
@@ -157,7 +168,6 @@ type Props = {
   selectedQuoteBundleVariant: QuoteBundleVariant
   quoteIds: string[]
   checkoutStatus?: CheckoutStatus
-  isPaymentConnected: boolean
 }
 
 export const CheckoutPayment = ({
@@ -168,7 +178,6 @@ export const CheckoutPayment = ({
   quoteIds,
   selectedQuoteBundleVariant,
   checkoutStatus,
-  isPaymentConnected,
 }: Props) => {
   const textKeys = useTextKeys()
 
@@ -184,7 +193,6 @@ export const CheckoutPayment = ({
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
   const [startCheckout] = useStartCheckoutMutation()
-  const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
@@ -197,6 +205,7 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
+  const [isPaymentConnected, setIsPaymentConnected] = useState(false)
 
   useScrollToTop()
 
@@ -212,26 +221,9 @@ export const CheckoutPayment = ({
     }
   }, [is3DsError, history, trackOfferEvent])
 
-  const addPaymentToCart = useCallback(
-    async (paymentTokenId) => {
-      try {
-        await addPaymentTokenMutation({
-          variables: {
-            id: quoteCartId,
-            paymentTokenId,
-          },
-          refetchQueries: ['QuoteCart'],
-        })
-      } catch (error) {
-        trackOfferEvent({
-          eventName: EventName.SignError,
-          options: { error, errorType: ErrorEventType.PaymentTokenMutation },
-        })
-        console.error('Failed to add Payment Token :', error.message, error)
-      }
-    },
-    [addPaymentTokenMutation, quoteCartId, trackOfferEvent],
-  )
+  const addPaymentToCart = useCallback(async () => {
+    setIsPaymentConnected(true)
+  }, [])
 
   const performCheckout = useCallback(async () => {
     try {
@@ -273,7 +265,6 @@ export const CheckoutPayment = ({
       setIsError(true)
     }
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
-
   useAdyenCheckout({
     adyenRef,
     onSuccess: addPaymentToCart,
@@ -320,22 +311,14 @@ export const CheckoutPayment = ({
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
-      const paymentTokenId = storage.session.getSession()?.paymentTokenId
-      if (!paymentTokenId) {
-        trackOfferEvent({
-          eventName: EventName.SignError,
-          options: { errorType: ErrorEventType.PaymentTokenIDMissing },
-        })
-        throw new Error('No token payment id')
-      }
-      addPaymentToCart(paymentTokenId)
+      addPaymentToCart()
     }
   }, [
     is3DsComplete,
-    addPaymentToCart,
     checkoutStatus,
     storage.session,
     trackOfferEvent,
+    addPaymentToCart,
   ])
 
   useEffect(() => {
@@ -428,6 +411,8 @@ export const CheckoutPayment = ({
 
     await performCheckout()
   }
+
+  useSubmitFormOnSsnChange(formik)
 
   useEffect(() => {
     if (checkoutStatus === CheckoutStatus.Signed) {
