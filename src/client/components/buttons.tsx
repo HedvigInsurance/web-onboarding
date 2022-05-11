@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
 import { Link } from 'react-router-dom'
 import { Size } from './types'
+import { getMargins, Margins } from './utils/margins'
 
 const { white, gray300, gray500, gray900, purple900 } = colorsV3
 
@@ -87,30 +88,41 @@ export const Button = styled(UnstyledButton)<ButtonProps>`
 
 export const LinkButton = Button.withComponent(Link)
 
-type TextButtonProps = {
+export type TextButtonProps = {
   color?: string
+  size?: Size
+  inline?: boolean
+} & Margins
+
+const TextButtonSizes: Record<Size, string> = {
+  sm: '0.875rem',
+  lg: '1.125rem',
 }
 
-export const TextButton = styled.button<TextButtonProps>`
-  background: none;
-  padding: 0;
-  margin: 0;
-  color: ${({ color }) => color || purple900};
-  font-size: 0.875rem;
-  line-height: 1.5rem;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  transition: color 0.1s ease;
+export const TextButton = styled.button<TextButtonProps>(
+  ({ color: textColor, size = 'sm', inline = false, ...props }) => ({
+    background: 'none',
+    padding: 0,
+    margin: 0,
+    marginLeft: inline ? '0.25em' : 0,
+    marginRight: inline ? '0.25em' : 0,
+    color: textColor || purple900,
+    fontSize: inline ? 'inherit' : TextButtonSizes[size],
+    lineHeight: '1.5rem',
+    border: 'none',
+    cursor: 'pointer',
+    display: inline ? 'inline' : 'flex',
+    transition: 'color 0.1s ease',
 
-  :hover {
-    color: ${({ color: textColor }) =>
-      color(textColor ?? purple900)
+    ':hover': {
+      color: color(textColor ?? purple900)
         .darken(0.1)
-        .toString()};
-  }
+        .toString(),
+    },
 
-  :focus {
-    outline: none;
-  }
-`
+    ':focus': {
+      outline: 'none',
+    },
+    ...getMargins(props),
+  }),
+)

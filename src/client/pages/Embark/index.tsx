@@ -23,7 +23,7 @@ import { useFeature, Features } from 'utils/hooks/useFeature'
 import { CampaignCode } from 'utils/campaignCode'
 import { EmbarkStory } from 'utils/embarkStory'
 import { useOnboardingQuoteCartId } from 'utils/hooks/useOnboardingQuoteCartId'
-import { pushToGTMDataLayer } from '../../utils/tracking/gtm'
+import { pushToGTMDataLayer } from 'utils/tracking/gtm/dataLayer'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import {

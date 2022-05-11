@@ -11,7 +11,7 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { AVYWindow } from 'utils/tracking/signing'
+import { AVYWindow } from 'utils/tracking/gtm/signing'
 import { ErrorModal } from '../components/ErrorModal'
 
 const Wrapper = styled.div`
