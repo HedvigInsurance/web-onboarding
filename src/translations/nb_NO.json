@@ -411,5 +411,8 @@
   "3D_SECURE_ERROR_DESCRIPTION": "Vennligst prøv å legge inn kortopplysningene dine på nytt. Hvis problemet vedvarer, prøv med et annet kort eller kontakt med banken din.",
   "3D_SECURE_ERROR_BUTTON": "Ok",
   "3D_SECURE_ERROR_HEADING": "Kortet ditt kunne ikke autentiseres",
-  "CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE": "Betaling tilkoblet!"
+  "CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE": "Betaling tilkoblet!",
+  "LANDING_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Du må velge minst en hovedforsikring for å fortsette",
+  "OPEN_COMPARISON_MODAL": "Sammenlign forsikringsnivåer",
+  "COMPARISON_MODEL_HEADER": "Hvilket forsikringsnivå passer deg?"
 }
