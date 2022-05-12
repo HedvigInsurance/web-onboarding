@@ -36,12 +36,25 @@ export const hasHomeContents = (bundle: QuoteBundle) =>
 export const hasHouse = (bundle: QuoteBundle) =>
   bundle.quotes.some((quote) => quoteSelector.isHouse(quote))
 
-export const getHomeOwnershipType = (bundle: QuoteBundle) => {
+type OwnershipType = 'rent' | 'own'
+export const getHomeOwnershipType = (
+  bundle: QuoteBundle,
+): OwnershipType | undefined => {
   const homeInsurance = bundle.quotes.find((quote) =>
     quoteSelector.isHomeContentsOrHouse(quote),
   )
 
-  return homeInsurance ? quoteSelector.getSubType(homeInsurance) : undefined
+  if (homeInsurance) {
+    const subType = quoteSelector.getSubType(homeInsurance)
+
+    if (subType && ['RENT', 'STUDENT_RENT'].includes(subType)) {
+      return 'rent'
+    }
+
+    return 'own'
+  }
+
+  return undefined
 }
 
 export const hasAccident = (bundle: QuoteBundle) =>

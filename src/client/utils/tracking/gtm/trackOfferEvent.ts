@@ -18,6 +18,7 @@ export type OptionalParameters = {
 
 export type EventParameters = {
   eventName: EventName
+  selectedBundle?: QuoteBundle
   options?: Partial<OptionalParameters>
 }
 
@@ -52,9 +53,7 @@ export const trackOfferEvent = (
         has_house: quoteBundleSelector.hasHouse(bundle),
         has_accident: quoteBundleSelector.hasAccident(bundle),
         has_travel: quoteBundleSelector.hasTravel(bundle),
-        ownership_type: quoteBundleSelector
-          .getHomeOwnershipType(bundle)
-          ?.toLowerCase(),
+        ownership_type: quoteBundleSelector.getHomeOwnershipType(bundle),
         quote_cart_id: quoteCartId,
         ...(switchedFrom && {
           switch_from: {

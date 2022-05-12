@@ -182,6 +182,7 @@ export const OfferPage = ({
     )
     trackOfferEvent({
       eventName: EventName.InsuranceSelectionToggle,
+      selectedBundle: newSelectedBundleVariant.bundle,
       options: {
         switchedFrom: selectedBundleVariant.bundle,
       },
@@ -198,6 +199,7 @@ export const OfferPage = ({
     )
     trackOfferEvent({
       eventName: EventName.OfferCrossSell,
+      selectedBundle: newSelectedBundleVariant.bundle,
       options: {
         switchedFrom: selectedBundleVariant.bundle,
       },

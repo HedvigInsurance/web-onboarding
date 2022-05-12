@@ -22,7 +22,7 @@ export const useTrackOfferEvent = () => {
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
   const trackEventHandler = useCallback(
-    ({ eventName, options = {} }: EventParameters) => {
+    ({ eventName, selectedBundle, options = {} }: EventParameters) => {
       const trackEventCallback = async (apolloClient: ApolloClientUtils) => {
         const quoteCartQueryData = await apolloClient.runQuery<QuoteCartQuery>({
           query: QuoteCartDocument,
@@ -31,15 +31,20 @@ export const useTrackOfferEvent = () => {
             locale: isoLocale,
           },
         })
-        const selectedBundleVariant = getSelectedBundleVariant(
-          quoteCartQueryData,
-          selectedInsuranceTypes,
-        )
 
-        if (selectedBundleVariant) {
+        let bundle = selectedBundle
+        if (!selectedBundle) {
+          const selectedBundleVariant = getSelectedBundleVariant(
+            quoteCartQueryData,
+            selectedInsuranceTypes,
+          )
+          bundle = selectedBundleVariant?.bundle
+        }
+
+        if (bundle) {
           trackOfferEvent(
             eventName,
-            selectedBundleVariant.bundle,
+            bundle,
             isReferralCodeUsed(quoteCartQueryData),
             {
               quoteCartId,
