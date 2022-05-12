@@ -1,6 +1,0 @@
-query ContractFaq($contractType: TypeOfContract!, $locale: Locale!) {
-  contractFaq(contractType: $contractType, locale: $locale) {
-    body
-    headline
-  }
-}

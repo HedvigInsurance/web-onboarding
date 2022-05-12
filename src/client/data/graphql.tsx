@@ -2216,18 +2216,24 @@ export type ContractFaq = {
   body: Scalars['String']
 }
 
-export type ContractFaqResponse = {
-  __typename?: 'ContractFaqResponse'
-  contractType?: Maybe<TypeOfContract>
-  faqItems: Array<ContractFaq>
-}
-
 /** Query parameters for getting FAQs for multiple contracts */
 export type ContractFaqsQuery = {
   /** An array of contract types */
   contractTypes: Array<TypeOfContract>
   /** Locale for PCMS */
   locale: Locale
+}
+
+export type ContractFaqsResponse = {
+  __typename?: 'ContractFaqsResponse'
+  faqs?: Maybe<Array<ContractFaqV2>>
+}
+
+export type ContractFaqV2 = {
+  __typename?: 'ContractFaqV2'
+  title?: Maybe<Scalars['String']>
+  faq?: Maybe<Array<ContractFaq>>
+  name?: Maybe<Scalars['String']>
 }
 
 export type ContractHighlight = {
@@ -8250,7 +8256,7 @@ export type NorwegianHouseAgreement = AgreementCore & {
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
   yearOfConstruction: Scalars['Int']
-  extraBuildings: Array<Maybe<ExtraBuilding>>
+  extraBuildings: Array<ExtraBuilding>
   isSubleted: Scalars['Boolean']
   partner?: Maybe<Scalars['String']>
   carrier?: Maybe<Scalars['String']>
@@ -8582,7 +8588,7 @@ export type Query = {
   /** Returns FAQ for TypeOfContract from promise-cms */
   contractFaq: Array<ContractFaq>
   /** Returns FAQ for TypeOfContract from promise-cms */
-  contractFaqs: Array<ContractFaqResponse>
+  contractFaqs: ContractFaqsResponse
   /** Returns termsAndConditions from promise-cms */
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
@@ -10418,7 +10424,7 @@ export type SwedishHouseAgreement = AgreementCore & {
   ancillaryArea: Scalars['Int']
   yearOfConstruction: Scalars['Int']
   numberOfBathrooms: Scalars['Int']
-  extraBuildings: Array<Maybe<ExtraBuilding>>
+  extraBuildings: Array<ExtraBuilding>
   isSubleted: Scalars['Boolean']
   partner?: Maybe<Scalars['String']>
   carrier?: Maybe<Scalars['String']>
@@ -11955,15 +11961,27 @@ export type CheckoutStatusQuery = { __typename?: 'Query' } & {
     }
 }
 
-export type ContractFaqQueryVariables = Exact<{
-  contractType: TypeOfContract
-  locale: Locale
+export type GetContractFaqsQueryVariables = Exact<{
+  input: ContractFaqsQuery
 }>
 
-export type ContractFaqQuery = { __typename?: 'Query' } & {
-  contractFaq: Array<
-    { __typename?: 'ContractFaq' } & Pick<ContractFaq, 'body' | 'headline'>
-  >
+export type GetContractFaqsQuery = { __typename?: 'Query' } & {
+  contractFaqs: { __typename?: 'ContractFaqsResponse' } & {
+    faqs?: Maybe<
+      Array<
+        { __typename?: 'ContractFaqV2' } & Pick<ContractFaqV2, 'title'> & {
+            faq?: Maybe<
+              Array<
+                { __typename?: 'ContractFaq' } & Pick<
+                  ContractFaq,
+                  'headline' | 'body'
+                >
+              >
+            >
+          }
+      >
+    >
+  }
 }
 
 export type CreateAccessTokenMutationVariables = Exact<{
@@ -13673,63 +13691,69 @@ export type CheckoutStatusQueryResult = ApolloReactCommon.QueryResult<
   CheckoutStatusQuery,
   CheckoutStatusQueryVariables
 >
-export const ContractFaqDocument = gql`
-  query ContractFaq($contractType: TypeOfContract!, $locale: Locale!) {
-    contractFaq(contractType: $contractType, locale: $locale) {
-      body
-      headline
+export const GetContractFaqsDocument = gql`
+  query GetContractFaqs($input: ContractFaqsQuery!) {
+    contractFaqs(input: $input) {
+      faqs {
+        title
+        faq {
+          headline
+          body
+        }
+      }
     }
   }
 `
 
 /**
- * __useContractFaqQuery__
+ * __useGetContractFaqsQuery__
  *
- * To run a query within a React component, call `useContractFaqQuery` and pass it any options that fit your needs.
- * When your component renders, `useContractFaqQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetContractFaqsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetContractFaqsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useContractFaqQuery({
+ * const { data, loading, error } = useGetContractFaqsQuery({
  *   variables: {
- *      contractType: // value for 'contractType'
- *      locale: // value for 'locale'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useContractFaqQuery(
+export function useGetContractFaqsQuery(
   baseOptions: Apollo.QueryHookOptions<
-    ContractFaqQuery,
-    ContractFaqQueryVariables
+    GetContractFaqsQuery,
+    GetContractFaqsQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ContractFaqQuery, ContractFaqQueryVariables>(
-    ContractFaqDocument,
+  return Apollo.useQuery<GetContractFaqsQuery, GetContractFaqsQueryVariables>(
+    GetContractFaqsDocument,
     options,
   )
 }
-export function useContractFaqLazyQuery(
+export function useGetContractFaqsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    ContractFaqQuery,
-    ContractFaqQueryVariables
+    GetContractFaqsQuery,
+    GetContractFaqsQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ContractFaqQuery, ContractFaqQueryVariables>(
-    ContractFaqDocument,
-    options,
-  )
+  return Apollo.useLazyQuery<
+    GetContractFaqsQuery,
+    GetContractFaqsQueryVariables
+  >(GetContractFaqsDocument, options)
 }
-export type ContractFaqQueryHookResult = ReturnType<typeof useContractFaqQuery>
-export type ContractFaqLazyQueryHookResult = ReturnType<
-  typeof useContractFaqLazyQuery
+export type GetContractFaqsQueryHookResult = ReturnType<
+  typeof useGetContractFaqsQuery
 >
-export type ContractFaqQueryResult = ApolloReactCommon.QueryResult<
-  ContractFaqQuery,
-  ContractFaqQueryVariables
+export type GetContractFaqsLazyQueryHookResult = ReturnType<
+  typeof useGetContractFaqsLazyQuery
+>
+export type GetContractFaqsQueryResult = ApolloReactCommon.QueryResult<
+  GetContractFaqsQuery,
+  GetContractFaqsQueryVariables
 >
 export const CreateAccessTokenDocument = gql`
   mutation CreateAccessToken($quoteCartId: ID!) {
