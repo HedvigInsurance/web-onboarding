@@ -161,11 +161,11 @@ type MileageInputProps = {
   formikProps: FormikProps<QuoteInput>
 }
 
-export const MileageInput: React.FC<MileageInputProps> = ({
+export const MileageInput = ({
   name,
   label,
   formikProps,
-}) => {
+}: MileageInputProps) => {
   const options = [1000, 1500, 2000, 2500, 2501].map((value) => {
     return value !== 2501
       ? {
