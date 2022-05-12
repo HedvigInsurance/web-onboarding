@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useLocation } from 'react-router'
 import { OfferData } from 'pages/OfferNew/types'
-import { getAddress } from 'pages/Offer/utils'
+import { getAddress, getCarMakeAndOrModel } from 'pages/Offer/utils'
 import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
@@ -78,6 +78,16 @@ const QuoteAddress = styled.div`
   }
 `
 
+const CarInfo = styled.div`
+  font-size: 1.5rem;
+  line-height: 1.3;
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 3rem;
+    line-height: 1.17;
+  }
+`
+
 const EditDetailsButton = styled(Button)`
   font-size: 0.875rem;
   border: 1px solid ${colorsV3.gray900};
@@ -124,6 +134,7 @@ export const HeroOfferDetails: React.FC<Props> = ({
   const numberCoInsured = (person.householdSize ?? 1) - 1
 
   const address = getAddress(allQuotes)
+  const carInfo = getCarMakeAndOrModel(allQuotes)
 
   const textKeys = useTextKeys()
 
@@ -137,6 +148,7 @@ export const HeroOfferDetails: React.FC<Props> = ({
         </NameAndCoInsured>
 
         {address && <QuoteAddress>{address}</QuoteAddress>}
+        {carInfo && <CarInfo>{carInfo}</CarInfo>}
       </OfferInfoWrapper>
       <EditDetailsButton
         background={'none'}

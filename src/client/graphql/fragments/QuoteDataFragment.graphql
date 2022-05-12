@@ -112,5 +112,13 @@ fragment QuoteDataFragment on BundledQuote {
       coInsured
       isStudent
     }
+    ... on SwedishCarDetails {
+      registrationNumber
+      info {
+        model
+        modelYear
+        makeAndModel
+      }
+    }
   }
 }
