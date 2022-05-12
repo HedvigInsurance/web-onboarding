@@ -7,13 +7,6 @@ import {
   hasTravelQuote,
 } from 'pages/OfferNew/utils'
 import { EmbarkStory } from 'utils/embarkStory'
-import {
-  getContractType,
-  getInitialOfferFromSessionStorage,
-  getTrackableContractCategory,
-  setInitialOfferToSessionStorage,
-  getExternalInsuranceDataFromGQLCache,
-} from './helpers'
 import { pushToGTMDataLayer, GTMPhoneNumberData } from './dataLayer'
 import { EventName } from './types'
 
@@ -33,25 +26,13 @@ export const trackOfferGTM = (
   referralCodeUsed: boolean,
   { switchedFrom, phoneNumberData, quoteCartId }: OptionalParameters = {},
 ) => {
-  const contractType = getContractType(offerData)
-  const contractCategory = getTrackableContractCategory(contractType)
   const grossPrice = Math.round(Number(offerData.cost.monthlyGross.amount))
   const netPrice = Math.round(Number(offerData.cost.monthlyNet.amount))
 
-  const currentInsurer = offerData.quotes[0].currentInsurer?.id ?? undefined
-  const dataCollectionId = offerData.quotes[0]?.dataCollectionId
-  const externalInsuranceData = dataCollectionId
-    ? getExternalInsuranceDataFromGQLCache(dataCollectionId)
-    : {}
-  const initialOffer = getInitialOfferFromSessionStorage()
-  if (!initialOffer) {
-    setInitialOfferToSessionStorage(contractCategory)
-  }
   try {
     pushToGTMDataLayer({
       event: eventName,
       offerData: {
-        insurance_type: contractType,
         referral_code: referralCodeUsed ? 'yes' : 'no',
         number_of_people: offerData.person.householdSize,
         insurance_price: grossPrice,
@@ -61,19 +42,19 @@ export const trackOfferGTM = (
         has_home: hasHomeQuote(offerData),
         has_accident: hasAccidentQuote(offerData),
         has_travel: hasTravelQuote(offerData),
-        initial_offer: initialOffer ?? contractCategory,
-        current_offer: contractCategory,
+        has_house: false,
         quote_cart_id: quoteCartId,
         ...(switchedFrom && {
-          switched_from: getTrackableContractCategory(
-            getContractType(switchedFrom),
-          ),
-          switched_to: contractCategory,
+          switched_from: {
+            is_student: isStudentOffer(offerData),
+            has_home: hasHomeQuote(offerData),
+            has_accident: hasAccidentQuote(offerData),
+            has_travel: hasTravelQuote(offerData),
+            has_house: false,
+          },
         }),
         ...(offerData.memberId && { member_id: offerData.memberId }),
         flow_type: EmbarkStory.get() ?? undefined,
-        current_insurer: currentInsurer,
-        ...(currentInsurer && externalInsuranceData),
       },
       ...phoneNumberData,
     })
