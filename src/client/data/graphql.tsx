@@ -11981,28 +11981,8 @@ export type GetContractFaqsQuery = { __typename?: 'Query' } & {
           }
       >
     >
-  }
-}
 
-export type CreateAccessTokenMutationVariables = Exact<{
-  quoteCartId: Scalars['ID']
-}>
 
-export type CreateAccessTokenMutation = { __typename?: 'Mutation' } & {
-  quoteCart_createAccessToken: {
-    __typename?: 'CreateQuoteCartAccessTokenResult'
-  } & Pick<CreateQuoteCartAccessTokenResult, 'accessToken'>
-}
-
-export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
-  homeInput: CreateQuoteInput
-  accidentInput: CreateQuoteInput
-}>
-
-export type CreateDanishHomeAccidentQuoteMutation = {
-  __typename?: 'Mutation'
-} & {
-  createHomeContents:
     | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
           quoteDetails:
             | { __typename: 'SwedishApartmentQuoteDetails' }
