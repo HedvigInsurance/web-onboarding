@@ -33,19 +33,15 @@ export const getSwedishCarValidationSchema = (textKeys: TextKeyMap) => {
   })
 }
 
-export const SwedishCarDetails: React.FC<{
+export const SwedishCarDetails = ({
+  formikProps,
+}: {
   formikProps: FormikProps<QuoteInput>
-}> = ({ formikProps }) => {
-  console.log(formikProps)
+}) => {
   return (
     <Content>
       <ContentColumn>
         <InputGroup>
-          <BooleanInput
-            name="data.isStudent"
-            label="DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL"
-            formikProps={formikProps}
-          />
           <TextInput
             name="firstName"
             label="DETAILS_MODULE_TABLE_FIRSTNAME_CELL_LABEL"
@@ -54,6 +50,16 @@ export const SwedishCarDetails: React.FC<{
           <TextInput
             name="lastName"
             label="DETAILS_MODULE_TABLE_LASTNAME_CELL_LABEL"
+            formikProps={formikProps}
+          />
+          <TextInput
+            name="data.registrationNumber"
+            label="DETAILS_MODULE_TABLE_REGISTRATION_NUMBER_CELL_LABEL"
+            formikProps={formikProps}
+          />
+          <MileageInput
+            name="data.mileage"
+            label="DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_CELL_LABEL"
             formikProps={formikProps}
           />
         </InputGroup>
@@ -73,16 +79,6 @@ export const SwedishCarDetails: React.FC<{
           <TextInput
             name="data.city"
             label="DETAILS_MODULE_TABLE_CITY_CELL_LABEL"
-            formikProps={formikProps}
-          />
-          <TextInput
-            name="data.registrationNumber"
-            label="DETAILS_MODULE_TABLE_REGISTRATION_NUMBER_CELL_LABEL"
-            formikProps={formikProps}
-          />
-          <MileageInput
-            name="data.mileage"
-            label="DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_CELL_LABEL"
             formikProps={formikProps}
           />
         </InputGroup>

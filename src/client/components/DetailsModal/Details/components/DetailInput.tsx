@@ -167,18 +167,14 @@ export const MileageInput: React.FC<MileageInputProps> = ({
   label,
   formikProps,
 }) => {
-  const { isoLocale } = useCurrentLocale()
-  const textKeys = useTextKeys()
-  const unitMultipler = isoLocale.toLowerCase().includes('en') ? 10 : 1
   const options = [1000, 1500, 2000, 2500, 2501].map((value) => {
     return value !== 2501
       ? {
-          label: `${value *
-            unitMultipler} ${textKeys.CAR_INSURANCE_MILEAGE_UNIT()}`,
+          label: `SE_WEB_SIGNUP_CAR_NEW_INSURANCE_MILEAGE_OPTION_${value * 10}`,
           value: value.toString(),
         }
       : {
-          label: 'CAR_INSURANCE_MILEAGE_EXCEEDS_MAXIMUM',
+          label: 'SE_WEB_SIGNUP_CAR_NEW_INSURANCE_MILEAGE_OPTION_25000_PLUS',
           value: value.toString(),
         }
   })
