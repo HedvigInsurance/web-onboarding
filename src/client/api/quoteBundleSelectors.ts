@@ -24,6 +24,26 @@ export const getQuotes = (bundle: QuoteBundle | undefined) => {
   return bundle?.quotes ?? []
 }
 
+export const hasHomeContents = (bundle: QuoteBundle) =>
+  bundle.quotes.some(
+    (quote) =>
+      quoteSelector.isSwedishApartment(quote) ||
+      quoteSelector.isSwedishHouse(quote) || // House Insurance in Sweden includes HomeContents coverage
+      quoteSelector.isDanishHomeContents(quote) ||
+      quoteSelector.isNorwegianHomeContents(quote),
+  )
+
+export const hasHouse = (bundle: QuoteBundle) =>
+  bundle.quotes.some((quote) => quoteSelector.isHouse(quote))
+
+export const getHomeOwnershipType = (bundle: QuoteBundle) => {
+  const homeInsurance = bundle.quotes.find((quote) =>
+    quoteSelector.isHomeContentsOrHouse(quote),
+  )
+
+  return homeInsurance ? quoteSelector.getSubType(homeInsurance) : undefined
+}
+
 export const hasAccident = (bundle: QuoteBundle) =>
   bundle.quotes.some((quote) => quoteSelector.isAccident(quote))
 
@@ -94,6 +114,10 @@ export const getBundleCurrency = (bundle: QuoteBundle) => {
   return bundle.bundleCost.monthlyNet.currency
 }
 
+export const getGrossPrice = (bundle: QuoteBundle) => {
+  return bundle.bundleCost.monthlyGross.amount
+}
+
 export const getTotalBundleCost = (bundle: QuoteBundle) => {
   return bundle.bundleCost.monthlyNet.amount
 }
@@ -143,6 +167,9 @@ const getHouseholdSizeFromBundledQuotes = (
 
   return
 }
+
+export const getHouseholdSize = (bundle: QuoteBundle) =>
+  getHouseholdSizeFromBundledQuotes(bundle.quotes)
 
 type QuoteWithAddress = Omit<BundledQuote, 'data'> & {
   data: { zipCode: string; street: string }

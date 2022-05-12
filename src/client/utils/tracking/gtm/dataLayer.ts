@@ -1,13 +1,20 @@
 import { AppEnvironment } from 'shared/clientConfig'
-import { TrackableContractType } from './types'
 
 export type GTMUserProperties = {
   market: string
   environment: AppEnvironment
 }
 
+type SwitchedFrom = {
+  is_student: boolean
+  has_home: boolean
+  has_house: boolean
+  has_accident: boolean
+  has_travel: boolean
+  ownership_type?: string
+}
+
 export type GTMOfferData = {
-  insurance_type: TrackableContractType
   referral_code: 'yes' | 'no'
   number_of_people?: number
   insurance_price: number
@@ -15,14 +22,14 @@ export type GTMOfferData = {
   currency: string
   is_student: boolean
   has_home: boolean
+  has_house: boolean
   has_accident: boolean
   has_travel: boolean
-  initial_offer: string
-  current_offer: string
+  ownership_type?: string
   member_id?: string
   quote_cart_id?: string
   flow_type?: string
-  current_insurer?: string
+  switched_from?: SwitchedFrom
 }
 
 export type GTMPageData = {

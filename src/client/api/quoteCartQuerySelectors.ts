@@ -54,6 +54,10 @@ export function getMonthlyCostDeductionIncentive(
     : undefined
 }
 
+export function isReferralCodeUsed(quoteCartQuery: QuoteCartQuery | undefined) {
+  return getMonthlyCostDeductionIncentive(quoteCartQuery) !== undefined
+}
+
 export function isPaymentConnected(quoteCartQuery: QuoteCartQuery | undefined) {
   const id = quoteCartQuery?.quoteCart.paymentConnection?.id
   return id !== undefined && id !== null
