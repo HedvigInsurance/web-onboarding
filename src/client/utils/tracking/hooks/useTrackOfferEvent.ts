@@ -32,14 +32,10 @@ export const useTrackOfferEvent = () => {
           },
         })
 
-        let bundle = selectedBundle
-        if (!selectedBundle) {
-          const selectedBundleVariant = getSelectedBundleVariant(
-            quoteCartQueryData,
-            selectedInsuranceTypes,
-          )
-          bundle = selectedBundleVariant?.bundle
-        }
+        const bundle =
+          selectedBundle ||
+          getSelectedBundleVariant(quoteCartQueryData, selectedInsuranceTypes)
+            ?.bundle
 
         if (bundle) {
           trackOfferEvent(
