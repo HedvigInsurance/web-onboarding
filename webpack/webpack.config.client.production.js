@@ -19,13 +19,18 @@ module.exports = webpackConfig({
     path: path.resolve(root, 'build/new-member-assets'),
   },
   optimization: {
+    minimize: true,
     splitChunks: {
       chunks: 'all',
       name: 'common',
     },
   },
-  devtool: 'source-map',
+  devtool: false,
   plugins: [
+    new webpack.SourceMapDevToolPlugin({
+      noSources: false,
+      filename: '[file].map',
+    }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false,

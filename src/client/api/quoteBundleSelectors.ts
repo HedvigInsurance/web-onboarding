@@ -1,6 +1,12 @@
-import { QuoteBundle, TypeOfContract, BundledQuote } from 'data/graphql'
+import {
+  QuoteBundle,
+  TypeOfContract,
+  BundledQuote,
+  PerilV2,
+} from 'data/graphql'
 import { MarketLabel } from 'shared/clientConfig'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
+import { OfferPersonInfo, Address } from '../pages/OfferNew/types'
 import * as quoteSelector from './quoteSelector'
 
 export const isMultiQuote = (bundle: QuoteBundle | undefined) => {
@@ -55,6 +61,7 @@ export const isYouthOffer = (bundle: QuoteBundle): boolean => {
 const HOME_HOUSE_INSURANCE_TYPES: Array<InsuranceType> = [
   InsuranceType.DANISH_HOME_CONTENT,
   InsuranceType.NORWEGIAN_HOME_CONTENT,
+  InsuranceType.NORWEGIAN_HOUSE,
   InsuranceType.SWEDISH_APARTMENT,
   InsuranceType.SWEDISH_HOUSE,
 ]
@@ -91,6 +98,21 @@ export const getTotalBundleCost = (bundle: QuoteBundle) => {
   return bundle.bundleCost.monthlyNet.amount
 }
 
+export const getOfferPersonInfo = (bundle: QuoteBundle): OfferPersonInfo => {
+  const firstQuote = bundle.quotes[0]
+
+  return {
+    firstName: firstQuote.firstName,
+    lastName: firstQuote.lastName,
+    email: firstQuote.email,
+    ssn: firstQuote.ssn,
+    phoneNumber: firstQuote.phoneNumber,
+    birthDate: firstQuote.birthDate,
+    householdSize: getHouseholdSizeFromBundledQuotes(bundle.quotes),
+    address: getAddressFromBundledQuotes(bundle.quotes),
+  }
+}
+
 export const includesExactlyAllContracts = (
   bundle: QuoteBundle,
   insuranceTypes: InsuranceType[],
@@ -106,4 +128,71 @@ export const getFirstInsuranceType = (bundle: QuoteBundle) => {
 
 export const hasCar = (bundle: BundledQuote[]) => {
   return bundle.some((quote) => quote.data.type === 'SWEDISH_CAR')
+}
+
+const getHouseholdSizeFromBundledQuotes = (
+  quotes: ReadonlyArray<BundledQuote>,
+): number | undefined => {
+  const quotesData = quotes.map((quote) => quote.data)
+
+  for (const data of quotesData) {
+    if ('householdSize' in data) return data.householdSize as number
+    if ('coInsured' in data) return (data.coInsured + 1) as number
+    if ('numberCoInsured' in data) return (data.numberCoInsured + 1) as number
+  }
+
+  return
+}
+
+type QuoteWithAddress = Omit<BundledQuote, 'data'> & {
+  data: { zipCode: string; street: string }
+}
+
+const quoteHasAddress = (quote: BundledQuote): quote is QuoteWithAddress => {
+  const addressRelatedKeys = ['zipCode', 'street']
+  return addressRelatedKeys.every((key) => key in quote.data)
+}
+
+const getAddressFromBundledQuotes = (
+  quotes: ReadonlyArray<BundledQuote>,
+): Address | null => {
+  const quoteWithAddress = quotes.find(quoteHasAddress)
+
+  if (quoteWithAddress) {
+    return {
+      street: quoteWithAddress.data.street,
+      zipCode: quoteWithAddress.data.zipCode,
+    }
+  }
+
+  return null
+}
+
+export const getAllPerilsForQuoteBundle = (bundle: QuoteBundle) => {
+  return bundle.quotes.reduce(
+    (accumulatedPerils, quote) =>
+      accumulatedPerils.concat(quote.contractPerils),
+    [] as PerilV2[],
+  )
+}
+
+export const getUniquePerilsForQuoteBundles = (bundles: QuoteBundle[]) => {
+  const uniquePerils = bundles
+    .reduce(
+      (accumulated, bundle) =>
+        accumulated.concat(getAllPerilsForQuoteBundle(bundle)),
+      [] as PerilV2[],
+    )
+    .filter(
+      (peril, index, allPerils) =>
+        allPerils.findIndex((p) => p.title === peril.title) === index,
+    )
+
+  return uniquePerils
+}
+
+export const bundleHasPeril = (bundle: QuoteBundle, peril: PerilV2) => {
+  return bundle.quotes.some((quote) =>
+    quote.contractPerils.find((p) => p.title === peril.title),
+  )
 }

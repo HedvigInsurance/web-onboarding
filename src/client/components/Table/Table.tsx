@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import React, { createContext, ReactNode, useContext } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { getMargins, Margins } from '../utils/margins'
 
 type WithChildrenProps = {
@@ -42,7 +43,6 @@ const TableBody = styled.tbody()
 
 const getTableCellStyles = ({ align = 'left', color }: TableCellProps) => ({
   textAlign: align,
-  minWidth: '4rem',
   color,
 })
 
@@ -53,7 +53,11 @@ type TableCellProps = WithChildrenProps & {
 
 const TableCellElement = styled.td((props: TableCellProps) => ({
   ...getTableCellStyles(props),
-  padding: '0.5rem 0',
+  padding: '0.5rem 0.5rem',
+
+  [MEDIUM_SCREEN_MEDIA_QUERY]: {
+    padding: '0.5rem 1rem',
+  },
 
   borderBottom: `1px solid ${colorsV3.gray300}`,
 }))
@@ -61,10 +65,14 @@ const TableCellElement = styled.td((props: TableCellProps) => ({
 const TableHeadCellElement = styled.th(
   (props: Omit<TableCellProps, 'color'>) => ({
     ...getTableCellStyles(props),
-    padding: '1rem 0',
+    padding: '1rem 0.5rem',
     fontSize: '0.875rem',
     fontWeight: 'normal',
     color: colorsV3.gray700,
+
+    [MEDIUM_SCREEN_MEDIA_QUERY]: {
+      padding: '1rem',
+    },
   }),
 )
 
