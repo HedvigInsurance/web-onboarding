@@ -15,7 +15,6 @@ import {
   SavingCookieStorage,
   Session,
 } from '../shared/sessionStorage'
-import { apolloClient } from './apolloClient'
 import { MobileContext } from './utils/mobileContext'
 
 Datadog.initRum()
@@ -27,6 +26,8 @@ Sentry.init({
   enabled: Boolean(process.env.SENTRY_DSN),
   release: process.env.SENTRY_RELEASE,
 })
+
+import { apolloClient } from './apolloClient'
 
 const session = createSession<Session>(
   new SavingCookieStorage(new CookieStorage({ expires: null, path: '/' })),

@@ -1,7 +1,10 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { QuoteBundleVariant } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
+import { useFeature } from 'utils/hooks/useFeature'
+import { Feature } from 'shared/clientConfig'
+import { TextButton } from 'components/buttons'
 import {
   ContainerWrapper,
   Container,
@@ -11,6 +14,7 @@ import {
   Body,
   ColumnSpacing,
 } from '../components'
+import { ComparisonModal } from '../ComparisonTable/ComparisonModal'
 import { Selector } from './Selector'
 
 interface Props {
@@ -27,6 +31,8 @@ export const InsuranceSelector = ({
   const textKeys = useTextKeys()
   const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
   const localizeNumber = useLocalizeNumber()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isComparisonTableEnabled] = useFeature([Feature.COMPARISON_TABLE])
 
   const variantMap = useMemo(
     () =>
@@ -72,6 +78,16 @@ export const InsuranceSelector = ({
               {textKeys.OFFER_BUNDLE_SELECTOR_TITLE()}
             </HeadingBlack>
             <Body>{textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION()}</Body>
+
+            {isComparisonTableEnabled && variants.length > 0 && (
+              <TextButton
+                mt="1.5rem"
+                size="lg"
+                onClick={() => setIsModalOpen(true)}
+              >
+                {textKeys.OPEN_COMPARISON_MODAL()}
+              </TextButton>
+            )}
           </HeadingWrapper>
           <Selector
             insurances={insurances}
@@ -83,6 +99,11 @@ export const InsuranceSelector = ({
         </Column>
         <ColumnSpacing />
       </Container>
+      <ComparisonModal
+        isVisible={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        bundles={variants.map((v) => v.bundle)}
+      />
     </ContainerWrapper>
   )
 }

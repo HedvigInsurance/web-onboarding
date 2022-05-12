@@ -1,11 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import {
-  OfferPersonInfo,
-  OfferQuote,
-  GenericQuoteData,
-} from 'pages/OfferNew/types'
+import { OfferPersonInfo, GenericQuoteData } from 'pages/OfferNew/types'
 import { formatCarRegistrationNumberSE, parseAddress } from 'pages/Offer/utils'
 import {
   getFormattedBirthdate,
@@ -15,7 +11,7 @@ import {
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
-import { TypeOfContract } from 'src/client/data/graphql'
+import { TypeOfContract, BundledQuote } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { localizeNumber } from 'l10n/useLocalizeNumber'
 import { Group, Row } from './InsuranceSummary'
@@ -33,7 +29,7 @@ const HorizontalSpacer = styled.div`
 
 type Props = {
   personalDetails: OfferPersonInfo
-  mainQuote: OfferQuote
+  mainQuote: BundledQuote
 }
 
 export const InsuranceSummaryDetails: React.FC<Props> = ({
@@ -263,11 +259,11 @@ const getCarDataMaybe = (
 }
 
 const getQuoteDetails = (
-  mainQuote: OfferQuote,
+  mainQuote: BundledQuote,
   textKeys: TextKeyMap,
   lang: string,
 ): ReadonlyArray<DetailsGroup> => {
-  const { data, contractType } = mainQuote
+  const { data, typeOfContract } = mainQuote
 
   const coInsured = getCoInsuredMaybe(textKeys, data)
   const carData = getCarDataMaybe(textKeys, data, lang)
@@ -275,7 +271,7 @@ const getQuoteDetails = (
   const detailsGroups: DetailsGroup[] = [
     [
       ...getAddressDataMaybe(textKeys, data),
-      ...getHomeInsuranceDetailsMaybe(textKeys, data, contractType),
+      ...getHomeInsuranceDetailsMaybe(textKeys, data, typeOfContract),
       ...getHouseSummaryDetailsMaybe(textKeys, data),
     ],
 

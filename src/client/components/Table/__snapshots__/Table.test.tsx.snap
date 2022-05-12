@@ -11,7 +11,7 @@ exports[`Table can render 1`] = `
       class="css-168pto2-TableRow e2t7qft2"
     >
       <td
-        class="css-1y781ub-TableCellElement e2t7qft4"
+        class="css-1by63zi-TableCellElement e2t7qft4"
       >
         hello
       </td>
@@ -31,7 +31,7 @@ exports[`Table can render table header 1`] = `
       class="css-168pto2-TableRow e2t7qft2"
     >
       <th
-        class="css-1dic96-TableHeadCellElement e2t7qft5"
+        class="css-1ock1qo-TableHeadCellElement e2t7qft5"
       >
         hello
       </th>

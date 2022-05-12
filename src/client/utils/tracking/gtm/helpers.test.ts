@@ -1,12 +1,11 @@
 import { TypeOfContract } from 'data/graphql'
+import { getTrackableContractCategory, getUtmParamsFromCookie } from './helpers'
 import {
   DkBundleTypes,
-  getTrackableContractCategory,
-  getUtmParamsFromCookie,
   NoBundleTypes,
   SeBundleTypes,
   TrackableContractCategory,
-} from './tracking'
+} from './types'
 let mockGetItem: jest.Mock
 jest.mock('cookie-storage', () => ({
   CookieStorage() {
