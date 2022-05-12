@@ -20,7 +20,6 @@ import {
 } from 'components/inputs'
 import { MarketLabel } from 'l10n/locales'
 import { useTextKeys } from 'utils/textKeys'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from '../../types'
 import { ContentColumnTitle, ContentColumnTitleButton } from './Details.styles'
 

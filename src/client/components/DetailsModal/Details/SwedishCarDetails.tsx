@@ -5,12 +5,7 @@ import { InputGroup } from 'components/inputs'
 import { TextKeyMap } from 'utils/textKeys'
 
 import { QuoteInput } from '../types'
-import {
-  MileageInput,
-  TextInput,
-  ZipcodeInput,
-  BooleanInput,
-} from './components/DetailInput'
+import { MileageInput, TextInput, ZipcodeInput } from './components/DetailInput'
 
 import { Content, ContentColumn } from './components/Details.styles'
 
