@@ -326,6 +326,8 @@ export type Agreement =
   | SwedishApartmentAgreement
   | SwedishHouseAgreement
   | SwedishAccidentAgreement
+  | SwedishCarAgreement
+  | SwedishQasaRentalAgreement
   | NorwegianHomeContentAgreement
   | NorwegianHouseAgreement
   | NorwegianTravelAgreement
@@ -1621,6 +1623,7 @@ export type BundledQuote = {
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
+  insuranceType: Scalars['String']
   perils: Array<PerilV2>
   detailsTable: Table
 }
@@ -2018,6 +2021,7 @@ export type CompleteQuote = {
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
+  insuranceType: Scalars['String']
   perils: Array<PerilV2>
   detailsTable: Table
 }
@@ -2067,6 +2071,11 @@ export type ConcurrentInception = {
   currentInsurer?: Maybe<CurrentInsurer>
 }
 
+export type ConnectPaymentFailed = {
+  __typename?: 'ConnectPaymentFailed'
+  paymentTokenId: Scalars['ID']
+}
+
 export type ConnectPaymentFinished = {
   __typename?: 'ConnectPaymentFinished'
   paymentTokenId: Scalars['ID']
@@ -2081,7 +2090,10 @@ export type ConnectPaymentInput = {
   market: Market
 }
 
-export type ConnectPaymentResult = ConnectPaymentFinished | ActionRequired
+export type ConnectPaymentResult =
+  | ConnectPaymentFinished
+  | ActionRequired
+  | ConnectPaymentFailed
 
 export type ConnectPositionInput = {
   /** Connect document after specified document */
@@ -2119,6 +2131,7 @@ export type Contract = {
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   supportsAddressChange: Scalars['Boolean']
+  logo: Icon
   perils: Array<PerilV2>
   currentAgreementDetailsTable: Table
   upcomingAgreementDetailsTable: Table
@@ -2837,6 +2850,7 @@ export enum CrossSellType {
   Travel = 'TRAVEL',
   HomeContent = 'HOME_CONTENT',
   House = 'HOUSE',
+  Car = 'CAR',
 }
 
 export type CurrentInsurer = {
@@ -3862,6 +3876,7 @@ export type EmbarkTextActionData = {
   large?: Maybe<Scalars['Boolean']>
   mask?: Maybe<Scalars['String']>
   tooltip?: Maybe<EmbarkTooltip>
+  subtitle?: Maybe<Scalars['String']>
 }
 
 export type EmbarkTextActionSet = EmbarkActionCore & {
@@ -4004,6 +4019,7 @@ export type ExternalInsuranceProviderMutation = {
   initiateDataCollectionWithSwedishPersonalNumber: DataCollectionStatus
   initiateDataCollectionWithNorwegianPersonalNumber: DataCollectionStatus
   initiateDataCollectionWithNorwegianPhoneNumber: DataCollectionStatus
+  initiateIframeDataCollection: Scalars['ID']
 }
 
 export type ExternalInsuranceProviderMutationInitiateDataCollectionArgs = {
@@ -4020,6 +4036,10 @@ export type ExternalInsuranceProviderMutationInitiateDataCollectionWithNorwegian
 
 export type ExternalInsuranceProviderMutationInitiateDataCollectionWithNorwegianPhoneNumberArgs = {
   input: DataCollectionPhoneNumberInput
+}
+
+export type ExternalInsuranceProviderMutationInitiateIframeDataCollectionArgs = {
+  input: InitiateIframeDataCollectionInput
 }
 
 export type ExtraBuilding = ExtraBuildingValue
@@ -5262,6 +5282,10 @@ export type InitiateDataCollectionInput = {
   reference: Scalars['ID']
   insuranceProvider: Scalars['String']
   personalNumber: Scalars['String']
+}
+
+export type InitiateIframeDataCollectionInput = {
+  collectionId: Scalars['String']
 }
 
 export type InitWidgetInput = {
@@ -8151,9 +8175,7 @@ export type NorwegianHouseAgreement = AgreementCore & {
   address: Address
   numberCoInsured: Scalars['Int']
   squareMeters: Scalars['Int']
-  ancillaryArea: Scalars['Int']
   yearOfConstruction: Scalars['Int']
-  numberOfBathrooms: Scalars['Int']
   extraBuildings: Array<Maybe<ExtraBuilding>>
   isSubleted: Scalars['Boolean']
   partner?: Maybe<Scalars['String']>
@@ -8450,6 +8472,7 @@ export type Query = {
   /** Returns whether a member has at least one contract */
   hasContract: Scalars['Boolean']
   partner: RapioPartner
+  paymentConnection_providers?: Maybe<Array<Provider>>
   quoteBundle: QuoteBundle
   /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
@@ -8481,6 +8504,8 @@ export type Query = {
   availableLocales: Array<Locale>
   /** Returns perils from promise-cms */
   contractPerils: Array<PerilV2>
+  /** Returns FAQ for TypeOfContract from promise-cms */
+  contractFaq: Array<ContractFaq>
   /** Returns termsAndConditions from promise-cms */
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
@@ -8631,6 +8656,10 @@ export type QueryPartnerArgs = {
   id: Scalars['ID']
 }
 
+export type QueryPaymentConnection_ProvidersArgs = {
+  market: Market
+}
+
 export type QueryQuoteBundleArgs = {
   input: QuoteBundleInput
   locale?: Maybe<Locale>
@@ -8670,6 +8699,11 @@ export type QueryAngelStoryArgs = {
 }
 
 export type QueryContractPerilsArgs = {
+  contractType: TypeOfContract
+  locale: Locale
+}
+
+export type QueryContractFaqArgs = {
   contractType: TypeOfContract
   locale: Locale
 }
@@ -10227,9 +10261,40 @@ export type SwedishBankIdSession = {
   autoStartToken?: Maybe<Scalars['String']>
 }
 
+export type SwedishCarAgreement = AgreementCore & {
+  __typename?: 'SwedishCarAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  address: Address
+  type: SwedishCarLineOfBusiness
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
+  registrationNumber?: Maybe<Scalars['String']>
+  mileage?: Maybe<Scalars['Int']>
+}
+
 export type SwedishCarDetails = {
   __typename?: 'SwedishCarDetails'
-  _?: Maybe<Scalars['String']>
+  registrationNumber: Scalars['String']
+  mileage: Scalars['Int']
+  info?: Maybe<SwedishCarInfo>
+}
+
+export type SwedishCarInfo = {
+  __typename?: 'SwedishCarInfo'
+  model?: Maybe<Scalars['String']>
+  makeAndModel?: Maybe<Scalars['String']>
+  modelYear?: Maybe<Scalars['String']>
+}
+
+export enum SwedishCarLineOfBusiness {
+  Traffic = 'TRAFFIC',
+  Half = 'HALF',
+  Full = 'FULL',
 }
 
 export type SwedishHouseAgreement = AgreementCore & {
@@ -10263,6 +10328,29 @@ export type SwedishHouseQuoteDetails = {
   numberOfBathrooms: Scalars['Int']
   yearOfConstruction: Scalars['Int']
   isSubleted: Scalars['Boolean']
+}
+
+export type SwedishQasaRentalAgreement = AgreementCore & {
+  __typename?: 'SwedishQasaRentalAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  address: Address
+  type: SwedishQasaRentalType
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
+  monthlyRentalAmount: Scalars['Int']
+  totalRentalAmount: Scalars['Int']
+  referenceNo?: Maybe<Scalars['String']>
+  tenantName: Scalars['String']
+}
+
+export enum SwedishQasaRentalType {
+  ShortTerm = 'SHORT_TERM',
+  LongTerm = 'LONG_TERM',
 }
 
 export enum SystemDateTimeFieldVariation {
@@ -10807,6 +10895,8 @@ export enum TypeOfContract {
   SeCarTraffic = 'SE_CAR_TRAFFIC',
   SeCarHalf = 'SE_CAR_HALF',
   SeCarFull = 'SE_CAR_FULL',
+  SeQasaShortTermRental = 'SE_QASA_SHORT_TERM_RENTAL',
+  SeQasaLongTermRental = 'SE_QASA_LONG_TERM_RENTAL',
   NoHouse = 'NO_HOUSE',
   NoHomeContentOwn = 'NO_HOME_CONTENT_OWN',
   NoHomeContentRent = 'NO_HOME_CONTENT_RENT',
@@ -12145,6 +12235,7 @@ export type PaymentConnection_ConnectPaymentMutation = {
         ActionRequired,
         'paymentTokenId' | 'action'
       >)
+    | { __typename?: 'ConnectPaymentFailed' }
 }
 
 export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables = Exact<{
@@ -12161,6 +12252,7 @@ export type PaymentConnection_SubmitAdditionalPaymentDetailsMutation = {
         'paymentTokenId' | 'status'
       >)
     | ({ __typename?: 'ActionRequired' } & Pick<ActionRequired, 'action'>)
+    | { __typename?: 'ConnectPaymentFailed' }
 }
 
 export type PaymentMethodsQueryVariables = Exact<{
@@ -12890,7 +12982,17 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
           SwedishAccidentDetails,
           'isStudent'
         >)
-      | { __typename?: 'SwedishCarDetails' }
+      | ({ __typename?: 'SwedishCarDetails' } & Pick<
+          SwedishCarDetails,
+          'registrationNumber'
+        > & {
+            info?: Maybe<
+              { __typename?: 'SwedishCarInfo' } & Pick<
+                SwedishCarInfo,
+                'model' | 'modelYear' | 'makeAndModel'
+              >
+            >
+          })
       | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
           NorwegianHomeContentsDetails,
           'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
@@ -13203,6 +13305,14 @@ export const QuoteDataFragmentFragmentDoc = gql`
         zipCode
         coInsured
         isStudent
+      }
+      ... on SwedishCarDetails {
+        registrationNumber
+        info {
+          model
+          modelYear
+          makeAndModel
+        }
       }
     }
   }

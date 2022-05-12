@@ -34,6 +34,8 @@ export type TypeOfContractExcludedUnused = Exclude<
   | TypeOfContract.SeCarFull
   | TypeOfContract.SeCarHalf
   | TypeOfContract.SeCarTraffic
+  | TypeOfContract.SeQasaLongTermRental
+  | TypeOfContract.SeQasaShortTermRental
 >
 
 export const ADTRACTION_CONTRACT_VALUES: Record<
