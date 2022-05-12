@@ -411,5 +411,16 @@
   "3D_SECURE_ERROR_DESCRIPTION": "Please try to enter your card details again. If the problem remains, try with another card or contact your credit card provider.",
   "3D_SECURE_ERROR_BUTTON": "OK",
   "3D_SECURE_ERROR_HEADING": "Your card couldn’t be authenticated",
-  "CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE": "Payment connected!"
+  "CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE": "Payment connected!",
+  "LANDING_PAGE_MISSING_MAIN_COVERAGE_ERROR": "At least one main coverage must be selected to continue",
+  "OPEN_COMPARISON_MODAL": "Compare insurance levels",
+  "COMPARISON_MODEL_HEADER": "What insurance level suits you?",
+  "DETAILS_MODULE_TABLE_CITY_CELL_LABEL": "City",
+  "DETAILS_MODULE_TABLE_REGISTRATION_NUMBER_CELL_LABEL": "",
+  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_CELL_LABEL": "Annual mileage",
+  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_10000": "",
+  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_15000": "",
+  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_20000": "",
+  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000": "",
+  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000_PLUS": ""
 }

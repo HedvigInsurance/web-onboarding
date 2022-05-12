@@ -170,11 +170,11 @@ export const MileageInput: React.FC<MileageInputProps> = ({
   const options = [1000, 1500, 2000, 2500, 2501].map((value) => {
     return value !== 2501
       ? {
-          label: `SE_WEB_SIGNUP_CAR_NEW_INSURANCE_MILEAGE_OPTION_${value * 10}`,
+          label: `DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_${value * 10}`,
           value: value.toString(),
         }
       : {
-          label: 'SE_WEB_SIGNUP_CAR_NEW_INSURANCE_MILEAGE_OPTION_25000_PLUS',
+          label: 'DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000_PLUS',
           value: value.toString(),
         }
   })
