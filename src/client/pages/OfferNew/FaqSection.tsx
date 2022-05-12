@@ -4,13 +4,13 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import AnimateHeight from 'react-animate-height'
 import ReactMarkdown from 'react-markdown/with-html'
-import { useFaqsQuery } from 'data/graphql'
-import { getIsoLocale, useCurrentLocale } from 'components/utils/CurrentLocale'
+import { TypeOfContract, useContractFaqQuery } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Container, Heading, Column, ColumnSpacing } from './components'
 
 const SectionWrapper = styled.div`
@@ -125,7 +125,6 @@ const ExpanderIcon = styled.svg<Openable>`
 `
 
 interface AccordionProps {
-  id: string
   headline: string
   body: string
 }
@@ -151,11 +150,17 @@ export const Accordion: React.FC<AccordionProps> = ({ headline, body }) => {
   )
 }
 
-export const FaqSection: React.FC = () => {
-  const pathLocale = useCurrentLocale()
-  const language = getIsoLocale(pathLocale)
-  const faqs = useFaqsQuery({ variables: { language } })
-  const languageData = faqs?.data?.languages[0]
+type FaqSectionProps = {
+  typeOfContract: TypeOfContract
+}
+
+export const FaqSection = ({ typeOfContract }: FaqSectionProps) => {
+  const { isoLocale } = useCurrentLocale()
+  const { data: faqItems } = useContractFaqQuery({
+    variables: { locale: isoLocale, contractType: 'SE_CAR_HALF' },
+  })
+  // const faqs = useFaqsQuery({ variables: { language } })
+  // const languageData = faqs?.data?.languages[0]
   const textKeys = useTextKeys()
 
   return (
@@ -165,10 +170,10 @@ export const FaqSection: React.FC = () => {
           <Column>
             <HeadingWhite>{textKeys.OFFER_FAQ_HEADING()}</HeadingWhite>
             <AccordionsWrapper>
-              {languageData?.faqs?.map((faq) => (
+              {faqItems?.contractFaq?.map((faq) => (
                 <Accordion
-                  key={faq?.id}
-                  id={faq?.id}
+                  key={faq?.headline}
+                  // id={faq?.id}
                   headline={faq!.headline!}
                   body={faq!.body!}
                 />

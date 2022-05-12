@@ -11955,6 +11955,17 @@ export type CheckoutStatusQuery = { __typename?: 'Query' } & {
     }
 }
 
+export type ContractFaqQueryVariables = Exact<{
+  contractType: TypeOfContract
+  locale: Locale
+}>
+
+export type ContractFaqQuery = { __typename?: 'Query' } & {
+  contractFaq: Array<
+    { __typename?: 'ContractFaq' } & Pick<ContractFaq, 'body' | 'headline'>
+  >
+}
+
 export type CreateAccessTokenMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
 }>
@@ -13661,6 +13672,64 @@ export type CheckoutStatusLazyQueryHookResult = ReturnType<
 export type CheckoutStatusQueryResult = ApolloReactCommon.QueryResult<
   CheckoutStatusQuery,
   CheckoutStatusQueryVariables
+>
+export const ContractFaqDocument = gql`
+  query ContractFaq($contractType: TypeOfContract!, $locale: Locale!) {
+    contractFaq(contractType: $contractType, locale: $locale) {
+      body
+      headline
+    }
+  }
+`
+
+/**
+ * __useContractFaqQuery__
+ *
+ * To run a query within a React component, call `useContractFaqQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContractFaqQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContractFaqQuery({
+ *   variables: {
+ *      contractType: // value for 'contractType'
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useContractFaqQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ContractFaqQuery,
+    ContractFaqQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ContractFaqQuery, ContractFaqQueryVariables>(
+    ContractFaqDocument,
+    options,
+  )
+}
+export function useContractFaqLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ContractFaqQuery,
+    ContractFaqQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ContractFaqQuery, ContractFaqQueryVariables>(
+    ContractFaqDocument,
+    options,
+  )
+}
+export type ContractFaqQueryHookResult = ReturnType<typeof useContractFaqQuery>
+export type ContractFaqLazyQueryHookResult = ReturnType<
+  typeof useContractFaqLazyQuery
+>
+export type ContractFaqQueryResult = ApolloReactCommon.QueryResult<
+  ContractFaqQuery,
+  ContractFaqQueryVariables
 >
 export const CreateAccessTokenDocument = gql`
   mutation CreateAccessToken($quoteCartId: ID!) {
