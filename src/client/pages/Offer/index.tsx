@@ -181,7 +181,7 @@ export const OfferPage = ({
         : getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
     trackOfferEvent({
-      eventName: EventName.OfferCrossSell,
+      eventName: EventName.InsuranceSelectionToggle,
       options: {
         switchedFrom: selectedBundleVariant.bundle,
       },

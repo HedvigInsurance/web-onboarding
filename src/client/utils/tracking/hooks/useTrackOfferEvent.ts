@@ -3,8 +3,8 @@ import { QuoteCartDocument, QuoteCartQuery } from 'data/graphql'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
-  getMonthlyCostDeductionIncentive,
   getSelectedBundleVariant,
+  isReferralCodeUsed,
 } from 'api/quoteCartQuerySelectors'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { apolloClient, ApolloClientUtils } from 'apolloClient'
@@ -31,8 +31,6 @@ export const useTrackOfferEvent = () => {
             locale: isoLocale,
           },
         })
-        const isReferralCodeUsed =
-          getMonthlyCostDeductionIncentive(quoteCartQueryData) !== undefined
         const selectedBundleVariant = getSelectedBundleVariant(
           quoteCartQueryData,
           selectedInsuranceTypes,
@@ -42,7 +40,7 @@ export const useTrackOfferEvent = () => {
           trackOfferEvent(
             eventName,
             selectedBundleVariant.bundle,
-            isReferralCodeUsed,
+            isReferralCodeUsed(quoteCartQueryData),
             {
               quoteCartId,
               ...options,
