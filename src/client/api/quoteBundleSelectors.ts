@@ -36,14 +36,6 @@ export const hasHomeContents = (bundle: QuoteBundle) =>
 export const hasHouse = (bundle: QuoteBundle) =>
   bundle.quotes.some((quote) => quoteSelector.isHouse(quote))
 
-export const getHomeOwnershipType = (bundle: QuoteBundle) => {
-  const homeInsurance = bundle.quotes.find((quote) =>
-    quoteSelector.isHomeContentsOrHouse(quote),
-  )
-
-  return homeInsurance ? quoteSelector.getSubType(homeInsurance) : undefined
-}
-
 export const hasAccident = (bundle: QuoteBundle) =>
   bundle.quotes.some((quote) => quoteSelector.isAccident(quote))
 

@@ -82,4 +82,6 @@ const HOME_INSURANCE_TYPES = [
 export const isHomeContentsOrHouse = (quote: BundledQuote) =>
   HOME_INSURANCE_TYPES.includes(quote.data.type)
 
-export const getSubType = (quote: BundledQuote) => quote.data.subType
+type QuoteDataSubTypes = 'RENT' | 'OWN' | 'STUDENT_RENT' | 'STUDENT_OWN'
+export const getSubType = (quote: BundledQuote) =>
+  quote.data.subType as QuoteDataSubTypes

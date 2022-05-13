@@ -5,6 +5,7 @@ import { captureSentryError } from 'utils/sentry-client'
 
 import { GTMPhoneNumberData, pushToGTMDataLayer } from './dataLayer'
 import { ErrorEventType, EventName } from './types'
+import { getBundleOwnershipType } from './helpers'
 
 export type OptionalParameters = {
   switchedFrom?: QuoteBundle
@@ -52,9 +53,7 @@ export const trackOfferEvent = (
         has_house: quoteBundleSelector.hasHouse(bundle),
         has_accident: quoteBundleSelector.hasAccident(bundle),
         has_travel: quoteBundleSelector.hasTravel(bundle),
-        ownership_type: quoteBundleSelector
-          .getHomeOwnershipType(bundle)
-          ?.toLowerCase(),
+        ownership_type: getBundleOwnershipType(bundle),
         quote_cart_id: quoteCartId,
         ...(switchedFrom && {
           switch_from: {
@@ -62,9 +61,7 @@ export const trackOfferEvent = (
             has_house: quoteBundleSelector.hasHouse(switchedFrom),
             has_accident: quoteBundleSelector.hasAccident(switchedFrom),
             has_travel: quoteBundleSelector.hasTravel(switchedFrom),
-            ownership_type: quoteBundleSelector.getHomeOwnershipType(
-              switchedFrom,
-            ),
+            ownership_type: getBundleOwnershipType(switchedFrom),
             is_student:
               quoteBundleSelector.isStudentOffer(switchedFrom) ||
               quoteBundleSelector.isYouthOffer(switchedFrom),
