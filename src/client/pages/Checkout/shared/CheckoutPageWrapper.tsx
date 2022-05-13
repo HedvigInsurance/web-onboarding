@@ -8,7 +8,12 @@ import { TopBar } from 'components/TopBar'
 import { BackButton } from 'components/BackButton/BackButton'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import { BREAKPOINTS, MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  BREAKPOINTS,
+  MEDIUM_LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+  SMALL_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
 
 const { gray100 } = colorsV3
@@ -19,7 +24,6 @@ type Props = {
 }
 
 const Wrapper = styled.div`
-  width: 100vw;
   min-height: 100vh;
   background-color: ${gray100};
   position: relative;
@@ -33,7 +37,7 @@ const Wrapper = styled.div`
     z-index: 1;
   }
 
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_LARGE_SCREEN_MEDIA_QUERY} {
     margin-bottom: 0;
     > button {
       top: 6.5rem;
@@ -47,6 +51,9 @@ const InnerWrapper = styled.div`
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     padding: 6.5rem 2rem;
+  }
+  ${SMALL_SCREEN_MEDIA_QUERY} {
+    padding: 0 1rem;
   }
 `
 
@@ -66,7 +73,7 @@ export const CheckoutPageWrapper = ({
   children,
   handleClickBackButton,
 }: Props) => {
-  const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
+  const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumLargeScreen })
   const { isQuoteCartValid } = useIsQuoteCartIdValid()
 
   useEffect(() => {
