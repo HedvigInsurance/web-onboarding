@@ -19,7 +19,6 @@ export type OptionalParameters = {
 
 export type EventParameters = {
   eventName: EventName
-  selectedBundle?: QuoteBundle
   options?: Partial<OptionalParameters>
 }
 
