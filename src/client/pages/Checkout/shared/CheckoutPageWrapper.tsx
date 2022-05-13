@@ -12,7 +12,6 @@ import {
   BREAKPOINTS,
   MEDIUM_LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
-  SMALL_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
 
