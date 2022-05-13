@@ -49,7 +49,6 @@ const InnerWrapper = styled.div`
   margin: 0 auto;
   position: relative;
   background: ${colorsV3.gray200};
-  padding: 0rem 1rem;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     padding: 6.5rem 2rem;
