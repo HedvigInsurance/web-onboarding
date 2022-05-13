@@ -54,7 +54,9 @@ export function getMonthlyCostDeductionIncentive(
     : undefined
 }
 
-export function isReferralCodeUsed(quoteCartQuery: QuoteCartQuery | undefined) {
+export function hasMonthlyCostDeduction(
+  quoteCartQuery: QuoteCartQuery | undefined,
+) {
   return getMonthlyCostDeductionIncentive(quoteCartQuery) !== undefined
 }
 

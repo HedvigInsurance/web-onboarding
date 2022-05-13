@@ -8,6 +8,7 @@ import {
   phoneNumberPlaceholder,
 } from './inputFormats'
 import { CallCenterData, callCenters } from './callCenters'
+import { AdTractionMarketConfig, adTractionConfig } from './adTractionConfigs'
 
 export const LOCALE_URL_PARAMS = [
   'se',
@@ -45,6 +46,7 @@ export type LocaleData = {
     placeholder?: string
   }
   callCenter?: CallCenterData
+  adTractionConfig: AdTractionMarketConfig
   currencyCode: 'SEK' | 'NOK' | 'DKK'
 }
 
@@ -72,6 +74,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.SE,
     },
     callCenter: callCenters.SE,
+    adTractionConfig: adTractionConfig.SE,
     currencyCode: 'SEK',
   },
   'se-en': {
@@ -97,6 +100,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.SE,
     },
     callCenter: callCenters.SE,
+    adTractionConfig: adTractionConfig.SE,
     currencyCode: 'SEK',
   },
   no: {
@@ -122,6 +126,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.NO,
     },
     currencyCode: 'NOK',
+    adTractionConfig: adTractionConfig.NO,
   },
   'no-en': {
     path: 'no-en',
@@ -146,6 +151,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.NO,
     },
     currencyCode: 'NOK',
+    adTractionConfig: adTractionConfig.NO,
   },
   dk: {
     path: 'dk',
@@ -170,6 +176,7 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.DK,
     },
     currencyCode: 'DKK',
+    adTractionConfig: adTractionConfig.DK,
   },
   'dk-en': {
     path: 'dk-en',
@@ -194,5 +201,6 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       placeholder: phoneNumberPlaceholder.DK,
     },
     currencyCode: 'DKK',
+    adTractionConfig: adTractionConfig.DK,
   },
 }

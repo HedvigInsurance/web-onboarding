@@ -51,6 +51,14 @@ export const isStudent = (quote: BundledQuote) => {
   return quote.data.isStudent === true
 }
 
+export const isYouth = (quote: BundledQuote) => {
+  return quote.data.isYouth === true
+}
+
+export const isStudentOrYouth = (quote: BundledQuote) => {
+  return isStudent(quote) || isYouth(quote)
+}
+
 const ACCIDENT_INSURANCE_TYPES = [
   InsuranceType.SWEDISH_ACCIDENT,
   InsuranceType.DANISH_ACCIDENT,
@@ -72,6 +80,14 @@ const HOUSE_INSURANCE_TYPES = [
 ]
 export const isHouse = (quote: BundledQuote) =>
   HOUSE_INSURANCE_TYPES.includes(quote.data.type)
+
+const HOME_CONTENT_TYPES = [
+  InsuranceType.SWEDISH_APARTMENT,
+  InsuranceType.NORWEGIAN_HOME_CONTENT,
+  InsuranceType.DANISH_HOME_CONTENT,
+]
+export const isHomeContents = (quote: BundledQuote) =>
+  HOME_CONTENT_TYPES.includes(quote.data.type)
 
 const HOME_INSURANCE_TYPES = [
   InsuranceType.SWEDISH_APARTMENT,

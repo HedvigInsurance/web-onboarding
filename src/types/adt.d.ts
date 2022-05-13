@@ -10,6 +10,7 @@ interface AdtTag {
   ti: string
   xd: string
   cpn?: string
+  pc?: string // TODO: Make this required when we remove the old non-quoteCart adTraction tracking
   doEvent: () => void
 }
 

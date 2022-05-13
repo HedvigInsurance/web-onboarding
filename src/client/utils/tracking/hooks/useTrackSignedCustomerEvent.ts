@@ -5,6 +5,7 @@ import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes
 import {
   getSelectedBundleVariant,
   getCampaign,
+  hasMonthlyCostDeduction,
 } from 'api/quoteCartQuerySelectors'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { apolloClient, ApolloClientUtils } from 'apolloClient'
@@ -15,7 +16,7 @@ import {
 } from 'utils/tracking/gtm/trackSignedCustomerEvent'
 
 export const useTrackSignedCustomerEvent = () => {
-  const { isoLocale } = useCurrentLocale()
+  const { isoLocale, adTractionConfig } = useCurrentLocale()
 
   const variation = useVariation()
 
@@ -47,12 +48,13 @@ export const useTrackSignedCustomerEvent = () => {
           trackSignedCustomerEvent({
             variation,
             campaignCode: getCampaign(quoteCartQueryData)?.code,
-            isDiscountMonthlyCostDeduction:
-              getCampaign(quoteCartQueryData)?.incentive?.__typename ===
-              'MonthlyCostDeduction',
+            isDiscountMonthlyCostDeduction: hasMonthlyCostDeduction(
+              quoteCartQueryData,
+            ),
             memberId,
             bundle: selectedBundleVariant.bundle,
             quoteCartId,
+            adTractionConfig,
             ...restParams,
           })
         }
@@ -61,7 +63,13 @@ export const useTrackSignedCustomerEvent = () => {
         trackEventCallback(apolloClient)
       }
     },
-    [quoteCartId, isoLocale, selectedInsuranceTypes, variation],
+    [
+      quoteCartId,
+      isoLocale,
+      selectedInsuranceTypes,
+      variation,
+      adTractionConfig,
+    ],
   )
 
   return trackEventHandler

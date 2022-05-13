@@ -103,6 +103,7 @@ function getFormErrorsFromUnderwritterLimits(
       case LimitCode.INVALID_BIRTHDATE:
       case LimitCode.UNDERAGE:
       case LimitCode.STUDENT_OVERAGE:
+      case LimitCode.YOUTH_OVERAGE:
         return [...acc, 'birthDate']
       case LimitCode.TOO_SMALL_LIVING_SPACE:
       case LimitCode.TOO_MUCH_LIVING_SPACE:
