@@ -18,10 +18,7 @@ import {
   BundledQuote,
   CheckoutStatus,
 } from 'data/graphql'
-import {
-  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
-  SMALL_SCREEN_MEDIA_QUERY,
-} from 'utils/mediaQueries'
+import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 
 import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
@@ -55,10 +52,7 @@ import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
 const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
-  padding: 1.5rem 0;
-  ${SMALL_SCREEN_MEDIA_QUERY} {
-    padding: 1.5rem 1rem;
-  }
+  padding: 1.5rem 1rem;
 `
 
 const AdyenContainer = styled.div`

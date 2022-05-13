@@ -11,7 +11,6 @@ import { HedvigLogo } from 'components/icons/HedvigLogo'
 import {
   BREAKPOINTS,
   MEDIUM_LARGE_SCREEN_MEDIA_QUERY,
-  MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
 
@@ -50,7 +49,7 @@ const InnerWrapper = styled.div`
   position: relative;
   background: ${colorsV3.gray200};
 
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_LARGE_SCREEN_MEDIA_QUERY} {
     padding: 6.5rem 2rem;
     background: none !important;
   }
