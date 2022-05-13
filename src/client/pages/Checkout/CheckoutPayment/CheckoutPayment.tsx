@@ -51,6 +51,11 @@ import { ContactInformation } from './ContactInformation/ContactInformation'
 
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
+const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+`
+
 const AdyenContainer = styled.div`
   #dropin-container {
     .adyen-checkout__payment-method {
@@ -438,7 +443,7 @@ export const CheckoutPayment = ({
   }
 
   return (
-    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
+    <CheckoutPaymentWrapper handleClickBackButton={handleClickBackButton}>
       <ThreeDSErrorModal
         isVisible={is3dsError}
         onClose={() => setIs3dsError(false)}
@@ -467,6 +472,6 @@ export const CheckoutPayment = ({
           <PaymentInfo {...priceData} />
         </Footer>
       )}
-    </CheckoutPageWrapper>
+    </CheckoutPaymentWrapper>
   )
 }

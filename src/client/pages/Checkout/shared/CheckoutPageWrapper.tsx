@@ -20,6 +20,7 @@ const { gray100 } = colorsV3
 
 type Props = {
   children: React.ReactNode
+  className?: string
   handleClickBackButton: () => void
 }
 
@@ -28,7 +29,7 @@ const Wrapper = styled.div`
   background-color: ${gray100};
   position: relative;
   padding: 0;
-  margin-bottom: 7rem;
+  margin-bottom: 5rem;
 
   > button {
     position: absolute;
@@ -48,12 +49,12 @@ const Wrapper = styled.div`
 const InnerWrapper = styled.div`
   margin: 0 auto;
   position: relative;
+  background: ${colorsV3.gray200};
+  padding: 0rem 1rem;
 
   ${MEDIUM_SCREEN_MEDIA_QUERY} {
     padding: 6.5rem 2rem;
-  }
-  ${SMALL_SCREEN_MEDIA_QUERY} {
-    padding: 0 1rem;
+    background: none !important;
   }
 `
 
@@ -72,10 +73,10 @@ export const WrapperWidth = 628
 export const CheckoutPageWrapper = ({
   children,
   handleClickBackButton,
+  className,
 }: Props) => {
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumLargeScreen })
   const { isQuoteCartValid } = useIsQuoteCartIdValid()
-
   useEffect(() => {
     hideIntercomLauncher()
   })
@@ -94,7 +95,7 @@ export const CheckoutPageWrapper = ({
           </LogoLink>
         )}
         <BackButton onClick={handleClickBackButton} />
-        <InnerWrapper>{children}</InnerWrapper>
+        <InnerWrapper className={className}>{children}</InnerWrapper>
       </Wrapper>
     </>
   )
