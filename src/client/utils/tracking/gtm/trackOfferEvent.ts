@@ -62,7 +62,7 @@ export const trackOfferEvent = (
             has_house: quoteBundleSelector.hasHouse(switchedFrom),
             has_accident: quoteBundleSelector.hasAccident(switchedFrom),
             has_travel: quoteBundleSelector.hasTravel(switchedFrom),
-            ownership_type: getBundleOwnershipType(bundle),
+            ownership_type: getBundleOwnershipType(switchedFrom),
             is_student:
               quoteBundleSelector.isStudentOffer(switchedFrom) ||
               quoteBundleSelector.isYouthOffer(switchedFrom),
