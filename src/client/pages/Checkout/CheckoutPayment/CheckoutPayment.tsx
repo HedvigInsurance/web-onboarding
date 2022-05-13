@@ -101,12 +101,12 @@ const AdyenContainer = styled.div`
     }
 
     .adyen-checkout__button {
-      background-color: ${colorsV3.purple500};
-      color: ${colorsV3.gray900};
+      background-color: ${colorsV3.gray900};
+      color: ${colorsV3.gray100};
       transition: transform 300ms;
 
       &:hover {
-        background-color: ${colorsV3.purple500};
+        background-color: ${colorsV3.gray800};
         transform: translateY(-2px);
         box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
       }
