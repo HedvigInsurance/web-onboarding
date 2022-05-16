@@ -246,6 +246,18 @@ const createAdyenCheckout = ({
         buttonType: 'subscribe',
         countryCode: currentLocale.marketLabel,
       },
+      googlepay: {
+        amount: {
+          value: 0,
+          currency: currentLocale.currencyCode,
+        },
+        countryCode: currentLocale.marketLabel,
+        environment:
+          window.hedvigClientConfig.adyenEnvironment === 'live'
+            ? 'PRODUCTION'
+            : 'TEST',
+        buttonType: 'subscribe',
+      },
     },
     enableStoreDetails: true,
     returnUrl,

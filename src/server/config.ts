@@ -1,6 +1,11 @@
 import * as dotenv from 'dotenv'
 
-import { Feature, FeatureMap, MarketLabel } from 'shared/clientConfig'
+import {
+  Feature,
+  FeatureMap,
+  MarketLabel,
+  AdyenEnvironment,
+} from 'shared/clientConfig'
 
 dotenv.config()
 
@@ -19,7 +24,8 @@ export const CONTENT_SERVICE_ENDPOINT =
     : process.env.CONTENT_SERVICE_ENDPOINT!
 
 export const ADYEN_CLIENT_KEY = process.env.ADYEN_CLIENT_KEY!
-export const ADYEN_ENVIRONMENT = process.env.ADYEN_ENVIRONMENT!
+export const ADYEN_ENVIRONMENT = process.env
+  .ADYEN_ENVIRONMENT as AdyenEnvironment
 
 export const HEROKU_SLUG_COMMIT = process.env.HEROKU_SLUG_COMMIT!
 export const DATADOG_APPLICATION_ID = process.env.DATADOG_APPLICATION_ID!
