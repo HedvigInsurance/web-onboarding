@@ -422,6 +422,7 @@
   "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_15000": "",
   "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_20000": "",
   "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000": "",
-  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000_PLUS": ""
-  "COMPARISON_MODEL_HEADER": "Hvilket forsikringsnivå passer deg?"
+  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000_PLUS": "",
+  "CHECKOUT_BUTTON_CONNECT_CARD": "Koble til kredittkort",
+  "LANDING_PAGE_MULTI_MAIN_COVERAGE_SUBHEADING": "Velg minst en hovedforsikring og de tilleggsforsikringene du ønsker for å komme i gang.I de neste stegene vil vi stille noen oppfølgingsspørsmål."
 }

@@ -422,5 +422,7 @@
   "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_15000": "15,000 km per year",
   "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_20000": "20,000 km per year",
   "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000": "25,000 km per year",
-  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000_PLUS": "25,000+ km per year"
+  "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000_PLUS": "25,000+ km per year",
+  "CHECKOUT_BUTTON_CONNECT_CARD": "Connect credit card",
+  "LANDING_PAGE_MULTI_MAIN_COVERAGE_SUBHEADING": "Choose at least one main coverage and any additional coverage you’d like to get started. In the next step, we’ll ask you some follow-up questions."
 }

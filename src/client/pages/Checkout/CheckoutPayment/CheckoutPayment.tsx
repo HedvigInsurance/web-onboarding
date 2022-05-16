@@ -101,12 +101,12 @@ const AdyenContainer = styled.div`
     }
 
     .adyen-checkout__button {
-      background-color: ${colorsV3.purple500};
-      color: ${colorsV3.gray900};
+      background-color: ${colorsV3.gray900};
+      color: ${colorsV3.gray100};
       transition: transform 300ms;
 
       &:hover {
-        background-color: ${colorsV3.purple500};
+        background-color: ${colorsV3.gray800};
         transform: translateY(-2px);
         box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
       }
@@ -221,9 +221,9 @@ export const CheckoutPayment = ({
     }
   }, [is3DsError, history, trackOfferEvent])
 
-  const addPaymentToCart = useCallback(async () => {
+  const setPaymentSuccess = () => {
     setIsPaymentConnected(true)
-  }, [])
+  }
 
   const performCheckout = useCallback(async () => {
     try {
@@ -267,7 +267,7 @@ export const CheckoutPayment = ({
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
   useAdyenCheckout({
     adyenRef,
-    onSuccess: addPaymentToCart,
+    onSuccess: setPaymentSuccess,
     quoteCartId,
     isSuccess: isPaymentConnected,
   })
@@ -311,15 +311,9 @@ export const CheckoutPayment = ({
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
-      addPaymentToCart()
+      setPaymentSuccess()
     }
-  }, [
-    is3DsComplete,
-    checkoutStatus,
-    storage.session,
-    trackOfferEvent,
-    addPaymentToCart,
-  ])
+  }, [is3DsComplete, checkoutStatus, storage.session, trackOfferEvent])
 
   useEffect(() => {
     if (isPaymentConnected) {
