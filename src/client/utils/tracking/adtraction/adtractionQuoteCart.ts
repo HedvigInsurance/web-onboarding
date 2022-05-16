@@ -17,7 +17,7 @@ export const getProductCategories = (bundle: QuoteBundle) => {
     if (isHomeContents(quote)) {
       return [
         ...acc,
-        isStudentOrYouth(quote) ? 'homeContentsStudent' : 'homeContents',
+        isStudentOrYouth(quote) ? 'homecontentstudent' : 'homecontent',
       ]
     }
     return acc

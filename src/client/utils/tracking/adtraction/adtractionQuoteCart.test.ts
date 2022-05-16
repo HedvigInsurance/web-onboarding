@@ -106,32 +106,30 @@ const danishStudentBundleMock = {
 
 describe('getProductValue', () => {
   it('return the correct pc value for SE bundle', () => {
-    expect(getProductCategories(swedishBundleMock)).toBe(
-      'homeContents-accident',
-    )
+    expect(getProductCategories(swedishBundleMock)).toBe('homecontent-accident')
   })
 
   it('return the correct pc value for SE Student bundle', () => {
     expect(getProductCategories(swedishStudentBundleMock)).toBe(
-      'homeContentsStudent-accident',
+      'homecontentstudent-accident',
     )
   })
 
   it('return the correct pc value for NO bundle', () => {
     expect(getProductCategories(norwegianBundleMock)).toBe(
-      'homeContents-house-accident-travel',
+      'homecontent-house-accident-travel',
     )
   })
 
   it('return the correct pc value for NO Youth bundle', () => {
     expect(getProductCategories(norwegianYouthBundleMock)).toBe(
-      'homeContentsStudent-house-accident-travel',
+      'homecontentstudent-house-accident-travel',
     )
   })
 
   it('return the correct pc value for DK Student bundle', () => {
     expect(getProductCategories(danishStudentBundleMock)).toBe(
-      'homeContentsStudent-accident-travel',
+      'homecontentstudent-accident-travel',
     )
   })
 })
