@@ -51,7 +51,7 @@ const InnerWrapper = styled.div`
 
   ${MEDIUM_LARGE_SCREEN_MEDIA_QUERY} {
     padding: 6.5rem 2rem;
-    background: none !important;
+    background: none;
   }
 `
 
