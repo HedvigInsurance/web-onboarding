@@ -1,4 +1,4 @@
-import { BundledQuote } from 'data/graphql'
+import { BundledQuote, SwedishCarDetails } from 'data/graphql'
 
 export interface Address {
   street: string
@@ -35,11 +35,37 @@ export const getAddress = (quotes: BundledQuote[]) => {
     : ''
 }
 
+const formatCarInfo = (quote: BundledQuote) => {
+  return (
+    [
+      (quote.quoteDetails as SwedishCarDetails)?.info?.makeAndModel,
+      (quote.quoteDetails as SwedishCarDetails)?.info?.model,
+    ]
+      .filter((x) => x)
+      .join(' ')
+      // split up every word so that we can remove duplicates between makeAndModel and model
+      .split(' ')
+      .filter((word, index, allWords) => index === allWords.indexOf(word))
+      .join(' ')
+      .trim()
+  )
+}
+
+export const getCarMakeAndOrModel = (quotes: BundledQuote[]) => {
+  const quoteWithCarInfo = quotes.find(
+    (quote) =>
+      (quote.quoteDetails as SwedishCarDetails)?.info?.makeAndModel ||
+      (quote.quoteDetails as SwedishCarDetails)?.info?.model,
+  )
+
+  return quoteWithCarInfo ? formatCarInfo(quoteWithCarInfo) : ''
+}
+
 export const formatCarRegistrationNumberSE = (registrationNumber: string) => {
   if (!SE_CAR_REGISTRATION_NUMBER_REGEX.test(registrationNumber))
     return registrationNumber
 
   const letters = registrationNumber.match(/[A-Za-z]{3}/)?.[0] || ''
 
-  return registrationNumber.replace(letters, `${letters} `)
+  return registrationNumber.replace(letters, `${letters} `).toUpperCase()
 }

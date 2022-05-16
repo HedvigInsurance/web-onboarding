@@ -1,3 +1,4 @@
+import { datadogRum } from '@datadog/browser-rum'
 import { gql } from '@apollo/client'
 import { AddressAutocompleteQuery } from '@hedviginsurance/embark'
 import { apolloClient } from 'apolloClient'
@@ -25,9 +26,16 @@ export const resolveAddressAutocomplete: AddressAutocompleteQuery = async (
     throw new Error('Missing apollo client')
   }
 
-  const result = await apolloClient.client.query({
-    query,
-    variables: { term, type },
-  })
-  return result.data.autoCompleteAddress || []
+  try {
+    const result = await apolloClient.client.query({
+      query,
+      variables: { term, type },
+    })
+
+    return result.data.autoCompleteAddress || []
+  } catch (error) {
+    datadogRum.addError(error)
+  }
+
+  return []
 }

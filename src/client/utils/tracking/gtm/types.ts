@@ -59,6 +59,7 @@ export enum ErrorEventType {
   BasicError = 'basic_error',
   ManualReviewRequired = 'manual_review_required',
   CheckoutStart = 'manual_checkout_start',
+  PaymentError = 'payment_error',
   Adyen = 'adyen',
   QuoteCartSetup = 'quote_cart_setup',
   threeDS = '3ds_payment',

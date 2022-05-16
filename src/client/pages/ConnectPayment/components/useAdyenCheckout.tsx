@@ -107,7 +107,7 @@ export const useAdyenCheckout = ({
     }
 
     const dropinApi = createAdyenCheckout({
-      payButtonText: textKeys.ONBOARDING_CONNECT_DD_CTA(),
+      payButtonText: textKeys.CHECKOUT_BUTTON_CONNECT_CARD(),
       successMessage,
       currentLocale,
       paymentMethodsResponse,
@@ -121,7 +121,7 @@ export const useAdyenCheckout = ({
       onError: (error) =>
         trackOfferEvent({
           eventName: EventName.SignError,
-          options: { error, errorType: ErrorEventType.Adyen },
+          options: { error, errorType: ErrorEventType.PaymentError },
         }),
     })
 
@@ -162,8 +162,7 @@ interface AdyenCheckoutProps {
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
   onSuccess?: (paymentTokenId?: string) => void
-  onError: (e: Error) => void
-  setIsCompleted?: () => void
+  onError: (e: Error | string) => void
   quoteCartId: string
   storage: StorageState
 }
@@ -203,6 +202,7 @@ const createAdyenCheckout = ({
       console.error(
         `Received unknown or faulty status type "${status}" as request finished from Adyen`,
       )
+      onError(status)
       dropinComponent.setStatus('error')
       window.setTimeout(() => dropinComponent.setStatus('ready'), 1000)
     }
@@ -311,6 +311,7 @@ const createAdyenCheckout = ({
           )
         }
       } catch (e) {
+        onError(e as Error)
         handleResult(dropinComponent, 'error')
       }
     },

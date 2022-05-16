@@ -1,18 +1,11 @@
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { QuoteBundle } from 'data/graphql'
-import { quoteBundleTrackingContractType } from 'api/quoteBundleTrackingContractType'
 import { EmbarkStory } from 'utils/embarkStory'
 import { captureSentryError } from 'utils/sentry-client'
 
 import { GTMPhoneNumberData, pushToGTMDataLayer } from './dataLayer'
 import { ErrorEventType, EventName } from './types'
-
-import {
-  getTrackableContractCategory,
-  getInitialOfferFromSessionStorage,
-  setInitialOfferToSessionStorage,
-  getExternalInsuranceDataFromGQLCache,
-} from './helpers'
+import { getBundleOwnershipType } from './helpers'
 
 export type OptionalParameters = {
   switchedFrom?: QuoteBundle
@@ -35,54 +28,47 @@ export const trackOfferEvent = (
   referralCodeUsed: boolean,
   options: OptionalParameters = {},
 ) => {
-  const mainQuote = quoteBundleSelector.getMainQuote(bundle)
-
   const { quoteCartId, ...optionsWithoutId } = options
   const { switchedFrom, phoneNumberData, memberId } = optionsWithoutId
-  const contractType = quoteBundleTrackingContractType(bundle)
-  const contractCategory = getTrackableContractCategory(contractType)
-  const grossPrice = Math.round(Number(bundle.bundleCost.monthlyGross.amount))
-  const netPrice = Math.round(Number(bundle.bundleCost.monthlyNet.amount))
-  const currentInsurer = mainQuote?.currentInsurer?.id ?? undefined
-  const dataCollectionId = mainQuote?.dataCollectionId
-  const externalInsuranceData = dataCollectionId
-    ? getExternalInsuranceDataFromGQLCache(dataCollectionId)
-    : {}
-
-  const initialOffer = getInitialOfferFromSessionStorage()
-  if (!initialOffer) {
-    setInitialOfferToSessionStorage(contractCategory)
-  }
+  const grossPrice = Math.round(
+    Number(quoteBundleSelector.getGrossPrice(bundle)),
+  )
+  const netPrice = Math.round(
+    Number(quoteBundleSelector.getTotalBundleCost(bundle)),
+  )
 
   try {
     pushToGTMDataLayer({
       event: eventName,
       offerData: {
-        insurance_type: contractType,
         referral_code: referralCodeUsed ? 'yes' : 'no',
-        number_of_people: mainQuote.data.numberCoInsured + 1,
+        number_of_people: quoteBundleSelector.getHouseholdSize(bundle),
         insurance_price: grossPrice,
         ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
-        currency: bundle.bundleCost.monthlyNet.currency,
+        currency: quoteBundleSelector.getBundleCurrency(bundle),
         is_student:
           quoteBundleSelector.isStudentOffer(bundle) ||
           quoteBundleSelector.isYouthOffer(bundle),
-        has_home: true,
+        has_home: quoteBundleSelector.hasHomeContents(bundle),
+        has_house: quoteBundleSelector.hasHouse(bundle),
         has_accident: quoteBundleSelector.hasAccident(bundle),
         has_travel: quoteBundleSelector.hasTravel(bundle),
-        initial_offer: initialOffer ?? contractCategory,
-        current_offer: contractCategory,
+        ownership_type: getBundleOwnershipType(bundle),
         quote_cart_id: quoteCartId,
         ...(switchedFrom && {
-          switched_from: getTrackableContractCategory(
-            quoteBundleTrackingContractType(switchedFrom),
-          ),
-          switched_to: contractCategory,
+          switch_from: {
+            has_home: quoteBundleSelector.hasHomeContents(switchedFrom),
+            has_house: quoteBundleSelector.hasHouse(switchedFrom),
+            has_accident: quoteBundleSelector.hasAccident(switchedFrom),
+            has_travel: quoteBundleSelector.hasTravel(switchedFrom),
+            ownership_type: getBundleOwnershipType(switchedFrom),
+            is_student:
+              quoteBundleSelector.isStudentOffer(switchedFrom) ||
+              quoteBundleSelector.isYouthOffer(switchedFrom),
+          },
         }),
         ...(memberId && { member_id: memberId }),
         flow_type: EmbarkStory.get() ?? undefined,
-        current_insurer: currentInsurer,
-        ...(currentInsurer && externalInsuranceData),
       },
       ...phoneNumberData,
       ...optionsWithoutId,
