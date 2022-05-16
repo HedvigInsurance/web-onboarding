@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { QuoteCartDocument, QuoteCartQuery } from 'data/graphql'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
-import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { getSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
   getSelectedBundleVariant,
   isReferralCodeUsed,
@@ -16,10 +16,7 @@ import {
 
 export const useTrackOfferEvent = () => {
   const { isoLocale } = useCurrentLocale()
-
   const { quoteCartId } = useQuoteCartIdFromUrl()
-
-  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
   const trackEventHandler = useCallback(
     ({ eventName, options = {} }: EventParameters) => {
@@ -31,15 +28,16 @@ export const useTrackOfferEvent = () => {
             locale: isoLocale,
           },
         })
-        const selectedBundleVariant = getSelectedBundleVariant(
-          quoteCartQueryData,
-          selectedInsuranceTypes,
-        )
 
-        if (selectedBundleVariant) {
+        const bundle = getSelectedBundleVariant(
+          quoteCartQueryData,
+          getSelectedInsuranceTypes(),
+        )?.bundle
+
+        if (bundle) {
           trackOfferEvent(
             eventName,
-            selectedBundleVariant.bundle,
+            bundle,
             isReferralCodeUsed(quoteCartQueryData),
             {
               quoteCartId,
@@ -52,7 +50,7 @@ export const useTrackOfferEvent = () => {
         trackEventCallback(apolloClient)
       }
     },
-    [quoteCartId, isoLocale, selectedInsuranceTypes],
+    [quoteCartId, isoLocale],
   )
 
   return trackEventHandler

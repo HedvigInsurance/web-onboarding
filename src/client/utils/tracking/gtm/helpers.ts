@@ -2,6 +2,7 @@ import { CookieStorage } from 'cookie-storage'
 import {
   ExternalInsuranceDataQuery,
   ExternalInsuranceDataDocument,
+  QuoteBundle,
 } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
 import {
@@ -20,6 +21,7 @@ import {
 } from 'pages/OfferNew/utils'
 import { apolloClient } from 'apolloClient'
 import { getExternalInsuranceData } from 'api/externalInsuranceQuerySelector'
+import * as quoteSelector from 'api/quoteSelector'
 import {
   SeBundleTypes,
   NoBundleTypes,
@@ -164,4 +166,25 @@ export const getExternalInsuranceDataFromGQLCache = (
         currentPrice !== undefined && currentCurrency !== undefined,
     }
   } else return {}
+}
+
+type OwnershipType = 'rent' | 'own'
+export const getBundleOwnershipType = (
+  bundle: QuoteBundle,
+): OwnershipType | undefined => {
+  const homeInsurance = bundle.quotes.find((quote) =>
+    quoteSelector.isHomeContentsOrHouse(quote),
+  )
+
+  if (homeInsurance) {
+    const subType = quoteSelector.getSubType(homeInsurance)
+
+    if (subType && ['RENT', 'STUDENT_RENT'].includes(subType)) {
+      return 'rent'
+    }
+
+    return 'own'
+  }
+
+  return undefined
 }

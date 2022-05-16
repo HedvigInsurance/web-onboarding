@@ -35,6 +35,9 @@ const validateInsuranceTypes = (
       ALL_CONTRACT_TYPES.includes((type as unknown) as TypeOfContract),
   ) as Array<InsuranceType>
 
+export const getSelectedInsuranceTypes = () =>
+  deserializeSearchParams(new URLSearchParams(window.location.search))
+
 export const useSelectedInsuranceTypes = () => {
   const location = useLocation()
   const history = useHistory()

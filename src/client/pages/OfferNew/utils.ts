@@ -355,6 +355,8 @@ export type HomeInsuranceTypeOfContract = Exclude<
   | TypeOfContract.SeCarFull
   | TypeOfContract.SeCarHalf
   | TypeOfContract.SeCarTraffic
+  | TypeOfContract.SeQasaLongTermRental
+  | TypeOfContract.SeQasaShortTermRental
 >
 
 type TypeOfResidenceTextKeys =
@@ -405,6 +407,8 @@ type SingleInsuranceTypeOfContract = Exclude<
   | TypeOfContract.SeCarFull
   | TypeOfContract.SeCarHalf
   | TypeOfContract.SeCarTraffic
+  | TypeOfContract.SeQasaLongTermRental
+  | TypeOfContract.SeQasaShortTermRental
 >
 
 export const getInsuranceTitle = (
