@@ -18,7 +18,10 @@ import {
   BundledQuote,
   CheckoutStatus,
 } from 'data/graphql'
-import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
+  SMALL_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 
 import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
@@ -52,7 +55,10 @@ import { ContactInformation } from './ContactInformation/ContactInformation'
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
 const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 0rem;
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding: 1.5rem 1rem;
+  }
 `
 
 const AdyenContainer = styled.div`
@@ -105,12 +111,12 @@ const AdyenContainer = styled.div`
     }
 
     .adyen-checkout__button {
-      background-color: ${colorsV3.gray900};
-      color: ${colorsV3.gray100};
+      background-color: ${colorsV3.purple500};
+      color: ${colorsV3.gray900};
       transition: transform 300ms;
 
       &:hover {
-        background-color: ${colorsV3.gray800};
+        background-color: ${colorsV3.purple500};
         transform: translateY(-2px);
         box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
       }
