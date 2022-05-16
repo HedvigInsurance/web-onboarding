@@ -23,7 +23,6 @@ export const getSwedishCarValidationSchema = (textKeys: TextKeyMap) => {
         textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
       ),
       mileage: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-      isStudent: Yup.boolean(),
     }).required(),
   })
 }
