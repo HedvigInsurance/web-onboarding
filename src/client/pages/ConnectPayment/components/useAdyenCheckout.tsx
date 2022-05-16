@@ -267,28 +267,25 @@ const createAdyenCheckout = ({
           },
         })
 
-        if (!result) {
-          return
-        }
-
         const paymentTokenId =
           result.data?.paymentConnection_connectPayment.paymentTokenId
 
+        if (paymentTokenId === undefined) {
+          handleResult(dropinComponent, 'error')
+          return
+        }
         storage.session.setSession({
           ...storage.session.getSession(),
           paymentTokenId,
           quoteCartId,
         })
-
-        if (paymentTokenId !== undefined) {
-          await addPaymentTokenMutation({
-            variables: {
-              id: quoteCartId,
-              paymentTokenId,
-            },
-            refetchQueries: ['QuoteCart'],
-          })
-        }
+        await addPaymentTokenMutation({
+          variables: {
+            id: quoteCartId,
+            paymentTokenId,
+          },
+          refetchQueries: ['QuoteCart'],
+        })
 
         if (
           result.data?.paymentConnection_connectPayment?.__typename ===
@@ -298,9 +295,7 @@ const createAdyenCheckout = ({
             result.data.paymentConnection_connectPayment.action,
           )
           return
-        }
-
-        if (
+        } else if (
           result.data?.paymentConnection_connectPayment?.__typename ===
           'ConnectPaymentFinished'
         ) {
@@ -309,6 +304,12 @@ const createAdyenCheckout = ({
             result.data?.paymentConnection_connectPayment.status,
             paymentTokenId,
           )
+        } else if (
+          result.data?.paymentConnection_connectPayment?.__typename ===
+          'ConnectPaymentFailed'
+        ) {
+          handleResult(dropinComponent, 'error')
+          return
         }
       } catch (e) {
         onError(e as Error)

@@ -221,7 +221,7 @@ export const CheckoutPayment = ({
     }
   }, [is3DsError, history, trackOfferEvent])
 
-  const addPaymentToCart = () => {
+  const setPaymentSuccess = () => {
     setIsPaymentConnected(true)
   }
 
@@ -267,7 +267,7 @@ export const CheckoutPayment = ({
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
   useAdyenCheckout({
     adyenRef,
-    onSuccess: addPaymentToCart,
+    onSuccess: setPaymentSuccess,
     quoteCartId,
     isSuccess: isPaymentConnected,
   })
@@ -311,7 +311,7 @@ export const CheckoutPayment = ({
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
-      addPaymentToCart()
+      setPaymentSuccess()
     }
   }, [is3DsComplete, checkoutStatus, storage.session, trackOfferEvent])
 
