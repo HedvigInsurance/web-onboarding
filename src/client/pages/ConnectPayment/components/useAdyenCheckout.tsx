@@ -105,7 +105,7 @@ export const useAdyenCheckout = ({
     }
 
     const dropinApi = createAdyenCheckout({
-      payButtonText: textKeys.ONBOARDING_CONNECT_DD_CTA(),
+      payButtonText: textKeys.CHECKOUT_BUTTON_CONNECT_CARD(),
       successMessage,
       currentLocale,
       paymentMethodsResponse,
