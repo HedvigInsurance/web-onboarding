@@ -8,5 +8,8 @@ mutation PaymentConnection_connectPayment($input: ConnectPaymentInput!) {
       paymentTokenId
       status
     }
+    ... on ConnectPaymentFailed {
+      paymentTokenId
+    }
   }
 }
