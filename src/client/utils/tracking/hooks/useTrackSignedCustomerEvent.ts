@@ -1,14 +1,14 @@
 import { useCallback } from 'react'
 import { QuoteCartDocument, QuoteCartQuery } from 'data/graphql'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
-import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { getSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
   getSelectedBundleVariant,
   getCampaign,
 } from 'api/quoteCartQuerySelectors'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { apolloClient, ApolloClientUtils } from 'apolloClient'
-import { useVariation } from 'utils/hooks/useVariation'
+import { getCurrentVariation } from 'utils/hooks/useVariation'
 import {
   trackSignedCustomerEvent,
   TrackSignedEventParams,
@@ -17,11 +17,7 @@ import {
 export const useTrackSignedCustomerEvent = () => {
   const { isoLocale } = useCurrentLocale()
 
-  const variation = useVariation()
-
   const { quoteCartId } = useQuoteCartIdFromUrl()
-
-  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
   const trackEventHandler = useCallback(
     ({
@@ -40,12 +36,12 @@ export const useTrackSignedCustomerEvent = () => {
 
         const selectedBundleVariant = getSelectedBundleVariant(
           quoteCartQueryData,
-          selectedInsuranceTypes,
+          getSelectedInsuranceTypes(),
         )
 
         if (selectedBundleVariant) {
           trackSignedCustomerEvent({
-            variation,
+            variation: getCurrentVariation(),
             campaignCode: getCampaign(quoteCartQueryData)?.code,
             isDiscountMonthlyCostDeduction:
               getCampaign(quoteCartQueryData)?.incentive?.__typename ===
@@ -61,7 +57,7 @@ export const useTrackSignedCustomerEvent = () => {
         trackEventCallback(apolloClient)
       }
     },
-    [quoteCartId, isoLocale, selectedInsuranceTypes, variation],
+    [quoteCartId, isoLocale],
   )
 
   return trackEventHandler
