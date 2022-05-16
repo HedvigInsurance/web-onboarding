@@ -16,19 +16,24 @@ const getVariation = match([
   [match.any(), null],
 ])
 
-export const useVariation = (): Variation | null => {
+const parseVariaton = (search: string): Variation | null => {
   const sessionStorageMaybe =
     typeof sessionStorage !== 'undefined' ? sessionStorage : null
-  const {
-    location: { search },
-  } = useHistory()
   const { variation: rawVariation } = queryString.parse(search.substr(1))
-  const variation =
+  return (
     getVariation(
       typeof rawVariation === 'object'
         ? rawVariation[0]?.toLowerCase()
         : rawVariation?.toLowerCase(),
     ) ?? JSON.parse(sessionStorageMaybe?.getItem('hvg:variation') ?? 'null')
+  )
+}
+
+export const useVariation = (): Variation | null => {
+  const {
+    location: { search },
+  } = useHistory()
+  const variation = parseVariaton(search)
 
   React.useEffect(() => {
     sessionStorage.setItem('hvg:variation', JSON.stringify(variation))
@@ -36,3 +41,5 @@ export const useVariation = (): Variation | null => {
 
   return variation
 }
+
+export const getCurrentVariation = () => parseVariaton(window.location.search)
