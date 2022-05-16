@@ -16,6 +16,9 @@ export const isSwedishAccident = (quote: BundledQuote) =>
 export const isNorwegianHomeContents = (quote: BundledQuote) =>
   quote.data.type === InsuranceType.NORWEGIAN_HOME_CONTENT
 
+export const isNorwegianHouse = (quote: BundledQuote) =>
+  quote.data.type === InsuranceType.NORWEGIAN_HOUSE
+
 export const isNorwegianTravel = (quote: BundledQuote) =>
   quote.data.type === InsuranceType.NORWEGIAN_TRAVEL
 
@@ -62,3 +65,23 @@ const TRAVEL_INSURANCE_TYPES = [
 ]
 export const isTravel = (quote: BundledQuote) =>
   TRAVEL_INSURANCE_TYPES.includes(quote.data.type)
+
+const HOUSE_INSURANCE_TYPES = [
+  InsuranceType.NORWEGIAN_HOUSE,
+  InsuranceType.SWEDISH_HOUSE,
+]
+export const isHouse = (quote: BundledQuote) =>
+  HOUSE_INSURANCE_TYPES.includes(quote.data.type)
+
+const HOME_INSURANCE_TYPES = [
+  InsuranceType.SWEDISH_APARTMENT,
+  InsuranceType.SWEDISH_HOUSE,
+  InsuranceType.NORWEGIAN_HOME_CONTENT,
+  InsuranceType.DANISH_HOME_CONTENT,
+]
+export const isHomeContentsOrHouse = (quote: BundledQuote) =>
+  HOME_INSURANCE_TYPES.includes(quote.data.type)
+
+type QuoteDataSubTypes = 'RENT' | 'OWN' | 'STUDENT_RENT' | 'STUDENT_OWN'
+export const getSubType = (quote: BundledQuote) =>
+  quote.data.subType as QuoteDataSubTypes

@@ -13,7 +13,11 @@ import {
   isSwedishApartment,
   isSwedishBRF,
 } from 'pages/OfferNew/utils'
-import { NoBundleTypes, DkBundleTypes, SeBundleTypes } from './tracking'
+import {
+  NoBundleTypes,
+  DkBundleTypes,
+  SeBundleTypes,
+} from 'utils/tracking/gtm/types'
 
 // Exclude single contract types that are only sold as part of bundles
 export type TypeOfContractExcludedUnused = Exclude<
@@ -30,6 +34,8 @@ export type TypeOfContractExcludedUnused = Exclude<
   | TypeOfContract.SeCarFull
   | TypeOfContract.SeCarHalf
   | TypeOfContract.SeCarTraffic
+  | TypeOfContract.SeQasaLongTermRental
+  | TypeOfContract.SeQasaShortTermRental
 >
 
 export const ADTRACTION_CONTRACT_VALUES: Record<

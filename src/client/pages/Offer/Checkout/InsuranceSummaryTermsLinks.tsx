@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { InsuranceTerm, InsuranceTermType } from 'data/graphql'
+import { QuoteBundle } from 'data/graphql'
 import { RawLink } from 'components/RawLink'
-import { OfferData, OfferQuote } from 'pages/OfferNew/types'
 import { Row } from './InsuranceSummary'
 
 const LinksWrapper = styled.div`
@@ -34,21 +33,13 @@ const Link = styled(RawLink)`
   }
 `
 
-export type Term = {
-  termType: InsuranceTermType
-  data: InsuranceTerm
-  quoteId: OfferQuote['id']
-}
-
-export type Terms = Term[]
-
 type Props = {
-  offerData: OfferData
+  quotes: QuoteBundle['quotes']
 }
 
-export const InsuranceSummaryTermsLinks = ({ offerData }: Props) => (
+export const InsuranceSummaryTermsLinks = ({ quotes }: Props) => (
   <>
-    {offerData.quotes.map(({ id, displayName, insuranceTerms }) => {
+    {quotes.map(({ id, displayName, insuranceTerms }) => {
       return (
         <LinksWrapper key={id}>
           <Row>

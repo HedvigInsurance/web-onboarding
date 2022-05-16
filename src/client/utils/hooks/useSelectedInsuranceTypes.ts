@@ -8,6 +8,7 @@ export enum InsuranceType {
   SWEDISH_HOUSE = 'SWEDISH_HOUSE',
   SWEDISH_ACCIDENT = 'SWEDISH_ACCIDENT',
   NORWEGIAN_HOME_CONTENT = 'NORWEGIAN_HOME_CONTENT',
+  NORWEGIAN_HOUSE = 'NORWEGIAN_HOUSE',
   NORWEGIAN_TRAVEL = 'NORWEGIAN_TRAVEL',
   NORWEGIAN_ACCIDENT = 'NORWEGIAN_ACCIDENT',
   DANISH_HOME_CONTENT = 'DANISH_HOME_CONTENT',
@@ -32,6 +33,9 @@ const validateInsuranceTypes = (
       ALL_INSURANCE_TYPES.includes((type as unknown) as InsuranceType) ||
       ALL_CONTRACT_TYPES.includes((type as unknown) as TypeOfContract),
   ) as Array<InsuranceType>
+
+export const getSelectedInsuranceTypes = () =>
+  deserializeSearchParams(new URLSearchParams(window.location.search))
 
 export const useSelectedInsuranceTypes = () => {
   const location = useLocation()

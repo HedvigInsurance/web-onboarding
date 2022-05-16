@@ -4,11 +4,14 @@ import {
   HttpLink,
   InMemoryCache,
   split,
+  QueryOptions,
+  OperationVariables,
 } from '@apollo/client'
 import { WebSocketLink } from '@apollo/link-ws'
 import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { datadogRum } from '@datadog/browser-rum'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 import { createSession, Session, DEVICE_ID_KEY } from '../shared/sessionStorage'
 
@@ -17,6 +20,9 @@ export interface ApolloClientUtils {
   // eslint-disable-next-line  @typescript-eslint/ban-types
   client: ApolloClient<object>
   httpLink: HttpLink
+  runQuery<T = any, TVariables = OperationVariables>(
+    options: QueryOptions<TVariables, T>,
+  ): Promise<T | undefined>
 }
 
 export const apolloClient = (() => {
@@ -80,5 +86,20 @@ export const apolloClient = (() => {
     ]),
   })
 
-  return { subscriptionClient, client, httpLink }
+  const runQuery = async <T = any, TVariables = OperationVariables>(
+    options: QueryOptions<TVariables, T>,
+  ): Promise<T | undefined> => {
+    try {
+      const apolloQuery = await client.query<T>(options)
+      if (apolloQuery.error) {
+        datadogRum.addError(apolloQuery.error, options)
+        return
+      } else return apolloQuery.data
+    } catch (e) {
+      datadogRum.addError(e, options)
+      return
+    }
+  }
+
+  return { subscriptionClient, client, httpLink, runQuery }
 })()

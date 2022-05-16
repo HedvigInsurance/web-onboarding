@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { match } from 'matchly'
 import { useHistory } from 'react-router'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { datadogRum } from '@datadog/browser-rum'
+import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleData, LocaleLabel } from 'l10n/locales'
@@ -15,9 +16,10 @@ import {
   PaymentConnectChannel,
   usePaymentMethodsQuery,
   PaymentMethodsQuery,
+  useAddPaymentTokenMutation,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
-import { EventName, ErrorEventType } from 'utils/tracking/gtm'
+import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
 
 interface Params {
   onSuccess?: (id?: string) => void
@@ -58,6 +60,7 @@ export const useAdyenCheckout = ({
   const [adyenState, setAdyenState] = useState<ADYEN_STATE>('NOT_LOADED')
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const storage = useStorage()
+  const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
 
   const [
     submitAdditionalPaymentDetails,
@@ -102,7 +105,7 @@ export const useAdyenCheckout = ({
     }
 
     const dropinApi = createAdyenCheckout({
-      payButtonText: textKeys.ONBOARDING_CONNECT_DD_CTA(),
+      payButtonText: textKeys.CHECKOUT_BUTTON_CONNECT_CARD(),
       successMessage,
       currentLocale,
       paymentMethodsResponse,
@@ -111,11 +114,12 @@ export const useAdyenCheckout = ({
       quoteCartId,
       history,
       onSuccess,
+      addPaymentTokenMutation,
       storage,
       onError: (error) =>
         trackOfferEvent({
           eventName: EventName.SignError,
-          options: { error, errorType: ErrorEventType.Adyen },
+          options: { error, errorType: ErrorEventType.PaymentError },
         }),
     })
 
@@ -136,6 +140,7 @@ export const useAdyenCheckout = ({
     storage,
     trackOfferEvent,
     successMessage,
+    addPaymentTokenMutation,
   ])
 
   useEffect(() => {
@@ -151,11 +156,11 @@ interface AdyenCheckoutProps {
   currentLocale: LocaleData
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
   connectPaymentMutation: any
+  addPaymentTokenMutation: any
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
   onSuccess?: (paymentTokenId?: string) => void
-  onError: (e: Error) => void
-  setIsCompleted?: () => void
+  onError: (e: Error | string) => void
   quoteCartId: string
   storage: StorageState
 }
@@ -167,6 +172,7 @@ const createAdyenCheckout = ({
   paymentMethodsResponse,
   connectPaymentMutation,
   submitAdditionalPaymentDetails,
+  addPaymentTokenMutation,
   quoteCartId,
   storage,
   onSuccess = () => {
@@ -195,6 +201,7 @@ const createAdyenCheckout = ({
       console.error(
         `Received unknown or faulty status type "${status}" as request finished from Adyen`,
       )
+      onError(status)
       dropinComponent.setStatus('error')
       window.setTimeout(() => dropinComponent.setStatus('ready'), 1000)
     }
@@ -284,6 +291,14 @@ const createAdyenCheckout = ({
           quoteCartId,
         })
 
+        await addPaymentTokenMutation({
+          variables: {
+            id: quoteCartId,
+            paymentTokenId,
+          },
+          refetchQueries: ['QuoteCart'],
+        })
+
         if (
           result.data?.paymentConnection_connectPayment?.__typename ===
           'ActionRequired'
@@ -305,6 +320,7 @@ const createAdyenCheckout = ({
           )
         }
       } catch (e) {
+        onError(e as Error)
         handleResult(dropinComponent, 'error')
       }
     },
@@ -375,7 +391,11 @@ const mountAdyenJs = (setAdyenLoaded: (adyenLoaded: boolean) => void) => () => {
   script.onload = () => setAdyenLoaded(true)
   document.body.append(script)
   return () => {
-    document.body.removeChild(script)
+    try {
+      document.body.contains(script) && document.body.removeChild(script)
+    } catch (error) {
+      datadogRum.addError(error)
+    }
   }
 }
 const mountAdyenCss = () => {
@@ -390,6 +410,10 @@ const mountAdyenCss = () => {
 
   document.body.append(link)
   return () => {
-    document.body.removeChild(link)
+    try {
+      document.body.contains(link) && document.body.removeChild(link)
+    } catch (error) {
+      datadogRum.addError(error)
+    }
   }
 }

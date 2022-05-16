@@ -1,11 +1,12 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { useFormik, FormikHelpers } from 'formik'
+import { useFormik, FormikHelpers, FormikProps } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router'
-import { useTrackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
+import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -16,19 +17,17 @@ import {
   QuoteBundleVariant,
   BundledQuote,
   CheckoutStatus,
-  useAddPaymentTokenMutation,
 } from 'data/graphql'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 
 import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { trackSignedCustomerEvent } from 'utils/tracking/trackSignedCustomerEvent'
 import { useStorage } from 'utils/StorageContainer'
-import { useVariation } from 'utils/hooks/useVariation'
-import { ErrorEventType, EventName } from 'utils/tracking/gtm'
+import { ErrorEventType, EventName } from 'utils/tracking/gtm/types'
 
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
+import { useDebounce } from 'utils/hooks/useDebounce'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -102,12 +101,12 @@ const AdyenContainer = styled.div`
     }
 
     .adyen-checkout__button {
-      background-color: ${colorsV3.purple500};
-      color: ${colorsV3.gray900};
+      background-color: ${colorsV3.gray900};
+      color: ${colorsV3.gray100};
       transition: transform 300ms;
 
       &:hover {
-        background-color: ${colorsV3.purple500};
+        background-color: ${colorsV3.gray800};
         transform: translateY(-2px);
         box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
       }
@@ -150,6 +149,17 @@ const Terms = styled.div`
   }
 `
 
+const useSubmitFormOnSsnChange = (formik: FormikProps<QuoteInput>) => {
+  const debouncedSsn = useDebounce(formik.values.ssn, 500)
+  const formikInitialSsn = formik.initialValues.ssn
+  const formikSubmitForm = formik.submitForm
+  useEffect(() => {
+    if (debouncedSsn !== formikInitialSsn) {
+      formikSubmitForm()
+    }
+  }, [debouncedSsn, formikInitialSsn, formikSubmitForm])
+}
+
 type Props = {
   bundleVariants: QuoteBundleVariant[]
   quoteCartId: string
@@ -158,7 +168,6 @@ type Props = {
   selectedQuoteBundleVariant: QuoteBundleVariant
   quoteIds: string[]
   checkoutStatus?: CheckoutStatus
-  isPaymentConnected: boolean
 }
 
 export const CheckoutPayment = ({
@@ -169,15 +178,14 @@ export const CheckoutPayment = ({
   quoteIds,
   selectedQuoteBundleVariant,
   checkoutStatus,
-  isPaymentConnected,
 }: Props) => {
   const textKeys = useTextKeys()
 
   const locale = useCurrentLocale()
   const client = useApolloClient()
   const storage = useStorage()
-  const variation = useVariation()
   const trackOfferEvent = useTrackOfferEvent()
+  const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
 
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
@@ -185,7 +193,6 @@ export const CheckoutPayment = ({
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
   const [startCheckout] = useStartCheckoutMutation()
-  const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
@@ -198,6 +205,7 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
+  const [isPaymentConnected, setIsPaymentConnected] = useState(false)
 
   useScrollToTop()
 
@@ -213,26 +221,9 @@ export const CheckoutPayment = ({
     }
   }, [is3DsError, history, trackOfferEvent])
 
-  const addPaymentToCart = useCallback(
-    async (paymentTokenId) => {
-      try {
-        await addPaymentTokenMutation({
-          variables: {
-            id: quoteCartId,
-            paymentTokenId,
-          },
-          refetchQueries: ['QuoteCart'],
-        })
-      } catch (error) {
-        trackOfferEvent({
-          eventName: EventName.SignError,
-          options: { error, errorType: ErrorEventType.PaymentTokenMutation },
-        })
-        console.error('Failed to add Payment Token :', error.message, error)
-      }
-    },
-    [addPaymentTokenMutation, quoteCartId, trackOfferEvent],
-  )
+  const addPaymentToCart = useCallback(async () => {
+    setIsPaymentConnected(true)
+  }, [])
 
   const performCheckout = useCallback(async () => {
     try {
@@ -274,7 +265,6 @@ export const CheckoutPayment = ({
       setIsError(true)
     }
   }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
-
   useAdyenCheckout({
     adyenRef,
     onSuccess: addPaymentToCart,
@@ -321,22 +311,14 @@ export const CheckoutPayment = ({
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
-      const paymentTokenId = storage.session.getSession()?.paymentTokenId
-      if (!paymentTokenId) {
-        trackOfferEvent({
-          eventName: EventName.SignError,
-          options: { errorType: ErrorEventType.PaymentTokenIDMissing },
-        })
-        throw new Error('No token payment id')
-      }
-      addPaymentToCart(paymentTokenId)
+      addPaymentToCart()
     }
   }, [
     is3DsComplete,
-    addPaymentToCart,
     checkoutStatus,
     storage.session,
     trackOfferEvent,
+    addPaymentToCart,
   ])
 
   useEffect(() => {
@@ -350,21 +332,12 @@ export const CheckoutPayment = ({
       const memberId = await setupQuoteCartSession({
         quoteCartId,
         apolloClientUtils: {
+          ...realApolloClient!,
           client,
-          subscriptionClient: realApolloClient!.subscriptionClient,
-          httpLink: realApolloClient!.httpLink,
         },
         storage,
       })
-      trackSignedCustomerEvent({
-        variation,
-        campaignCode: priceData.campaignCode,
-        isDiscountMonthlyCostDeduction:
-          priceData.isDiscountMonthlyCostDeduction,
-        memberId,
-        bundle: selectedQuoteBundleVariant.bundle,
-        quoteCartId,
-      })
+      trackSignedCustomerEvent({ memberId })
     } catch (error) {
       trackOfferEvent({
         eventName: EventName.SignError,
@@ -372,16 +345,7 @@ export const CheckoutPayment = ({
       })
       throw new Error('Setup quote cart session failed')
     }
-  }, [
-    priceData.campaignCode,
-    priceData.isDiscountMonthlyCostDeduction,
-    client,
-    selectedQuoteBundleVariant.bundle,
-    quoteCartId,
-    storage,
-    variation,
-    trackOfferEvent,
-  ])
+  }, [client, quoteCartId, storage, trackOfferEvent, trackSignedCustomerEvent])
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
@@ -447,6 +411,8 @@ export const CheckoutPayment = ({
 
     await performCheckout()
   }
+
+  useSubmitFormOnSsnChange(formik)
 
   useEffect(() => {
     if (checkoutStatus === CheckoutStatus.Signed) {

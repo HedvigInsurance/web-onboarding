@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { SemanticEvents } from 'quepasa'
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { useHistory, useRouteMatch, RouteComponentProps } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import {
@@ -9,8 +9,8 @@ import {
   CheckoutStatus,
   CheckoutMethod,
 } from 'data/graphql'
-import { EventName } from 'utils/tracking/gtm'
-import { getUtmParamsFromCookie, TrackAction } from 'utils/tracking/tracking'
+import { EventName } from 'utils/tracking/gtm/types'
+import { getUtmParamsFromCookie } from 'utils/tracking/gtm/helpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
@@ -25,7 +25,8 @@ import {
   getMonthlyCostDeductionIncentive,
   isCarInsuranceType,
 } from 'api/quoteCartQuerySelectors'
-import { trackOfferEvent } from 'utils/tracking/trackOfferEvent'
+import { useTrackSegmentEvent } from 'utils/tracking/hooks/useTrackSegmentEvent'
+import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
@@ -131,18 +132,26 @@ export const OfferPage = ({
   const bundleVariants = getPossibleVariations(quoteCartQueryData)
   const campaign = getCampaign(quoteCartQueryData)
 
-  useEffect(() => {
+  const trackOfferEvent = useTrackOfferEvent()
+  const trackSegmentEvent = useTrackSegmentEvent()
+
+  useEffect(() => trackOfferEvent({ eventName: EventName.OfferCreated }), [
+    trackOfferEvent,
+  ])
+
+  const trackCheckoutStarted = useCallback(() => {
     if (selectedBundleVariant) {
-      trackOfferEvent(
-        EventName.OfferCreated,
-        selectedBundleVariant.bundle,
-        isReferralCodeUsed,
-        {
-          quoteCartId,
+      trackSegmentEvent({
+        name: SemanticEvents.Ecommerce.CheckoutStarted,
+        properties: {
+          value: Number(getNetAmount(selectedBundleVariant).amount),
+          currency: getNetAmount(selectedBundleVariant).currency,
+          label: 'Offer',
+          ...getUtmParamsFromCookie(),
         },
-      )
+      })
     }
-  }, [selectedBundleVariant, isReferralCodeUsed, quoteCartId])
+  }, [selectedBundleVariant, trackSegmentEvent])
 
   if (isLoadingQuoteCart) return <LoadingPage loading />
 
@@ -171,12 +180,12 @@ export const OfferPage = ({
         ? getTypeOfContractFromBundleVariant(newSelectedBundleVariant)
         : getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
-    trackOfferEvent(
-      EventName.InsuranceSelectionToggle,
-      newSelectedBundleVariant.bundle,
-      isReferralCodeUsed,
-      { quoteCartId, switchedFrom: selectedBundleVariant.bundle },
-    )
+    trackOfferEvent({
+      eventName: EventName.InsuranceSelectionToggle,
+      options: {
+        switchedFrom: selectedBundleVariant.bundle,
+      },
+    })
   }
 
   const handleCheckoutUpsellCardAccepted = (
@@ -187,15 +196,12 @@ export const OfferPage = ({
         ? getTypeOfContractFromBundleVariant(newSelectedBundleVariant)
         : getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
-    trackOfferEvent(
-      EventName.OfferCrossSell,
-      newSelectedBundleVariant.bundle,
-      isReferralCodeUsed,
-      {
-        quoteCartId,
+    trackOfferEvent({
+      eventName: EventName.OfferCrossSell,
+      options: {
         switchedFrom: selectedBundleVariant.bundle,
       },
-    )
+    })
   }
 
   const toggleCheckout = createToggleCheckout(history, quoteCartId, pathLocale)
@@ -213,30 +219,16 @@ export const OfferPage = ({
       bundle={selectedBundleVariant.bundle}
     >
       <>
-        <TrackAction
-          event={{
-            name: SemanticEvents.Ecommerce.CheckoutStarted,
-            properties: {
-              value: Number(getNetAmount(selectedBundleVariant).amount),
-              currency: getNetAmount(selectedBundleVariant).currency,
-              label: 'Offer',
-              ...getUtmParamsFromCookie(),
-            },
+        <Introduction
+          quoteCartId={quoteCartId}
+          allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
+          offerData={offerData}
+          campaign={campaign}
+          onCheckoutOpen={() => {
+            handleCheckoutToggle(true)
+            trackCheckoutStarted()
           }}
-        >
-          {({ track }) => (
-            <Introduction
-              quoteCartId={quoteCartId}
-              allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
-              offerData={offerData}
-              campaign={campaign}
-              onCheckoutOpen={() => {
-                handleCheckoutToggle(true)
-                track()
-              }}
-            />
-          )}
-        </TrackAction>
+        />
         {isInsuranceSelectorVisible && (
           <InsuranceSelector
             variants={bundleVariants}
