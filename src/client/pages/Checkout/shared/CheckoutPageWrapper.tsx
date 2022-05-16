@@ -8,23 +8,26 @@ import { TopBar } from 'components/TopBar'
 import { BackButton } from 'components/BackButton/BackButton'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
-import { BREAKPOINTS, MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  BREAKPOINTS,
+  MEDIUM_LARGE_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { CheckoutPageErrorModal } from './CheckoutPageErrorModal'
 
 const { gray100 } = colorsV3
 
 type Props = {
   children: React.ReactNode
+  className?: string
   handleClickBackButton: () => void
 }
 
 const Wrapper = styled.div`
-  width: 100vw;
   min-height: 100vh;
   background-color: ${gray100};
   position: relative;
   padding: 0;
-  margin-bottom: 7rem;
+  margin-bottom: 5rem;
 
   > button {
     position: absolute;
@@ -33,7 +36,7 @@ const Wrapper = styled.div`
     z-index: 1;
   }
 
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_LARGE_SCREEN_MEDIA_QUERY} {
     margin-bottom: 0;
     > button {
       top: 6.5rem;
@@ -45,7 +48,7 @@ const InnerWrapper = styled.div`
   margin: 0 auto;
   position: relative;
 
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+  ${MEDIUM_LARGE_SCREEN_MEDIA_QUERY} {
     padding: 6.5rem 2rem;
   }
 `
@@ -65,10 +68,10 @@ export const WrapperWidth = 628
 export const CheckoutPageWrapper = ({
   children,
   handleClickBackButton,
+  className,
 }: Props) => {
-  const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
+  const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumLargeScreen })
   const { isQuoteCartValid } = useIsQuoteCartIdValid()
-
   useEffect(() => {
     hideIntercomLauncher()
   })
@@ -87,7 +90,7 @@ export const CheckoutPageWrapper = ({
           </LogoLink>
         )}
         <BackButton onClick={handleClickBackButton} />
-        <InnerWrapper>{children}</InnerWrapper>
+        <InnerWrapper className={className}>{children}</InnerWrapper>
       </Wrapper>
     </>
   )

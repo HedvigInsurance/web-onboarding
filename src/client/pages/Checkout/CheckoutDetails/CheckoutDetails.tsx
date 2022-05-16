@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
@@ -11,6 +13,7 @@ import { DetailsModal } from 'components/DetailsModal'
 import { EventName } from 'utils/tracking/gtm/types'
 
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
+import { MEDIUM_LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -21,6 +24,14 @@ import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
 import { StartDateSection } from './components/StartDateSection/StartDateSection'
 import { DocumentLinks } from './components/DocumentLinks'
+
+const CheckoutDetailsWrapper = styled(CheckoutPageWrapper)`
+  background: ${colorsV3.gray200};
+
+  ${MEDIUM_LARGE_SCREEN_MEDIA_QUERY} {
+    background: none;
+  }
+`
 
 export const CheckoutDetails = () => {
   const textKeys = useTextKeys()
@@ -65,7 +76,7 @@ export const CheckoutDetails = () => {
   const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
-    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
+    <CheckoutDetailsWrapper handleClickBackButton={handleClickBackButton}>
       <PageSection>
         <YourPlan {...priceData} />
         <StartDateSection />
@@ -89,6 +100,6 @@ export const CheckoutDetails = () => {
       >
         <PaymentInfo {...priceData} />
       </Footer>
-    </CheckoutPageWrapper>
+    </CheckoutDetailsWrapper>
   )
 }
