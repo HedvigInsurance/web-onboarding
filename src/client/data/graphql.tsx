@@ -143,7 +143,10 @@ export type AcceptedReferral = {
 export type ActionRequired = {
   __typename?: 'ActionRequired'
   paymentTokenId: Scalars['ID']
+  /** @deprecated use actionV2 */
   action: Scalars['CheckoutPaymentAction']
+  /** String-wrapped json of the Adyen action response, necessary for some clients' deserialization */
+  actionV2: Scalars['CheckoutPaymentAction']
 }
 
 /** The contract has an inception date in the future and a termination date in the future */
@@ -341,6 +344,7 @@ export type AgreementCore = {
   status: AgreementStatus
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   partner?: Maybe<Scalars['String']>
@@ -2131,7 +2135,7 @@ export type Contract = {
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
   supportsAddressChange: Scalars['Boolean']
-  logo: Icon
+  logo?: Maybe<Icon>
   perils: Array<PerilV2>
   currentAgreementDetailsTable: Table
   upcomingAgreementDetailsTable: Table
@@ -2160,6 +2164,10 @@ export type ContractTermsAndConditionsArgs = {
   locale: Locale
   date?: Maybe<Scalars['LocalDate']>
   partner?: Maybe<Scalars['String']>
+}
+
+export type ContractLogoArgs = {
+  locale: Locale
 }
 
 export type ContractPerilsArgs = {
@@ -2205,6 +2213,20 @@ export type ContractFaq = {
   __typename?: 'ContractFaq'
   headline: Scalars['String']
   body: Scalars['String']
+}
+
+export type ContractFaqResponse = {
+  __typename?: 'ContractFaqResponse'
+  contractType?: Maybe<TypeOfContract>
+  faqItems: Array<ContractFaq>
+}
+
+/** Query parameters for getting FAQs for multiple contracts */
+export type ContractFaqsQuery = {
+  /** An array of contract types */
+  contractTypes: Array<TypeOfContract>
+  /** Locale for PCMS */
+  locale: Locale
 }
 
 export type ContractHighlight = {
@@ -2698,7 +2720,6 @@ export type CreateOnboardingQuoteCartInput = {
 export type CreateQuoteBundleInput = {
   payload: Array<Scalars['JSON']>
   initiatedFrom?: Maybe<QuoteInitiatedFrom>
-  contractBundleId?: Maybe<Scalars['ID']>
   numberCoInsured?: Maybe<Scalars['Int']>
 }
 
@@ -2815,6 +2836,7 @@ export type CrossSellEmbarkEmbarkStoryArgs = {
 
 export type CrossSellInfo = {
   __typename?: 'CrossSellInfo'
+  /** @deprecated use CrossSell.title instead */
   displayName: Scalars['String']
   aboutSection: Scalars['String']
   contractPerils: Array<PerilV2>
@@ -2865,6 +2887,7 @@ export type DanishAccidentAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -2908,6 +2931,7 @@ export type DanishHomeContentAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -2950,6 +2974,7 @@ export type DanishTravelAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -7715,6 +7740,11 @@ export type Mutation = {
   /** Create a quote and add it to the given cart. */
   quoteCart_createQuoteBundle: CreateQuoteBundleResult
   /**
+   * Generate self change quotes for the member's insurances. The input is the new home address information,
+   * and the mutation generates new quotes for all the member's existing insurances.
+   */
+  quoteCart_selfChange: SelfChangeResult
+  /**
    * Add a campaign by its code to this cart. This campaign won't be "redeemed", but rather
    * left in a pending state on the onboarding until signing occurs and a member is created.
    *
@@ -7921,6 +7951,11 @@ export type MutationQuoteCart_CreateQuoteBundleArgs = {
   input: CreateQuoteBundleInput
 }
 
+export type MutationQuoteCart_SelfChangeArgs = {
+  id: Scalars['ID']
+  input: SelfChangeInput
+}
+
 export type MutationQuoteCart_AddCampaignArgs = {
   id: Scalars['ID']
   code: Scalars['String']
@@ -8094,6 +8129,7 @@ export type NorwegianAccidentAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -8131,6 +8167,7 @@ export type NorwegianHomeContentAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -8169,6 +8206,7 @@ export type NorwegianHouseAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -8202,6 +8240,7 @@ export type NorwegianTravelAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -8506,6 +8545,8 @@ export type Query = {
   contractPerils: Array<PerilV2>
   /** Returns FAQ for TypeOfContract from promise-cms */
   contractFaq: Array<ContractFaq>
+  /** Returns FAQ for TypeOfContract from promise-cms */
+  contractFaqs: Array<ContractFaqResponse>
   /** Returns termsAndConditions from promise-cms */
   termsAndConditions: InsuranceTerm
   insuranceTerms: Array<InsuranceTerm>
@@ -8706,6 +8747,10 @@ export type QueryContractPerilsArgs = {
 export type QueryContractFaqArgs = {
   contractType: TypeOfContract
   locale: Locale
+}
+
+export type QueryContractFaqsArgs = {
+  input: ContractFaqsQuery
 }
 
 export type QueryTermsAndConditionsArgs = {
@@ -10014,6 +10059,13 @@ export type SelfChangeEligibility = {
   addressChangeEmbarkStoryId?: Maybe<Scalars['ID']>
 }
 
+export type SelfChangeInput = {
+  startDate: Scalars['LocalDate']
+  payload: Scalars['JSON']
+}
+
+export type SelfChangeResult = QuoteCart | QuoteBundleError
+
 export type SessionInformation = {
   __typename?: 'SessionInformation'
   token: Scalars['String']
@@ -10186,6 +10238,7 @@ export type SwedishAccidentAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -10216,6 +10269,7 @@ export type SwedishApartmentAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -10266,6 +10320,7 @@ export type SwedishCarAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -10302,6 +10357,7 @@ export type SwedishHouseAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -10335,6 +10391,7 @@ export type SwedishQasaRentalAgreement = AgreementCore & {
   id: Scalars['ID']
   activeFrom?: Maybe<Scalars['LocalDate']>
   activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
   premium: MonetaryAmountV2
   certificateUrl?: Maybe<Scalars['String']>
   status: AgreementStatus
@@ -12235,7 +12292,10 @@ export type PaymentConnection_ConnectPaymentMutation = {
         ActionRequired,
         'paymentTokenId' | 'action'
       >)
-    | { __typename?: 'ConnectPaymentFailed' }
+    | ({ __typename?: 'ConnectPaymentFailed' } & Pick<
+        ConnectPaymentFailed,
+        'paymentTokenId'
+      >)
 }
 
 export type PaymentConnection_SubmitAdditionalPaymentDetailsMutationVariables = Exact<{
@@ -14460,6 +14520,9 @@ export const PaymentConnection_ConnectPaymentDocument = gql`
       ... on ConnectPaymentFinished {
         paymentTokenId
         status
+      }
+      ... on ConnectPaymentFailed {
+        paymentTokenId
       }
     }
   }

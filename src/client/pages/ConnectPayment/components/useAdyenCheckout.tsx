@@ -17,12 +17,14 @@ import {
   usePaymentMethodsQuery,
   PaymentMethodsQuery,
   useAddPaymentTokenMutation,
+  PaymentConnection_ConnectPaymentMutationFn,
+  AddPaymentTokenMutationFn,
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
 import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
 
 interface Params {
-  onSuccess?: (id?: string) => void
+  onSuccess?: () => void
   adyenRef: React.MutableRefObject<HTMLDivElement | null>
   quoteCartId: string
   isSuccess: boolean
@@ -155,8 +157,8 @@ interface AdyenCheckoutProps {
   successMessage: string
   currentLocale: LocaleData
   paymentMethodsResponse: Scalars['PaymentMethodsResponse']
-  connectPaymentMutation: any
-  addPaymentTokenMutation: any
+  connectPaymentMutation: PaymentConnection_ConnectPaymentMutationFn
+  addPaymentTokenMutation: AddPaymentTokenMutationFn
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
   onSuccess?: (paymentTokenId?: string) => void
@@ -194,7 +196,6 @@ const createAdyenCheckout = ({
     paymentTokenId?: string,
   ) => {
     if (['AUTHORISED', 'PENDING'].includes(status)) {
-      // history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
       dropinComponent.setStatus('success', { message: successMessage })
       onSuccess(paymentTokenId)
     } else {
@@ -246,6 +247,18 @@ const createAdyenCheckout = ({
         buttonType: 'subscribe',
         countryCode: currentLocale.marketLabel,
       },
+      googlepay: {
+        amount: {
+          value: 0,
+          currency: currentLocale.currencyCode,
+        },
+        countryCode: currentLocale.marketLabel,
+        environment:
+          window.hedvigClientConfig.adyenEnvironment === 'live'
+            ? 'PRODUCTION'
+            : 'TEST',
+        buttonType: 'subscribe',
+      },
     },
     enableStoreDetails: true,
     returnUrl,
@@ -266,19 +279,18 @@ const createAdyenCheckout = ({
           },
         })
 
-        if (!result) {
+        const paymentTokenId =
+          result.data?.paymentConnection_connectPayment.paymentTokenId
+
+        if (paymentTokenId === undefined) {
+          handleResult(dropinComponent, 'error')
           return
         }
-
-        const paymentTokenId =
-          result.data.paymentConnection_connectPayment.paymentTokenId
-
         storage.session.setSession({
           ...storage.session.getSession(),
           paymentTokenId,
           quoteCartId,
         })
-
         await addPaymentTokenMutation({
           variables: {
             id: quoteCartId,
@@ -295,9 +307,7 @@ const createAdyenCheckout = ({
             result.data.paymentConnection_connectPayment.action,
           )
           return
-        }
-
-        if (
+        } else if (
           result.data?.paymentConnection_connectPayment?.__typename ===
           'ConnectPaymentFinished'
         ) {
@@ -306,6 +316,12 @@ const createAdyenCheckout = ({
             result.data?.paymentConnection_connectPayment.status,
             paymentTokenId,
           )
+        } else if (
+          result.data?.paymentConnection_connectPayment?.__typename ===
+          'ConnectPaymentFailed'
+        ) {
+          handleResult(dropinComponent, 'error')
+          return
         }
       } catch (e) {
         onError(e as Error)
