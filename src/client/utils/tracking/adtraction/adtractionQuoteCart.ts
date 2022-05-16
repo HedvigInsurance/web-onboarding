@@ -29,7 +29,7 @@ export const adtractionQuoteCart = (
   orderId: string,
   emailAddress: string,
   bundle: QuoteBundle,
-  adTracktionConfig: AdTractionMarketConfig,
+  adTractionConfig: AdTractionMarketConfig,
   couponCode?: string,
 ) => {
   try {
@@ -45,7 +45,7 @@ export const adtractionQuoteCart = (
       adt.Tag.cpn = couponCode
     }
 
-    adt.Tag.tp = adTracktionConfig.tp
+    adt.Tag.tp = adTractionConfig.tp
     adt.Tag.pc = getProductCategories(bundle)
     adt.Tag.doEvent()
   } catch (e) {
