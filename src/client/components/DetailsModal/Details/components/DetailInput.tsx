@@ -155,41 +155,6 @@ export const AreaInput: React.FC<AreaInputProps> = ({
   />
 )
 
-type MileageInputProps = {
-  name: string
-  label: string
-  formikProps: FormikProps<QuoteInput>
-}
-
-export const MileageInput = ({
-  name,
-  label,
-  formikProps,
-}: MileageInputProps) => {
-  const options = [1000, 1500, 2000, 2500, 2501].map((value) => {
-    return value !== 2501
-      ? {
-          label: `DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_${value * 10}`,
-          value: value.toString(),
-        }
-      : {
-          label: 'DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000_PLUS',
-          value: value.toString(),
-        }
-  })
-  return (
-    <DetailInput
-      name={name}
-      field={{
-        label: label,
-        placeholder: '',
-        options,
-      }}
-      formikProps={formikProps}
-    />
-  )
-}
-
 type HomeOwnershipTypeInputProps = {
   name: string
   formikProps: FormikProps<QuoteInput>
