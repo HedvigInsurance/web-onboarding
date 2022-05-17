@@ -5,7 +5,6 @@ import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Button, ButtonGroup } from 'components/buttons'
 import { Modal, ModalFooter, ModalProps } from 'components/ModalNew'
 import {
-  BundledQuote,
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
   UnderwritingLimit,
@@ -156,18 +155,15 @@ const getSubType = (data: QuoteDetailsInput) => {
 type DetailsModalProps = Pick<ModalProps, 'isVisible'> & {
   onClose: () => void
   quoteCartId: string
-  allQuotes: BundledQuote[]
 }
 
 export const DetailsModal = ({
   quoteCartId,
-  allQuotes,
   isVisible,
   onClose,
 }: DetailsModalProps) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
-
   const [
     createQuoteBundle,
     {
@@ -187,7 +183,7 @@ export const DetailsModal = ({
   )
 
   if (!selectedQuoteBundle) return null
-
+  const allQuotes = selectedQuoteBundle.bundle.quotes
   const mainQuote = bundleSelector.getMainQuote(selectedQuoteBundle.bundle)
   const {
     firstName,
@@ -211,8 +207,10 @@ export const DetailsModal = ({
     startDate,
     data: {
       ...mainQuoteData,
-      isStudent: quoteSelector.isStudent(mainQuote),
-      householdSize: numberCoInsured + 1,
+      ...(!quoteSelector.isCar(mainQuote) && {
+        isStudent: quoteSelector.isStudent(mainQuote),
+        householdSize: numberCoInsured + 1,
+      }),
     },
   } as QuoteInput
 
@@ -220,30 +218,38 @@ export const DetailsModal = ({
   const isQuoteCreationFailed = isQuoteBundleError(createQuoteBundleData)
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
-    const {
-      data: { householdSize },
-    } = form
-
+    const quotes = allQuotes.map((quote) => {
+      const { startDate, currentInsurer, data } = quote
+      const {
+        data: { zipCode, street, city },
+      } = form
+      return {
+        ...form,
+        startDate,
+        currentInsurer: currentInsurer?.id,
+        data: {
+          ...(quoteSelector.isCar(mainQuote) === quoteSelector.isCar(quote)
+            ? form.data
+            : data),
+          ...(!quoteSelector.isCar(quote) && {
+            isStudent: data.isStudent,
+            householdSize: numberCoInsured + 1,
+          }),
+          id: data.id,
+          type: data.type,
+          typeOfContract: data.typeOfContract,
+          subType: getSubType(form.data),
+          zipCode,
+          street,
+          city,
+        },
+      }
+    })
     return createQuoteBundle({
       variables: {
         locale: isoLocale,
         quoteCartId,
-        quotes: allQuotes.map(({ startDate, currentInsurer, data }) => {
-          return {
-            ...form,
-            startDate,
-            currentInsurer: currentInsurer?.id,
-            data: {
-              isStudent: data.isStudent,
-              ...form.data,
-              numberCoInsured: householdSize && householdSize - 1,
-              id: data.id,
-              type: data.type,
-              typeOfContract: data.typeOfContract,
-              subType: getSubType(form.data),
-            },
-          }
-        }),
+        quotes,
       },
     })
   }
