@@ -44,6 +44,7 @@ import { Introduction } from './Introduction'
 import { Checkout } from './Checkout'
 import { PageWrapper } from './PageWrapper'
 import { CheckoutSuccessRedirect } from './CheckoutSuccessRedirect'
+import { useGetPromotions } from './useGetPromotions'
 
 function isValidCheckoutMethod(
   checkoutMethod: CheckoutMethod | undefined,
@@ -134,6 +135,9 @@ export const OfferPage = ({
 
   const trackOfferEvent = useTrackOfferEvent()
   const trackSegmentEvent = useTrackSegmentEvent()
+  const promotions = useGetPromotions(
+    getUniqueQuotesFromVariantList(bundleVariants),
+  )
 
   useEffect(() => trackOfferEvent({ eventName: EventName.OfferCreated }), [
     trackOfferEvent,
@@ -237,7 +241,7 @@ export const OfferPage = ({
           />
         )}
         <Perils offerData={offerData} />
-        <AppPromotionSection />
+        <AppPromotionSection promotions={promotions} />
         <FaqSection />
         <Checkout
           quoteCartId={quoteCartId}
