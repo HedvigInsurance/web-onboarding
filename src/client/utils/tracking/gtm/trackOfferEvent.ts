@@ -3,7 +3,7 @@ import { QuoteBundle } from 'data/graphql'
 import { EmbarkStory } from 'utils/embarkStory'
 import { captureSentryError } from 'utils/sentry-client'
 
-import { getGTMOfferBase } from 'src/client/utils/tracking/gtm/helpers'
+import { getGTMOfferBase } from 'utils/tracking/gtm/helpers'
 import { GTMPhoneNumberData, pushToGTMDataLayer } from './dataLayer'
 import { ErrorEventType, EventName } from './types'
 
