@@ -43,6 +43,7 @@ export const trackOfferGTM = (
         has_accident: hasAccidentQuote(offerData),
         has_travel: hasTravelQuote(offerData),
         has_house: false,
+        has_car: false,
         quote_cart_id: quoteCartId,
         ...(switchedFrom && {
           switched_from: {
@@ -51,6 +52,7 @@ export const trackOfferGTM = (
             has_accident: hasAccidentQuote(offerData),
             has_travel: hasTravelQuote(offerData),
             has_house: false,
+            has_car: false,
           },
         }),
         ...(offerData.memberId && { member_id: offerData.memberId }),

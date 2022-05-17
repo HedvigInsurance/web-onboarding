@@ -28,7 +28,7 @@ const InputFieldsWrapper = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: auto;
 
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+  @media screen and (min-width: 500px) {
     grid-template-columns: 1fr 1fr;
     gap: 0 1.5rem;
   }

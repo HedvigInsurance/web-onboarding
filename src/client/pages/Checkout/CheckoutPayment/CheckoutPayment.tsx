@@ -51,6 +51,13 @@ import { ContactInformation } from './ContactInformation/ContactInformation'
 
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
+const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
+  padding: 1.5rem 0rem;
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding: 1.5rem 1rem;
+  }
+`
+
 const AdyenContainer = styled.div`
   #dropin-container {
     .adyen-checkout__payment-method {
@@ -101,12 +108,12 @@ const AdyenContainer = styled.div`
     }
 
     .adyen-checkout__button {
-      background-color: ${colorsV3.gray900};
-      color: ${colorsV3.gray100};
+      background-color: ${colorsV3.purple500};
+      color: ${colorsV3.gray900};
       transition: transform 300ms;
 
       &:hover {
-        background-color: ${colorsV3.gray800};
+        background-color: ${colorsV3.purple500};
         transform: translateY(-2px);
         box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
       }
@@ -432,7 +439,7 @@ export const CheckoutPayment = ({
   }
 
   return (
-    <CheckoutPageWrapper handleClickBackButton={handleClickBackButton}>
+    <CheckoutPaymentWrapper handleClickBackButton={handleClickBackButton}>
       <ThreeDSErrorModal
         isVisible={is3dsError}
         onClose={() => setIs3dsError(false)}
@@ -461,6 +468,6 @@ export const CheckoutPayment = ({
           <PaymentInfo {...priceData} />
         </Footer>
       )}
-    </CheckoutPageWrapper>
+    </CheckoutPaymentWrapper>
   )
 }
