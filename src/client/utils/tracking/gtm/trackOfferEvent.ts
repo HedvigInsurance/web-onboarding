@@ -3,9 +3,9 @@ import { QuoteBundle } from 'data/graphql'
 import { EmbarkStory } from 'utils/embarkStory'
 import { captureSentryError } from 'utils/sentry-client'
 
+import { getGTMOfferBase } from 'src/client/utils/tracking/gtm/helpers'
 import { GTMPhoneNumberData, pushToGTMDataLayer } from './dataLayer'
 import { ErrorEventType, EventName } from './types'
-import { getBundleOwnershipType } from './helpers'
 
 export type OptionalParameters = {
   switchedFrom?: QuoteBundle
@@ -46,25 +46,11 @@ export const trackOfferEvent = (
         insurance_price: grossPrice,
         ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
         currency: quoteBundleSelector.getBundleCurrency(bundle),
-        is_student:
-          quoteBundleSelector.isStudentOffer(bundle) ||
-          quoteBundleSelector.isYouthOffer(bundle),
-        has_home: quoteBundleSelector.hasHomeContents(bundle),
-        has_house: quoteBundleSelector.hasHouse(bundle),
-        has_accident: quoteBundleSelector.hasAccident(bundle),
-        has_travel: quoteBundleSelector.hasTravel(bundle),
-        ownership_type: getBundleOwnershipType(bundle),
         quote_cart_id: quoteCartId,
+        ...getGTMOfferBase(bundle),
         ...(switchedFrom && {
           switch_from: {
-            has_home: quoteBundleSelector.hasHomeContents(switchedFrom),
-            has_house: quoteBundleSelector.hasHouse(switchedFrom),
-            has_accident: quoteBundleSelector.hasAccident(switchedFrom),
-            has_travel: quoteBundleSelector.hasTravel(switchedFrom),
-            ownership_type: getBundleOwnershipType(switchedFrom),
-            is_student:
-              quoteBundleSelector.isStudentOffer(switchedFrom) ||
-              quoteBundleSelector.isYouthOffer(switchedFrom),
+            ...getGTMOfferBase(switchedFrom),
           },
         }),
         ...(memberId && { member_id: memberId }),

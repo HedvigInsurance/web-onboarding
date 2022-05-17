@@ -21,8 +21,10 @@ export enum Feature {
 
 export type FeatureMap = Record<Feature, Array<MarketLabel>>
 
+export type AdyenEnvironment = 'test' | 'live'
+
 export interface ClientConfig {
-  adyenEnvironment: string
+  adyenEnvironment: AdyenEnvironment
   adyenClientKey: string
   contentServiceEndpoint: string
   giraffeHost: string

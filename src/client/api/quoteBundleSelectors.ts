@@ -146,8 +146,8 @@ export const getFirstInsuranceType = (bundle: QuoteBundle) => {
   return bundle.quotes?.[0]?.data.type
 }
 
-export const hasCar = (bundle: BundledQuote[]) => {
-  return bundle.some((quote) => quote.data.type === 'SWEDISH_CAR')
+export const hasCar = (quotes: BundledQuote[]) => {
+  return quotes.some(quoteSelector.isCar)
 }
 
 const getHouseholdSizeFromBundledQuotes = (
