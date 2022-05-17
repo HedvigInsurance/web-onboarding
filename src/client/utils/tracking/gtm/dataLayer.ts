@@ -5,12 +5,14 @@ export type GTMUserProperties = {
   environment: AppEnvironment
 }
 
-type SwitchedFrom = {
+export type GTMOfferBase = {
   is_student: boolean
   has_home: boolean
   has_house: boolean
   has_accident: boolean
   has_travel: boolean
+  has_car: boolean
+  car_sub_type?: string
   ownership_type?: string
 }
 
@@ -20,17 +22,11 @@ export type GTMOfferData = {
   insurance_price: number
   discounted_premium?: number
   currency: string
-  is_student: boolean
-  has_home: boolean
-  has_house: boolean
-  has_accident: boolean
-  has_travel: boolean
-  ownership_type?: string
   member_id?: string
   quote_cart_id?: string
   flow_type?: string
-  switched_from?: SwitchedFrom
-}
+  switched_from?: GTMOfferBase
+} & GTMOfferBase
 
 export type GTMPageData = {
   page: string
