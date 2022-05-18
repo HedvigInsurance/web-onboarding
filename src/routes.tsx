@@ -94,6 +94,16 @@ export const routes: Route[] = [
     },
   },
   {
+    path: `${onboardingLocaleBaseRoute}/home-insurance`,
+    serverRouteData: {
+      titleTextKey: 'STARTPAGE_PAGE_TITLE',
+    },
+    clientRouteData: {
+      Component: Landing,
+      exact: true,
+    },
+  },
+  {
     path: `${localePathPattern}/forever/:code?`,
     serverRouteData: {
       titleTextKey: 'FOREVER_LANDINGPAGE_TITLE',
