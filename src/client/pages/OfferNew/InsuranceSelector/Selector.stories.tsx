@@ -1,7 +1,7 @@
 import React from 'react'
-import { Selector } from './Selector'
+import { SelectableInsurance, Selector } from './Selector'
 
-const mockInsurances = [
+const mockInsurances: SelectableInsurance[] = [
   {
     id: '1',
     name: 'Inbo, Ulykke & Rejse',
