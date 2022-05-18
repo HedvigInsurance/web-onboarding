@@ -5,6 +5,7 @@ import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
 import { useFeature } from 'utils/hooks/useFeature'
 import { Feature } from 'shared/clientConfig'
 import { TextButton } from 'components/buttons'
+import { hasCar } from 'api/quoteBundleSelectors'
 import {
   ContainerWrapper,
   Container,
@@ -15,6 +16,7 @@ import {
   ColumnSpacing,
 } from '../components'
 import { ComparisonModal } from '../ComparisonTable/ComparisonModal'
+import { getUniqueQuotesFromVariantList } from '../utils'
 import { Selector } from './Selector'
 
 interface Props {
@@ -69,15 +71,15 @@ export const InsuranceSelector = ({
     }
   })
 
+  const { title, body } = useGetTranslations(variants)
+
   return (
     <ContainerWrapper>
       <Container>
         <Column>
           <HeadingWrapper>
-            <HeadingBlack>
-              {textKeys.OFFER_BUNDLE_SELECTOR_TITLE()}
-            </HeadingBlack>
-            <Body>{textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION()}</Body>
+            <HeadingBlack>{title}</HeadingBlack>
+            <Body>{body}</Body>
 
             {isComparisonTableEnabled && variants.length > 0 && (
               <TextButton
@@ -106,4 +108,24 @@ export const InsuranceSelector = ({
       />
     </ContainerWrapper>
   )
+}
+function useGetTranslations(
+  variants: QuoteBundleVariant[],
+): { title: any; body: any } {
+  const bundles = getUniqueQuotesFromVariantList(variants)
+  const hasCarInBundles = hasCar(bundles)
+  const textKeys = useTextKeys()
+
+  const translations = useMemo(() => {
+    return {
+      title: hasCarInBundles
+        ? textKeys.OFFER_BUNDLE_SELECTOR_TITLE_CAR()
+        : textKeys.OFFER_BUNDLE_SELECTOR_TITLE(),
+      body: hasCarInBundles
+        ? textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION_CAR()
+        : textKeys.OFFER_BUNDLE_SELECTOR_DESCRIPTION(),
+    }
+  }, [hasCarInBundles, textKeys])
+
+  return translations
 }
