@@ -21,6 +21,7 @@ import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCent
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTrackSegmentEvent } from 'utils/tracking/hooks/useTrackSegmentEvent'
+import { useTextKeys } from 'utils/textKeys'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import {
   getOfferData,
@@ -47,10 +48,11 @@ const createToggleCheckout = (history: History<any>, locale?: string) => (
 const getQuoteIdsFromBundleVariant = (bundleVariant: QuoteBundleVariant) =>
   bundleVariant.bundle.quotes.map((quote) => quote.id)
 
-export const OfferNew: React.FC = () => {
+export const OfferNew = () => {
   const { path: localePath, isoLocale, callCenter } = useCurrentLocale()
   const localeIsoCode = isoLocale
   const variation = useVariation()
+  const textKeys = useTextKeys()
 
   const [
     isInsuranceToggleEnabled,
@@ -238,7 +240,15 @@ export const OfferNew: React.FC = () => {
               />
             )}
             <Perils offerData={offerData} />
-            <AppPromotionSection />
+            <AppPromotionSection
+              promotions={[
+                {
+                  headingText: textKeys.OFFER_APP_PROMOTION_HEADING(),
+                  bodyText: textKeys.OFFER_APP_PROMOTION_PARAGRAPH(),
+                  imageUrl: '/new-member-assets/offer/app-promotion.jpg',
+                },
+              ]}
+            />
             <FaqSection />
             <Checkout
               quoteBundleVariants={bundleVariants}
