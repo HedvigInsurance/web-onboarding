@@ -1,6 +1,6 @@
 import md5 from 'md5'
 import { QuoteBundle } from 'data/graphql'
-import { AdTractionMarketConfig } from 'src/client/l10n/adTractionConfigs'
+import { AdTractionMarketConfig } from 'l10n/adTractionConfigs'
 import {
   isAccident,
   isHomeContents,
@@ -11,13 +11,13 @@ import {
 
 export const getProductCategories = (bundle: QuoteBundle) => {
   const categoryList = bundle.quotes.reduce((acc, quote) => {
-    if (isAccident(quote)) return [...acc, 'accident']
-    if (isTravel(quote)) return [...acc, 'travel']
-    if (isHouse(quote)) return [...acc, 'house']
+    if (isAccident(quote)) return [...acc, 'accident_0']
+    if (isTravel(quote)) return [...acc, 'travel_0']
+    if (isHouse(quote)) return [...acc, 'house_0']
     if (isHomeContents(quote)) {
       return [
         ...acc,
-        isStudentOrYouth(quote) ? 'homecontentstudent' : 'homecontent',
+        isStudentOrYouth(quote) ? 'homecontentstudent_0' : 'homecontent_0',
       ]
     }
     return acc
