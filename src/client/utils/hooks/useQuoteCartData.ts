@@ -133,7 +133,7 @@ const getExtraBuildingsDetails = (quoteDetails: GenericQuoteData) => {
         label: 'CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE',
         value: {
           value: extraBuilding.area,
-          suffix: 'CHECKOUT_DETAILS_SQM_VALUE',
+          suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
         },
       },
       {
