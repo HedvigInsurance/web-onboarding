@@ -17,7 +17,7 @@ import {
 } from '../components'
 import { ComparisonModal } from '../ComparisonTable/ComparisonModal'
 import { getUniqueQuotesFromVariantList } from '../utils'
-import { Selector } from './Selector'
+import { SelectableInsurance, Selector } from './Selector'
 
 interface Props {
   variants: QuoteBundleVariant[]
@@ -45,31 +45,34 @@ export const InsuranceSelector = ({
     [variants],
   )
 
-  const insurances = variants.map(({ id, tag, bundle }) => {
-    const {
-      displayName,
-      bundleCost: {
-        monthlyNet: { amount, currency },
-        monthlyGross: { amount: grossAmount, currency: grossCurrency },
-      },
-    } = bundle
+  const insurances: SelectableInsurance[] = variants.map(
+    ({ id, tag, description, bundle }) => {
+      const {
+        displayName,
+        bundleCost: {
+          monthlyNet: { amount, currency },
+          monthlyGross: { amount: grossAmount, currency: grossCurrency },
+        },
+      } = bundle
 
-    return {
-      id,
-      label: tag ?? undefined,
-      name: displayName,
-      price: `${localizeNumber(
-        Math.round(Number(amount)),
-      )} ${currency}${localizedPerMonth}`,
-      grossPrice:
-        amount !== grossAmount
-          ? `${Math.round(
-              Number(grossAmount),
-            )} ${grossCurrency}${localizedPerMonth}`
-          : undefined,
-      selected: id === selectedQuoteBundle.id,
-    }
-  })
+      return {
+        id,
+        description: description ?? '',
+        label: tag ?? undefined,
+        name: displayName,
+        price: `${localizeNumber(
+          Math.round(Number(amount)),
+        )} ${currency}${localizedPerMonth}`,
+        grossPrice:
+          amount !== grossAmount
+            ? `${Math.round(
+                Number(grossAmount),
+              )} ${grossCurrency}${localizedPerMonth}`
+            : undefined,
+        selected: id === selectedQuoteBundle.id,
+      }
+    },
+  )
 
   const { title, body } = useGetTranslations(variants)
 
@@ -109,9 +112,10 @@ export const InsuranceSelector = ({
     </ContainerWrapper>
   )
 }
-function useGetTranslations(
+
+const useGetTranslations = (
   variants: QuoteBundleVariant[],
-): { title: any; body: any } {
+): { title: any; body: any } => {
   const bundles = getUniqueQuotesFromVariantList(variants)
   const hasCarInBundles = hasCar(bundles)
   const textKeys = useTextKeys()
