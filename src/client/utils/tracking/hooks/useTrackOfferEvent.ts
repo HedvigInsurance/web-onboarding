@@ -4,7 +4,7 @@ import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { getSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
   getSelectedBundleVariant,
-  isReferralCodeUsed,
+  hasMonthlyCostDeduction,
 } from 'api/quoteCartQuerySelectors'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { apolloClient, ApolloClientUtils } from 'apolloClient'
@@ -38,7 +38,7 @@ export const useTrackOfferEvent = () => {
           trackOfferEvent(
             eventName,
             bundle,
-            isReferralCodeUsed(quoteCartQueryData),
+            hasMonthlyCostDeduction(quoteCartQueryData),
             {
               quoteCartId,
               ...options,

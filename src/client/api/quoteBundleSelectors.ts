@@ -98,6 +98,10 @@ export const getMainQuote = (bundle: QuoteBundle) => {
   return bundle.quotes[0]
 }
 
+export const getEmail = (bundle: QuoteBundle) => {
+  return bundle.quotes[0].email
+}
+
 export const getDiscountAmount = (bundle: QuoteBundle) => {
   return bundle.bundleCost.monthlyDiscount.amount
 }

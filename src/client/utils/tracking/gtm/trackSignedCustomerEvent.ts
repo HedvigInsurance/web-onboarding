@@ -2,6 +2,7 @@ import { QuoteBundle } from 'data/graphql'
 import { Variation } from 'utils/hooks/useVariation'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { adtractionQuoteCart } from 'utils/tracking/adtraction/adtractionQuoteCart'
+import { AdTractionMarketConfig } from 'l10n/adTractionConfigs'
 import { handleSignedEvent } from './signing'
 import { trackOfferEvent } from './trackOfferEvent'
 import { EventName } from './types'
@@ -13,6 +14,7 @@ export type TrackSignedEventParams = {
   bundle: QuoteBundle
   campaignCode?: string
   isDiscountMonthlyCostDeduction: boolean
+  adTractionConfig: AdTractionMarketConfig
 }
 
 export const trackSignedCustomerEvent = ({
@@ -22,18 +24,17 @@ export const trackSignedCustomerEvent = ({
   bundle,
   campaignCode,
   isDiscountMonthlyCostDeduction,
+  adTractionConfig,
 }: TrackSignedEventParams) => {
-  const mainQuote = quoteBundleSelector.getMainQuote(bundle)
-
   if (variation === Variation.AVY) {
     handleSignedEvent(memberId)
   }
 
   adtractionQuoteCart(
-    parseFloat(bundle.bundleCost.monthlyGross.amount),
     memberId,
-    mainQuote.data.email || '',
+    quoteBundleSelector.getEmail(bundle) || '',
     bundle,
+    adTractionConfig,
     campaignCode,
   )
 
