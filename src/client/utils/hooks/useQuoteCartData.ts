@@ -37,7 +37,7 @@ type Details = {
 type DetailsGroup = Details[]
 
 const getHomeDetails = (mainQuote: BundledQuote) => {
-  const { street, zipCode, livingSpace } = mainQuote.data
+  const { street, zipCode, livingSpace, squareMeters } = mainQuote.data
   const { typeOfContract } = mainQuote
   if ('floor' in mainQuote.data && 'apartment' in mainQuote.data) {
     const { floor, apartment } = mainQuote.data
@@ -61,7 +61,7 @@ const getHomeDetails = (mainQuote: BundledQuote) => {
     {
       label: 'CHECKOUT_DETAILS_LIVING_SPACE',
       value: {
-        value: livingSpace,
+        value: livingSpace || squareMeters,
         suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
       },
     },
@@ -92,7 +92,7 @@ const getHouseDetails = (data: GenericQuoteData) => {
     {
       label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
       value: {
-        value: data.ancillaryArea || data.squareMeters,
+        value: data.ancillaryArea,
         suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
       },
     },
