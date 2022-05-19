@@ -25,7 +25,7 @@ const Container = styled.div<{ selected?: boolean; focused?: boolean }>`
   min-height: 6.625rem;
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    height: 9.25rem;
+    min-height: 9.25rem;
   }
 
   &:hover {
