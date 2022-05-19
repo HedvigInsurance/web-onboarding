@@ -89,14 +89,15 @@ const HOME_CONTENT_TYPES = [
 export const isHomeContents = (quote: BundledQuote) =>
   HOME_CONTENT_TYPES.includes(quote.data.type)
 
-const HOME_INSURANCE_TYPES = [
+const HOME_OR_HOUSE_INSURANCE_TYPES = [
   InsuranceType.SWEDISH_APARTMENT,
   InsuranceType.SWEDISH_HOUSE,
   InsuranceType.NORWEGIAN_HOME_CONTENT,
+  InsuranceType.NORWEGIAN_HOUSE,
   InsuranceType.DANISH_HOME_CONTENT,
 ]
 export const isHomeContentsOrHouse = (quote: BundledQuote) =>
-  HOME_INSURANCE_TYPES.includes(quote.data.type)
+  HOME_OR_HOUSE_INSURANCE_TYPES.includes(quote.data.type)
 
 export const isCar = (quote: BundledQuote) => quote.data.type === 'SWEDISH_CAR'
 

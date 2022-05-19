@@ -113,7 +113,7 @@ const AdyenContainer = styled.div`
       transition: transform 300ms;
 
       &:hover {
-        background-color: ${colorsV3.purple500};
+        background-color: ${colorsV3.gray800};
         transform: translateY(-2px);
         box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
       }
@@ -287,9 +287,6 @@ export const CheckoutPayment = ({
       email,
       ssn,
       phoneNumber,
-      data: {
-        ...mainQuote.data,
-      },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
     validateOnChange: false,
@@ -363,11 +360,7 @@ export const CheckoutPayment = ({
         locale: locale.isoLocale,
         quoteCartId,
         quotes: getUniqueQuotesFromVariantList(bundleVariants).map(
-          ({
-            startDate,
-            currentInsurer,
-            data: { type, typeOfContract, isStudent },
-          }) => {
+          ({ startDate, currentInsurer, data }) => {
             return {
               firstName,
               lastName,
@@ -378,12 +371,7 @@ export const CheckoutPayment = ({
               currentInsurer: currentInsurer?.id,
               phoneNumber: phoneNumber?.replace(/\s/g, ''),
               dataCollectionId,
-              data: {
-                ...form.data,
-                type,
-                typeOfContract,
-                isStudent,
-              },
+              data,
             }
           },
         ),

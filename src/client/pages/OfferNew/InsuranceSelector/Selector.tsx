@@ -22,19 +22,22 @@ const CardWrapper = styled.div`
   cursor: pointer;
 `
 
+export type SelectableInsurance = {
+  id: string
+  name: string
+  price: string
+  grossPrice?: string
+  label?: string
+  selected?: boolean
+  description?: string
+}
+
 type Props = {
-  insurances: {
-    id: string
-    name: string
-    price: string
-    grossPrice?: string
-    label?: string
-    selected?: boolean
-  }[]
+  insurances: SelectableInsurance[]
   onChange: (id: string) => void
 }
 
-export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
+export const Selector = ({ insurances, onChange }: Props) => {
   const [focusId, setFocusId] = useState<string | null>(null)
 
   const selectedInsuranceId = insurances.find(({ selected }) => selected)?.id
@@ -81,7 +84,7 @@ export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
       aria-activedescendant={focusId ?? undefined}
       onKeyDown={handleContainerKeyPress}
     >
-      {insurances.map(({ id, name, price, grossPrice, label, selected }) => (
+      {insurances.map(({ id, selected, ...cardProps }) => (
         <CardWrapper
           id={id}
           key={id}
@@ -91,12 +94,9 @@ export const Selector: React.FC<Props> = ({ insurances, onChange }) => {
         >
           <Card
             onClick={() => handleCardClick(id)}
-            selected={selected}
             focused={focusId === id}
-            name={name}
-            price={price}
-            grossPrice={grossPrice}
-            label={label}
+            selected={selected}
+            {...cardProps}
           />
         </CardWrapper>
       ))}
