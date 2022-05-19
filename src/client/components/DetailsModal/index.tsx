@@ -201,7 +201,12 @@ export const DetailsModal = ({
     data: mainQuoteData,
   } = mainQuote
 
-  const { type: mainQuoteType, numberCoInsured } = mainQuoteData
+  const {
+    type: mainQuoteType,
+    numberCoInsured,
+    squareMeters,
+    livingSpace,
+  } = mainQuoteData
   const initialValues = {
     firstName,
     lastName,
@@ -213,7 +218,9 @@ export const DetailsModal = ({
     data: {
       ...mainQuoteData,
       isStudent: quoteSelector.isStudent(mainQuote),
+      isYouth: quoteSelector.isYouth(mainQuote),
       householdSize: numberCoInsured + 1,
+      livingSpace: squareMeters ? squareMeters : livingSpace,
     },
   } as QuoteInput
 
@@ -222,7 +229,7 @@ export const DetailsModal = ({
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
-      data: { householdSize },
+      data: { householdSize, livingSpace },
     } = form
 
     return createQuoteBundle({
@@ -238,10 +245,11 @@ export const DetailsModal = ({
               isStudent: data.isStudent,
               ...form.data,
               numberCoInsured: householdSize && householdSize - 1,
+              squareMeters: livingSpace ? livingSpace : squareMeters,
               id: data.id,
               type: data.type,
               typeOfContract: data.typeOfContract,
-              subType: getSubType(form.data),
+              subType: getSubType(form.data) || data.subType,
             },
           }
         }),
