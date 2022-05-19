@@ -23,6 +23,7 @@ import {
   isLimitHit,
   isQuoteBundleError,
 } from 'api/quoteBundleErrorSelectors'
+import { QuoteDataCommon } from 'api/quoteDetailsDataTypes'
 import { QuoteDetailsInput, QuoteInput } from './types'
 
 import { Details, getValidationSchema } from './Details'
@@ -218,38 +219,43 @@ export const DetailsModal = ({
   const isQuoteCreationFailed = isQuoteBundleError(createQuoteBundleData)
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
-    const quotes = allQuotes.map((quote) => {
+    const newQuotes = allQuotes.map((quote) => {
       const { startDate, currentInsurer, data } = quote
-      const {
-        data: { zipCode, street, city },
-      } = form
+
+      const quoteData = Object.keys(data).reduce<
+        Partial<QuoteDetailsInput & QuoteDataCommon>
+      >((acc, key) => {
+        switch (key) {
+          case 'numberCoInsured':
+            acc[key] = form.data.householdSize || data[key] + 1
+            return acc
+          case 'subType':
+            acc[key] = getSubType(form.data)
+            return acc
+          case 'id':
+          case 'type':
+          case 'typeOfContract':
+            acc[key] = data[key]
+            return acc
+          default:
+            acc[key as keyof QuoteDetailsInput] =
+              form.data[key as keyof QuoteDetailsInput] || data[key]
+            return acc
+        }
+      }, {})
+      console.log(form, data, quoteData)
       return {
         ...form,
         startDate,
         currentInsurer: currentInsurer?.id,
-        data: {
-          ...(quoteSelector.isCar(mainQuote) === quoteSelector.isCar(quote)
-            ? form.data
-            : data),
-          ...(!quoteSelector.isCar(quote) && {
-            isStudent: data.isStudent,
-            householdSize: numberCoInsured + 1,
-          }),
-          id: data.id,
-          type: data.type,
-          typeOfContract: data.typeOfContract,
-          subType: getSubType(form.data),
-          zipCode,
-          street,
-          city,
-        },
+        data: quoteData,
       }
     })
     return createQuoteBundle({
       variables: {
         locale: isoLocale,
         quoteCartId,
-        quotes,
+        quotes: newQuotes,
       },
     })
   }
