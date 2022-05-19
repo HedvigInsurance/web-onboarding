@@ -287,9 +287,6 @@ export const CheckoutPayment = ({
       email,
       ssn,
       phoneNumber,
-      data: {
-        ...mainQuote.data,
-      },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
     validateOnChange: false,
@@ -363,11 +360,7 @@ export const CheckoutPayment = ({
         locale: locale.isoLocale,
         quoteCartId,
         quotes: getUniqueQuotesFromVariantList(bundleVariants).map(
-          ({
-            startDate,
-            currentInsurer,
-            data: { type, typeOfContract, isStudent },
-          }) => {
+          ({ startDate, currentInsurer, data }) => {
             return {
               firstName,
               lastName,
@@ -378,12 +371,7 @@ export const CheckoutPayment = ({
               currentInsurer: currentInsurer?.id,
               phoneNumber: phoneNumber?.replace(/\s/g, ''),
               dataCollectionId,
-              data: {
-                ...form.data,
-                type,
-                typeOfContract,
-                isStudent,
-              },
+              data,
             }
           },
         ),
