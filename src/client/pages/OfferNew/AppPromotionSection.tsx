@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { LocalizedImage } from 'components/LocalizedImage'
+import { Space } from 'components/Space'
 import { Column, ColumnSpacing, Container, Heading, Body } from './components'
 
 const OuterWrapper = styled.div`
@@ -23,22 +23,31 @@ const PromotionImage = styled(LocalizedImage)`
   }
 `
 
-export const AppPromotionSection: React.FC = () => {
-  const textKeys = useTextKeys()
+type Promotion = {
+  headingText: string
+  bodyText: string
+  imageUrl: string
+}
 
+type PromotionSectionProps = {
+  promotions: Promotion[]
+}
+
+export const AppPromotionSection = ({ promotions }: PromotionSectionProps) => {
   return (
     <OuterWrapper>
-      <Container>
-        <Column>
-          <Heading>{textKeys.OFFER_APP_PROMOTION_HEADING()}</Heading>
-          <Body>{textKeys.OFFER_APP_PROMOTION_PARAGRAPH()}</Body>
-          <PromotionImage
-            src="/new-member-assets/offer/app-promotion.jpg"
-            alt="App promotion"
-          />
-        </Column>
-        <ColumnSpacing />
-      </Container>
+      <Space y={{ base: 4, mediumScreen: 8 }}>
+        {promotions.map((promotion) => (
+          <Container key={promotion.headingText}>
+            <Column>
+              <Heading>{promotion.headingText}</Heading>
+              <Body>{promotion.bodyText}</Body>
+              <PromotionImage src={promotion.imageUrl} alt="" />
+            </Column>
+            <ColumnSpacing />
+          </Container>
+        ))}
+      </Space>
     </OuterWrapper>
   )
 }
