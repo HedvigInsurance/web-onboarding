@@ -92,14 +92,14 @@ const getHouseDetails = (data: GenericQuoteData) => {
     {
       label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
       value: {
-        value: data.ancillaryArea,
+        value: data.ancillaryArea || data.squareMeters,
         suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
       },
     },
     {
       label: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS',
       value: {
-        value: data.numberOfBathrooms,
+        value: data.numberOfBathrooms || data.numberOfWetUnits,
         suffix:
           data.numberOfBathrooms && data.numberOfBathrooms > 1
             ? 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_MANY'
