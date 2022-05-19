@@ -5,6 +5,7 @@ query QuoteCart($id: ID!, $locale: Locale!) {
       possibleVariations {
         id
         tag(locale: $locale)
+        description(locale: $locale)
         bundle {
           displayName(locale: $locale)
           bundleCost {
