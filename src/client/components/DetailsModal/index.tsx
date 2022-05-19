@@ -103,6 +103,7 @@ function getFormErrorsFromUnderwritterLimits(
       case LimitCode.INVALID_BIRTHDATE:
       case LimitCode.UNDERAGE:
       case LimitCode.STUDENT_OVERAGE:
+      case LimitCode.YOUTH_OVERAGE:
         return [...acc, 'birthDate']
       case LimitCode.TOO_SMALL_LIVING_SPACE:
       case LimitCode.TOO_MUCH_LIVING_SPACE:
@@ -197,7 +198,12 @@ export const DetailsModal = ({
     data: mainQuoteData,
   } = mainQuote
 
-  const { type: mainQuoteType, numberCoInsured } = mainQuoteData
+  const {
+    type: mainQuoteType,
+    numberCoInsured,
+    squareMeters,
+    livingSpace,
+  } = mainQuoteData
   const initialValues = {
     firstName,
     lastName,
@@ -210,7 +216,9 @@ export const DetailsModal = ({
       ...mainQuoteData,
       ...(!quoteSelector.isCar(mainQuote) && {
         isStudent: quoteSelector.isStudent(mainQuote),
+        isYouth: quoteSelector.isYouth(mainQuote),
         householdSize: numberCoInsured + 1,
+        livingSpace: squareMeters ? squareMeters : livingSpace,
       }),
     },
   } as QuoteInput
@@ -228,6 +236,14 @@ export const DetailsModal = ({
         switch (key) {
           case 'numberCoInsured':
             acc[key] = form.data.householdSize || data[key] + 1
+            return acc
+          case 'livingSpace':
+          case 'squareMeters':
+            acc.squareMeters =
+              form.data['livingSpace'] ||
+              form.data['squareMeters'] ||
+              data['livingSpace'] ||
+              data['squareMeters']
             return acc
           case 'subType':
             acc[key] = getSubType(form.data)

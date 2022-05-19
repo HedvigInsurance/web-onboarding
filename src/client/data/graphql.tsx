@@ -8227,7 +8227,6 @@ export type NorwegianHouseDetails = {
   coInsured: Scalars['Int']
   livingSpace: Scalars['Int']
   extraBuildings: Array<ExtraBuilding>
-  numberOfBathrooms: Scalars['Int']
   yearOfConstruction: Scalars['Int']
   yearOfOwnership: Scalars['Int']
   waterLeakageDetector?: Maybe<Scalars['Boolean']>
@@ -8870,12 +8869,19 @@ export type QuoteBundleVariant = {
   __typename?: 'QuoteBundleVariant'
   /** A describing tag of this variant, for example "Most popular" */
   tag?: Maybe<Scalars['String']>
+  /** A long description for this variant */
+  description?: Maybe<Scalars['String']>
   id: Scalars['ID']
   bundle: QuoteBundle
 }
 
 /** A possible alternative bundling variant */
 export type QuoteBundleVariantTagArgs = {
+  locale: Locale
+}
+
+/** A possible alternative bundling variant */
+export type QuoteBundleVariantDescriptionArgs = {
   locale: Locale
 }
 
@@ -10977,6 +10983,7 @@ export enum TypeOfContractGradientOption {
   GradientTwo = 'GRADIENT_TWO',
   GradientThree = 'GRADIENT_THREE',
   GradientFour = 'GRADIENT_FOUR',
+  GradientFive = 'GRADIENT_FIVE',
 }
 
 export type UnderwritingLimit = {
@@ -12583,7 +12590,7 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
           possibleVariations: Array<
             { __typename?: 'QuoteBundleVariant' } & Pick<
               QuoteBundleVariant,
-              'id' | 'tag'
+              'id' | 'tag' | 'description'
             > & {
                 bundle: { __typename?: 'QuoteBundle' } & Pick<
                   QuoteBundle,
@@ -14939,6 +14946,7 @@ export const QuoteCartDocument = gql`
         possibleVariations {
           id
           tag(locale: $locale)
+          description(locale: $locale)
           bundle {
             displayName(locale: $locale)
             bundleCost {

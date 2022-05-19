@@ -70,19 +70,15 @@ export const isYouthOffer = (bundle: QuoteBundle): boolean => {
     .every((quote) => quote.data.isYouth === true)
 }
 
-const HOME_HOUSE_INSURANCE_TYPES: Array<InsuranceType> = [
-  InsuranceType.DANISH_HOME_CONTENT,
-  InsuranceType.NORWEGIAN_HOME_CONTENT,
-  InsuranceType.NORWEGIAN_HOUSE,
-  InsuranceType.SWEDISH_APARTMENT,
-  InsuranceType.SWEDISH_HOUSE,
-]
-
 export const getMainQuote = (bundle: QuoteBundle) => {
   if (isMultiQuote(bundle)) {
-    const mainQuoteInBundle = bundle.quotes.find((quote) =>
-      HOME_HOUSE_INSURANCE_TYPES.includes(quote.data.type),
+    const houseQuote = bundle.quotes.find((quote) =>
+      quoteSelector.isHouse(quote),
     )
+    const homeContentsQuote = bundle.quotes.find((quote) =>
+      quoteSelector.isHomeContents(quote),
+    )
+    const mainQuoteInBundle = houseQuote || homeContentsQuote
 
     if (!mainQuoteInBundle) {
       throw new Error(
@@ -96,6 +92,10 @@ export const getMainQuote = (bundle: QuoteBundle) => {
   }
 
   return bundle.quotes[0]
+}
+
+export const getEmail = (bundle: QuoteBundle) => {
+  return bundle.quotes[0].email
 }
 
 export const getDiscountAmount = (bundle: QuoteBundle) => {
