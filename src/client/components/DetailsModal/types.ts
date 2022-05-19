@@ -1,8 +1,4 @@
-import {
-  ExtraBuildingInput,
-  CreateQuoteInput,
-  TypeOfContract,
-} from 'data/graphql'
+import { ExtraBuildingInput, CreateQuoteInput } from 'data/graphql'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
 type QuoteHolderInput = Pick<
@@ -31,6 +27,7 @@ export type QuoteDetailsInput = {
   extraBuildings?: Array<ExtraBuildingInput> | null
   zipCode?: string | null
   livingSpace?: number | null
+  squareMeters?: number | null
   householdSize?: number | null
   youth?: boolean | null
   coInsured?: number | null
