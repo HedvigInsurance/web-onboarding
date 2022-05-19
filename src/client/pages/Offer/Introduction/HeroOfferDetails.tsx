@@ -159,7 +159,6 @@ export const HeroOfferDetails: React.FC<Props> = ({
       </EditDetailsButton>
       <DetailsModal
         quoteCartId={quoteCartId}
-        allQuotes={allQuotes}
         isVisible={detailsModalIsOpen}
         onClose={() => setDetailsModalIsOpen(false)}
       />

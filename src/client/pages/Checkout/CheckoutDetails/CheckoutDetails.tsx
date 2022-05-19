@@ -89,7 +89,6 @@ export const CheckoutDetails = () => {
       </PageSection>
       <DetailsModal
         quoteCartId={quoteCartId}
-        allQuotes={allQuotes}
         isVisible={detailsModalIsOpen}
         onClose={() => setDetailsModalIsOpen(false)}
       />
