@@ -313,9 +313,6 @@ export const StartDate = ({
   )
 
   const selectedQuotes = quoteBundleSelector.getQuotes(selectedBundle)
-  if (selectedQuotes.length === 0) {
-    throw Error(`Quote Cart doesn't have any quotes`)
-  }
 
   const handleSelectNewStartDate = async (
     newDateValue: Date | null,
