@@ -259,7 +259,6 @@ export const DetailsModal = ({
             return acc
         }
       }, {})
-      console.log(form, data, quoteData)
       return {
         ...form,
         startDate,
