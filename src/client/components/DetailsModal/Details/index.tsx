@@ -20,9 +20,14 @@ import {
 } from './SwedishCarDetails'
 
 import {
-  NorwegianDetails,
-  getNorwegianValidationSchema,
+  NorwegianHomeContentsDetails,
+  getNorwegianHomeContentsValidationSchema,
 } from './NorwegianDetails'
+
+import {
+  NorwegianHouseDetails,
+  getNorwegianHouseValidationSchema,
+} from './NorwegianHouseDetails'
 
 import { DanishDetails, getDanishValidationSchema } from './DanishDetails'
 
@@ -32,6 +37,7 @@ export const getValidationSchema = (
   textKeys: TextKeyMap,
 ) => {
   const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
+  const isNorwegianHouse = type === InsuranceType.NORWEGIAN_HOUSE
   const isSwedishCar = type === InsuranceType.SWEDISH_CAR
 
   switch (market) {
@@ -42,7 +48,9 @@ export const getValidationSchema = (
         ? getSwedishHouseValidationSchema(textKeys)
         : getSwedishApartmentValidationSchema(textKeys)
     case 'NO':
-      return getNorwegianValidationSchema(textKeys)
+      return isNorwegianHouse
+        ? getNorwegianHouseValidationSchema(textKeys)
+        : getNorwegianHomeContentsValidationSchema(textKeys)
     case 'DK':
       return getDanishValidationSchema(textKeys)
     default:
@@ -56,6 +64,7 @@ export const Details: React.FC<{
   formikProps: FormikProps<QuoteInput>
 }> = ({ market, type, formikProps }) => {
   const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
+  const isNorwegianHouse = type === InsuranceType.NORWEGIAN_HOUSE
   const isSwedishCar = type === InsuranceType.SWEDISH_CAR
 
   switch (market) {
@@ -68,7 +77,11 @@ export const Details: React.FC<{
         <SwedishApartmentDetails formikProps={formikProps} />
       )
     case 'NO':
-      return <NorwegianDetails formikProps={formikProps} />
+      return isNorwegianHouse ? (
+        <NorwegianHouseDetails formikProps={formikProps} />
+      ) : (
+        <NorwegianHomeContentsDetails formikProps={formikProps} />
+      )
     case 'DK':
       return <DanishDetails formikProps={formikProps} />
 
