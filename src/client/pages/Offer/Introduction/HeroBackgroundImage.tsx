@@ -1,34 +1,34 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { css } from '@emotion/core'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  EXTRA_LARGE_SCREEN_MEDIA_QUERY,
+  LARGE_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 
+type BackgroundImageVariant = 'home' | 'car'
 type Props = {
-  height?: number
-  isFullScreen?: boolean
   zIndex: number
-  className?: string
+  variant?: BackgroundImageVariant
 }
 
 const ImageContainer = styled.div<Props>`
   background-color: ${colorsV3.gray900};
   width: 100%;
-  height: ${({ height }) => (height ? `${height}px` : '100%')};
+  height: 400px;
   position: absolute;
   top: 0;
   overflow: hidden;
   z-index: ${({ zIndex }) => zIndex};
-  ${({ isFullScreen }) =>
-    isFullScreen &&
-    css`
-      height: 100vh;
-    `}
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    height: 100%;
+  }
 `
 
 type ImageProps = {
   hasLoaded: boolean
-} & Pick<Props, 'isFullScreen'>
+}
 
 const Image = styled.img<ImageProps>`
   height: auto;
@@ -39,23 +39,28 @@ const Image = styled.img<ImageProps>`
   opacity: ${({ hasLoaded }) => (hasLoaded ? 0.6 : 0)};
   transition: opacity 1s cubic-bezier(0.33, 1, 0.68, 1);
   transition-delay: 150ms;
-  object-position: ${({ isFullScreen }) =>
-    isFullScreen ? '50% 50%' : '100% -100px'};
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    object-position: 100% 50%;
+    object-position: 100% -500px;
+  }
+
+  ${EXTRA_LARGE_SCREEN_MEDIA_QUERY} {
+    object-position: 100% -600px;
   }
 `
 
-export const BackgroundImage = ({
-  height,
-  isFullScreen = false,
-  zIndex,
-  className,
-}: Props) => {
-  const [hasImageLoaded, setHasImageLoaded] = useState(false)
+type ImageVariantSizes = {
+  small: string
+  medium: string
+}
 
-  const images = {
+type ImageVariant = {
+  portrait: ImageVariantSizes
+  landscape: ImageVariantSizes
+}
+
+const variants: Record<BackgroundImageVariant, ImageVariant> = {
+  home: {
     portrait: {
       small: '/new-member-assets/landing/hedvig_living_room_portrait_small.jpg',
       medium:
@@ -67,14 +72,26 @@ export const BackgroundImage = ({
       medium:
         '/new-member-assets/landing/hedvig_living_room_landscape_medium.jpg',
     },
-  }
+  },
+  car: {
+    portrait: {
+      small: '/new-member-assets/landing/hedvig_garage_portrait_small.jpg',
+      medium: '/new-member-assets/landing/hedvig_garage_portrait_medium.jpg',
+    },
+    landscape: {
+      small: '/new-member-assets/landing/hedvig_garage_landscape_small.jpg',
+      medium: '/new-member-assets/landing/hedvig_garage_landscape_medium.jpg',
+    },
+  },
+}
+
+export const HeroBackgroundImage = ({ zIndex, variant = 'home' }: Props) => {
+  const [hasImageLoaded, setHasImageLoaded] = useState(false)
+
+  const images = variants[variant]
+
   return (
-    <ImageContainer
-      className={className}
-      height={height}
-      isFullScreen={isFullScreen}
-      zIndex={zIndex}
-    >
+    <ImageContainer zIndex={zIndex}>
       <picture>
         <source
           media="(orientation: portrait)"
@@ -88,7 +105,6 @@ export const BackgroundImage = ({
           src={images.landscape.small}
           onLoad={() => setHasImageLoaded(true)}
           hasLoaded={hasImageLoaded}
-          isFullScreen={isFullScreen}
         />
       </picture>
     </ImageContainer>
