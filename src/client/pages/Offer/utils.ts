@@ -7,7 +7,7 @@ export interface Address {
   floor?: number
 }
 
-export const SE_CAR_REGISTRATION_NUMBER_REGEX = /[A-Za-z]{3}[0-9]{2}[A-Za-z0-9]{1}$/
+export const SE_CAR_REGISTRATION_NUMBER_REGEX = /^[A-Za-z]{3}[0-9]{2}[A-Za-z0-9]{1}$/
 
 export const parseAddress = (address: Address) => {
   const { street, apartment, floor } = address

@@ -9,6 +9,7 @@ import {
   useQuoteCartQuery,
   UnderwritingLimit,
   ApartmentType,
+  BundledQuote,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
@@ -157,12 +158,14 @@ const getSubType = (data: QuoteDetailsInput) => {
 type DetailsModalProps = Pick<ModalProps, 'isVisible'> & {
   onClose: () => void
   quoteCartId: string
+  allQuotes: BundledQuote[]
 }
 
 export const DetailsModal = ({
   quoteCartId,
   isVisible,
   onClose,
+  allQuotes,
 }: DetailsModalProps) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
@@ -185,7 +188,6 @@ export const DetailsModal = ({
   )
 
   if (!selectedQuoteBundle) return null
-  const allQuotes = selectedQuoteBundle.bundle.quotes
   const mainQuote = bundleSelector.getMainQuote(selectedQuoteBundle.bundle)
   const {
     firstName,
@@ -227,15 +229,23 @@ export const DetailsModal = ({
   const isQuoteCreationFailed = isQuoteBundleError(createQuoteBundleData)
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
+    // cleanup null form fields
+    Object.keys(form).forEach(
+      (k) =>
+        form[k as keyof QuoteInput] == null &&
+        delete form[k as keyof QuoteInput],
+    )
+
     const newQuotes = allQuotes.map((quote) => {
       const { startDate, currentInsurer, data } = quote
-
       const quoteData = Object.keys(data).reduce<
         Partial<QuoteDetailsInput & QuoteDataCommon>
       >((acc, key) => {
         switch (key) {
           case 'numberCoInsured':
-            acc[key] = form.data.householdSize || data[key] + 1
+            acc[key] =
+              (form.data.householdSize && form.data.householdSize - 1) ||
+              data[key]
             return acc
           case 'livingSpace':
           case 'squareMeters':
@@ -244,19 +254,30 @@ export const DetailsModal = ({
               form.data['squareMeters'] ||
               data['livingSpace'] ||
               data['squareMeters']
+            acc.livingSpace =
+              form.data['livingSpace'] ||
+              form.data['squareMeters'] ||
+              data['livingSpace'] ||
+              data['squareMeters']
             return acc
           case 'subType':
-            acc[key] = getSubType(form.data)
+            acc[key] =
+              mainQuote.id === quote.id
+                ? getSubType(form.data)
+                : getSubType(data)
             return acc
           case 'id':
           case 'type':
           case 'typeOfContract':
             acc[key] = data[key]
             return acc
-          default:
+          default: {
+            const formValue = form.data[key as keyof QuoteDetailsInput]
             acc[key as keyof QuoteDetailsInput] =
-              form.data[key as keyof QuoteDetailsInput] || data[key]
+              (formValue !== undefined && formValue !== null && formValue) ||
+              data[key]
             return acc
+          }
         }
       }, {})
       return {
@@ -274,7 +295,6 @@ export const DetailsModal = ({
       },
     })
   }
-
   const onSubmit = async (
     form: QuoteInput,
     { setErrors }: FormikHelpers<QuoteInput>,
