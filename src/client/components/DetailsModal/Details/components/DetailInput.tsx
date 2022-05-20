@@ -315,6 +315,20 @@ export const ZipcodeInput: React.FC<ZipcodeInputProps> = ({
   )
 }
 
+const getExtraBuildingOptions = (market: MarketLabel) => {
+  if (market === 'NO') {
+    return [
+      ExtraBuildingType.Garage,
+      ExtraBuildingType.Guesthouse,
+      ExtraBuildingType.Carport,
+      ExtraBuildingType.Sauna,
+      ExtraBuildingType.Other,
+    ]
+  }
+
+  return Object.values(ExtraBuildingType)
+}
+
 const getExtraBuilding = (extraBuildingType: ExtraBuildingType): string => {
   const map = {
     [ExtraBuildingType.Attefall]: 'DETAILS_MODULE_EXTRABUILDINGS_ATTEFALL',
@@ -341,14 +355,17 @@ const getExtraBuilding = (extraBuildingType: ExtraBuildingType): string => {
 }
 
 type ExtraBuildingsInputProps = {
+  market: MarketLabel
   formikProps: FormikProps<QuoteInput>
 }
 
 export const ExtraBuildingsInput: React.FC<ExtraBuildingsInputProps> = ({
+  market,
   formikProps,
 }) => {
   const textKeys = useTextKeys()
   const extraBuildings = formikProps.values.data.extraBuildings
+  const extraBuldingsOptions = getExtraBuildingOptions(market)
 
   return (
     <FieldArray
@@ -380,7 +397,7 @@ export const ExtraBuildingsInput: React.FC<ExtraBuildingsInputProps> = ({
                   label:
                     'DETAILS_MODULE_EXTRABUILDINGS_TABLE_BUILDINGTYPE_CELL_LABEL_HOUSE',
                   placeholder: '',
-                  options: Object.values(ExtraBuildingType).map((value) => ({
+                  options: extraBuldingsOptions.map((value) => ({
                     label: getExtraBuilding(value),
                     value,
                   })),

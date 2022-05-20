@@ -63,7 +63,7 @@ export const SwedishHouseDetails: React.FC<{
   return (
     <Content>
       <ContentRow>
-        <ExtraBuildingsInput formikProps={formikProps} />
+        <ExtraBuildingsInput market="SE" formikProps={formikProps} />
       </ContentRow>
       <ContentColumn>
         <InputGroup>
