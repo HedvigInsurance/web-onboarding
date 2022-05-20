@@ -88,14 +88,8 @@ const getHouseDetails = (data: GenericQuoteData) => {
   ) {
     return []
   }
-  return [
-    {
-      label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
-      value: {
-        value: data.ancillaryArea || data.squareMeters,
-        suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
-      },
-    },
+
+  const houseDetails = [
     {
       label: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS',
       value: {
@@ -117,6 +111,30 @@ const getHouseDetails = (data: GenericQuoteData) => {
       },
     },
   ]
+  if (data.ancillaryArea) {
+    houseDetails.push({
+      label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
+      value: {
+        value: data.ancillaryArea,
+        suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
+      },
+    })
+  } else if (data.yearOfOwnership) {
+    houseDetails.push(
+      {
+        label: 'CHECKOUT_DETAILS_YEAR_OF_OWNERSHIP',
+        value: { value: data.yearOfOwnership },
+      },
+      {
+        label: 'CHECKOUT_DETAILS_WATER_LEAKAGE',
+        value: {
+          textKey: data.waterLeakageDetector ? 'YES' : 'NO',
+        },
+      },
+    )
+  }
+
+  return houseDetails
 }
 
 const getExtraBuildingsDetails = (quoteDetails: GenericQuoteData) => {
