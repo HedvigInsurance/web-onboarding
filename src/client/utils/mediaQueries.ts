@@ -1,4 +1,5 @@
 export const BREAKPOINTS = {
+  extraLargeScreen: 1600,
   largeScreen: 1000,
   mediumLargeScreen: 840,
   mediumScreen: 800,
@@ -6,6 +7,7 @@ export const BREAKPOINTS = {
   smallScreen: 375,
 }
 
+export const EXTRA_LARGE_SCREEN_MEDIA_QUERY = `@media screen and (min-width: ${BREAKPOINTS.extraLargeScreen}px)`
 export const LARGE_SCREEN_MEDIA_QUERY = `@media screen and (min-width: ${BREAKPOINTS.largeScreen}px)`
 export const MEDIUM_LARGE_SCREEN_MEDIA_QUERY = `@media screen and (min-width: ${BREAKPOINTS.mediumLargeScreen}px)`
 export const MEDIUM_SCREEN_MEDIA_QUERY = `@media screen and (min-width: ${BREAKPOINTS.mediumScreen}px)`
@@ -13,6 +15,7 @@ export const MEDIUM_SMALL_SCREEN_MEDIA_QUERY = `@media screen and (min-width: ${
 export const SMALL_SCREEN_MEDIA_QUERY = `@media screen and (min-width: ${BREAKPOINTS.smallScreen}px)`
 
 export const MEDIA_QUERIES: Record<keyof typeof BREAKPOINTS, string> = {
+  extraLargeScreen: EXTRA_LARGE_SCREEN_MEDIA_QUERY,
   largeScreen: LARGE_SCREEN_MEDIA_QUERY,
   mediumLargeScreen: MEDIUM_LARGE_SCREEN_MEDIA_QUERY,
   mediumScreen: MEDIUM_SCREEN_MEDIA_QUERY,
