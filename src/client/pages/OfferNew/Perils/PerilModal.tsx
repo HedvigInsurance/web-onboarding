@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { colorsV3, fonts } from '@hedviginsurance/brand'
+import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useState, useEffect } from 'react'
 import { BackArrow } from 'components/icons/BackArrow'
 import { ForwardArrow } from 'components/icons/ForwardArrow'
