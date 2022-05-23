@@ -163,8 +163,6 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
 
   const currentPeril = perils[currentPerilIndex % perils.length]
 
-  console.log(currentPeril)
-
   return (
     <ModalWrapper isVisible={isVisible} onClose={onClose}>
       <ModalInnerWrapper>
