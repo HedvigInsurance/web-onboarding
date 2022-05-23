@@ -7,12 +7,12 @@ import { useTextKeys } from 'utils/textKeys'
 import { CallCenterData } from 'l10n/callCenters'
 import { Telephone } from '../icons/Telephone'
 
-const { black, white, gray700, gray500 } = colorsV3
+const { gray900, gray100, gray700, gray500 } = colorsV3
 
 type Color = 'black' | 'white'
 
 const Wrapper = styled.div<{ color: Color }>`
-  color: ${({ color }) => (color === 'black' ? black : white)};
+  color: ${({ color }) => (color === 'black' ? gray900 : gray100)};
 `
 
 const InnerWrapper = styled.div`
@@ -40,7 +40,7 @@ const PhoneLink = styled.a<{ color: Color }>`
 `
 
 const Text = styled.p<{ color: Color }>`
-  color: ${({ color }) => (color === 'black' ? gray700 : gray500)};
+  color: ${({ color }) => (color === 'black' ? gray700 : gray100)};
   font-size: 0.75rem;
   text-align: right;
 
