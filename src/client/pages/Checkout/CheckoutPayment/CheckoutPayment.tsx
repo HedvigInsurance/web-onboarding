@@ -181,7 +181,6 @@ type Props = {
   quoteCartId: string
   priceData: PriceData
   mainQuote: BundledQuote
-  selectedQuoteBundleVariant: QuoteBundleVariant
   quoteIds: string[]
   checkoutStatus?: CheckoutStatus
 }
@@ -192,7 +191,6 @@ export const CheckoutPayment = ({
   priceData,
   mainQuote,
   quoteIds,
-  selectedQuoteBundleVariant,
   checkoutStatus,
 }: Props) => {
   const textKeys = useTextKeys()

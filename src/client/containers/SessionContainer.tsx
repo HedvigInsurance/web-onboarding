@@ -10,7 +10,6 @@ import {
   CreateAccessTokenDocument,
 } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer, StorageState } from 'utils/StorageContainer'
 import { Feature } from 'shared/clientConfig'
 import {
