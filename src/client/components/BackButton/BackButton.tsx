@@ -24,9 +24,8 @@ export const BackButton = ({ onClick }: Props) => {
   const history = useHistory()
 
   const handleClick = () => {
-    history.goBack()
-
-    onClick?.()
+    if (onClick !== undefined && typeof onClick === 'function') onClick()
+    else history.goBack()
   }
 
   return (

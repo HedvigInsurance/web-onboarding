@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { useHistory } from 'react-router-dom'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
@@ -45,6 +46,8 @@ export const CheckoutDetails = () => {
 
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
+  const history = useHistory()
+
   useScrollToTop()
 
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
@@ -61,6 +64,7 @@ export const CheckoutDetails = () => {
 
   const handleClickBackButton = () => {
     trackOfferEvent({ eventName: EventName.CheckoutOpenGoBack })
+    history.push(offerPageLink)
   }
 
   const handleOnClick = () => {
@@ -74,6 +78,7 @@ export const CheckoutDetails = () => {
   const quoteDetails = data.quoteDetails
   const bundleVariants = data.bundleVariants
   const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
+  const offerPageLink = `/${localePath}/new-member/offer/${quoteCartId}`
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
     <CheckoutDetailsWrapper handleClickBackButton={handleClickBackButton}>
