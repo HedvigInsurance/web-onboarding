@@ -120,7 +120,7 @@ export const useAdyenCheckout = ({
       storage,
       onError: (error) =>
         trackOfferEvent({
-          eventName: EventName.SignError,
+          eventName: EventName.PaymentConnectedFailed,
           options: { error, errorType: ErrorEventType.PaymentError },
         }),
     })
