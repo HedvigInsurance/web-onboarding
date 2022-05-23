@@ -12,6 +12,7 @@ import {
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 import { Cross } from 'components/icons/Cross'
+import { Headline } from 'components/Headline/Headline'
 
 const TRANSITION_MS = 250
 
@@ -74,23 +75,6 @@ const DirectionButton = styled.button`
   }
 `
 
-const Content = styled.div`
-  display: block;
-`
-
-const Title = styled.div`
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  font-size: 1.5rem;
-  line-height: 1.2;
-  text-align: center;
-  color: ${colorsV3.gray900};
-
-  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    font-size: 2rem;
-  }
-`
-
 const Description = styled.div`
   margin-bottom: 3rem;
   font-size: 1rem;
@@ -127,7 +111,13 @@ const CoverageListTitle = styled.div`
   border-bottom: 1px solid ${colorsV3.gray900};
 `
 
-const CoverageListItem = styled.div`
+const CoverageListItemWrapper = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`
+
+const CoverageListItem = styled.li`
   font-size: 0.875rem;
   line-height: 1.5;
   color: ${colorsV3.gray900};
@@ -173,6 +163,8 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
 
   const currentPeril = perils[currentPerilIndex % perils.length]
 
+  console.log(currentPeril)
+
   return (
     <ModalWrapper isVisible={isVisible} onClose={onClose}>
       <ModalInnerWrapper>
@@ -184,7 +176,14 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
           >
             <BackArrow />
           </DirectionButton>
-          <Title>{currentPeril.title}</Title>
+          <Headline
+            textAlign="center"
+            headingLevel="h2"
+            colorVariant="dark"
+            variant="s"
+          >
+            {currentPeril.title}
+          </Headline>
 
           <DirectionButton
             onClick={() =>
@@ -194,23 +193,22 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
             <ForwardArrow />
           </DirectionButton>
         </Header>
-
-        <Content>
-          <Description>{currentPeril.description}</Description>
-          <CoverageWrapper>
-            <CoverageList>
-              <CoverageListTitle>
-                {textKeys.PERIL_MODAL_EXCEPTIONS_TITLE()}
-              </CoverageListTitle>
+        <Description>{currentPeril.description}</Description>
+        <CoverageWrapper>
+          <CoverageList>
+            <CoverageListTitle>
+              {textKeys.PERIL_MODAL_COVERAGE_TITLE()}
+            </CoverageListTitle>
+            <CoverageListItemWrapper>
               {currentPeril.covered.map((text) => (
                 <CoverageListItem key={text}>
                   <Cross size="0.75rem" />
                   {text}
                 </CoverageListItem>
               ))}
-            </CoverageList>
-          </CoverageWrapper>
-        </Content>
+            </CoverageListItemWrapper>
+          </CoverageList>
+        </CoverageWrapper>
       </ModalInnerWrapper>
     </ModalWrapper>
   )
