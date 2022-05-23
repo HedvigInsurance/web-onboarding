@@ -18,7 +18,10 @@ import {
   BundledQuote,
   CheckoutStatus,
 } from 'data/graphql'
-import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
+  MEDIUM_LARGE_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 
 import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
@@ -55,6 +58,9 @@ const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
   padding: 1.5rem 0rem;
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     padding: 1.5rem 1rem;
+  }
+  ${MEDIUM_LARGE_SCREEN_MEDIA_QUERY} {
+    padding-top: 5rem;
   }
 `
 
