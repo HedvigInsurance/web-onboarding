@@ -1,5 +1,5 @@
 import { TypeOfContract } from 'data/graphql'
-import { getTrackableContractCategory, getUtmParamsFromCookie } from './helpers'
+import { getTrackableContractCategory } from './helpers'
 import {
   DkBundleTypes,
   NoBundleTypes,
@@ -13,29 +13,6 @@ jest.mock('cookie-storage', () => ({
     return { getItem: mockGetItem }
   },
 }))
-
-describe('getUtmParamsFromCookie()', () => {
-  it('Converts a regular set of utm parameters', () => {
-    const cookie = '{"source": "foo"}'
-    mockGetItem.mockReturnValue(cookie)
-
-    const res = getUtmParamsFromCookie()
-
-    expect(res).toMatchObject({ source: 'foo' })
-
-    mockGetItem.mockClear()
-  })
-
-  it('Returns undefined if the UTM parameters are malformed', () => {
-    const cookie = '{SOO_mAlfOrMeD'
-    mockGetItem.mockReturnValue(cookie)
-
-    const res = getUtmParamsFromCookie()
-
-    expect(res).toBeUndefined()
-    mockGetItem.mockClear()
-  })
-})
 
 describe('getTrackableContractCategory', () => {
   it('returns correct contract category for swedish quotes', () => {

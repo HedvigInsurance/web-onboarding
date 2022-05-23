@@ -46,20 +46,6 @@ export interface UtmParams {
   name?: string
 }
 
-export const getUtmParamsFromCookie = (): UtmParams | undefined => {
-  const params = cookie.getItem('utm-params')
-  try {
-    return params ? JSON.parse(params) : undefined
-  } catch (e) {
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
-      ;(window as any).Sentry.captureMessage(
-        'Error parsing UTM-parameters: ' + params,
-      )
-    }
-    return undefined
-  }
-}
-
 export const getContractType = (offerData: OfferData) => {
   if (isBundle(offerData)) {
     const { quoteDetails: homeQuoteDetails } = getMainQuote(offerData)
