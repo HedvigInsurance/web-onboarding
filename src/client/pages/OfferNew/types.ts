@@ -73,7 +73,9 @@ export type GenericQuoteData = {
   subType?: string
   apartment?: string
   floor?: number
+  squareMeters?: number
 
+  numberOfWetUnits?: number
   ancillaryArea?: number
   numberOfBathrooms?: number
   yearOfConstruction?: number
