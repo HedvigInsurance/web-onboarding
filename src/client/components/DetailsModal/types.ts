@@ -16,6 +16,7 @@ type QuoteHolderInput = Pick<
 
 export type QuoteDetailsInput = {
   street?: string | null
+  city?: string | null
   type: InsuranceType
   subType?: string | null
   floor?: string | null
@@ -26,6 +27,7 @@ export type QuoteDetailsInput = {
   extraBuildings?: Array<ExtraBuildingInput> | null
   zipCode?: string | null
   livingSpace?: number | null
+  squareMeters?: number | null
   householdSize?: number | null
   youth?: boolean | null
   coInsured?: number | null
