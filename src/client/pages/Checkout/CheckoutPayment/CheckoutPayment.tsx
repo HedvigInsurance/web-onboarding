@@ -202,7 +202,6 @@ export const CheckoutPayment = ({
   const storage = useStorage()
   const trackOfferEvent = useTrackOfferEvent()
   const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
-
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
     createQuoteBundle,
@@ -432,7 +431,9 @@ export const CheckoutPayment = ({
   }
 
   const handleClickBackButton = () => {
+    const detailsPageLink = `/${locale.path}/new-member/checkout/details/${quoteCartId}`
     trackOfferEvent({ eventName: EventName.ContactInformationPageGoBack })
+    history.push(detailsPageLink)
   }
 
   return (
