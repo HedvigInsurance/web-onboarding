@@ -428,10 +428,10 @@ export const CheckoutPayment = ({
   }
 
   const handleClickBackButton = () => {
+    const detailsPageLink = `/${locale.path}/new-member/checkout/details/${quoteCartId}`
     trackOfferEvent({ eventName: EventName.ContactInformationPageGoBack })
     history.push(detailsPageLink)
   }
-  const detailsPageLink = `/${locale.path}/new-member/checkout/details/${quoteCartId}`
 
   return (
     <CheckoutPaymentWrapper handleClickBackButton={handleClickBackButton}>

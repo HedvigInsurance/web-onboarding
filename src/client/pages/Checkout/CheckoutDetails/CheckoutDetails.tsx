@@ -63,6 +63,7 @@ export const CheckoutDetails = () => {
   }
 
   const handleClickBackButton = () => {
+    const offerPageLink = `/${localePath}/new-member/offer/${quoteCartId}`
     trackOfferEvent({ eventName: EventName.CheckoutOpenGoBack })
     history.push(offerPageLink)
   }
@@ -78,7 +79,6 @@ export const CheckoutDetails = () => {
   const quoteDetails = data.quoteDetails
   const bundleVariants = data.bundleVariants
   const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
-  const offerPageLink = `/${localePath}/new-member/offer/${quoteCartId}`
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
   return (
     <CheckoutDetailsWrapper handleClickBackButton={handleClickBackButton}>
