@@ -11,15 +11,14 @@ export const useGetPromotions = (quotes: BundledQuote[]) => {
     return hasCarInBundles
       ? [
           {
-            headingText: textKeys.OFFER_SWITCH_PROMOTION_HEADING_CAR(),
-            bodyText: textKeys.OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR(),
-            imageUrl: '/new-member-assets/offer/app-promotion-car.jpg',
-          },
-
-          {
             headingText: textKeys.OFFER_APP_PROMOTION_HEADING_CAR(),
             bodyText: textKeys.OFFER_APP_PROMOTION_PARAGRAPH_CAR(),
             imageUrl: '/new-member-assets/offer/app-promotion-car.jpg',
+          },
+          {
+            headingText: textKeys.OFFER_SWITCH_PROMOTION_HEADING_CAR(),
+            bodyText: textKeys.OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR(),
+            imageUrl: '/new-member-assets/offer/switch-promotion.jpg',
           },
         ]
       : [
