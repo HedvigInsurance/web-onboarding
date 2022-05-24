@@ -12325,17 +12325,6 @@ export type MemberQuery = { __typename?: 'Query' } & {
   >
 }
 
-export type NorwegianBankIdAuthMutationVariables = Exact<{
-  personalNumber: Scalars['String']
-}>
-
-export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
-  norwegianBankIdAuth: { __typename?: 'NorwegianBankIdAuthResponse' } & Pick<
-    NorwegianBankIdAuthResponse,
-    'redirectUrl'
-  >
-}
-
 export type PaymentConnection_ConnectPaymentMutationVariables = Exact<{
   input: ConnectPaymentInput
 }>
@@ -14457,57 +14446,6 @@ export type MemberLazyQueryHookResult = ReturnType<typeof useMemberLazyQuery>
 export type MemberQueryResult = ApolloReactCommon.QueryResult<
   MemberQuery,
   MemberQueryVariables
->
-export const NorwegianBankIdAuthDocument = gql`
-  mutation NorwegianBankIdAuth($personalNumber: String!) {
-    norwegianBankIdAuth(personalNumber: $personalNumber) {
-      redirectUrl
-    }
-  }
-`
-export type NorwegianBankIdAuthMutationFn = ApolloReactCommon.MutationFunction<
-  NorwegianBankIdAuthMutation,
-  NorwegianBankIdAuthMutationVariables
->
-
-/**
- * __useNorwegianBankIdAuthMutation__
- *
- * To run a mutation, you first call `useNorwegianBankIdAuthMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useNorwegianBankIdAuthMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [norwegianBankIdAuthMutation, { data, loading, error }] = useNorwegianBankIdAuthMutation({
- *   variables: {
- *      personalNumber: // value for 'personalNumber'
- *   },
- * });
- */
-export function useNorwegianBankIdAuthMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    NorwegianBankIdAuthMutation,
-    NorwegianBankIdAuthMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    NorwegianBankIdAuthMutation,
-    NorwegianBankIdAuthMutationVariables
-  >(NorwegianBankIdAuthDocument, options)
-}
-export type NorwegianBankIdAuthMutationHookResult = ReturnType<
-  typeof useNorwegianBankIdAuthMutation
->
-export type NorwegianBankIdAuthMutationResult = ApolloReactCommon.MutationResult<
-  NorwegianBankIdAuthMutation
->
-export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  NorwegianBankIdAuthMutation,
-  NorwegianBankIdAuthMutationVariables
 >
 export const PaymentConnection_ConnectPaymentDocument = gql`
   mutation PaymentConnection_connectPayment($input: ConnectPaymentInput!) {
