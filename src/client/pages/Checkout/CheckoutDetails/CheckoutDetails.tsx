@@ -93,8 +93,8 @@ export const CheckoutDetails = () => {
         <CheckoutIntercomVariation />
       </PageSection>
       <DetailsModal
-        quoteCartId={quoteCartId}
         allQuotes={allQuotes}
+        quoteCartId={quoteCartId}
         isVisible={detailsModalIsOpen}
         onClose={() => setDetailsModalIsOpen(false)}
       />

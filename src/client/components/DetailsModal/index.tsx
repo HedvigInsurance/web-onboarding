@@ -5,11 +5,11 @@ import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Button, ButtonGroup } from 'components/buttons'
 import { Modal, ModalFooter, ModalProps } from 'components/ModalNew'
 import {
-  BundledQuote,
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
   UnderwritingLimit,
   ApartmentType,
+  BundledQuote,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
@@ -24,6 +24,7 @@ import {
   isLimitHit,
   isQuoteBundleError,
 } from 'api/quoteBundleErrorSelectors'
+import { QuoteDataCommon } from 'api/quoteDetailsDataTypes'
 import { QuoteDetailsInput, QuoteInput } from './types'
 
 import { Details, getValidationSchema } from './Details'
@@ -162,13 +163,12 @@ type DetailsModalProps = Pick<ModalProps, 'isVisible'> & {
 
 export const DetailsModal = ({
   quoteCartId,
-  allQuotes,
   isVisible,
   onClose,
+  allQuotes,
 }: DetailsModalProps) => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
-
   const [
     createQuoteBundle,
     {
@@ -188,7 +188,6 @@ export const DetailsModal = ({
   )
 
   if (!selectedQuoteBundle) return null
-
   const mainQuote = bundleSelector.getMainQuote(selectedQuoteBundle.bundle)
   const {
     firstName,
@@ -217,10 +216,12 @@ export const DetailsModal = ({
     startDate,
     data: {
       ...mainQuoteData,
-      isStudent: quoteSelector.isStudent(mainQuote),
-      isYouth: quoteSelector.isYouth(mainQuote),
-      householdSize: numberCoInsured + 1,
-      livingSpace: squareMeters ? squareMeters : livingSpace,
+      ...(!quoteSelector.isCar(mainQuote) && {
+        isStudent: quoteSelector.isStudent(mainQuote),
+        isYouth: quoteSelector.isYouth(mainQuote),
+        householdSize: numberCoInsured + 1,
+        livingSpace: squareMeters ? squareMeters : livingSpace,
+      }),
     },
   } as QuoteInput
 
@@ -228,35 +229,72 @@ export const DetailsModal = ({
   const isQuoteCreationFailed = isQuoteBundleError(createQuoteBundleData)
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
-    const {
-      data: { householdSize, livingSpace },
-    } = form
+    // cleanup null form fields
+    Object.keys(form).forEach(
+      (k) =>
+        form[k as keyof QuoteInput] == null &&
+        delete form[k as keyof QuoteInput],
+    )
 
+    const newQuotes = allQuotes.map((quote) => {
+      const { startDate, currentInsurer, data } = quote
+      const quoteData = Object.keys(data).reduce<
+        Partial<QuoteDetailsInput & QuoteDataCommon>
+      >((acc, key) => {
+        switch (key) {
+          case 'numberCoInsured':
+            acc[key] =
+              (form.data.householdSize && form.data.householdSize - 1) ||
+              data[key]
+            return acc
+          case 'livingSpace':
+          case 'squareMeters':
+            acc.squareMeters =
+              form.data['livingSpace'] ||
+              form.data['squareMeters'] ||
+              data['livingSpace'] ||
+              data['squareMeters']
+            acc.livingSpace =
+              form.data['livingSpace'] ||
+              form.data['squareMeters'] ||
+              data['livingSpace'] ||
+              data['squareMeters']
+            return acc
+          case 'subType':
+            acc[key] =
+              mainQuote.id === quote.id
+                ? getSubType(form.data)
+                : getSubType(data)
+            return acc
+          case 'id':
+          case 'type':
+          case 'typeOfContract':
+            acc[key] = data[key]
+            return acc
+          default: {
+            const formValue = form.data[key as keyof QuoteDetailsInput]
+            acc[key as keyof QuoteDetailsInput] =
+              (formValue !== undefined && formValue !== null && formValue) ||
+              data[key]
+            return acc
+          }
+        }
+      }, {})
+      return {
+        ...form,
+        startDate,
+        currentInsurer: currentInsurer?.id,
+        data: quoteData,
+      }
+    })
     return createQuoteBundle({
       variables: {
         locale: isoLocale,
         quoteCartId,
-        quotes: allQuotes.map(({ startDate, currentInsurer, data }) => {
-          return {
-            ...form,
-            startDate,
-            currentInsurer: currentInsurer?.id,
-            data: {
-              isStudent: data.isStudent,
-              ...form.data,
-              numberCoInsured: householdSize && householdSize - 1,
-              squareMeters: livingSpace ? livingSpace : squareMeters,
-              id: data.id,
-              type: data.type,
-              typeOfContract: data.typeOfContract,
-              subType: getSubType(form.data) || data.subType,
-            },
-          }
-        }),
+        quotes: newQuotes,
       },
     })
   }
-
   const onSubmit = async (
     form: QuoteInput,
     { setErrors }: FormikHelpers<QuoteInput>,
