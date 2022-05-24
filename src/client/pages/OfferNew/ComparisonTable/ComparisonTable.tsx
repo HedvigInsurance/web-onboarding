@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { QuoteBundle } from 'data/graphql'
+import styled from '@emotion/styled'
+import { QuoteBundle, PerilV2 } from 'data/graphql'
 import { ThinTick } from 'components/icons/ThinTick'
 import {
   Table,
@@ -16,6 +17,42 @@ import {
 
 type ComparisonTableProps = {
   bundles: QuoteBundle[]
+}
+
+type AccordionProps = {
+  bundles: QuoteBundle[]
+  row: PerilV2
+}
+
+const RowTitle = styled.div`
+  font-size: 1rem;
+`
+
+const RowDescription = styled.p`
+  font-size: 0.875rem;
+  color: ${colorsV3.gray700};
+`
+
+const Accordion = ({ bundles, row }: AccordionProps) => {
+  const [isActive, setIsActive] = useState(false)
+
+  return (
+    <TableRow key={row.title} onClick={() => setIsActive(!isActive)}>
+      <TableCell>
+        <RowTitle>{row.title}</RowTitle>
+        {isActive && <RowDescription>{row.description}</RowDescription>}
+      </TableCell>
+      {bundles.map((bundle) => (
+        <TableCell
+          key={`${row.title}-${bundle.displayName}`}
+          align="center"
+          color={bundleHasPeril(bundle, row) ? undefined : colorsV3.gray400}
+        >
+          {bundleHasPeril(bundle, row) ? <ThinTick /> : <>&mdash;</>}
+        </TableCell>
+      ))}
+    </TableRow>
+  )
 }
 
 export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
@@ -36,21 +73,7 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
         </TableHead>
         <TableBody>
           {uniquePerils.map((row) => (
-            <TableRow key={row.title}>
-              <TableCell>{row.title}</TableCell>
-
-              {bundles.map((bundle) => (
-                <TableCell
-                  key={`${row.title}-${bundle.displayName}`}
-                  align="center"
-                  color={
-                    bundleHasPeril(bundle, row) ? undefined : colorsV3.gray400
-                  }
-                >
-                  {bundleHasPeril(bundle, row) ? <ThinTick /> : <>&mdash;</>}
-                </TableCell>
-              ))}
-            </TableRow>
+            <Accordion key={row.title} row={row} bundles={bundles} />
           ))}
         </TableBody>
       </Table>
