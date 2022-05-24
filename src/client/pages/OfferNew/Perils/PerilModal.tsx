@@ -11,10 +11,14 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { Cross } from 'components/icons/Cross'
 import { Headline } from 'components/Headline/Headline'
+import { SelectedOptionCheckmark } from 'components/icons/SelectedOptionCheckmark'
+import { Cross } from 'components/icons/Cross'
+import { InfoIconFilled } from 'components/icons/Info'
 
 const TRANSITION_MS = 250
+
+type Color = 'black' | 'gray'
 
 interface PerilModalProps {
   perils: ReadonlyArray<PerilV2>
@@ -76,7 +80,7 @@ const DirectionButton = styled.button`
 `
 
 const Description = styled.div`
-  margin-bottom: 3rem;
+  margin-bottom: 3.75rem;
   font-size: 1rem;
   line-height: 1.33;
   color: ${colorsV3.gray900};
@@ -100,15 +104,19 @@ const CoverageWrapper = styled.div`
 
 const CoverageList = styled.div`
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 `
 
-const CoverageListTitle = styled.div`
-  font-size: 1.5rem;
-  color: ${colorsV3.gray900};
+const Divider = styled.div`
+  border-top: 1px solid ${colorsV3.gray900};
   margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid ${colorsV3.gray900};
+`
+
+const SubTitle = styled.p`
+  font-size: 0.75rem;
+  color: ${colorsV3.gray700};
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0;
 `
 
 const CoverageListItemWrapper = styled.ul`
@@ -117,10 +125,11 @@ const CoverageListItemWrapper = styled.ul`
   padding: 0;
 `
 
-const CoverageListItem = styled.li`
+const CoverageListItem = styled.li<{ color: Color }>`
   font-size: 0.875rem;
   line-height: 1.5;
-  color: ${colorsV3.gray900};
+  color: ${({ color }) =>
+    color === 'black' ? colorsV3.gray900 : colorsV3.gray600};
   padding-left: 2rem;
   position: relative;
   margin-bottom: 1rem;
@@ -130,6 +139,38 @@ const CoverageListItem = styled.li`
     left: 0;
     top: 0.25rem;
   }
+`
+const InfoBoxWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+
+const InfoBox = styled.div`
+  max-width: 41.25rem;
+  width: 100%;
+  border-radius: 8px;
+  background: ${colorsV3.gray200};
+  padding: 1.5rem 2.5rem 1.5rem 3.5rem;
+  position: relative;
+  svg {
+    position: absolute;
+    left: 1.5rem;
+  }
+  @media (max-width: 600px) {
+    margin-top: 2.5rem;
+    background: none;
+    padding: 0;
+    svg {
+      display: none;
+    }
+  }
+`
+
+const InfoBoxBody = styled.div`
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: ${colorsV3.gray700};
 `
 
 export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
@@ -193,20 +234,41 @@ export const PerilModal: React.FC<PerilModalProps & ModalProps> = ({
         </Header>
         <Description>{currentPeril.description}</Description>
         <CoverageWrapper>
+          <Divider />
           <CoverageList>
-            <CoverageListTitle>
-              {textKeys.PERIL_MODAL_COVERAGE_TITLE()}
-            </CoverageListTitle>
+            <SubTitle>{textKeys.PERIL_MODAL_COVERAGE_TITLE()}</SubTitle>
             <CoverageListItemWrapper>
               {currentPeril.covered.map((text) => (
-                <CoverageListItem key={text}>
-                  <Cross size="0.75rem" />
+                <CoverageListItem key={text} color="black">
+                  <SelectedOptionCheckmark size="0.875rem" />
                   {text}
                 </CoverageListItem>
               ))}
             </CoverageListItemWrapper>
           </CoverageList>
+          {currentPeril.exceptions.length > 0 && (
+            <CoverageList>
+              <SubTitle>{textKeys.PERIL_MODAL_EXCEPTIONS_TITLE()}</SubTitle>
+              <CoverageListItemWrapper>
+                {currentPeril.exceptions.map((text) => (
+                  <CoverageListItem key={text} color="gray">
+                    <Cross size="0.875rem" />
+                    {text}
+                  </CoverageListItem>
+                ))}
+              </CoverageListItemWrapper>
+            </CoverageList>
+          )}
         </CoverageWrapper>
+        {currentPeril.info && (
+          <InfoBoxWrapper>
+            <InfoBox>
+              <InfoIconFilled size="0.875rem" />
+              <SubTitle>{textKeys.PERIL_MODAL_INFO_TITLE()}</SubTitle>
+              <InfoBoxBody>{currentPeril.info}</InfoBoxBody>
+            </InfoBox>
+          </InfoBoxWrapper>
+        )}
       </ModalInnerWrapper>
     </ModalWrapper>
   )
