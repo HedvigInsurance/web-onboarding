@@ -28,6 +28,8 @@ interface PerilModalProps {
 
 const ModalWrapper = styled(Modal)`
   max-width: 33rem;
+  height: 100%;
+  max-height: 42rem;
 `
 
 const ModalInnerWrapper = styled.div`
