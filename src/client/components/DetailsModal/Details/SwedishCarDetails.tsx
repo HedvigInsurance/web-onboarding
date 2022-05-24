@@ -4,6 +4,7 @@ import { FormikProps } from 'formik'
 import { InputGroup } from 'components/inputs'
 import { TextKeyMap } from 'utils/textKeys'
 
+import { SE_CAR_REGISTRATION_NUMBER_REGEX } from 'pages/Offer/utils'
 import { QuoteInput } from '../types'
 import { MileageInput, TextInput, ZipcodeInput } from './components/DetailInput'
 
@@ -19,9 +20,12 @@ export const getSwedishCarValidationSchema = (textKeys: TextKeyMap) => {
         .matches(/^[0-9]{3}[0-9]{2}$/, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       city: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-      registrationNumber: Yup.string().required(
-        textKeys.GENERIC_ERROR_INPUT_REQUIRED(),
-      ),
+      registrationNumber: Yup.string()
+        .matches(
+          SE_CAR_REGISTRATION_NUMBER_REGEX,
+          textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+        )
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       mileage: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     }).required(),
   })
