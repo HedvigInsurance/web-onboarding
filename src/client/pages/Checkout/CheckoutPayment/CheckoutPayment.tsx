@@ -65,6 +65,9 @@ const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
 `
 
 const AdyenContainer = styled.div`
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding-bottom: 5rem;
+  }
   #dropin-container {
     .adyen-checkout__payment-method {
       background: transparent;
@@ -199,7 +202,6 @@ export const CheckoutPayment = ({
   const storage = useStorage()
   const trackOfferEvent = useTrackOfferEvent()
   const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
-
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
     createQuoteBundle,
@@ -227,7 +229,7 @@ export const CheckoutPayment = ({
     if (is3DsError) {
       history.replace('?')
       trackOfferEvent({
-        eventName: EventName.SignError,
+        eventName: EventName.PaymentConnectedFailed,
         options: { errorType: ErrorEventType.threeDS },
       })
       setIs3dsError(true)
@@ -429,7 +431,9 @@ export const CheckoutPayment = ({
   }
 
   const handleClickBackButton = () => {
+    const detailsPageLink = `/${locale.path}/new-member/checkout/details/${quoteCartId}`
     trackOfferEvent({ eventName: EventName.ContactInformationPageGoBack })
+    history.push(detailsPageLink)
   }
 
   return (

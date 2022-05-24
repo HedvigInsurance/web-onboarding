@@ -38,6 +38,9 @@ export type TypeOfContractExcludedUnused = Exclude<
   | TypeOfContract.SeQasaShortTermRental
 >
 
+/**
+ * @deprecated replaced with categories in Quote Cart Offer Page
+ */
 export const ADTRACTION_CONTRACT_VALUES: Record<
   TypeOfContractExcludedUnused,
   number
@@ -52,7 +55,8 @@ export const ADTRACTION_CONTRACT_VALUES: Record<
   SE_ACCIDENT_BUNDLE_STUDENT_BRF: 1660489963,
   SE_ACCIDENT_BUNDLE_STUDENT_RENT: 1660490018,
   SE_ACCIDENT_BUNDLE_HOUSE: 1660490052,
-  NO_HOUSE: 0, //needs updated
+  NO_HOUSE: 0, // not needed
+  DK_HOUSE: 0, // not needed
   NO_HOME_CONTENT_OWN: 1492623645,
   NO_HOME_CONTENT_RENT: 1492623645,
   NO_HOME_CONTENT_YOUTH_OWN: 1492623719,
