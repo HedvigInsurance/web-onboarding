@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import styled from '@emotion/styled'
 import { QuoteBundleVariant } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
@@ -6,6 +7,7 @@ import { useFeature } from 'utils/hooks/useFeature'
 import { Feature } from 'shared/clientConfig'
 import { TextButton } from 'components/buttons'
 import { hasCar } from 'api/quoteBundleSelectors'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import {
   ContainerWrapper,
   Container,
@@ -24,6 +26,16 @@ interface Props {
   selectedQuoteBundle: QuoteBundleVariant
   onChange: (bundle: QuoteBundleVariant) => void
 }
+
+const CompareInsuranceButton = styled(TextButton)`
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0.5rem 0 0;
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 1.125rem;
+  }
+`
 
 export const InsuranceSelector = ({
   variants,
@@ -85,13 +97,9 @@ export const InsuranceSelector = ({
             <Body>{body}</Body>
 
             {isComparisonTableEnabled && variants.length > 0 && (
-              <TextButton
-                mt="1.5rem"
-                size="lg"
-                onClick={() => setIsModalOpen(true)}
-              >
+              <CompareInsuranceButton onClick={() => setIsModalOpen(true)}>
                 {textKeys.OPEN_COMPARISON_MODAL()}
-              </TextButton>
+              </CompareInsuranceButton>
             )}
           </HeadingWrapper>
           <Selector
