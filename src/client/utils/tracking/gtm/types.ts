@@ -51,6 +51,7 @@ export enum EventName {
   ButtonClick = 'button_click',
   SignError = 'sign_error',
   PaymentDetailsConfirmed = 'payment_details_confirmed',
+  PaymentConnectedFailed = 'payment_connected_failed',
 }
 
 export enum ErrorEventType {

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 
+import { BackgroundImage } from 'components/BackgroundImage'
 import { Section } from 'pages/OfferNew/components'
 
 import { OfferData } from 'pages/OfferNew/types'
@@ -11,11 +12,12 @@ import { isBundle } from 'pages/OfferNew/utils'
 import { hasCar } from 'api/quoteBundleSelectors'
 
 import { ExternalInsuranceProvider } from '../../OfferNew/Introduction/ExternalInsuranceProvider'
-import { HeroBackgroundImage } from './HeroBackgroundImage'
+
 import { Sidebar } from './Sidebar'
 import { HeroOfferDetails } from './HeroOfferDetails'
 
 const HERO_HEIGHT_LARGE_SCREEN = 600
+const HERO_HEIGHT = 400
 
 const Hero = styled.div`
   width: 100%;
@@ -61,6 +63,14 @@ const ContentContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+  }
+`
+
+const HeroBackgroundImage = styled(BackgroundImage)`
+  height: ${HERO_HEIGHT}px;
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    height: ${HERO_HEIGHT_LARGE_SCREEN}px;
   }
 `
 
