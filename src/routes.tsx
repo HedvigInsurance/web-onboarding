@@ -10,7 +10,6 @@ import { Debugger } from './client/pages/Debugger'
 import { OfferDebugger } from './client/pages/OfferDebugger'
 import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
-import { Forever } from './client/pages/Forever'
 import { FourOhFour } from './client/pages/FourOhFour'
 import { Landing } from './client/pages/Landing/Landing'
 import { LoginApp } from './client/pages/LoginApp'
@@ -101,19 +100,6 @@ export const routes: Route[] = [
     clientRouteData: {
       Component: Landing,
       exact: true,
-    },
-  },
-  {
-    path: `${localePathPattern}/forever/:code?`,
-    serverRouteData: {
-      titleTextKey: 'FOREVER_LANDINGPAGE_TITLE',
-      metaDescriptionTextKey: 'FOREVER_LANDINGPAGE_DESCRIPTION',
-      ogImage:
-        'https://www.hedvig.com/new-member-assets/social/forever-notifications.jpg',
-    },
-    clientRouteData: {
-      Component: Forever,
-      exact: false,
     },
   },
   {
