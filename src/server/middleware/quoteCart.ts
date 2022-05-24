@@ -90,10 +90,10 @@ export const quoteCartSessionMiddleware: Router.IMiddleware<
       .getLogger('quoteCart')
       .info(`Created quote cart ${newQuoteCartId}`)
     storage.setItem(ONBOARDING_QUOTE_CART_COOKIE_KEY, newQuoteCartId)
-    await next()
   } catch (e) {
     Sentry.captureException(e)
     ctx.state.getLogger('quoteCart').error(e.message)
-    throw e
+  } finally {
+    await next()
   }
 }
