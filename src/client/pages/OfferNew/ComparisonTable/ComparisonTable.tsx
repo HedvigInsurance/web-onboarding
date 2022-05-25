@@ -14,6 +14,8 @@ import {
   bundleHasPeril,
   getUniquePerilsForQuoteBundles,
 } from 'api/quoteBundleSelectors'
+import { ChevronDown } from 'components/icons/ChevronDown'
+import { ChevronUp } from 'components/icons/ChevronUp'
 
 type ComparisonTableProps = {
   bundles: QuoteBundle[]
@@ -26,6 +28,8 @@ type AccordionProps = {
 
 const RowTitle = styled.div`
   font-size: 1rem;
+  display: flex;
+  align-items: center;
 `
 
 const RowDescription = styled.p`
@@ -33,13 +37,19 @@ const RowDescription = styled.p`
   color: ${colorsV3.gray700};
 `
 
+const AccordionRow = styled(TableRow)`
+  cursor: pointer;
+`
+
 const Accordion = ({ bundles, row }: AccordionProps) => {
   const [isActive, setIsActive] = useState(false)
 
   return (
-    <TableRow key={row.title} onClick={() => setIsActive(!isActive)}>
+    <AccordionRow key={row.title} onClick={() => setIsActive(!isActive)}>
       <TableCell>
-        <RowTitle>{row.title}</RowTitle>
+        <RowTitle>
+          {row.title} {isActive ? <ChevronUp /> : <ChevronDown />}
+        </RowTitle>
         {isActive && <RowDescription>{row.description}</RowDescription>}
       </TableCell>
       {bundles.map((bundle) => (
@@ -51,7 +61,7 @@ const Accordion = ({ bundles, row }: AccordionProps) => {
           {bundleHasPeril(bundle, row) ? <ThinTick /> : <>&mdash;</>}
         </TableCell>
       ))}
-    </TableRow>
+    </AccordionRow>
   )
 }
 
