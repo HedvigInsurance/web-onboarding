@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
+import { useMediaQuery } from 'react-responsive'
 import { QuoteBundle, PerilV2 } from 'data/graphql'
 import { ThinTick } from 'components/icons/ThinTick'
 import {
@@ -16,6 +17,7 @@ import {
 } from 'api/quoteBundleSelectors'
 import { ChevronDown } from 'components/icons/ChevronDown'
 import { ChevronUp } from 'components/icons/ChevronUp'
+import { BREAKPOINTS } from 'utils/mediaQueries'
 
 type ComparisonTableProps = {
   bundles: QuoteBundle[]
@@ -30,6 +32,10 @@ const RowTitle = styled.div`
   font-size: 1rem;
   display: flex;
   align-items: center;
+
+  svg {
+    margin-left: 0.625rem;
+  }
 `
 
 const RowDescription = styled.p`
@@ -41,25 +47,34 @@ const AccordionRow = styled(TableRow)`
   cursor: pointer;
 `
 
+const TitleTableCell = styled(TableCell)`
+  max-width: 20rem;
+`
+
+const PerilTableCell = styled(TableCell)`
+  vertical-align: top;
+`
+
 const Accordion = ({ bundles, row }: AccordionProps) => {
   const [isActive, setIsActive] = useState(false)
 
   return (
     <AccordionRow key={row.title} onClick={() => setIsActive(!isActive)}>
-      <TableCell>
+      <TitleTableCell>
         <RowTitle>
-          {row.title} {isActive ? <ChevronUp /> : <ChevronDown />}
+          {row.title}{' '}
+          {isActive ? <ChevronUp size="1rem" /> : <ChevronDown size="1rem" />}
         </RowTitle>
         {isActive && <RowDescription>{row.description}</RowDescription>}
-      </TableCell>
+      </TitleTableCell>
       {bundles.map((bundle) => (
-        <TableCell
+        <PerilTableCell
           key={`${row.title}-${bundle.displayName}`}
           align="center"
           color={bundleHasPeril(bundle, row) ? undefined : colorsV3.gray400}
         >
           {bundleHasPeril(bundle, row) ? <ThinTick /> : <>&mdash;</>}
-        </TableCell>
+        </PerilTableCell>
       ))}
     </AccordionRow>
   )
@@ -67,6 +82,8 @@ const Accordion = ({ bundles, row }: AccordionProps) => {
 
 export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
   const uniquePerils = getUniquePerilsForQuoteBundles(bundles)
+
+  const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
 
   return (
     <>
@@ -82,9 +99,27 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {uniquePerils.map((row) => (
-            <Accordion key={row.title} row={row} bundles={bundles} />
-          ))}
+          {uniquePerils.map((row) =>
+            isDesktop ? (
+              <Accordion key={row.title} row={row} bundles={bundles} />
+            ) : (
+              <TableRow key={row.title}>
+                <TableCell>{row.title}</TableCell>
+
+                {bundles.map((bundle) => (
+                  <TableCell
+                    key={`${row.title}-${bundle.displayName}`}
+                    align="center"
+                    color={
+                      bundleHasPeril(bundle, row) ? undefined : colorsV3.gray400
+                    }
+                  >
+                    {bundleHasPeril(bundle, row) ? <ThinTick /> : <>&mdash;</>}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ),
+          )}
         </TableBody>
       </Table>
     </>

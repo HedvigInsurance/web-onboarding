@@ -1,4 +1,5 @@
 import React from 'react'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { IconRoot, IconRootProps } from './IconRoot'
 
 export const ChevronUp: React.FC<IconRootProps> = (props) => (
@@ -6,9 +7,12 @@ export const ChevronUp: React.FC<IconRootProps> = (props) => (
     <path
       fillRule="evenodd"
       clipRule="evenodd"
-      d="M18 15L12 9L6 15"
-      stroke="currentColor"
-      strokeWidth="1.25"
+      d="M12 9.06066L4.53033 16.5303L3.46967 15.4697L12 6.93934L20.5303 15.4697L19.4697 16.5303L12 9.06066Z"
+      fill="currentColor"
     />
   </IconRoot>
 )
+
+ChevronUp.defaultProps = {
+  color: colorsV3.gray500,
+}
