@@ -79,7 +79,9 @@ export type GenericQuoteData = {
   ancillaryArea?: number
   numberOfBathrooms?: number
   yearOfConstruction?: number
+  yearOfOwnership?: number
   isSubleted?: boolean
+  waterLeakageDetector?: boolean
 
   extraBuildings?: Array<{
     displayName: string | null

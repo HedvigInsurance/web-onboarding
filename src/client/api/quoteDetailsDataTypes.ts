@@ -1,6 +1,6 @@
 import { TypeOfContract, ExtraBuilding } from 'data/graphql'
 
-type QuoteDataCommon = {
+export type QuoteDataCommon = {
   typeOfContract: TypeOfContract
   numberCoInsured: number
   id: string

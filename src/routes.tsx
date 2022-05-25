@@ -10,10 +10,8 @@ import { Debugger } from './client/pages/Debugger'
 import { OfferDebugger } from './client/pages/OfferDebugger'
 import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
-import { Forever } from './client/pages/Forever'
 import { FourOhFour } from './client/pages/FourOhFour'
 import { Landing } from './client/pages/Landing/Landing'
-import { LoginApp } from './client/pages/LoginApp'
 import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
 import { OfferPage } from './client/pages/Offer'
@@ -101,19 +99,6 @@ export const routes: Route[] = [
     clientRouteData: {
       Component: Landing,
       exact: true,
-    },
-  },
-  {
-    path: `${localePathPattern}/forever/:code?`,
-    serverRouteData: {
-      titleTextKey: 'FOREVER_LANDINGPAGE_TITLE',
-      metaDescriptionTextKey: 'FOREVER_LANDINGPAGE_DESCRIPTION',
-      ogImage:
-        'https://www.hedvig.com/new-member-assets/social/forever-notifications.jpg',
-    },
-    clientRouteData: {
-      Component: Forever,
-      exact: false,
     },
   },
   {
@@ -421,20 +406,6 @@ export const routes: Route[] = [
         )
       },
       exact: false,
-    },
-  },
-  {
-    /*
-    This route is only used as a web view in the apps
-    for markets using Simple Sign, since we're missing some certificates
-    */
-    path: localePathPattern + '/login',
-    serverRouteData: {
-      titleTextKey: 'Text',
-    },
-    clientRouteData: {
-      Component: LoginApp,
-      exact: true,
     },
   },
   {
