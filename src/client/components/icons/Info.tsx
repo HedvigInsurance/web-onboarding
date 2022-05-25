@@ -13,7 +13,7 @@ export const InfoIcon: React.FC<IconRootProps> = (props) => (
   </IconRoot>
 )
 
-export const InfoIconFilled: React.FC<IconRootProps> = (props) => (
+export const InfoIconFilled = (props: IconRootProps) => (
   <IconRoot viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       fillRule="evenodd"
