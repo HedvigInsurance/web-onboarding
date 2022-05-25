@@ -127,7 +127,7 @@ const CoverageListItemWrapper = styled.ul`
   padding: 0;
 `
 
-const CoverageListItem = styled.li<{ color: Color }>`
+const CoverageListItem = styled.li<{ color: ListItemColor }>`
   font-size: 0.875rem;
   line-height: 1.5;
   color: ${({ color }) =>
