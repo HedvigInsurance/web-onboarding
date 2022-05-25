@@ -402,7 +402,6 @@
   "MAIN_COVERAGE_DESC_ACCIDENT": "",
   "CHECKOUT_DETAILS_REGISTRATION_NUMBER": "",
   "CHECKOUT_DETAILS_MILEAGE": "",
-  "CHECKOUT_DETAILS_MILEAGE_VALUE": "",
   "3D_SECURE_ERROR_DESCRIPTION": "Prøv at indtaste dine kortoplysninger igen. Fortsætter problemet, så prøv med et andet kort eller kontakt din betalingskortudbyder.",
   "3D_SECURE_ERROR_BUTTON": "Okay",
   "3D_SECURE_ERROR_HEADING": "Dit kort kunne ikke godkendes",

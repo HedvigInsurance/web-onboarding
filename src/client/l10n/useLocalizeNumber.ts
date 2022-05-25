@@ -7,7 +7,7 @@ import { useCurrentLocale } from './useCurrentLocale'
  * @param lang ISO two-letter language code, for example 'sv'
  * @returns Number formatted according to browser's language settings
  */
-export const localizeNumber = (number: number, lang: string): string => {
+const localizeNumber = (number: number, lang: string): string => {
   if (typeof number !== 'number') return number
 
   return number.toLocaleString(lang)
