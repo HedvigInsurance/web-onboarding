@@ -18,7 +18,7 @@ import { InfoIconFilled } from 'components/icons/Info'
 
 const TRANSITION_MS = 250
 
-type Color = 'black' | 'gray'
+type ListItemColor = 'black' | 'gray'
 
 interface PerilModalProps {
   perils: ReadonlyArray<PerilV2>
