@@ -494,7 +494,7 @@ export const Checkout = ({
         </>
       )}
       {signStatus?.signState === SignState.Completed && (
-        <CheckoutSuccessRedirect offerData={offerData} />
+        <CheckoutSuccessRedirect />
       )}
       <SignFailModal
         isVisible={isShowingFailModal}
