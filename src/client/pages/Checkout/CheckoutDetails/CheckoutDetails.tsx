@@ -42,7 +42,7 @@ export const CheckoutDetails = () => {
   const { path: localePath } = useCurrentLocale()
 
   const trackOfferEvent = useTrackOfferEvent()
-  const data = useQuoteCartData()
+  const { data, error } = useQuoteCartData()
 
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
@@ -54,12 +54,13 @@ export const CheckoutDetails = () => {
     trackOfferEvent,
   ])
 
-  if (data?.error) {
-    console.error('Quote cart data error: no data')
-    return <CheckoutErrorModal isVisible onRetry={onRetry} />
-  }
-  if (!data || data.loading) {
-    return <LoadingPage loading />
+  if (data === null) {
+    return (
+      <>
+        <LoadingPage loading />
+        <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
+      </>
+    )
   }
 
   const handleClickBackButton = () => {
@@ -105,6 +106,8 @@ export const CheckoutDetails = () => {
       >
         <PaymentInfo {...priceData} />
       </Footer>
+
+      <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
     </CheckoutDetailsWrapper>
   )
 }
