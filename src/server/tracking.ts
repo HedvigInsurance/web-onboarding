@@ -1,11 +1,4 @@
-import { min as createMinifiedSegmentSnippet } from '@segment/snippet'
 import { AppEnvironment } from 'shared/clientConfig'
-
-const segmentSnippet = createMinifiedSegmentSnippet({
-  apiKey: process.env.SEGMENT_API_KEY || '',
-  page: true,
-  load: true,
-})
 
 export const gtmNoScript = {
   dev: `<!-- Google Tag Manager development (noscript) -->
@@ -43,6 +36,4 @@ ${
   })(window,document,'script','dataLayer','GTM-WWMKHK5');</script>
   <!-- End Google Tag Manager -->`
 }
-
-<script key="segment-snippet" nonce="${cspNonce}">${segmentSnippet}</script>
 `
