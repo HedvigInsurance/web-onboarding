@@ -85,7 +85,13 @@ export const quoteCartSessionMiddleware: Router.IMiddleware<
       variables: { market: apiMarket, locale: isoLocale },
     })
 
-    const newQuoteCartId = result.data.data.onboardingQuoteCart_create.id
+    const newQuoteCartId = result.data.data?.onboardingQuoteCart_create.id
+    if (!newQuoteCartId) {
+      throw new Error(
+        `Failed to create quote cart: ${JSON.stringify(result.data)}`,
+      )
+    }
+
     ctx.state
       .getLogger('quoteCart')
       .info(`Created quote cart ${newQuoteCartId}`)
