@@ -23,11 +23,6 @@ type ComparisonTableProps = {
   bundles: QuoteBundle[]
 }
 
-type AccordionProps = {
-  bundles: QuoteBundle[]
-  row: PerilV2
-}
-
 const RowTitle = styled.div`
   font-size: 1rem;
   display: flex;
@@ -55,14 +50,19 @@ const PerilTableCell = styled(TableCell)`
   vertical-align: top;
 `
 
-const Accordion = ({ bundles, row }: AccordionProps) => {
-  const [isActive, setIsActive] = useState(false)
+type AccordionProps = {
+  bundles: QuoteBundle[]
+  row: PerilV2
+  isActive: boolean
+  setIsActive: (isActive: boolean) => void
+}
 
+const Accordion = ({ bundles, row, isActive, setIsActive }: AccordionProps) => {
   return (
     <AccordionRow key={row.title} onClick={() => setIsActive(!isActive)}>
       <TitleTableCell>
         <RowTitle>
-          {row.title}{' '}
+          {row.title}
           {isActive ? <ChevronUp size="1rem" /> : <ChevronDown size="1rem" />}
         </RowTitle>
         {isActive && <RowDescription>{row.description}</RowDescription>}
@@ -82,7 +82,7 @@ const Accordion = ({ bundles, row }: AccordionProps) => {
 
 export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
   const uniquePerils = getUniquePerilsForQuoteBundles(bundles)
-
+  const [activeIndex, setActiveIndex] = useState<number>()
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
 
   return (
@@ -99,9 +99,17 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {uniquePerils.map((row) =>
+          {uniquePerils.map((row, index) =>
             isDesktop ? (
-              <Accordion key={row.title} row={row} bundles={bundles} />
+              <Accordion
+                key={row.title}
+                row={row}
+                bundles={bundles}
+                isActive={activeIndex === index}
+                setIsActive={(isActive) =>
+                  setActiveIndex(isActive ? index : undefined)
+                }
+              />
             ) : (
               <TableRow key={row.title}>
                 <TableCell>{row.title}</TableCell>
