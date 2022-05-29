@@ -48,7 +48,7 @@ const AccordionRow = styled(TableRow)`
 `
 
 const TitleTableCell = styled(TableCell)`
-  max-width: 20rem;
+  max-width: 16rem;
 `
 
 const PerilTableCell = styled(TableCell)`
