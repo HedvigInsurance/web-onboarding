@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { Headline } from 'components/Headline/Headline'
 import { Modal, ModalContent, ModalProps } from 'components/ModalNew'
 import { QuoteBundle } from 'data/graphql'
@@ -9,6 +10,11 @@ type ComparisonModalProps = Pick<ModalProps, 'isVisible' | 'onClose'> & {
   bundles: QuoteBundle[]
 }
 
+const ModalWrapper = styled(Modal)`
+  max-height: 42rem;
+  height: 100%;
+`
+
 export const ComparisonModal = ({
   isVisible,
   onClose,
@@ -17,7 +23,7 @@ export const ComparisonModal = ({
   const textKeys = useTextKeys()
 
   return (
-    <Modal isVisible={isVisible} onClose={onClose}>
+    <ModalWrapper isVisible={isVisible} onClose={onClose}>
       <ModalContent>
         <Headline
           textAlign="center"
@@ -29,6 +35,6 @@ export const ComparisonModal = ({
         </Headline>
         <ComparisonTable bundles={bundles} />
       </ModalContent>
-    </Modal>
+    </ModalWrapper>
   )
 }
