@@ -15,19 +15,19 @@ export const AccordionActiveContent = styled(AnimateHeight)`
   color: ${colorsV3.gray700};
 `
 
-export type AccordionProps = {
+export type AccordionItemProps = {
   isActive: boolean
   setIsActive: (isActive: boolean) => void
   children: React.ReactNode
   disabled: boolean
 }
 
-export const Accordion = ({
+export const AccordionItem = ({
   isActive,
   setIsActive,
   children,
   disabled,
-}: AccordionProps) => {
+}: AccordionItemProps) => {
   return (
     <AccordionRow onClick={() => setIsActive(isActive)} disabled={disabled}>
       {children}

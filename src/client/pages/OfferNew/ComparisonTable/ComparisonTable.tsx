@@ -19,8 +19,8 @@ import { ChevronDown } from 'components/icons/ChevronDown'
 import { ChevronUp } from 'components/icons/ChevronUp'
 import { BREAKPOINTS } from 'utils/mediaQueries'
 import {
-  AccordionProps,
-  Accordion,
+  AccordionItemProps,
+  AccordionItem,
   AccordionActiveContent,
 } from 'components/Accordion/Accordion'
 
@@ -44,7 +44,9 @@ const PerilTableCell = styled(TableCell)`
   vertical-align: top;
 `
 
-const AccordionButton = ({ isActive }: Pick<AccordionProps, 'isActive'>) => {
+const AccordionButton = ({
+  isActive,
+}: Pick<AccordionItemProps, 'isActive'>) => {
   return (
     <>{isActive ? <ChevronUp size="1rem" /> : <ChevronDown size="1rem" />}</>
   )
@@ -72,7 +74,7 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
           {uniquePerils.map((row, index) => (
             <TableRow key={row.title}>
               <TitleTableCell>
-                <Accordion
+                <AccordionItem
                   key={row.title}
                   isActive={activeIndex === index}
                   setIsActive={(isActive) =>
@@ -91,7 +93,7 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
                   >
                     <p>{row.description}</p>
                   </AccordionActiveContent>
-                </Accordion>
+                </AccordionItem>
               </TitleTableCell>
 
               {bundles.map((bundle) => (
