@@ -39,6 +39,8 @@ import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
 import { useDebounce } from 'utils/hooks/useDebounce'
+import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
+import { EventName } from 'utils/tracking/gtm/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -231,7 +233,7 @@ export const Checkout = ({
   const locale = useCurrentLocale()
   const client = useApolloClient()
   const storage = useStorage()
-
+  const trackOfferEvent = useTrackOfferEvent()
   const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
 
   const [isUpsellCardVisible, isPhoneNumberRequired] = useFeature([
@@ -342,10 +344,13 @@ export const Checkout = ({
 
   useEffect(() => {
     if (checkoutStatus === CheckoutStatus.Failed) {
+      trackOfferEvent({
+        eventName: EventName.SignError,
+      })
       setSignUiState('FAILED')
       return
     }
-  }, [checkoutStatus])
+  }, [checkoutStatus, trackOfferEvent])
 
   const completeCheckout = useCallback(async () => {
     if (isCompletingCheckout) {
@@ -365,15 +370,19 @@ export const Checkout = ({
       })
       trackSignedCustomerEvent({ memberId })
     } catch (error) {
+      trackOfferEvent({
+        eventName: EventName.SignError,
+      })
       setSignUiState('FAILED')
       setIsCompletingCheckout(false)
     }
   }, [
-    client,
-    quoteCartId,
-    storage,
     isCompletingCheckout,
+    quoteCartId,
+    client,
+    storage,
     trackSignedCustomerEvent,
+    trackOfferEvent,
   ])
 
   useEffect(() => {
@@ -416,6 +425,9 @@ export const Checkout = ({
         variables: { quoteIds, quoteCartId },
       })
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
+        trackOfferEvent({
+          eventName: EventName.SignError,
+        })
         setSignUiState('FAILED')
         return
       }
@@ -429,13 +441,18 @@ export const Checkout = ({
         setSignUiState('MANUAL_REVIEW')
         return
       }
-
+      trackOfferEvent({
+        eventName: EventName.SignError,
+      })
       setSignUiState('FAILED')
       return
     }
   }
 
   const handleSignStart = () => {
+    trackOfferEvent({
+      eventName: EventName.ButtonClick,
+    })
     if (checkoutStatus === CheckoutStatus.Signed) {
       completeCheckout()
     } else {
