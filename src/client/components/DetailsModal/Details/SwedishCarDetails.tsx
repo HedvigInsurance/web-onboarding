@@ -54,6 +54,7 @@ export const SwedishCarDetails = ({
             name="data.registrationNumber"
             label="DETAILS_MODULE_TABLE_REGISTRATION_NUMBER_CELL_LABEL"
             formikProps={formikProps}
+            upperCase
           />
           <MileageInput
             name="data.mileage"
