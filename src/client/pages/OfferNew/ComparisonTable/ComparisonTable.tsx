@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
-import { QuoteBundle, PerilV2 } from 'data/graphql'
+import { QuoteBundle } from 'data/graphql'
 import { ThinTick } from 'components/icons/ThinTick'
 import {
   Table,
@@ -18,65 +18,35 @@ import {
 import { ChevronDown } from 'components/icons/ChevronDown'
 import { ChevronUp } from 'components/icons/ChevronUp'
 import { BREAKPOINTS } from 'utils/mediaQueries'
+import {
+  AccordionProps,
+  Accordion,
+  AccordionActiveContent,
+} from 'components/Accordion/Accordion'
 
 type ComparisonTableProps = {
   bundles: QuoteBundle[]
 }
 
-const RowTitle = styled.div`
-  font-size: 1rem;
+const TitleTableCell = styled(TableCell)`
+  width: 100%;
+`
+
+const Title = styled.div`
   display: flex;
   align-items: center;
-
   svg {
     margin-left: 0.625rem;
   }
-`
-
-const RowDescription = styled.p`
-  font-size: 0.875rem;
-  color: ${colorsV3.gray700};
-`
-
-const AccordionRow = styled(TableRow)`
-  cursor: pointer;
-`
-
-const TitleTableCell = styled(TableCell)`
-  max-width: 16rem;
 `
 
 const PerilTableCell = styled(TableCell)`
   vertical-align: top;
 `
 
-type AccordionProps = {
-  bundles: QuoteBundle[]
-  row: PerilV2
-  isActive: boolean
-  setIsActive: (isActive: boolean) => void
-}
-
-const Accordion = ({ bundles, row, isActive, setIsActive }: AccordionProps) => {
+const AccordionButton = ({ isActive }: Pick<AccordionProps, 'isActive'>) => {
   return (
-    <AccordionRow key={row.title} onClick={() => setIsActive(!isActive)}>
-      <TitleTableCell>
-        <RowTitle>
-          {row.title}
-          {isActive ? <ChevronUp size="1rem" /> : <ChevronDown size="1rem" />}
-        </RowTitle>
-        {isActive && <RowDescription>{row.description}</RowDescription>}
-      </TitleTableCell>
-      {bundles.map((bundle) => (
-        <PerilTableCell
-          key={`${row.title}-${bundle.displayName}`}
-          align="center"
-          color={bundleHasPeril(bundle, row) ? undefined : colorsV3.gray400}
-        >
-          {bundleHasPeril(bundle, row) ? <ThinTick /> : <>&mdash;</>}
-        </PerilTableCell>
-      ))}
-    </AccordionRow>
+    <>{isActive ? <ChevronUp size="1rem" /> : <ChevronDown size="1rem" />}</>
   )
 }
 
@@ -99,35 +69,44 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {uniquePerils.map((row, index) =>
-            isDesktop ? (
-              <Accordion
-                key={row.title}
-                row={row}
-                bundles={bundles}
-                isActive={activeIndex === index}
-                setIsActive={(isActive) =>
-                  setActiveIndex(isActive ? index : undefined)
-                }
-              />
-            ) : (
-              <TableRow key={row.title}>
-                <TableCell>{row.title}</TableCell>
-
-                {bundles.map((bundle) => (
-                  <TableCell
-                    key={`${row.title}-${bundle.displayName}`}
-                    align="center"
-                    color={
-                      bundleHasPeril(bundle, row) ? undefined : colorsV3.gray400
-                    }
+          {uniquePerils.map((row, index) => (
+            <TableRow key={row.title}>
+              <TitleTableCell>
+                <Accordion
+                  key={row.title}
+                  isActive={activeIndex === index}
+                  setIsActive={(isActive) =>
+                    isDesktop && setActiveIndex(isActive ? undefined : index)
+                  }
+                  disabled={!isDesktop}
+                >
+                  <Title>
+                    {row.title}
+                    {isDesktop && (
+                      <AccordionButton isActive={activeIndex === index} />
+                    )}
+                  </Title>
+                  <AccordionActiveContent
+                    height={activeIndex === index ? 'auto' : 0}
                   >
-                    {bundleHasPeril(bundle, row) ? <ThinTick /> : <>&mdash;</>}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ),
-          )}
+                    <p>{row.description}</p>
+                  </AccordionActiveContent>
+                </Accordion>
+              </TitleTableCell>
+
+              {bundles.map((bundle) => (
+                <PerilTableCell
+                  key={`${row.title}-${bundle.displayName}`}
+                  align="center"
+                  color={
+                    bundleHasPeril(bundle, row) ? undefined : colorsV3.gray400
+                  }
+                >
+                  {bundleHasPeril(bundle, row) ? <ThinTick /> : <>&mdash;</>}
+                </PerilTableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </>
