@@ -41,7 +41,7 @@ export const getDanishHouseValidationSchema = (textKeys: TextKeyMap) => {
       householdSize: Yup.number()
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-      isYouth: Yup.boolean(),
+      isStudent: Yup.boolean(),
       extraBuildings: Yup.array().of(
         Yup.object().shape({
           type: Yup.string().required(),
@@ -97,7 +97,7 @@ export const DanishHouseDetails = ({
           />
           <ZipcodeInput
             name="data.zipCode"
-            market="NO"
+            market="DK"
             formikProps={formikProps}
           />
           <AreaInput
