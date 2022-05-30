@@ -21,7 +21,7 @@ import { BREAKPOINTS } from 'utils/mediaQueries'
 import {
   AccordionItemProps,
   AccordionItem,
-  AccordionActiveContent,
+  AccordionContent,
 } from 'components/Accordion/Accordion'
 
 type ComparisonTableProps = {
@@ -88,11 +88,9 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
                       <AccordionButton isActive={activeIndex === index} />
                     )}
                   </Title>
-                  <AccordionActiveContent
-                    height={activeIndex === index ? 'auto' : 0}
-                  >
+                  <AccordionContent height={activeIndex === index ? 'auto' : 0}>
                     <p>{row.description}</p>
-                  </AccordionActiveContent>
+                  </AccordionContent>
                 </AccordionItem>
               </TitleTableCell>
 
