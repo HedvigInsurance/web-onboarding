@@ -1,7 +1,6 @@
 import { History } from 'history'
 import React, { useEffect } from 'react'
 import { useHistory, useRouteMatch, RouteComponentProps } from 'react-router'
-import { datadogRum } from '@datadog/browser-rum'
 import { LoadingPage } from 'components/LoadingPage'
 import {
   useQuoteCartQuery,
