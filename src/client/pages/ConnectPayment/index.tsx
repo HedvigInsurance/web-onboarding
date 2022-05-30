@@ -1,14 +1,11 @@
-import { SemanticEvents } from 'quepasa'
-import React, { useEffect } from 'react'
+import React from 'react'
 import Helmet from 'react-helmet-async'
 import { useHistory } from 'react-router'
-import { useTrackSegmentEvent } from 'utils/tracking/hooks/useTrackSegmentEvent'
 import { TopBar } from 'components/TopBar'
 import { Page } from 'components/utils/Page'
 import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useTextKeys } from 'utils/textKeys'
-import { getUtmParamsFromCookie } from 'utils/tracking/gtm/helpers'
 import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { pushToGTMDataLayer } from 'utils/tracking/gtm/dataLayer'
@@ -33,19 +30,6 @@ export const ConnectPayment: React.FC = () => {
       },
     })
   }
-
-  const trackSegmentEvent = useTrackSegmentEvent()
-  useEffect(() => {
-    trackSegmentEvent({
-      name: SemanticEvents.Ecommerce.CheckoutStepCompleted,
-      properties: {
-        category: 'web-onboarding-steps',
-        action: 'Signed',
-        label: 'Completed',
-        ...getUtmParamsFromCookie(),
-      },
-    })
-  }, [trackSegmentEvent])
 
   return (
     <Page>

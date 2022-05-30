@@ -6,7 +6,7 @@ import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { CheckoutPayment } from './CheckoutPayment'
 
 export const Checkout = () => {
-  const data = useQuoteCartData()
+  const { data, error } = useQuoteCartData()
 
   useEffect(() => {
     // clean up existing auth tokens
@@ -15,32 +15,36 @@ export const Checkout = () => {
     }
   }, [])
 
-  if (data?.error) {
-    console.error('Quote cart data error: no data')
-    return <CheckoutErrorModal isVisible onRetry={onRetry} />
+  if (data === null) {
+    return (
+      <>
+        <LoadingPage loading />
+        <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
+      </>
+    )
   }
-  if (!data || data.loading) {
-    return <LoadingPage loading />
-  }
+
   const {
     bundleVariants,
     priceData,
     quoteCartId,
     mainQuote,
     quoteIds,
-    selectedQuoteBundleVariant,
     checkoutStatus,
   } = data
 
   return (
-    <CheckoutPayment
-      bundleVariants={bundleVariants}
-      quoteCartId={quoteCartId}
-      priceData={priceData}
-      mainQuote={mainQuote}
-      quoteIds={quoteIds}
-      selectedQuoteBundleVariant={selectedQuoteBundleVariant}
-      checkoutStatus={checkoutStatus}
-    />
+    <>
+      <CheckoutPayment
+        bundleVariants={bundleVariants}
+        quoteCartId={quoteCartId}
+        priceData={priceData}
+        mainQuote={mainQuote}
+        quoteIds={quoteIds}
+        checkoutStatus={checkoutStatus}
+      />
+
+      <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
+    </>
   )
 }

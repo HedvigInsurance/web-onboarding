@@ -10,10 +10,8 @@ import { Debugger } from './client/pages/Debugger'
 import { OfferDebugger } from './client/pages/OfferDebugger'
 import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
-import { Forever } from './client/pages/Forever'
 import { FourOhFour } from './client/pages/FourOhFour'
 import { Landing } from './client/pages/Landing/Landing'
-import { LoginApp } from './client/pages/LoginApp'
 import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
 import { OfferPage } from './client/pages/Offer'
@@ -29,6 +27,7 @@ enum EmbarkStory {
   DenmarkContentsQuoteCart = 'Web Onboarding DK - Quote Cart Home Content',
   DenmarkContentsAccidentQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident',
   DenmarkContentsAccidentTravelQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident Travel',
+  DenmarkOnboarding = 'onboarding-DK',
 
   NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
   NorwayContentsEnglish = 'Web Onboarding NO - English Contents',
@@ -94,16 +93,13 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${localePathPattern}/forever/:code?`,
+    path: `${onboardingLocaleBaseRoute}/home-insurance`,
     serverRouteData: {
-      titleTextKey: 'FOREVER_LANDINGPAGE_TITLE',
-      metaDescriptionTextKey: 'FOREVER_LANDINGPAGE_DESCRIPTION',
-      ogImage:
-        'https://www.hedvig.com/new-member-assets/social/forever-notifications.jpg',
+      titleTextKey: 'STARTPAGE_PAGE_TITLE',
     },
     clientRouteData: {
-      Component: Forever,
-      exact: false,
+      Component: Landing,
+      exact: true,
     },
   },
   {
@@ -300,6 +296,14 @@ export const routes: Route[] = [
                     name: EmbarkStory.DenmarkContentsAccidentTravelQuoteCart,
                     quoteCart: true,
                   }
+                case 'onboarding':
+                  if (isHouseEnabled) {
+                    return {
+                      baseUrl,
+                      name: EmbarkStory.DenmarkOnboarding,
+                      quoteCart: true,
+                    }
+                  }
               }
               break
             case 'no':
@@ -411,20 +415,6 @@ export const routes: Route[] = [
         )
       },
       exact: false,
-    },
-  },
-  {
-    /*
-    This route is only used as a web view in the apps
-    for markets using Simple Sign, since we're missing some certificates
-    */
-    path: localePathPattern + '/login',
-    serverRouteData: {
-      titleTextKey: 'Text',
-    },
-    clientRouteData: {
-      Component: LoginApp,
-      exact: true,
     },
   },
   {

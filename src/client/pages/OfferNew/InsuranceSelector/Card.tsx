@@ -4,6 +4,7 @@ import React from 'react'
 import { SelectedOptionCheckmark } from 'components/icons/SelectedOptionCheckmark'
 import { UnselectedOptionCircle } from 'components/icons/UnselectedOptionCircle'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { SelectableInsurance } from './Selector'
 
 const Container = styled.div<{ selected?: boolean; focused?: boolean }>`
   display: flex;
@@ -24,7 +25,7 @@ const Container = styled.div<{ selected?: boolean; focused?: boolean }>`
   min-height: 6.625rem;
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    height: 9.25rem;
+    min-height: 9.25rem;
   }
 
   &:hover {
@@ -53,6 +54,12 @@ const NameAndPriceWrapper = styled.div`
   margin-top: 1.75rem;
 `
 
+const Description = styled.div({
+  marginTop: '0.5rem',
+  color: colorsV3.gray700,
+  fontSize: '0.875rem',
+})
+
 const Name = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
@@ -74,17 +81,12 @@ const GrossPrice = styled(Price)`
   text-decoration: line-through;
 `
 
-interface Props {
-  name: string
-  price: string
-  grossPrice?: string
-  label?: string
-  selected?: boolean
+type Props = Omit<SelectableInsurance, 'id'> & {
   focused?: boolean
   onClick: () => void
 }
 
-export const Card: React.FC<Props> = ({
+export const Card = ({
   name,
   price,
   grossPrice,
@@ -92,7 +94,8 @@ export const Card: React.FC<Props> = ({
   selected,
   onClick,
   focused,
-}) => {
+  description,
+}: Props) => {
   return (
     <Container selected={selected} focused={focused} onClick={onClick}>
       <LabelWrapper>
@@ -106,6 +109,7 @@ export const Card: React.FC<Props> = ({
           <Price>{price}</Price>
         </PriceWrapper>
       </NameAndPriceWrapper>
+      {description && <Description>{description}</Description>}
     </Container>
   )
 }

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import styled from '@emotion/styled'
 import { QuoteBundleVariant } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
@@ -6,6 +7,7 @@ import { useFeature } from 'utils/hooks/useFeature'
 import { Feature } from 'shared/clientConfig'
 import { TextButton } from 'components/buttons'
 import { hasCar } from 'api/quoteBundleSelectors'
+import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import {
   ContainerWrapper,
   Container,
@@ -17,13 +19,23 @@ import {
 } from '../components'
 import { ComparisonModal } from '../ComparisonTable/ComparisonModal'
 import { getUniqueQuotesFromVariantList } from '../utils'
-import { Selector } from './Selector'
+import { SelectableInsurance, Selector } from './Selector'
 
 interface Props {
   variants: QuoteBundleVariant[]
   selectedQuoteBundle: QuoteBundleVariant
   onChange: (bundle: QuoteBundleVariant) => void
 }
+
+const CompareInsuranceButton = styled(TextButton)`
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0.5rem 0 0;
+
+  ${MEDIUM_SCREEN_MEDIA_QUERY} {
+    font-size: 1.125rem;
+  }
+`
 
 export const InsuranceSelector = ({
   variants,
@@ -45,31 +57,34 @@ export const InsuranceSelector = ({
     [variants],
   )
 
-  const insurances = variants.map(({ id, tag, bundle }) => {
-    const {
-      displayName,
-      bundleCost: {
-        monthlyNet: { amount, currency },
-        monthlyGross: { amount: grossAmount, currency: grossCurrency },
-      },
-    } = bundle
+  const insurances: SelectableInsurance[] = variants.map(
+    ({ id, tag, description, bundle }) => {
+      const {
+        displayName,
+        bundleCost: {
+          monthlyNet: { amount, currency },
+          monthlyGross: { amount: grossAmount, currency: grossCurrency },
+        },
+      } = bundle
 
-    return {
-      id,
-      label: tag ?? undefined,
-      name: displayName,
-      price: `${localizeNumber(
-        Math.round(Number(amount)),
-      )} ${currency}${localizedPerMonth}`,
-      grossPrice:
-        amount !== grossAmount
-          ? `${Math.round(
-              Number(grossAmount),
-            )} ${grossCurrency}${localizedPerMonth}`
-          : undefined,
-      selected: id === selectedQuoteBundle.id,
-    }
-  })
+      return {
+        id,
+        description: description ?? '',
+        label: tag ?? undefined,
+        name: displayName,
+        price: `${localizeNumber(
+          Math.round(Number(amount)),
+        )} ${currency}${localizedPerMonth}`,
+        grossPrice:
+          amount !== grossAmount
+            ? `${Math.round(
+                Number(grossAmount),
+              )} ${grossCurrency}${localizedPerMonth}`
+            : undefined,
+        selected: id === selectedQuoteBundle.id,
+      }
+    },
+  )
 
   const { title, body } = useGetTranslations(variants)
 
@@ -82,13 +97,9 @@ export const InsuranceSelector = ({
             <Body>{body}</Body>
 
             {isComparisonTableEnabled && variants.length > 0 && (
-              <TextButton
-                mt="1.5rem"
-                size="lg"
-                onClick={() => setIsModalOpen(true)}
-              >
+              <CompareInsuranceButton onClick={() => setIsModalOpen(true)}>
                 {textKeys.OPEN_COMPARISON_MODAL()}
-              </TextButton>
+              </CompareInsuranceButton>
             )}
           </HeadingWrapper>
           <Selector
@@ -109,9 +120,10 @@ export const InsuranceSelector = ({
     </ContainerWrapper>
   )
 }
-function useGetTranslations(
+
+const useGetTranslations = (
   variants: QuoteBundleVariant[],
-): { title: any; body: any } {
+): { title: any; body: any } => {
   const bundles = getUniqueQuotesFromVariantList(variants)
   const hasCarInBundles = hasCar(bundles)
   const textKeys = useTextKeys()

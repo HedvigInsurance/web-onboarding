@@ -13,14 +13,12 @@ import {
   AreaInput,
   ZipcodeInput,
   BooleanInput,
-  HomeOwnershipTypeInput,
   BirthDateInput,
+  ExtraBuildingsInput,
 } from './components/DetailInput'
-import { Content, ContentColumn } from './components/Details.styles'
+import { Content, ContentColumn, ContentRow } from './components/Details.styles'
 
-export const getNorwegianHomeContentsValidationSchema = (
-  textKeys: TextKeyMap,
-) => {
+export const getNorwegianHouseValidationSchema = (textKeys: TextKeyMap) => {
   return Yup.object().shape({
     firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
@@ -44,17 +42,28 @@ export const getNorwegianHomeContentsValidationSchema = (
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       isYouth: Yup.boolean(),
-      subType: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      extraBuildings: Yup.array().of(
+        Yup.object().shape({
+          type: Yup.string().required(),
+          area: Yup.number()
+            .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+            .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+          hasWaterConnected: Yup.boolean().required(),
+        }),
+      ),
     }).required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
   })
 }
 
-export const NorwegianHomeContentsDetails: React.FC<{
+export const NorwegianHouseDetails: React.FC<{
   formikProps: FormikProps<QuoteInput>
 }> = ({ formikProps }) => {
   const { birthDate: birthDateFormat } = useCurrentLocale()
   return (
     <Content>
+      <ContentRow>
+        <ExtraBuildingsInput market="NO" formikProps={formikProps} />
+      </ContentRow>
       <ContentColumn>
         <InputGroup>
           <TextInput
@@ -103,10 +112,6 @@ export const NorwegianHomeContentsDetails: React.FC<{
           <BooleanInput
             name="data.isYouth"
             label="DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL"
-            formikProps={formikProps}
-          />
-          <HomeOwnershipTypeInput
-            name="data.subType"
             formikProps={formikProps}
           />
         </InputGroup>

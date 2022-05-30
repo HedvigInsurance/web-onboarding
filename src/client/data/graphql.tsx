@@ -336,6 +336,7 @@ export type Agreement =
   | NorwegianTravelAgreement
   | NorwegianAccidentAgreement
   | DanishHomeContentAgreement
+  | DanishHouseAgreement
   | DanishAccidentAgreement
   | DanishTravelAgreement
 
@@ -2969,6 +2970,38 @@ export enum DanishHomeContentsType {
   Own = 'OWN',
 }
 
+export type DanishHouseAgreement = AgreementCore & {
+  __typename?: 'DanishHouseAgreement'
+  id: Scalars['ID']
+  activeFrom?: Maybe<Scalars['LocalDate']>
+  activeTo?: Maybe<Scalars['LocalDate']>
+  inceptionDate?: Maybe<Scalars['LocalDate']>
+  premium: MonetaryAmountV2
+  certificateUrl?: Maybe<Scalars['String']>
+  status: AgreementStatus
+  address: Address
+  numberCoInsured: Scalars['Int']
+  squareMeters: Scalars['Int']
+  yearOfConstruction: Scalars['Int']
+  extraBuildings: Array<ExtraBuilding>
+  isSubleted: Scalars['Boolean']
+  partner?: Maybe<Scalars['String']>
+  carrier?: Maybe<Scalars['String']>
+}
+
+export type DanishHouseDetails = {
+  __typename?: 'DanishHouseDetails'
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  coInsured: Scalars['Int']
+  livingSpace: Scalars['Int']
+  extraBuildings: Array<ExtraBuilding>
+  yearOfConstruction: Scalars['Int']
+  yearOfOwnership: Scalars['Int']
+  numberOfWetUnits: Scalars['Int']
+  isSubleted: Scalars['Boolean']
+}
+
 export type DanishTravelAgreement = AgreementCore & {
   __typename?: 'DanishTravelAgreement'
   id: Scalars['ID']
@@ -3581,6 +3614,7 @@ export type EmbarkLink = {
   __typename?: 'EmbarkLink'
   name: Scalars['String']
   label: Scalars['String']
+  hidden: Scalars['Boolean']
 }
 
 export type EmbarkMessage = {
@@ -7813,6 +7847,8 @@ export type Mutation = {
   createAddressChangeQuotes: AddressChangeQuoteResult
   /** Create all the quotes needed as a result of one of more Cross-Sells */
   createCrossSellQuotes: CrossSellQuotesResult
+  /** Clear Embark translation cache. */
+  embarkClearTranslationCache?: Maybe<Scalars['Boolean']>
   signOrApproveQuotes: SignOrApprove
 }
 
@@ -8227,7 +8263,6 @@ export type NorwegianHouseDetails = {
   coInsured: Scalars['Int']
   livingSpace: Scalars['Int']
   extraBuildings: Array<ExtraBuilding>
-  numberOfBathrooms: Scalars['Int']
   yearOfConstruction: Scalars['Int']
   yearOfOwnership: Scalars['Int']
   waterLeakageDetector?: Maybe<Scalars['Boolean']>
@@ -8502,6 +8537,7 @@ export type Query = {
   externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
   autoCompleteAddress: Array<AutoCompleteResponse>
   _?: Maybe<Scalars['Boolean']>
+  swedishCarInfo?: Maybe<SwedishCarInfo>
   /** Returns all claims the member has */
   claims: Array<Claim>
   /** Returns all the currently active contracts, combined into bundles. */
@@ -8693,6 +8729,10 @@ export type QueryAutoCompleteAddressArgs = {
   options?: Maybe<AddressAutocompleteOptions>
 }
 
+export type QuerySwedishCarInfoArgs = {
+  registrationNumber: Scalars['String']
+}
+
 export type QueryPartnerArgs = {
   id: Scalars['ID']
 }
@@ -8870,12 +8910,19 @@ export type QuoteBundleVariant = {
   __typename?: 'QuoteBundleVariant'
   /** A describing tag of this variant, for example "Most popular" */
   tag?: Maybe<Scalars['String']>
+  /** A long description for this variant */
+  description?: Maybe<Scalars['String']>
   id: Scalars['ID']
   bundle: QuoteBundle
 }
 
 /** A possible alternative bundling variant */
 export type QuoteBundleVariantTagArgs = {
+  locale: Locale
+}
+
+/** A possible alternative bundling variant */
+export type QuoteBundleVariantDescriptionArgs = {
   locale: Locale
 }
 
@@ -8924,6 +8971,7 @@ export type QuoteDetails =
   | NorwegianTravelDetails
   | NorwegianAccidentDetails
   | DanishHomeContentsDetails
+  | DanishHouseDetails
   | DanishAccidentDetails
   | DanishTravelDetails
 
@@ -10330,6 +10378,7 @@ export type SwedishCarAgreement = AgreementCore & {
   carrier?: Maybe<Scalars['String']>
   registrationNumber?: Maybe<Scalars['String']>
   mileage?: Maybe<Scalars['Int']>
+  info?: Maybe<SwedishCarInfo>
 }
 
 export type SwedishCarDetails = {
@@ -10344,6 +10393,8 @@ export type SwedishCarInfo = {
   model?: Maybe<Scalars['String']>
   makeAndModel?: Maybe<Scalars['String']>
   modelYear?: Maybe<Scalars['String']>
+  registrationNumber?: Maybe<Scalars['String']>
+  personalRegistrationNumber?: Maybe<Scalars['String']>
 }
 
 export enum SwedishCarLineOfBusiness {
@@ -10966,6 +11017,7 @@ export enum TypeOfContract {
   DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
   DkHomeContentStudentOwn = 'DK_HOME_CONTENT_STUDENT_OWN',
   DkHomeContentStudentRent = 'DK_HOME_CONTENT_STUDENT_RENT',
+  DkHouse = 'DK_HOUSE',
   DkAccident = 'DK_ACCIDENT',
   DkAccidentStudent = 'DK_ACCIDENT_STUDENT',
   DkTravel = 'DK_TRAVEL',
@@ -10977,6 +11029,7 @@ export enum TypeOfContractGradientOption {
   GradientTwo = 'GRADIENT_TWO',
   GradientThree = 'GRADIENT_THREE',
   GradientFour = 'GRADIENT_FOUR',
+  GradientFive = 'GRADIENT_FIVE',
 }
 
 export type UnderwritingLimit = {
@@ -11932,6 +11985,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishHouseDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
         })
@@ -11948,6 +12002,7 @@ export type CreateDanishHomeAccidentQuoteMutation = {
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishHouseDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
         })
@@ -11975,6 +12030,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishHouseDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
         })
@@ -11991,6 +12047,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishHouseDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
         })
@@ -12007,6 +12064,7 @@ export type CreateDanishHomeAccidentTravelQuoteMutation = {
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishHouseDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
         })
@@ -12089,6 +12147,7 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishHouseDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
         })
@@ -12109,6 +12168,7 @@ export type CreateSwedishHomeAccidentQuoteMutation = {
             | { __typename: 'NorwegianTravelDetails' }
             | { __typename: 'NorwegianAccidentDetails' }
             | { __typename: 'DanishHomeContentsDetails' }
+            | { __typename: 'DanishHouseDetails' }
             | { __typename: 'DanishAccidentDetails' }
             | { __typename: 'DanishTravelDetails' }
         })
@@ -12262,17 +12322,6 @@ export type MemberQuery = { __typename?: 'Query' } & {
   member: { __typename?: 'Member' } & Pick<
     Member,
     'id' | 'firstName' | 'lastName'
-  >
-}
-
-export type NorwegianBankIdAuthMutationVariables = Exact<{
-  personalNumber: Scalars['String']
-}>
-
-export type NorwegianBankIdAuthMutation = { __typename?: 'Mutation' } & {
-  norwegianBankIdAuth: { __typename?: 'NorwegianBankIdAuthResponse' } & Pick<
-    NorwegianBankIdAuthResponse,
-    'redirectUrl'
   >
 }
 
@@ -12502,6 +12551,7 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
           | 'coInsured'
           | 'isStudent'
         > & { danishHomeType: DanishHomeContentsDetails['type'] })
+      | { __typename?: 'DanishHouseDetails' }
       | ({ __typename?: 'DanishAccidentDetails' } & Pick<
           DanishAccidentDetails,
           'street' | 'zipCode' | 'coInsured' | 'isStudent'
@@ -12583,7 +12633,7 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
           possibleVariations: Array<
             { __typename?: 'QuoteBundleVariant' } & Pick<
               QuoteBundleVariant,
-              'id' | 'tag'
+              'id' | 'tag' | 'description'
             > & {
                 bundle: { __typename?: 'QuoteBundle' } & Pick<
                   QuoteBundle,
@@ -12678,48 +12728,6 @@ export type RedeemCodeMutation = { __typename?: 'Mutation' } & {
   }
 }
 
-export type RedeemCodeV2MutationVariables = Exact<{
-  code: Scalars['String']
-}>
-
-export type RedeemCodeV2Mutation = { __typename?: 'Mutation' } & {
-  redeemCodeV2:
-    | ({ __typename?: 'SuccessfulRedeemResult' } & {
-        campaigns: Array<
-          { __typename?: 'Campaign' } & {
-            incentive?: Maybe<
-              | ({ __typename?: 'MonthlyCostDeduction' } & {
-                  amount?: Maybe<
-                    { __typename?: 'MonetaryAmountV2' } & Pick<
-                      MonetaryAmountV2,
-                      'amount' | 'currency'
-                    >
-                  >
-                })
-              | { __typename?: 'FreeMonths' }
-              | { __typename?: 'NoDiscount' }
-              | { __typename?: 'VisibleNoDiscount' }
-              | { __typename?: 'PercentageDiscountMonths' }
-              | { __typename?: 'IndefinitePercentageDiscount' }
-            >
-            owner?: Maybe<
-              { __typename?: 'CampaignOwner' } & Pick<
-                CampaignOwner,
-                'id' | 'displayName'
-              >
-            >
-          }
-        >
-      })
-    | { __typename?: 'CannotRedeemOwnCampaign' }
-    | { __typename?: 'CampaignCannotBeCombinedWithExisting' }
-    | { __typename?: 'CannotRedeemEmptyCode' }
-    | { __typename?: 'CampaignHasExpired' }
-    | { __typename?: 'MemberIsNotEligibleForCampaign' }
-    | { __typename?: 'CampaignDoesNotExist' }
-    | { __typename?: 'CannotRedeemCampaignFromDifferentMarket' }
-}
-
 export type RedeemedCampaignsQueryVariables = Exact<{ [key: string]: never }>
 
 export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
@@ -12750,27 +12758,6 @@ export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
         >
       }
   >
-}
-
-export type ReferrerNameQueryVariables = Exact<{ [key: string]: never }>
-
-export type ReferrerNameQuery = { __typename?: 'Query' } & {
-  referralInformation: { __typename?: 'Referrals' } & {
-    referredBy?: Maybe<
-      | ({ __typename?: 'ActiveReferral' } & Pick<ActiveReferral, 'name'> & {
-            discount: { __typename?: 'MonetaryAmountV2' } & Pick<
-              MonetaryAmountV2,
-              'amount' | 'currency'
-            >
-          })
-      | ({ __typename?: 'InProgressReferral' } & Pick<
-          InProgressReferral,
-          'name'
-        >)
-      | { __typename?: 'AcceptedReferral' }
-      | { __typename?: 'TerminatedReferral' }
-    >
-  }
 }
 
 export type RemoveCampaignCodeMutationVariables = Exact<{
@@ -13073,6 +13060,7 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
           | 'coInsured'
           | 'isStudent'
         > & { danishHomeType: DanishHomeContentsDetails['type'] })
+      | { __typename?: 'DanishHouseDetails' }
       | ({ __typename?: 'DanishAccidentDetails' } & Pick<
           DanishAccidentDetails,
           'street' | 'zipCode' | 'coInsured' | 'isStudent'
@@ -14459,57 +14447,6 @@ export type MemberQueryResult = ApolloReactCommon.QueryResult<
   MemberQuery,
   MemberQueryVariables
 >
-export const NorwegianBankIdAuthDocument = gql`
-  mutation NorwegianBankIdAuth($personalNumber: String!) {
-    norwegianBankIdAuth(personalNumber: $personalNumber) {
-      redirectUrl
-    }
-  }
-`
-export type NorwegianBankIdAuthMutationFn = ApolloReactCommon.MutationFunction<
-  NorwegianBankIdAuthMutation,
-  NorwegianBankIdAuthMutationVariables
->
-
-/**
- * __useNorwegianBankIdAuthMutation__
- *
- * To run a mutation, you first call `useNorwegianBankIdAuthMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useNorwegianBankIdAuthMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [norwegianBankIdAuthMutation, { data, loading, error }] = useNorwegianBankIdAuthMutation({
- *   variables: {
- *      personalNumber: // value for 'personalNumber'
- *   },
- * });
- */
-export function useNorwegianBankIdAuthMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    NorwegianBankIdAuthMutation,
-    NorwegianBankIdAuthMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    NorwegianBankIdAuthMutation,
-    NorwegianBankIdAuthMutationVariables
-  >(NorwegianBankIdAuthDocument, options)
-}
-export type NorwegianBankIdAuthMutationHookResult = ReturnType<
-  typeof useNorwegianBankIdAuthMutation
->
-export type NorwegianBankIdAuthMutationResult = ApolloReactCommon.MutationResult<
-  NorwegianBankIdAuthMutation
->
-export type NorwegianBankIdAuthMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  NorwegianBankIdAuthMutation,
-  NorwegianBankIdAuthMutationVariables
->
 export const PaymentConnection_ConnectPaymentDocument = gql`
   mutation PaymentConnection_connectPayment($input: ConnectPaymentInput!) {
     paymentConnection_connectPayment(input: $input) {
@@ -14939,6 +14876,7 @@ export const QuoteCartDocument = gql`
         possibleVariations {
           id
           tag(locale: $locale)
+          description(locale: $locale)
           bundle {
             displayName(locale: $locale)
             bundleCost {
@@ -15210,72 +15148,6 @@ export type RedeemCodeMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RedeemCodeMutation,
   RedeemCodeMutationVariables
 >
-export const RedeemCodeV2Document = gql`
-  mutation RedeemCodeV2($code: String!) {
-    redeemCodeV2(code: $code) {
-      ... on SuccessfulRedeemResult {
-        campaigns {
-          incentive {
-            ... on MonthlyCostDeduction {
-              amount {
-                amount
-                currency
-              }
-            }
-          }
-          owner {
-            id
-            displayName
-          }
-        }
-      }
-    }
-  }
-`
-export type RedeemCodeV2MutationFn = ApolloReactCommon.MutationFunction<
-  RedeemCodeV2Mutation,
-  RedeemCodeV2MutationVariables
->
-
-/**
- * __useRedeemCodeV2Mutation__
- *
- * To run a mutation, you first call `useRedeemCodeV2Mutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRedeemCodeV2Mutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [redeemCodeV2Mutation, { data, loading, error }] = useRedeemCodeV2Mutation({
- *   variables: {
- *      code: // value for 'code'
- *   },
- * });
- */
-export function useRedeemCodeV2Mutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RedeemCodeV2Mutation,
-    RedeemCodeV2MutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RedeemCodeV2Mutation,
-    RedeemCodeV2MutationVariables
-  >(RedeemCodeV2Document, options)
-}
-export type RedeemCodeV2MutationHookResult = ReturnType<
-  typeof useRedeemCodeV2Mutation
->
-export type RedeemCodeV2MutationResult = ApolloReactCommon.MutationResult<
-  RedeemCodeV2Mutation
->
-export type RedeemCodeV2MutationOptions = ApolloReactCommon.BaseMutationOptions<
-  RedeemCodeV2Mutation,
-  RedeemCodeV2MutationVariables
->
 export const RedeemedCampaignsDocument = gql`
   query RedeemedCampaigns {
     redeemedCampaigns {
@@ -15357,74 +15229,6 @@ export type RedeemedCampaignsLazyQueryHookResult = ReturnType<
 export type RedeemedCampaignsQueryResult = ApolloReactCommon.QueryResult<
   RedeemedCampaignsQuery,
   RedeemedCampaignsQueryVariables
->
-export const ReferrerNameDocument = gql`
-  query ReferrerName {
-    referralInformation {
-      referredBy {
-        ... on ActiveReferral {
-          name
-          discount {
-            amount
-            currency
-          }
-        }
-        ... on InProgressReferral {
-          name
-        }
-      }
-    }
-  }
-`
-
-/**
- * __useReferrerNameQuery__
- *
- * To run a query within a React component, call `useReferrerNameQuery` and pass it any options that fit your needs.
- * When your component renders, `useReferrerNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useReferrerNameQuery({
- *   variables: {
- *   },
- * });
- */
-export function useReferrerNameQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ReferrerNameQuery,
-    ReferrerNameQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ReferrerNameQuery, ReferrerNameQueryVariables>(
-    ReferrerNameDocument,
-    options,
-  )
-}
-export function useReferrerNameLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ReferrerNameQuery,
-    ReferrerNameQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ReferrerNameQuery, ReferrerNameQueryVariables>(
-    ReferrerNameDocument,
-    options,
-  )
-}
-export type ReferrerNameQueryHookResult = ReturnType<
-  typeof useReferrerNameQuery
->
-export type ReferrerNameLazyQueryHookResult = ReturnType<
-  typeof useReferrerNameLazyQuery
->
-export type ReferrerNameQueryResult = ApolloReactCommon.QueryResult<
-  ReferrerNameQuery,
-  ReferrerNameQueryVariables
 >
 export const RemoveCampaignCodeDocument = gql`
   mutation RemoveCampaignCode($quoteCartId: ID!) {

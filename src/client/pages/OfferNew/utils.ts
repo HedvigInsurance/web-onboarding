@@ -378,6 +378,7 @@ export const typeOfResidenceTextKeys: Record<
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
   [TypeOfContract.SeHouse]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
   [TypeOfContract.NoHouse]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
+  [TypeOfContract.DkHouse]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
   [TypeOfContract.NoHomeContentRent]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
   [TypeOfContract.NoHomeContentOwn]:
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
@@ -446,6 +447,7 @@ export const getInsuranceTitle = (
     [TypeOfContract.SeApartmentStudentBrf]: textKeys.QUOTE_TITLE_BRF_STUDENT(),
     [TypeOfContract.SeHouse]: textKeys.QUOTE_TITLE_HOUSE(),
     [TypeOfContract.NoHouse]: textKeys.QUOTE_TITLE_HOUSE(),
+    [TypeOfContract.DkHouse]: textKeys.QUOTE_TITLE_HOUSE(),
     [TypeOfContract.NoHomeContentRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
     [TypeOfContract.NoHomeContentOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
     [TypeOfContract.NoHomeContentYouthRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS_YOUTH(),

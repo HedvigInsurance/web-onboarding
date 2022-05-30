@@ -37,7 +37,7 @@ type Details = {
 type DetailsGroup = Details[]
 
 const getHomeDetails = (mainQuote: BundledQuote) => {
-  const { street, zipCode, livingSpace } = mainQuote.data
+  const { street, zipCode, livingSpace, squareMeters } = mainQuote.data
   const { typeOfContract } = mainQuote
   if ('floor' in mainQuote.data && 'apartment' in mainQuote.data) {
     const { floor, apartment } = mainQuote.data
@@ -61,7 +61,7 @@ const getHomeDetails = (mainQuote: BundledQuote) => {
     {
       label: 'CHECKOUT_DETAILS_LIVING_SPACE',
       value: {
-        value: livingSpace,
+        value: livingSpace || squareMeters,
         suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
       },
     },
@@ -88,18 +88,12 @@ const getHouseDetails = (data: GenericQuoteData) => {
   ) {
     return []
   }
-  return [
-    {
-      label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
-      value: {
-        value: data.ancillaryArea,
-        suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
-      },
-    },
+
+  const houseDetails = [
     {
       label: 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS',
       value: {
-        value: data.numberOfBathrooms,
+        value: data.numberOfBathrooms || data.numberOfWetUnits,
         suffix:
           data.numberOfBathrooms && data.numberOfBathrooms > 1
             ? 'CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS_SUFFIX_MANY'
@@ -117,6 +111,30 @@ const getHouseDetails = (data: GenericQuoteData) => {
       },
     },
   ]
+  if (data.ancillaryArea) {
+    houseDetails.push({
+      label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
+      value: {
+        value: data.ancillaryArea,
+        suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
+      },
+    })
+  } else if (data.yearOfOwnership) {
+    houseDetails.push(
+      {
+        label: 'CHECKOUT_DETAILS_YEAR_OF_OWNERSHIP',
+        value: { value: data.yearOfOwnership },
+      },
+      {
+        label: 'CHECKOUT_DETAILS_WATER_LEAKAGE',
+        value: {
+          textKey: data.waterLeakageDetector ? 'YES' : 'NO',
+        },
+      },
+    )
+  }
+
+  return houseDetails
 }
 
 const getExtraBuildingsDetails = (quoteDetails: GenericQuoteData) => {
@@ -133,7 +151,7 @@ const getExtraBuildingsDetails = (quoteDetails: GenericQuoteData) => {
         label: 'CHECKOUT_DETAILS_EXTRA_BUILDINGS_SIZE',
         value: {
           value: extraBuilding.area,
-          suffix: 'CHECKOUT_DETAILS_SQM_VALUE',
+          suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
         },
       },
       {
@@ -189,9 +207,7 @@ export const useQuoteCartData = () => {
     selectedInsuranceTypes,
   )
 
-  if (error) return { error }
-
-  if (!selectedQuoteBundleVariant) return null
+  if (!selectedQuoteBundleVariant) return { error, loading, data: null }
 
   const prices = selectedQuoteBundleVariant?.bundle.quotes.map((item) => {
     return { displayName: item.displayName, price: item.price.amount }
@@ -219,15 +235,17 @@ export const useQuoteCartData = () => {
   ]
 
   return {
-    priceData,
-    quoteDetails: quoteDetailsGroups,
-    selectedQuoteBundleVariant,
-    quoteCartId,
-    quoteIds,
-    bundleVariants,
-    mainQuote,
     loading,
     error,
-    checkoutStatus: getCheckoutStatus(data),
+    data: {
+      priceData,
+      quoteDetails: quoteDetailsGroups,
+      selectedQuoteBundleVariant,
+      quoteCartId,
+      quoteIds,
+      bundleVariants,
+      mainQuote,
+      checkoutStatus: getCheckoutStatus(data),
+    },
   }
 }

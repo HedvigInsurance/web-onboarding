@@ -302,15 +302,6 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
         ...payloadObject,
       },
     })
-
-    // Push data to Segment
-    const castedWindow = window as any
-    if (castedWindow && castedWindow.analytics) {
-      castedWindow.analytics.track(eventName, {
-        originatedFromEmbarkStory: props.name,
-        ...payloadObject,
-      })
-    }
   }
 
   useEffect(() => {

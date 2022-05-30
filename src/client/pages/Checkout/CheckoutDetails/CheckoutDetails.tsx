@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { useHistory } from 'react-router-dom'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
@@ -41,9 +42,11 @@ export const CheckoutDetails = () => {
   const { path: localePath } = useCurrentLocale()
 
   const trackOfferEvent = useTrackOfferEvent()
-  const data = useQuoteCartData()
+  const { data, error } = useQuoteCartData()
 
   const { quoteCartId } = useQuoteCartIdFromUrl()
+
+  const history = useHistory()
 
   useScrollToTop()
 
@@ -51,16 +54,19 @@ export const CheckoutDetails = () => {
     trackOfferEvent,
   ])
 
-  if (data?.error) {
-    console.error('Quote cart data error: no data')
-    return <CheckoutErrorModal isVisible onRetry={onRetry} />
-  }
-  if (!data || data.loading) {
-    return <LoadingPage loading />
+  if (data === null) {
+    return (
+      <>
+        <LoadingPage loading />
+        <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
+      </>
+    )
   }
 
   const handleClickBackButton = () => {
+    const offerPageLink = `/${localePath}/new-member/offer/${quoteCartId}`
     trackOfferEvent({ eventName: EventName.CheckoutOpenGoBack })
+    history.push(offerPageLink)
   }
 
   const handleOnClick = () => {
@@ -88,8 +94,8 @@ export const CheckoutDetails = () => {
         <CheckoutIntercomVariation />
       </PageSection>
       <DetailsModal
-        quoteCartId={quoteCartId}
         allQuotes={allQuotes}
+        quoteCartId={quoteCartId}
         isVisible={detailsModalIsOpen}
         onClose={() => setDetailsModalIsOpen(false)}
       />
@@ -100,6 +106,8 @@ export const CheckoutDetails = () => {
       >
         <PaymentInfo {...priceData} />
       </Footer>
+
+      <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
     </CheckoutDetailsWrapper>
   )
 }

@@ -18,7 +18,10 @@ import {
   BundledQuote,
   CheckoutStatus,
 } from 'data/graphql'
-import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import {
+  MEDIUM_SMALL_SCREEN_MEDIA_QUERY,
+  MEDIUM_LARGE_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 
 import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
@@ -56,9 +59,15 @@ const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     padding: 1.5rem 1rem;
   }
+  ${MEDIUM_LARGE_SCREEN_MEDIA_QUERY} {
+    padding-top: 5rem;
+  }
 `
 
 const AdyenContainer = styled.div`
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    padding-bottom: 5rem;
+  }
   #dropin-container {
     .adyen-checkout__payment-method {
       background: transparent;
@@ -113,7 +122,7 @@ const AdyenContainer = styled.div`
       transition: transform 300ms;
 
       &:hover {
-        background-color: ${colorsV3.purple500};
+        background-color: ${colorsV3.gray800};
         transform: translateY(-2px);
         box-shadow: 0 3px 5px rgb(55 55 55 / 15%);
       }
@@ -172,7 +181,6 @@ type Props = {
   quoteCartId: string
   priceData: PriceData
   mainQuote: BundledQuote
-  selectedQuoteBundleVariant: QuoteBundleVariant
   quoteIds: string[]
   checkoutStatus?: CheckoutStatus
 }
@@ -183,7 +191,6 @@ export const CheckoutPayment = ({
   priceData,
   mainQuote,
   quoteIds,
-  selectedQuoteBundleVariant,
   checkoutStatus,
 }: Props) => {
   const textKeys = useTextKeys()
@@ -193,7 +200,6 @@ export const CheckoutPayment = ({
   const storage = useStorage()
   const trackOfferEvent = useTrackOfferEvent()
   const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
-
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
     createQuoteBundle,
@@ -221,7 +227,7 @@ export const CheckoutPayment = ({
     if (is3DsError) {
       history.replace('?')
       trackOfferEvent({
-        eventName: EventName.SignError,
+        eventName: EventName.PaymentConnectedFailed,
         options: { errorType: ErrorEventType.threeDS },
       })
       setIs3dsError(true)
@@ -287,9 +293,6 @@ export const CheckoutPayment = ({
       email,
       ssn,
       phoneNumber,
-      data: {
-        ...mainQuote.data,
-      },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
     validateOnChange: false,
@@ -363,11 +366,7 @@ export const CheckoutPayment = ({
         locale: locale.isoLocale,
         quoteCartId,
         quotes: getUniqueQuotesFromVariantList(bundleVariants).map(
-          ({
-            startDate,
-            currentInsurer,
-            data: { type, typeOfContract, isStudent },
-          }) => {
+          ({ startDate, currentInsurer, data }) => {
             return {
               firstName,
               lastName,
@@ -378,12 +377,7 @@ export const CheckoutPayment = ({
               currentInsurer: currentInsurer?.id,
               phoneNumber: phoneNumber?.replace(/\s/g, ''),
               dataCollectionId,
-              data: {
-                ...form.data,
-                type,
-                typeOfContract,
-                isStudent,
-              },
+              data,
             }
           },
         ),
@@ -422,12 +416,7 @@ export const CheckoutPayment = ({
   }, [checkoutStatus, completeCheckout])
 
   if (checkoutStatus === CheckoutStatus.Completed) {
-    return (
-      <CheckoutSuccessRedirect
-        bundle={selectedQuoteBundleVariant.bundle}
-        connectPayment={false}
-      />
-    )
+    return <CheckoutSuccessRedirect connectPayment={false} />
   }
 
   if (isError) {
@@ -435,7 +424,9 @@ export const CheckoutPayment = ({
   }
 
   const handleClickBackButton = () => {
+    const detailsPageLink = `/${locale.path}/new-member/checkout/details/${quoteCartId}`
     trackOfferEvent({ eventName: EventName.ContactInformationPageGoBack })
+    history.push(detailsPageLink)
   }
 
   return (

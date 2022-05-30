@@ -132,7 +132,7 @@ const StartDateWrapper = styled.div`
 `
 
 const StartDateLabel = styled.p`
-  margin: 0 0 0.5rem 0.5rem;
+  margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
   line-height: 1;
 `
@@ -279,9 +279,6 @@ export const Checkout = ({
       email,
       ssn,
       phoneNumber,
-      data: {
-        ...mainQuote.data,
-      },
     } as QuoteInput,
     validationSchema: getCheckoutDetailsValidationSchema(
       locale,
@@ -461,11 +458,7 @@ export const Checkout = ({
         locale: locale.isoLocale,
         quoteCartId,
         quotes: getUniqueQuotesFromVariantList(quoteBundleVariants).map(
-          ({
-            startDate,
-            currentInsurer,
-            data: { type, typeOfContract, isStudent },
-          }) => {
+          ({ startDate, currentInsurer, data }) => {
             return {
               firstName,
               lastName,
@@ -476,12 +469,7 @@ export const Checkout = ({
               currentInsurer: currentInsurer?.id,
               phoneNumber: phoneNumber?.replace(/\s/g, ''),
               dataCollectionId,
-              data: {
-                ...form.data,
-                type,
-                typeOfContract,
-                isStudent,
-              },
+              data,
             }
           },
         ),
