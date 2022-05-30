@@ -73,7 +73,7 @@ export const quoteCartSessionMiddleware: Router.IMiddleware<
 
   try {
     ctx.state.getLogger('quoteCart').info('Creating quote cart')
-    const result = await httpClient.post(GIRAFFE_URL, {
+    const { data } = await httpClient.post(GIRAFFE_URL, {
       operationName: 'CreateQuoteCart',
       query: `
           mutation CreateQuoteCart($market: Market!, $locale: String!) {
@@ -85,11 +85,9 @@ export const quoteCartSessionMiddleware: Router.IMiddleware<
       variables: { market: apiMarket, locale: isoLocale },
     })
 
-    const newQuoteCartId = result.data.data?.onboardingQuoteCart_create.id
+    const newQuoteCartId = data.data?.onboardingQuoteCart_create.id
     if (!newQuoteCartId) {
-      throw new Error(
-        `Failed to create quote cart: ${JSON.stringify(result.data)}`,
-      )
+      throw new Error(`Failed to create quote cart: ${JSON.stringify(data)}`)
     }
 
     ctx.state
