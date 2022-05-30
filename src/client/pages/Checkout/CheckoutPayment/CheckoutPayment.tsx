@@ -181,7 +181,6 @@ type Props = {
   quoteCartId: string
   priceData: PriceData
   mainQuote: BundledQuote
-  selectedQuoteBundleVariant: QuoteBundleVariant
   quoteIds: string[]
   checkoutStatus?: CheckoutStatus
 }
@@ -192,7 +191,6 @@ export const CheckoutPayment = ({
   priceData,
   mainQuote,
   quoteIds,
-  selectedQuoteBundleVariant,
   checkoutStatus,
 }: Props) => {
   const textKeys = useTextKeys()
@@ -418,12 +416,7 @@ export const CheckoutPayment = ({
   }, [checkoutStatus, completeCheckout])
 
   if (checkoutStatus === CheckoutStatus.Completed) {
-    return (
-      <CheckoutSuccessRedirect
-        bundle={selectedQuoteBundleVariant.bundle}
-        connectPayment={false}
-      />
-    )
+    return <CheckoutSuccessRedirect connectPayment={false} />
   }
 
   if (isError) {

@@ -13,7 +13,6 @@ import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { TypeOfContract, BundledQuote } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { localizeNumber } from 'l10n/useLocalizeNumber'
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`
@@ -59,19 +58,17 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           </Row>
         ))}
       </Group>
-      {getQuoteDetails(mainQuote, textKeys, currentLocale.htmlLang).map(
-        (group, index) => (
-          <Group key={index}>
-            {group.map(({ key, value, label }) => (
-              <Row key={key}>
-                <Label>{label}</Label>
-                <HorizontalSpacer />
-                <Value>{value}</Value>
-              </Row>
-            ))}
-          </Group>
-        ),
-      )}
+      {getQuoteDetails(mainQuote, textKeys).map((group, index) => (
+        <Group key={index}>
+          {group.map(({ key, value, label }) => (
+            <Row key={key}>
+              <Label>{label}</Label>
+              <HorizontalSpacer />
+              <Value>{value}</Value>
+            </Row>
+          ))}
+        </Group>
+      ))}
       {studentOrYouthLabel && (
         <Group>
           <Row>
@@ -235,38 +232,35 @@ const getAddressDataMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
   return arr
 }
 
-const getCarDataMaybe = (
-  textKeys: TextKeyMap,
-  data: GenericQuoteData,
-  lang: string,
-) => {
-  return data.registrationNumber && data.mileage
-    ? [
-        {
-          key: 'registrationNumber',
-          label: textKeys.CHECKOUT_DETAILS_REGISTRATION_NUMBER(),
-          value: formatCarRegistrationNumberSE(data.registrationNumber),
-        },
-        {
-          key: 'mileage',
-          label: textKeys.CHECKOUT_DETAILS_MILEAGE(),
-          value: textKeys.CHECKOUT_DETAILS_MILEAGE_VALUE({
-            VALUE: localizeNumber(data.mileage, lang),
-          }),
-        },
-      ]
-    : null
+const getCarDataMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
+  if (!(data.registrationNumber && data.mileage)) return null
+
+  const mileageTextKey = `DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_${
+    data.mileage === 2501 ? '25000_PLUS' : data.mileage * 10
+  }`
+
+  return [
+    {
+      key: 'registrationNumber',
+      label: textKeys.CHECKOUT_DETAILS_REGISTRATION_NUMBER(),
+      value: formatCarRegistrationNumberSE(data.registrationNumber),
+    },
+    {
+      key: 'mileage',
+      label: textKeys.CHECKOUT_DETAILS_MILEAGE(),
+      value: textKeys[mileageTextKey](),
+    },
+  ]
 }
 
 const getQuoteDetails = (
   mainQuote: BundledQuote,
   textKeys: TextKeyMap,
-  lang: string,
 ): ReadonlyArray<DetailsGroup> => {
   const { data, typeOfContract } = mainQuote
 
   const coInsured = getCoInsuredMaybe(textKeys, data)
-  const carData = getCarDataMaybe(textKeys, data, lang)
+  const carData = getCarDataMaybe(textKeys, data)
 
   const detailsGroups: DetailsGroup[] = [
     [

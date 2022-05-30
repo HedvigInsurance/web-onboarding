@@ -55,9 +55,12 @@ export const DetailInput: React.FC<DetailInputProps &
         if (field.type === 'number') {
           formikProps.setFieldValue(formikName, value && parseInt(value, 10))
         } else {
+          const formVal = /^(true|false)/.test(value)
+            ? JSON.parse(value)
+            : value
           formikProps.setFieldValue(
             formikName,
-            /^(true|false)/.test(value) ? JSON.parse(value) : value,
+            field.upperCase ? formVal.toUpperCase() : formVal,
           )
         }
       }}
@@ -90,18 +93,21 @@ type TextInputProps = {
   name: string
   label: string
   formikProps: FormikProps<QuoteInput>
+  upperCase?: boolean
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
   name,
   label,
   formikProps,
+  upperCase,
 }) => (
   <DetailInput
     name={name}
     field={{
       label: label,
       placeholder: '',
+      upperCase,
     }}
     formikProps={formikProps}
   />

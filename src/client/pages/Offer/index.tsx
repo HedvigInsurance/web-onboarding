@@ -1,6 +1,5 @@
 import { History } from 'history'
-import { SemanticEvents } from 'quepasa'
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory, useRouteMatch, RouteComponentProps } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import {
@@ -10,7 +9,6 @@ import {
   CheckoutMethod,
 } from 'data/graphql'
 import { EventName } from 'utils/tracking/gtm/types'
-import { getUtmParamsFromCookie } from 'utils/tracking/gtm/helpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
@@ -25,7 +23,6 @@ import {
   getMonthlyCostDeductionIncentive,
   isCarInsuranceType,
 } from 'api/quoteCartQuerySelectors'
-import { useTrackSegmentEvent } from 'utils/tracking/hooks/useTrackSegmentEvent'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import {
   getOfferData,
@@ -75,10 +72,6 @@ const createToggleCheckout = (
 }
 
 type OfferPageProps = RouteComponentProps<{ id: string }>
-
-function getNetAmount(bundleVariant: QuoteBundleVariant) {
-  return bundleVariant.bundle.bundleCost.monthlyNet
-}
 
 export const OfferPage = ({
   match: {
@@ -134,7 +127,6 @@ export const OfferPage = ({
   const campaign = getCampaign(quoteCartQueryData)
 
   const trackOfferEvent = useTrackOfferEvent()
-  const trackSegmentEvent = useTrackSegmentEvent()
   const promotions = useGetPromotions(
     getUniqueQuotesFromVariantList(bundleVariants),
   )
@@ -142,20 +134,6 @@ export const OfferPage = ({
   useEffect(() => trackOfferEvent({ eventName: EventName.OfferCreated }), [
     trackOfferEvent,
   ])
-
-  const trackCheckoutStarted = useCallback(() => {
-    if (selectedBundleVariant) {
-      trackSegmentEvent({
-        name: SemanticEvents.Ecommerce.CheckoutStarted,
-        properties: {
-          value: Number(getNetAmount(selectedBundleVariant).amount),
-          currency: getNetAmount(selectedBundleVariant).currency,
-          label: 'Offer',
-          ...getUtmParamsFromCookie(),
-        },
-      })
-    }
-  }, [selectedBundleVariant, trackSegmentEvent])
 
   if (isLoadingQuoteCart) return <LoadingPage loading />
 
@@ -173,7 +151,7 @@ export const OfferPage = ({
   }
 
   if (checkoutStatus === CheckoutStatus.Completed) {
-    return <CheckoutSuccessRedirect bundle={selectedBundleVariant.bundle} />
+    return <CheckoutSuccessRedirect />
   }
 
   const onInsuranceSelectorChange = (
@@ -228,10 +206,7 @@ export const OfferPage = ({
           allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
           offerData={offerData}
           campaign={campaign}
-          onCheckoutOpen={() => {
-            handleCheckoutToggle(true)
-            trackCheckoutStarted()
-          }}
+          onCheckoutOpen={() => handleCheckoutToggle(true)}
         />
         {isInsuranceSelectorVisible && (
           <InsuranceSelector

@@ -1,6 +1,5 @@
 import { History } from 'history'
-import { SemanticEvents } from 'quepasa'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Redirect, useHistory, useRouteMatch } from 'react-router'
 import { LoadingPage } from 'components/LoadingPage'
 import { TopBar } from 'components/TopBar'
@@ -14,13 +13,11 @@ import {
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { EventName } from 'utils/tracking/gtm/types'
 import { trackOfferGTM } from 'utils/tracking/gtm/trackOfferGTM'
-import { getUtmParamsFromCookie } from 'utils/tracking/gtm/helpers'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { useTrackSegmentEvent } from 'utils/tracking/hooks/useTrackSegmentEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import {
@@ -149,22 +146,6 @@ export const OfferNew = () => {
     ? getOfferData(selectedBundleVariant.bundle)
     : null
 
-  const trackSegmentEvent = useTrackSegmentEvent()
-
-  const trackCheckoutStarted = useCallback(() => {
-    if (offerData) {
-      trackSegmentEvent({
-        name: SemanticEvents.Ecommerce.CheckoutStarted,
-        properties: {
-          value: Number(offerData.cost.monthlyNet.amount),
-          currency: offerData.cost.monthlyNet.currency,
-          label: 'Offer',
-          ...getUtmParamsFromCookie(),
-        },
-      })
-    }
-  }, [offerData, trackSegmentEvent])
-
   if ((loadingQuoteBundle && !data) || quoteIdsIsLoading) {
     return <LoadingPage />
   }
@@ -226,10 +207,7 @@ export const OfferNew = () => {
               allQuotes={getUniqueQuotesFromVariantList(bundleVariants)}
               offerData={offerData}
               refetch={refetch as () => Promise<any>}
-              onCheckoutOpen={() => {
-                handleCheckoutToggle(true)
-                trackCheckoutStarted()
-              }}
+              onCheckoutOpen={() => handleCheckoutToggle(true)}
             />
 
             {isInsuranceSelectorVisible && (

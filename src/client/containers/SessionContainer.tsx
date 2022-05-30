@@ -1,7 +1,6 @@
 import { useApolloClient } from '@apollo/react-hooks'
 import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
-import { SegmentAnalyticsJs } from 'quepasa'
 import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { afterTick } from 'pages/Embark/utils'
@@ -11,7 +10,6 @@ import {
   CreateAccessTokenDocument,
 } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { captureSentryError } from 'utils/sentry-client'
 import { Storage, StorageContainer, StorageState } from 'utils/StorageContainer'
 import { Feature } from 'shared/clientConfig'
 import {
@@ -74,14 +72,6 @@ export const setupSession = async (
     variables: { pickedLocale },
   })
 
-  try {
-    const castedWindow = window as any
-    const segment = castedWindow.analytics as SegmentAnalyticsJs
-    segment.identify(sessionResult.data.createSessionV2.memberId)
-  } catch (e) {
-    captureSentryError(e)
-  }
-
   return sessionResult.data
 }
 
@@ -121,14 +111,6 @@ export const setupQuoteCartSession = async ({
     query: MemberDocument,
   })
   const memberId = memberResult.data.member.id
-
-  try {
-    const castedWindow = window as any
-    const segment = castedWindow.analytics as SegmentAnalyticsJs
-    segment.identify(memberId)
-  } catch (e) {
-    captureSentryError(e)
-  }
 
   return memberId
 }

@@ -104,7 +104,7 @@ For more info about _Cypress_, please refer to the [official documentation](http
 
 ## Analytics
 
-We use Segment, Mixpanel and Google Tag Manager as our analytics tools. You can read about the setup in [Notion](https://www.notion.so/hedviginsurance/Mixpanel-Setup-iOS-Web-Embark-d1abeb9ba7634adea6155f847d32cd8d)
+We use Google Tag Manager as our analytics tool. You can read about the setup in [Notion](https://www.notion.so/hedviginsurance/Mixpanel-Setup-iOS-Web-Embark-d1abeb9ba7634adea6155f847d32cd8d)
 
 ## Text keys
 
