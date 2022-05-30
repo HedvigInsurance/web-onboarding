@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import AnimateHeight from 'react-animate-height'
 import { colorsV3 } from '@hedviginsurance/brand'
 
-const AccordionRow = styled.button<Pick<AccordionProps, 'disabled'>>(
+const AccordionRow = styled.button<Pick<AccordionItemProps, 'disabled'>>(
   ({ disabled }) => ({
     all: 'unset',
     cursor: disabled ? 'initial' : 'pointer',
