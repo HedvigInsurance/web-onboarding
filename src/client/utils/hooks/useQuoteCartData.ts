@@ -207,9 +207,7 @@ export const useQuoteCartData = () => {
     selectedInsuranceTypes,
   )
 
-  if (error) return { error }
-
-  if (!selectedQuoteBundleVariant) return null
+  if (!selectedQuoteBundleVariant) return { error, loading, data: null }
 
   const prices = selectedQuoteBundleVariant?.bundle.quotes.map((item) => {
     return { displayName: item.displayName, price: item.price.amount }
@@ -237,15 +235,17 @@ export const useQuoteCartData = () => {
   ]
 
   return {
-    priceData,
-    quoteDetails: quoteDetailsGroups,
-    selectedQuoteBundleVariant,
-    quoteCartId,
-    quoteIds,
-    bundleVariants,
-    mainQuote,
     loading,
     error,
-    checkoutStatus: getCheckoutStatus(data),
+    data: {
+      priceData,
+      quoteDetails: quoteDetailsGroups,
+      selectedQuoteBundleVariant,
+      quoteCartId,
+      quoteIds,
+      bundleVariants,
+      mainQuote,
+      checkoutStatus: getCheckoutStatus(data),
+    },
   }
 }
