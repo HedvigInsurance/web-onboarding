@@ -198,6 +198,7 @@ export interface CoreInputFieldProps {
   options?: CoreInputFieldOptions[]
   mask?: Mask
   helperText?: string
+  upperCase?: boolean
   onChange?: FieldInputProps<string>['onChange']
   onBlur?: FieldInputProps<string>['onBlur']
   onFocus?: ((e: FocusEvent<HTMLInputElement>) => void) | undefined
