@@ -1,6 +1,7 @@
 import { History } from 'history'
 import React, { useEffect } from 'react'
 import { useHistory, useRouteMatch, RouteComponentProps } from 'react-router'
+import { datadogRum } from '@datadog/browser-rum'
 import { LoadingPage } from 'components/LoadingPage'
 import {
   useQuoteCartQuery,
@@ -24,6 +25,7 @@ import {
   isCarInsuranceType,
 } from 'api/quoteCartQuerySelectors'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
+import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
@@ -86,6 +88,7 @@ export const OfferPage = ({
     selectedInsuranceTypes,
     setSelectedInsuranceTypes,
   ] = useSelectedInsuranceTypes()
+  const sendDatadogAction = useSendDatadogAction()
 
   const history = useHistory()
 
@@ -189,6 +192,10 @@ export const OfferPage = ({
   const toggleCheckout = createToggleCheckout(history, quoteCartId, pathLocale)
   const handleCheckoutToggle = (open: boolean) => {
     toggleCheckout(open)
+
+    if (open) {
+      sendDatadogAction(EventName.CheckoutOpen)
+    }
   }
 
   const isInsuranceSelectorVisible =

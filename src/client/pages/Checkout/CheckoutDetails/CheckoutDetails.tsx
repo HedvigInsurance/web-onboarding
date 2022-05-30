@@ -15,6 +15,7 @@ import { EventName } from 'utils/tracking/gtm/types'
 
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { MEDIUM_LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -41,6 +42,7 @@ export const CheckoutDetails = () => {
 
   const { path: localePath } = useCurrentLocale()
 
+  const sendDatadogAction = useSendDatadogAction()
   const trackOfferEvent = useTrackOfferEvent()
   const { data, error } = useQuoteCartData()
 
@@ -74,6 +76,7 @@ export const CheckoutDetails = () => {
       eventName: EventName.ButtonClick,
       options: { buttonId: 'continue_to_payment' },
     })
+    sendDatadogAction('checkout_payment')
   }
 
   const priceData = data.priceData
