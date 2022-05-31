@@ -22,6 +22,7 @@ import {
 } from 'data/graphql'
 import { useStorage, StorageState } from 'utils/StorageContainer'
 import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
+import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 
 interface Params {
   onSuccess?: () => void
@@ -63,6 +64,7 @@ export const useAdyenCheckout = ({
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const storage = useStorage()
   const [addPaymentTokenMutation] = useAddPaymentTokenMutation()
+  const sendDatadogAction = useSendDatadogAction()
 
   const [
     submitAdditionalPaymentDetails,
@@ -115,6 +117,7 @@ export const useAdyenCheckout = ({
       submitAdditionalPaymentDetails,
       quoteCartId,
       history,
+      onSubmit: () => sendDatadogAction('payment_submit'),
       onSuccess,
       addPaymentTokenMutation,
       storage,
@@ -143,6 +146,7 @@ export const useAdyenCheckout = ({
     trackOfferEvent,
     successMessage,
     addPaymentTokenMutation,
+    sendDatadogAction,
   ])
 
   useEffect(() => {
@@ -161,6 +165,7 @@ interface AdyenCheckoutProps {
   addPaymentTokenMutation: AddPaymentTokenMutationFn
   submitAdditionalPaymentDetails: any
   history: ReturnType<typeof useHistory>
+  onSubmit?: () => void
   onSuccess?: (paymentTokenId?: string) => void
   onError: (e: Error | string) => void
   quoteCartId: string
@@ -177,6 +182,7 @@ const createAdyenCheckout = ({
   addPaymentTokenMutation,
   quoteCartId,
   storage,
+  onSubmit,
   onSuccess = () => {
     /* noop */
   },
@@ -263,6 +269,7 @@ const createAdyenCheckout = ({
     enableStoreDetails: true,
     returnUrl,
     onSubmit: async (state: any, dropinComponent: any) => {
+      onSubmit?.()
       dropinComponent.setStatus('loading')
       const paymentRequest = {
         browserInfo: state.data.browserInfo || null || undefined,

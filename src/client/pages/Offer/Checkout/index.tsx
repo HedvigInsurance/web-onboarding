@@ -41,6 +41,7 @@ import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSigned
 import { useDebounce } from 'utils/hooks/useDebounce'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
+import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -235,6 +236,7 @@ export const Checkout = ({
   const storage = useStorage()
   const trackOfferEvent = useTrackOfferEvent()
   const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
+  const sendDatadogAction = useSendDatadogAction()
 
   const [isUpsellCardVisible, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_UPSELL_CARD,
@@ -359,6 +361,7 @@ export const Checkout = ({
 
     setIsCompletingCheckout(true)
     setSignUiState('STARTED')
+    sendDatadogAction('checkout_complete')
     try {
       const memberId = await setupQuoteCartSession({
         quoteCartId,
@@ -369,6 +372,7 @@ export const Checkout = ({
         storage,
       })
       trackSignedCustomerEvent({ memberId })
+      sendDatadogAction(EventName.SignedCustomer)
     } catch (error) {
       trackOfferEvent({
         eventName: EventName.SignError,
@@ -383,6 +387,7 @@ export const Checkout = ({
     storage,
     trackSignedCustomerEvent,
     trackOfferEvent,
+    sendDatadogAction,
   ])
 
   useEffect(() => {
@@ -421,6 +426,7 @@ export const Checkout = ({
         }
       }
 
+      sendDatadogAction('sign_started')
       const { data } = await startCheckout({
         variables: { quoteIds, quoteCartId },
       })

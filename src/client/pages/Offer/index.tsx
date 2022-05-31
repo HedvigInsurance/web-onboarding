@@ -24,6 +24,7 @@ import {
   isCarInsuranceType,
 } from 'api/quoteCartQuerySelectors'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
+import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import {
   getOfferData,
   getUniqueQuotesFromVariantList,
@@ -86,6 +87,7 @@ export const OfferPage = ({
     selectedInsuranceTypes,
     setSelectedInsuranceTypes,
   ] = useSelectedInsuranceTypes()
+  const sendDatadogAction = useSendDatadogAction()
 
   const history = useHistory()
 
@@ -189,6 +191,10 @@ export const OfferPage = ({
   const toggleCheckout = createToggleCheckout(history, quoteCartId, pathLocale)
   const handleCheckoutToggle = (open: boolean) => {
     toggleCheckout(open)
+
+    if (open) {
+      sendDatadogAction(EventName.CheckoutOpen)
+    }
   }
 
   const isInsuranceSelectorVisible =
