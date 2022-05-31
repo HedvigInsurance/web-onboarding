@@ -126,6 +126,8 @@ export const OfferPage = ({
   const bundleVariants = getPossibleVariations(quoteCartQueryData)
   const campaign = getCampaign(quoteCartQueryData)
 
+  const isCar = isCarInsuranceType(selectedBundleVariant)
+
   const trackOfferEvent = useTrackOfferEvent()
   const promotions = useGetPromotions(
     getUniqueQuotesFromVariantList(bundleVariants),
@@ -144,7 +146,7 @@ export const OfferPage = ({
     !isValidCheckoutMethod(checkoutMethod)
   ) {
     return (
-      <PageWrapper quoteCartId={quoteCartId}>
+      <PageWrapper quoteCartId={quoteCartId} isCar={isCar}>
         <SetupFailedModal isVisible={true} onRetry={refetchQuoteCart} />
       </PageWrapper>
     )
@@ -199,6 +201,7 @@ export const OfferPage = ({
       quoteCartId={quoteCartId}
       isReferralCodeUsed={isReferralCodeUsed}
       bundle={selectedBundleVariant.bundle}
+      isCar={isCar}
     >
       <>
         <Introduction
