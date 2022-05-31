@@ -2,7 +2,6 @@ import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
-import AnimateHeight from 'react-animate-height'
 import ReactMarkdown from 'react-markdown/with-html'
 import {
   QuoteBundleVariant,
@@ -10,11 +9,14 @@ import {
   useGetContractFaqsQuery,
 } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
-import {
-  LARGE_SCREEN_MEDIA_QUERY,
-  MEDIUM_SCREEN_MEDIA_QUERY,
-} from 'utils/mediaQueries'
+import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from 'components/Accordion/Accordion'
 import { Container, Heading, Column, ColumnSpacing } from './components'
 import { Tabs } from './Tabs/Tabs'
 
@@ -30,10 +32,7 @@ const SectionWrapper = styled.div`
   }
 `
 
-const AccordionsWrapper = styled.div`
-  list-style: none;
-  padding: 0;
-  margin: 0;
+const TabsWrapper = styled.div`
   margin-top: 1.5rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
@@ -41,10 +40,7 @@ const AccordionsWrapper = styled.div`
   }
 `
 
-const AccordionWrapper = styled('li')`
-  padding: 0;
-  margin: 0;
-
+const StyledAccordionItem = styled(AccordionItem)`
   &:not(:last-child) {
     margin-bottom: 1.5rem;
 
@@ -54,15 +50,13 @@ const AccordionWrapper = styled('li')`
   }
 `
 
-const AccordionHeadline = styled('h3')`
+const StyledAccordionTrigger = styled(AccordionTrigger)`
   font-size: 1.25rem;
   line-height: 1.4;
-  margin: 0;
 `
 
 const AccordionBody = styled(ReactMarkdown)`
-  margin-top: 0.5rem;
-  margin-bottom: 2rem;
+  padding-top: 0.5rem;
   line-height: 1.6;
 
   p,
@@ -73,31 +67,13 @@ const AccordionBody = styled(ReactMarkdown)`
   h5,
   h6 {
     &:first-of-type {
-      margin-top: 0;
+      padding-top: 0;
     }
   }
 `
 
-const ExpandToggler = styled.button`
-  all: unset;
-  cursor: pointer;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  ${MEDIUM_SCREEN_MEDIA_QUERY} {
-    width: auto;
-    justify-content: flex-start;
-  }
-
-  &:focus {
-    outline: none;
-  }
-`
-
 interface Openable {
-  isOpen: boolean
+  isOpen?: boolean
 }
 
 const ExpanderIcon = styled.svg<Openable>`
@@ -106,36 +82,14 @@ const ExpanderIcon = styled.svg<Openable>`
   `};
   margin-left: 1rem;
   transition: transform 150ms;
-  flex-shrink: 0;
   width: 0.8rem;
   height: 0.8rem;
   fill: ${colorsV3.gray900};
 `
 
-interface AccordionProps {
+type AccordionProps = {
   headline: string
   body: string
-}
-
-const Accordion = ({ headline, body }: AccordionProps) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const toggleIsOpen = () => setIsOpen(!isOpen)
-
-  return (
-    <AccordionWrapper>
-      <AccordionHeadline>
-        <ExpandToggler onClick={toggleIsOpen}>
-          {headline}
-          <ExpanderIcon viewBox="0 0 357 357" isOpen={isOpen}>
-            <path d="M357,204H204v153h-51V204H0v-51h153V0h51v153h153V204z" />
-          </ExpanderIcon>
-        </ExpandToggler>
-      </AccordionHeadline>
-      <AnimateHeight height={isOpen ? 'auto' : 0}>
-        <AccordionBody source={body} escapeHtml={false} />
-      </AnimateHeight>
-    </AccordionWrapper>
-  )
 }
 
 type FaqPanelProps = {
@@ -144,15 +98,21 @@ type FaqPanelProps = {
 
 const FaqPanel = ({ list }: FaqPanelProps) => {
   return (
-    <>
+    <Accordion mode="multiple">
       {list?.map((listItem) => (
-        <Accordion
-          key={listItem?.headline}
-          headline={listItem!.headline}
-          body={listItem!.body!}
-        />
+        <StyledAccordionItem key={listItem?.headline}>
+          <StyledAccordionTrigger>
+            {listItem!.headline}
+            <ExpanderIcon viewBox="0 0 357 357">
+              <path d="M357,204H204v153h-51V204H0v-51h153V0h51v153h153V204z" />
+            </ExpanderIcon>
+          </StyledAccordionTrigger>
+          <AccordionContent>
+            <AccordionBody source={listItem!.body!} escapeHtml={false} />
+          </AccordionContent>
+        </StyledAccordionItem>
       ))}
-    </>
+    </Accordion>
   )
 }
 
@@ -225,9 +185,7 @@ export const FaqSection = ({ variants }: FaqSectionProps) => {
       <Container>
         <Column>
           <Heading>{textKeys.OFFER_FAQ_HEADING()}</Heading>
-          <AccordionsWrapper>
-            {items && <Tabs items={items} />}
-          </AccordionsWrapper>
+          <TabsWrapper>{items && <Tabs items={items} />}</TabsWrapper>
         </Column>
         <ColumnSpacing />
       </Container>
