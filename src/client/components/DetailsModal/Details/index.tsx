@@ -30,6 +30,10 @@ import {
 } from './NorwegianHouseDetails'
 
 import { DanishDetails, getDanishValidationSchema } from './DanishDetails'
+import {
+  DanishHouseDetails,
+  getDanishHouseValidationSchema,
+} from './DanishHouseDetails'
 
 export const getValidationSchema = (
   market: MarketLabel,
@@ -38,6 +42,7 @@ export const getValidationSchema = (
 ) => {
   const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
   const isNorwegianHouse = type === InsuranceType.NORWEGIAN_HOUSE
+  const isDanishHouse = type === InsuranceType.DANISH_HOUSE
   const isSwedishCar = type === InsuranceType.SWEDISH_CAR
 
   switch (market) {
@@ -52,7 +57,9 @@ export const getValidationSchema = (
         ? getNorwegianHouseValidationSchema(textKeys)
         : getNorwegianHomeContentsValidationSchema(textKeys)
     case 'DK':
-      return getDanishValidationSchema(textKeys)
+      return isDanishHouse
+        ? getDanishHouseValidationSchema(textKeys)
+        : getDanishValidationSchema(textKeys)
     default:
       throw 'Unknown market'
   }
@@ -65,6 +72,7 @@ export const Details: React.FC<{
 }> = ({ market, type, formikProps }) => {
   const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
   const isNorwegianHouse = type === InsuranceType.NORWEGIAN_HOUSE
+  const isDanishHouse = type === InsuranceType.DANISH_HOUSE
   const isSwedishCar = type === InsuranceType.SWEDISH_CAR
 
   switch (market) {
@@ -83,7 +91,11 @@ export const Details: React.FC<{
         <NorwegianHomeContentsDetails formikProps={formikProps} />
       )
     case 'DK':
-      return <DanishDetails formikProps={formikProps} />
+      return isDanishHouse ? (
+        <DanishHouseDetails formikProps={formikProps} />
+      ) : (
+        <DanishDetails formikProps={formikProps} />
+      )
 
     default:
       return null

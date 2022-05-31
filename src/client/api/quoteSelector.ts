@@ -77,6 +77,7 @@ export const isTravel = (quote: BundledQuote) =>
 const HOUSE_INSURANCE_TYPES = [
   InsuranceType.NORWEGIAN_HOUSE,
   InsuranceType.SWEDISH_HOUSE,
+  InsuranceType.DANISH_HOUSE,
 ]
 export const isHouse = (quote: BundledQuote) =>
   HOUSE_INSURANCE_TYPES.includes(quote.data.type)

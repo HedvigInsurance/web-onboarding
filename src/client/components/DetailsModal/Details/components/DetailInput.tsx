@@ -322,17 +322,25 @@ export const ZipcodeInput: React.FC<ZipcodeInputProps> = ({
 }
 
 const getExtraBuildingOptions = (market: MarketLabel) => {
-  if (market === 'NO') {
-    return [
-      ExtraBuildingType.Garage,
-      ExtraBuildingType.Guesthouse,
-      ExtraBuildingType.Carport,
-      ExtraBuildingType.Sauna,
-      ExtraBuildingType.Other,
-    ]
+  switch (market) {
+    case 'NO':
+      return [
+        ExtraBuildingType.Garage,
+        ExtraBuildingType.Guesthouse,
+        ExtraBuildingType.Carport,
+        ExtraBuildingType.Sauna,
+        ExtraBuildingType.Other,
+      ]
+    case 'DK':
+      return [
+        ExtraBuildingType.Garage,
+        ExtraBuildingType.Guesthouse,
+        ExtraBuildingType.Carport,
+        ExtraBuildingType.Other,
+      ]
+    default:
+      return Object.values(ExtraBuildingType)
   }
-
-  return Object.values(ExtraBuildingType)
 }
 
 const getExtraBuilding = (extraBuildingType: ExtraBuildingType): string => {

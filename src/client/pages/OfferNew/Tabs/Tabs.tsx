@@ -42,7 +42,7 @@ type Props = {
     name: string
     content: React.ReactNode
   }[]
-  onChange: (id: string) => void
+  onChange?: (id: string) => void
 }
 type TabItem = {
   id: string
@@ -55,7 +55,7 @@ export const Tabs: React.FC<Props> = ({ items, onChange }) => {
 
   const handleClick = (item: TabItem) => {
     setSelected(item)
-    onChange(item.name)
+    onChange?.(item.name)
   }
 
   useEffect(() => {

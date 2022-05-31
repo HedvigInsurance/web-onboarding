@@ -1,0 +1,11 @@
+query GetContractFaqs($input: ContractFaqsQuery!) {
+  contractFaqs(input: $input) {
+    faqs {
+      title
+      faq {
+        headline
+        body
+      }
+    }
+  }
+}
