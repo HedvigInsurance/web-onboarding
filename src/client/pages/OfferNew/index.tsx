@@ -19,6 +19,7 @@ import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCent
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
+import { isCarInsuranceType } from 'api/quoteCartQuerySelectors'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import {
   getOfferData,
@@ -92,6 +93,8 @@ export const OfferNew = () => {
   const selectedBundleVariant =
     getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants) ||
     bundleVariants?.[0]
+
+  const isCar = isCarInsuranceType(selectedBundleVariant)
 
   const onInsuranceSelectorChange = (
     selectedBundleVariant: QuoteBundleVariant,
@@ -191,7 +194,7 @@ export const OfferNew = () => {
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            {isCustomerServicePhoneNumberEnabled && callCenter ? (
+            {!isCar && isCustomerServicePhoneNumberEnabled && callCenter ? (
               <CallCenterPhoneNumber
                 color="white"
                 onClick={handleClickPhoneNumber}

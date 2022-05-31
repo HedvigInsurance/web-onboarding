@@ -66,6 +66,7 @@ interface EmbarkProps {
   name: string
   baseUrl: string
   startPageLink?: string
+  isCar?: boolean
 }
 
 const Embark = (props: EmbarkProps) => {
