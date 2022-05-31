@@ -15,6 +15,17 @@ const swedishBundleMock = {
     },
   ],
 } as QuoteBundle
+
+const swedishCarBundleMock = {
+  quotes: [
+    {
+      data: {
+        type: 'SWEDISH_CAR',
+      },
+    },
+  ],
+} as QuoteBundle
+
 const swedishStudentBundleMock = {
   quotes: [
     {
@@ -109,6 +120,10 @@ describe('getProductValue', () => {
     expect(getProductCategories(swedishBundleMock)).toBe(
       'homecontent_0-accident_0',
     )
+  })
+
+  it('return the correct pc value for SE Car bundle', () => {
+    expect(getProductCategories(swedishCarBundleMock)).toBe('car_0')
   })
 
   it('return the correct pc value for SE Student bundle', () => {

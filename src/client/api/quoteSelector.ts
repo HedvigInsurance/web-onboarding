@@ -100,7 +100,8 @@ const HOME_OR_HOUSE_INSURANCE_TYPES = [
 export const isHomeContentsOrHouse = (quote: BundledQuote) =>
   HOME_OR_HOUSE_INSURANCE_TYPES.includes(quote.data.type)
 
-export const isCar = (quote: BundledQuote) => quote.data.type === 'SWEDISH_CAR'
+export const isCar = (quote: BundledQuote) =>
+  quote.data.type === InsuranceType.SWEDISH_CAR
 
 export type QuoteOwnershipType = 'RENT' | 'OWN' | 'STUDENT_RENT' | 'STUDENT_OWN'
 
