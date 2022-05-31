@@ -452,6 +452,7 @@ export const Checkout = ({
   const handleSignStart = () => {
     trackOfferEvent({
       eventName: EventName.ButtonClick,
+      options: { buttonId: 'complete_purchase' },
     })
     if (checkoutStatus === CheckoutStatus.Signed) {
       completeCheckout()
