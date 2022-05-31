@@ -40,7 +40,7 @@ import { QuoteInput } from 'components/DetailsModal/types'
 import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
 import { useDebounce } from 'utils/hooks/useDebounce'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
-import { EventName } from 'utils/tracking/gtm/types'
+import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
 import { InsuranceSummary } from './InsuranceSummary'
@@ -427,6 +427,7 @@ export const Checkout = ({
       if (data?.quoteCart_startCheckout.__typename === 'BasicError') {
         trackOfferEvent({
           eventName: EventName.SignError,
+          options: { errorType: ErrorEventType.BasicError },
         })
         setSignUiState('FAILED')
         return
@@ -437,6 +438,10 @@ export const Checkout = ({
       )
       if (isManualReviewRequired) {
         setIsManualReviewRequired(isManualReviewRequired)
+        trackOfferEvent({
+          eventName: EventName.SignError,
+          options: { errorType: ErrorEventType.ManualReviewRequired },
+        })
         setIsShowingFailModal(true)
         setSignUiState('MANUAL_REVIEW')
         return
