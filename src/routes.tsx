@@ -7,7 +7,6 @@ import { TrustlyFailPage } from './client/pages/ConnectPayment/components/Trustl
 import { TrustlySpinnerPage } from './client/pages/ConnectPayment/components/TrustlySpinnerPage'
 import { ConnectPaymentsDirectEntry } from './client/pages/ConnectPayment/ConnectPaymentsDirectEntry'
 import { Debugger } from './client/pages/Debugger'
-import { OfferDebugger } from './client/pages/OfferDebugger'
 import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
 import { FourOhFour } from './client/pages/FourOhFour'
@@ -229,14 +228,6 @@ export const routes: Route[] = [
     isHiddenInProd: true,
     clientRouteData: {
       Component: Debugger,
-      exact: true,
-    },
-  },
-  {
-    path: `${onboardingLocaleBaseRoute}/offer-debugger`,
-    isHiddenInProd: true,
-    clientRouteData: {
-      Component: OfferDebugger,
       exact: true,
     },
   },
