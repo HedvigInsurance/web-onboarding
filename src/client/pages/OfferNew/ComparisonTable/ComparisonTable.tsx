@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { colorsV3 } from '@hedviginsurance/brand'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
@@ -15,13 +15,13 @@ import {
   bundleHasPeril,
   getUniquePerilsForQuoteBundles,
 } from 'api/quoteBundleSelectors'
-import { ChevronDown } from 'components/icons/ChevronDown'
-import { ChevronUp } from 'components/icons/ChevronUp'
 import { BREAKPOINTS } from 'utils/mediaQueries'
 import {
-  AccordionItemProps,
   AccordionItem,
+  AccordionTrigger,
+  Accordion,
   AccordionContent,
+  AccordionTriggerIcon,
 } from 'components/Accordion/Accordion'
 
 type ComparisonTableProps = {
@@ -32,33 +32,21 @@ const TitleTableCell = styled(TableCell)`
   width: 100%;
 `
 
-const Title = styled.div`
-  display: flex;
-  align-items: center;
-  svg {
-    margin-left: 0.625rem;
-  }
-`
+const StyledAccordionContent = styled(AccordionContent)({
+  fontSize: '0.875rem',
+  color: colorsV3.gray700,
+})
 
 const PerilTableCell = styled(TableCell)`
   vertical-align: top;
 `
 
-const AccordionButton = ({
-  isActive,
-}: Pick<AccordionItemProps, 'isActive'>) => {
-  return (
-    <>{isActive ? <ChevronUp size="1rem" /> : <ChevronDown size="1rem" />}</>
-  )
-}
-
 export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
   const uniquePerils = getUniquePerilsForQuoteBundles(bundles)
-  const [activeIndex, setActiveIndex] = useState<number>()
   const isDesktop = useMediaQuery({ minWidth: BREAKPOINTS.mediumScreen })
 
   return (
-    <>
+    <Accordion mode="single">
       <Table fullWidth mt="2rem">
         <TableHead>
           <TableRow>
@@ -71,26 +59,17 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {uniquePerils.map((row, index) => (
+          {uniquePerils.map((row) => (
             <TableRow key={row.title}>
               <TitleTableCell>
-                <AccordionItem
-                  key={row.title}
-                  isActive={activeIndex === index}
-                  setIsActive={(isActive) =>
-                    isDesktop && setActiveIndex(isActive ? undefined : index)
-                  }
-                  disabled={!isDesktop}
-                >
-                  <Title>
+                <AccordionItem>
+                  <AccordionTrigger disabled={!isDesktop}>
                     {row.title}
-                    {isDesktop && (
-                      <AccordionButton isActive={activeIndex === index} />
-                    )}
-                  </Title>
-                  <AccordionContent height={activeIndex === index ? 'auto' : 0}>
+                    {isDesktop && <AccordionTriggerIcon />}
+                  </AccordionTrigger>
+                  <StyledAccordionContent>
                     <p>{row.description}</p>
-                  </AccordionContent>
+                  </StyledAccordionContent>
                 </AccordionItem>
               </TitleTableCell>
 
@@ -109,6 +88,6 @@ export const ComparisonTable = ({ bundles }: ComparisonTableProps) => {
           ))}
         </TableBody>
       </Table>
-    </>
+    </Accordion>
   )
 }
