@@ -143,14 +143,12 @@ export const DateInput: React.FC<DateInputProps> = ({
 }
 
 export const getLocaleImport = (locale: string) => {
+  if (locale.includes('en'))
+    return import(
+      /* webpackChunkName: 'date-fns-en' */
+      'date-fns/locale/en-GB'
+    )
   switch (locale) {
-    case 'se-en':
-    case 'no-en':
-    case 'dk-en':
-      return import(
-        /* webpackChunkName: 'date-fns-en' */
-        'date-fns/locale/en-GB'
-      )
     case 'dk':
       return import(
         /* webpackChunkName: 'date-fn-dk' */
