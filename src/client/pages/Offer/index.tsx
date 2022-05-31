@@ -217,7 +217,7 @@ export const OfferPage = ({
         )}
         <Perils offerData={offerData} />
         <AppPromotionSection promotions={promotions} />
-        <FaqSection />
+        <FaqSection variants={bundleVariants} />
         <Checkout
           quoteCartId={quoteCartId}
           checkoutMethod={checkoutMethod}
