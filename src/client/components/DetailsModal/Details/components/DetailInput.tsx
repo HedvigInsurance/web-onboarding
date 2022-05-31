@@ -55,9 +55,12 @@ export const DetailInput: React.FC<DetailInputProps &
         if (field.type === 'number') {
           formikProps.setFieldValue(formikName, value && parseInt(value, 10))
         } else {
+          const formVal = /^(true|false)/.test(value)
+            ? JSON.parse(value)
+            : value
           formikProps.setFieldValue(
             formikName,
-            /^(true|false)/.test(value) ? JSON.parse(value) : value,
+            field.upperCase ? formVal.toUpperCase() : formVal,
           )
         }
       }}
@@ -90,18 +93,21 @@ type TextInputProps = {
   name: string
   label: string
   formikProps: FormikProps<QuoteInput>
+  upperCase?: boolean
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
   name,
   label,
   formikProps,
+  upperCase,
 }) => (
   <DetailInput
     name={name}
     field={{
       label: label,
       placeholder: '',
+      upperCase,
     }}
     formikProps={formikProps}
   />
@@ -316,17 +322,25 @@ export const ZipcodeInput: React.FC<ZipcodeInputProps> = ({
 }
 
 const getExtraBuildingOptions = (market: MarketLabel) => {
-  if (market === 'NO') {
-    return [
-      ExtraBuildingType.Garage,
-      ExtraBuildingType.Guesthouse,
-      ExtraBuildingType.Carport,
-      ExtraBuildingType.Sauna,
-      ExtraBuildingType.Other,
-    ]
+  switch (market) {
+    case 'NO':
+      return [
+        ExtraBuildingType.Garage,
+        ExtraBuildingType.Guesthouse,
+        ExtraBuildingType.Carport,
+        ExtraBuildingType.Sauna,
+        ExtraBuildingType.Other,
+      ]
+    case 'DK':
+      return [
+        ExtraBuildingType.Garage,
+        ExtraBuildingType.Guesthouse,
+        ExtraBuildingType.Carport,
+        ExtraBuildingType.Other,
+      ]
+    default:
+      return Object.values(ExtraBuildingType)
   }
-
-  return Object.values(ExtraBuildingType)
 }
 
 const getExtraBuilding = (extraBuildingType: ExtraBuildingType): string => {

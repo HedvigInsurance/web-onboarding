@@ -26,6 +26,7 @@ enum EmbarkStory {
   DenmarkContentsQuoteCart = 'Web Onboarding DK - Quote Cart Home Content',
   DenmarkContentsAccidentQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident',
   DenmarkContentsAccidentTravelQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident Travel',
+  DenmarkOnboarding = 'onboarding-DK',
 
   NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
   NorwayContentsEnglish = 'Web Onboarding NO - English Contents',
@@ -285,6 +286,14 @@ export const routes: Route[] = [
                     baseUrl,
                     name: EmbarkStory.DenmarkContentsAccidentTravelQuoteCart,
                     quoteCart: true,
+                  }
+                case 'onboarding':
+                  if (isHouseEnabled) {
+                    return {
+                      baseUrl,
+                      name: EmbarkStory.DenmarkOnboarding,
+                      quoteCart: true,
+                    }
                   }
               }
               break
