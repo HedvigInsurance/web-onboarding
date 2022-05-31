@@ -184,7 +184,7 @@ export const FaqSection = ({ variants }: FaqSectionProps) => {
     return data.contractFaqs.faqs.map((d) => ({
       id: d.title || '',
       // if only one FAQ: show no tab (empty string for 'name')
-      name: data.contractFaqs?.faqs?.length ?? 0 < 2 ? '' : d.title!,
+      name: (data.contractFaqs?.faqs?.length ?? 0) < 2 ? '' : d.title!,
       content: <FaqPanel list={d.faq!} />,
     }))
   }, [data])
