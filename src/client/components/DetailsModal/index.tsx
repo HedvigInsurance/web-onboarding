@@ -261,10 +261,17 @@ export const DetailsModal = ({
               data['squareMeters']
             return acc
           case 'subType':
-            acc[key] =
-              mainQuote.id === quote.id
-                ? getSubType(form.data)
-                : getSubType(data)
+            if (marketLabel === 'SE') {
+              acc[key] =
+                mainQuote.id === quote.id
+                  ? getSubType(form.data)
+                  : getSubType(data)
+            } else {
+              acc[key] =
+                mainQuote.id === quote.id
+                  ? form.data['subType']
+                  : data['subType']
+            }
             return acc
           case 'id':
           case 'type':
