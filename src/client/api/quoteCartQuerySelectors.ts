@@ -78,8 +78,10 @@ export function getAllQuotes(quoteCartQuery: QuoteCartQuery | undefined) {
   return Object.values(quoteMap)
 }
 
-export const isCarInsuranceType = (bundleVariant: QuoteBundleVariant) => {
-  return bundleVariant.bundle.quotes.every(
+export const isCarInsuranceType = (
+  bundleVariant: QuoteBundleVariant | undefined,
+) => {
+  return bundleVariant?.bundle.quotes.every(
     (quote) => quote.data.type === 'SWEDISH_CAR',
   )
 }
