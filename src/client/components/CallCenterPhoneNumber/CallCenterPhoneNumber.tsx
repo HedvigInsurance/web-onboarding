@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { format as formatDate, getDay } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { CallCenterData } from 'l10n/callCenters'
+import { EmbarkStory } from 'utils/embarkStory'
 import { Telephone } from '../icons/Telephone'
 
 const { gray900, gray100, gray700, gray500 } = colorsV3
@@ -116,7 +117,15 @@ export const CallCenterPhoneNumber: React.FC<{
   const currentTime = formatDate(new Date(), 'HH')
   const { callCenter: phoneNumber } = currentLocale
 
-  if (!phoneNumber) return null
+  const embarkStory = EmbarkStory.get()
+
+  useEffect(() => {
+    if (embarkStory) EmbarkStory.set(embarkStory)
+  }, [embarkStory])
+
+  const isCar = EmbarkStory.get()?.includes('car')
+
+  if (!phoneNumber || isCar) return null
 
   return (
     <Wrapper color={color}>

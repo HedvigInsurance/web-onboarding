@@ -94,8 +94,6 @@ export const OfferNew = () => {
     getBundleVariantFromQuoteIds(selectedQuoteIds, bundleVariants) ||
     bundleVariants?.[0]
 
-  const isCar = isCarInsuranceType(selectedBundleVariant)
-
   const onInsuranceSelectorChange = (
     selectedBundleVariant: QuoteBundleVariant,
   ) => {
@@ -194,7 +192,7 @@ export const OfferNew = () => {
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            {!isCar && isCustomerServicePhoneNumberEnabled && callCenter ? (
+            {isCustomerServicePhoneNumberEnabled && callCenter ? (
               <CallCenterPhoneNumber
                 color="white"
                 onClick={handleClickPhoneNumber}
