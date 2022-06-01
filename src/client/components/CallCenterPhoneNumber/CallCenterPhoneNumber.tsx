@@ -4,8 +4,7 @@ import React from 'react'
 import { format as formatDate, getDay } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
-import { CallCenterData } from 'l10n/callCenters'
-import { EmbarkStory } from 'utils/embarkStory'
+import { CallCenterData, CallCenterVariant } from 'l10n/callCenters'
 import { Telephone } from '../icons/Telephone'
 
 const { gray900, gray100, gray700, gray500 } = colorsV3
@@ -109,17 +108,22 @@ const PhoneOpeningHours: React.FC<{
   )
 }
 
-export const CallCenterPhoneNumber: React.FC<{
+type CallCenterPhoneNumberProps = {
   color: Color
+  variant?: CallCenterVariant
   onClick: (status: 'opened' | 'closed') => void
-}> = ({ color, onClick }) => {
+}
+
+export const CallCenterPhoneNumber = ({
+  color,
+  onClick,
+  variant = 'callCenter',
+}: CallCenterPhoneNumberProps) => {
   const currentLocale = useCurrentLocale()
   const currentTime = formatDate(new Date(), 'HH')
-  const { callCenter: phoneNumber } = currentLocale
+  const phoneNumber = currentLocale[variant]
 
-  const isCar = EmbarkStory.get()?.includes('car')
-
-  if (!phoneNumber || isCar) return null
+  if (!phoneNumber) return null
 
   return (
     <Wrapper color={color}>
