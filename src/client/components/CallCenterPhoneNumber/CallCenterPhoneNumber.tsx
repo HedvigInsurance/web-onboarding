@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { format as formatDate, getDay } from 'date-fns'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
