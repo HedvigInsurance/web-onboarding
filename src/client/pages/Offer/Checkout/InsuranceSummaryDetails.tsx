@@ -87,34 +87,79 @@ type DetailsGroup = ReadonlyArray<{
   value: React.ReactNode
 }>
 
-function getHouseSummaryDetailsMaybe(
+const getHouseSummaryDetailsMaybe = (
   textKeys: TextKeyMap,
   data: GenericQuoteData,
-): DetailsGroup {
-  if (data.type !== InsuranceType.SWEDISH_HOUSE) {
-    return []
-  }
-
+): DetailsGroup => {
   return [
-    {
-      key: 'ancillaryarea',
-      label: textKeys.CHECKOUT_DETAILS_ANCILLARY_SPACE(),
-      value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-        VALUE: data.ancillaryArea as number,
-      }),
-    },
-    {
-      key: 'bathrooms',
-      label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
-      value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
-        VALUE: data.numberOfBathrooms as number,
-      }),
-    },
-    {
-      key: 'yearOfConstruction',
-      label: textKeys.CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION(),
-      value: data.yearOfConstruction,
-    },
+    ...(data.ancillaryArea
+      ? [
+          {
+            key: 'ancillaryarea',
+            label: textKeys.CHECKOUT_DETAILS_ANCILLARY_SPACE(),
+            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+              VALUE: data.ancillaryArea,
+            }),
+          },
+        ]
+      : []),
+    ...(data.numberOfBathrooms
+      ? [
+          {
+            key: 'bathrooms',
+            label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
+            value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
+              VALUE: data.numberOfBathrooms,
+            }),
+          },
+        ]
+      : data.numberOfWetUnits
+      ? [
+          {
+            key: 'bathrooms',
+            label: textKeys.CHECKOUT_DETAILS_NUMBER_OF_BATHROOMS(),
+            value: textKeys.CHECKOUT_DETAILS_COUNT_VALUE({
+              VALUE: data.numberOfWetUnits,
+            }),
+          },
+        ]
+      : []),
+    ...(data.yearOfConstruction
+      ? [
+          {
+            key: 'yearOfConstruction',
+            label: textKeys.CHECKOUT_DETAILS_YEAR_OF_CONSTRUCTION(),
+            value: data.yearOfConstruction,
+          },
+        ]
+      : []),
+  ]
+}
+
+const getLivingSpaceMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
+  return [
+    ...(data.livingSpace
+      ? [
+          {
+            key: 'livingspace',
+            label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
+            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+              VALUE: data.livingSpace,
+            }),
+          },
+        ]
+      : []),
+    ...(data.squareMeters
+      ? [
+          {
+            key: 'livingspace',
+            label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
+            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
+              VALUE: data.squareMeters,
+            }),
+          },
+        ]
+      : []),
   ]
 }
 
@@ -158,13 +203,6 @@ const getHomeInsuranceDetailsMaybe = (
   return [
     ...(data.livingSpace
       ? [
-          {
-            key: 'livingspace',
-            label: textKeys.CHECKOUT_DETAILS_LIVING_SPACE(),
-            value: textKeys.CHECKOUT_DETAILS_SQM_VALUE({
-              VALUE: data.livingSpace,
-            }),
-          },
           {
             key: 'residenceType',
             label: textKeys.CHECKOUT_DETAILS_RESIDENCE_TYPE(),
@@ -265,6 +303,7 @@ const getQuoteDetails = (
   const detailsGroups: DetailsGroup[] = [
     [
       ...getAddressDataMaybe(textKeys, data),
+      ...getLivingSpaceMaybe(textKeys, data),
       ...getHomeInsuranceDetailsMaybe(textKeys, data, typeOfContract),
       ...getHouseSummaryDetailsMaybe(textKeys, data),
     ],
