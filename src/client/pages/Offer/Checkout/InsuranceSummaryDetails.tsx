@@ -10,7 +10,6 @@ import {
 } from 'pages/OfferNew/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
-import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { TypeOfContract, BundledQuote } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Group, Row } from './InsuranceSummary'
