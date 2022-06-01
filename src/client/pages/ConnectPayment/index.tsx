@@ -42,6 +42,7 @@ export const ConnectPayment: React.FC = () => {
             <CallCenterPhoneNumber
               color="white"
               onClick={handleClickPhoneNumber}
+              variant="supportNumber"
             />
           ) : (
             <LanguagePicker color="white" />
