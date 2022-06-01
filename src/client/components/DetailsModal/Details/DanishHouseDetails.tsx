@@ -12,7 +12,6 @@ import {
   TextInput,
   AreaInput,
   ZipcodeInput,
-  BooleanInput,
   BirthDateInput,
   ExtraBuildingsInput,
 } from './components/DetailInput'
@@ -41,7 +40,6 @@ export const getDanishHouseValidationSchema = (textKeys: TextKeyMap) => {
       householdSize: Yup.number()
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-      isStudent: Yup.boolean(),
       extraBuildings: Yup.array().of(
         Yup.object().shape({
           type: Yup.string().required(),
@@ -112,11 +110,6 @@ export const DanishHouseDetails = ({
               placeholder: '',
               type: inputTypes.number,
             }}
-            formikProps={formikProps}
-          />
-          <BooleanInput
-            name="data.isStudent"
-            label="DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL"
             formikProps={formikProps}
           />
         </InputGroup>
