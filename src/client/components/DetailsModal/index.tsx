@@ -244,8 +244,9 @@ export const DetailsModal = ({
         switch (key) {
           case 'numberCoInsured':
             acc[key] =
-              (form.data.householdSize && form.data.householdSize - 1) ||
-              data[key]
+              typeof form.data.householdSize === 'number'
+                ? form.data.householdSize - 1
+                : data[key]
             return acc
           case 'livingSpace':
           case 'squareMeters':
