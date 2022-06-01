@@ -146,6 +146,14 @@ export const hasCar = (quotes: BundledQuote[]) => {
   return quotes.some(quoteSelector.isCar)
 }
 
+export const isStudent = (quotes: BundledQuote[]) => {
+  return quotes.some(quoteSelector.isStudent)
+}
+
+export const isYouth = (quotes: BundledQuote[]) => {
+  return quotes.some(quoteSelector.isYouth)
+}
+
 const getHouseholdSizeFromBundledQuotes = (
   quotes: ReadonlyArray<BundledQuote>,
 ): number | undefined => {
