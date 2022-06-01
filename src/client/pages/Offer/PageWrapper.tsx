@@ -16,9 +16,14 @@ type PageWrapperProps = {
   bundle?: QuoteBundle
   isReferralCodeUsed?: boolean
   children: React.ReactNode
+  hidePhoneNumber?: boolean
 }
 
-export const PageWrapper = ({ quoteCartId, children }: PageWrapperProps) => {
+export const PageWrapper = ({
+  quoteCartId,
+  children,
+  hidePhoneNumber,
+}: PageWrapperProps) => {
   const history = useHistory()
   const { phoneNumber } = useCurrentLocale()
   const variation = useVariation()
@@ -39,7 +44,9 @@ export const PageWrapper = ({ quoteCartId, children }: PageWrapperProps) => {
     <Page>
       {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
         <TopBar isTransparent>
-          {isCustomerServicePhoneNumberEnabled && phoneNumber ? (
+          {!hidePhoneNumber &&
+          isCustomerServicePhoneNumberEnabled &&
+          phoneNumber ? (
             <CallCenterPhoneNumber
               color="white"
               onClick={handleClickPhoneNumber}
