@@ -46,6 +46,7 @@ export type LocaleData = {
     placeholder?: string
   }
   callCenter?: CallCenterData
+  supportNumber?: CallCenterData
   adTractionConfig: AdTractionMarketConfig
   currencyCode: 'SEK' | 'NOK' | 'DKK'
 }
@@ -73,7 +74,8 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: phoneNumberFormats.SE,
       placeholder: phoneNumberPlaceholder.SE,
     },
-    callCenter: callCenters.SE,
+    callCenter: callCenters.SE?.callCenter,
+    supportNumber: callCenters.SE?.supportNumber,
     adTractionConfig: adTractionConfig.SE,
     currencyCode: 'SEK',
   },
@@ -99,7 +101,8 @@ export const locales: Record<LocaleLabel, LocaleData> = {
       formatRegex: phoneNumberFormats.SE,
       placeholder: phoneNumberPlaceholder.SE,
     },
-    callCenter: callCenters.SE,
+    callCenter: callCenters.SE?.callCenter,
+    supportNumber: callCenters.SE?.supportNumber,
     adTractionConfig: adTractionConfig.SE,
     currencyCode: 'SEK',
   },

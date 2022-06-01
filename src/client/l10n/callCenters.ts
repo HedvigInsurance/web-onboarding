@@ -1,6 +1,8 @@
 import { MarketLabel } from './locales'
 
-type CallCenters = Partial<Record<MarketLabel, CallCenterData>>
+export type CallCenterVariant = 'callCenter' | 'supportNumber'
+type CallCentersPerMarket = Partial<Record<CallCenterVariant, CallCenterData>>
+type CallCenters = Partial<Record<MarketLabel, CallCentersPerMarket>>
 
 export type CallCenterData = {
   displayNumber: string
@@ -13,11 +15,21 @@ export type CallCenterData = {
 
 export const callCenters: CallCenters = {
   SE: {
-    displayNumber: '075-101 20 00',
-    hrefNumber: 'tel:0751012000',
-    opensAt: '09',
-    closesAt: '18',
-    lunchStartsAt: '12',
-    lunchEndsAt: '13',
+    callCenter: {
+      displayNumber: '075-101 20 00',
+      hrefNumber: 'tel:0751012000',
+      opensAt: '09',
+      closesAt: '18',
+      lunchStartsAt: '12',
+      lunchEndsAt: '13',
+    },
+    supportNumber: {
+      displayNumber: '010-45 99 200',
+      hrefNumber: 'tel:+46104599200.',
+      opensAt: '09',
+      closesAt: '17',
+      lunchStartsAt: '12',
+      lunchEndsAt: '13',
+    },
   },
 }
