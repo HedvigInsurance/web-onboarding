@@ -31,6 +31,7 @@ import { ErrorEventType, EventName } from 'utils/tracking/gtm/types'
 
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { useDebounce } from 'utils/hooks/useDebounce'
+import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -166,14 +167,16 @@ const Terms = styled.div`
 `
 
 const useSubmitFormOnSsnChange = (formik: FormikProps<QuoteInput>) => {
+  const sendDatadogAction = useSendDatadogAction()
   const debouncedSsn = useDebounce(formik.values.ssn, 500)
   const formikInitialSsn = formik.initialValues.ssn
   const formikSubmitForm = formik.submitForm
   useEffect(() => {
     if (debouncedSsn !== formikInitialSsn) {
+      sendDatadogAction('personal_number_update')
       formikSubmitForm()
     }
-  }, [debouncedSsn, formikInitialSsn, formikSubmitForm])
+  }, [debouncedSsn, formikInitialSsn, formikSubmitForm, sendDatadogAction])
 }
 
 type Props = {
@@ -200,6 +203,7 @@ export const CheckoutPayment = ({
   const storage = useStorage()
   const trackOfferEvent = useTrackOfferEvent()
   const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
+  const sendDatadogAction = useSendDatadogAction()
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
     createQuoteBundle,
@@ -234,11 +238,13 @@ export const CheckoutPayment = ({
     }
   }, [is3DsError, history, trackOfferEvent])
 
-  const setPaymentSuccess = () => {
+  const handlePaymentSuccess = useCallback(() => {
     setIsPaymentConnected(true)
-  }
+    sendDatadogAction('payment_connected')
+  }, [sendDatadogAction])
 
   const performCheckout = useCallback(async () => {
+    sendDatadogAction('checkout_start')
     try {
       setIsDataLoading(true)
       const { data } = await startCheckout({
@@ -277,10 +283,17 @@ export const CheckoutPayment = ({
       console.error('Could not start checkout')
       setIsError(true)
     }
-  }, [getStatus, quoteCartId, quoteIds, startCheckout, trackOfferEvent])
+  }, [
+    getStatus,
+    quoteCartId,
+    quoteIds,
+    startCheckout,
+    trackOfferEvent,
+    sendDatadogAction,
+  ])
   useAdyenCheckout({
     adyenRef,
-    onSuccess: setPaymentSuccess,
+    onSuccess: handlePaymentSuccess,
     quoteCartId,
     isSuccess: isPaymentConnected,
   })
@@ -321,9 +334,15 @@ export const CheckoutPayment = ({
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
-      setPaymentSuccess()
+      handlePaymentSuccess()
     }
-  }, [is3DsComplete, checkoutStatus, storage.session, trackOfferEvent])
+  }, [
+    is3DsComplete,
+    checkoutStatus,
+    storage.session,
+    trackOfferEvent,
+    handlePaymentSuccess,
+  ])
 
   useEffect(() => {
     if (isPaymentConnected) {
@@ -333,6 +352,7 @@ export const CheckoutPayment = ({
 
   const completeCheckout = useCallback(async () => {
     try {
+      sendDatadogAction('checkout_complete')
       const memberId = await setupQuoteCartSession({
         quoteCartId,
         apolloClientUtils: {
@@ -341,6 +361,7 @@ export const CheckoutPayment = ({
         },
         storage,
       })
+      sendDatadogAction('checkout_completed')
       trackSignedCustomerEvent({ memberId })
     } catch (error) {
       trackOfferEvent({
@@ -349,7 +370,14 @@ export const CheckoutPayment = ({
       })
       throw new Error('Setup quote cart session failed')
     }
-  }, [client, quoteCartId, storage, trackOfferEvent, trackSignedCustomerEvent])
+  }, [
+    client,
+    quoteCartId,
+    storage,
+    trackOfferEvent,
+    trackSignedCustomerEvent,
+    sendDatadogAction,
+  ])
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
     const {
@@ -399,6 +427,7 @@ export const CheckoutPayment = ({
     if (Object.keys(errors).length > 0) return
 
     if (isFormDataUpdated) {
+      sendDatadogAction('holder_form_submit')
       const { data } = await submitForm()
       const isUpdateQuotesFailed = isQuoteBundleError(data)
       if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')

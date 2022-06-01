@@ -232,7 +232,7 @@ export const OfferNew = () => {
                 },
               ]}
             />
-            <FaqSection />
+            <FaqSection variants={bundleVariants} />
             <Checkout
               quoteBundleVariants={bundleVariants}
               selectedQuoteBundleVariant={selectedBundleVariant}

@@ -8,6 +8,7 @@ declare module 'react-animate-height' {
     className?: string
     style?: CSSStyleDeclaration
     contentClassName?: string
+    id?: string
     animationStateClasses?: {
       animating?: string
       animatingUp?: string

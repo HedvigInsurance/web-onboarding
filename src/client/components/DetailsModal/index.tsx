@@ -217,8 +217,8 @@ export const DetailsModal = ({
     data: {
       ...mainQuoteData,
       ...(!quoteSelector.isCar(mainQuote) && {
-        isStudent: quoteSelector.isStudent(mainQuote),
-        isYouth: quoteSelector.isYouth(mainQuote),
+        isStudent: bundleSelector.isStudent(selectedQuoteBundle.bundle.quotes),
+        isYouth: bundleSelector.isYouth(selectedQuoteBundle.bundle.quotes),
         householdSize: numberCoInsured + 1,
         livingSpace: squareMeters ? squareMeters : livingSpace,
       }),
@@ -274,8 +274,9 @@ export const DetailsModal = ({
           default: {
             const formValue = form.data[key as keyof QuoteDetailsInput]
             acc[key as keyof QuoteDetailsInput] =
-              (formValue !== undefined && formValue !== null && formValue) ||
-              data[key]
+              formValue !== undefined && formValue !== null
+                ? formValue
+                : data[key]
             return acc
           }
         }
