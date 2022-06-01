@@ -12,7 +12,6 @@ import {
   TextInput,
   AreaInput,
   ZipcodeInput,
-  BooleanInput,
   BirthDateInput,
   ExtraBuildingsInput,
 } from './components/DetailInput'
@@ -41,7 +40,6 @@ export const getNorwegianHouseValidationSchema = (textKeys: TextKeyMap) => {
       householdSize: Yup.number()
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-      isYouth: Yup.boolean(),
       extraBuildings: Yup.array().of(
         Yup.object().shape({
           type: Yup.string().required(),
@@ -107,11 +105,6 @@ export const NorwegianHouseDetails: React.FC<{
               placeholder: '',
               type: inputTypes.number,
             }}
-            formikProps={formikProps}
-          />
-          <BooleanInput
-            name="data.isYouth"
-            label="DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL"
             formikProps={formikProps}
           />
         </InputGroup>
