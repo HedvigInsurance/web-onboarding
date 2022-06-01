@@ -19,6 +19,7 @@ import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCent
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
+import { isCarInsuranceType } from 'api/quoteCartQuerySelectors'
 import { useQuoteIds } from '../../utils/hooks/useQuoteIds'
 import {
   getOfferData,
@@ -142,6 +143,8 @@ export const OfferNew = () => {
   const checkoutMatch = useRouteMatch(`${localePathPattern}/new-member/sign`)
   const toggleCheckout = createToggleCheckout(history, localePath)
 
+  const hidePhoneNumber = isCarInsuranceType(selectedBundleVariant)
+
   const offerData = selectedBundleVariant
     ? getOfferData(selectedBundleVariant.bundle)
     : null
@@ -191,7 +194,9 @@ export const OfferNew = () => {
       <SessionTokenGuard>
         {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
           <TopBar isTransparent>
-            {isCustomerServicePhoneNumberEnabled && callCenter ? (
+            {!hidePhoneNumber &&
+            isCustomerServicePhoneNumberEnabled &&
+            callCenter ? (
               <CallCenterPhoneNumber
                 color="white"
                 onClick={handleClickPhoneNumber}
