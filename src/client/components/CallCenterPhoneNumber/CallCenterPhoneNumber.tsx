@@ -117,12 +117,6 @@ export const CallCenterPhoneNumber: React.FC<{
   const currentTime = formatDate(new Date(), 'HH')
   const { callCenter: phoneNumber } = currentLocale
 
-  const embarkStory = EmbarkStory.get()
-
-  useEffect(() => {
-    if (embarkStory) EmbarkStory.set(embarkStory)
-  }, [embarkStory])
-
   const isCar = EmbarkStory.get()?.includes('car')
 
   if (!phoneNumber || isCar) return null

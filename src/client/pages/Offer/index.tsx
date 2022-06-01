@@ -126,6 +126,8 @@ export const OfferPage = ({
   const bundleVariants = getPossibleVariations(quoteCartQueryData)
   const campaign = getCampaign(quoteCartQueryData)
 
+  const hidePhoneNumber = isCarInsuranceType(selectedBundleVariant)
+
   const trackOfferEvent = useTrackOfferEvent()
   const promotions = useGetPromotions(
     getUniqueQuotesFromVariantList(bundleVariants),
@@ -199,6 +201,7 @@ export const OfferPage = ({
       quoteCartId={quoteCartId}
       isReferralCodeUsed={isReferralCodeUsed}
       bundle={selectedBundleVariant.bundle}
+      hidePhoneNumber={hidePhoneNumber}
     >
       <>
         <Introduction
