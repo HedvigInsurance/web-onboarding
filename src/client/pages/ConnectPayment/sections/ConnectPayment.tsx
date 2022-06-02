@@ -1,8 +1,12 @@
 import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
 import React from 'react'
+import { useHistory } from 'react-router'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
-import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
+import {
+  AdyenCheckout,
+  getOnSuccessRedirectUrl,
+} from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import { useTextKeys } from 'utils/textKeys'
 import { useBreakpoint } from 'utils/hooks/useBreakpoint'
@@ -12,7 +16,9 @@ import {
 } from 'utils/mediaQueries'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { AVYWindow } from 'utils/tracking/gtm/signing'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { ErrorModal } from '../components/ErrorModal'
+import { useIsPaymentConnected } from '../useIsPaymentConnected'
 
 const Wrapper = styled.div`
   height: 100%;
@@ -132,6 +138,9 @@ export const ConnectPaymentPage: React.FC = () => {
   const market = useMarket()
   const { isLargeScreen } = useBreakpoint()
   const variation = useVariation()
+  const history = useHistory()
+  const { path } = useCurrentLocale()
+  const isPaymentConnected = useIsPaymentConnected()
 
   const onSuccess = () => {
     if (variation === Variation.AVY) {
@@ -142,6 +151,10 @@ export const ConnectPaymentPage: React.FC = () => {
         avyWindow.ReactNativeWebView.postMessage(message)
       }
     }
+  }
+
+  if (isPaymentConnected) {
+    history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
   }
 
   return (
