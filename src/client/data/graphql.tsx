@@ -7814,8 +7814,6 @@ export type Mutation = {
   quoteCart_createAccessToken: CreateQuoteCartAccessTokenResult
   /** Create a Swedish quote bundle based on SSN. */
   quoteCart_createSwedishBundle: CreateQuoteBundleResult
-  /** Initiate widget, widget should send requestId (Avy) and partner name */
-  quoteCart_initWidget: CreateQuoteCartResult
   createQuote: CreateQuoteResult
   editQuote: CreateQuoteResult
   removeCurrentInsurer: CreateQuoteResult
@@ -8030,10 +8028,6 @@ export type MutationQuoteCart_CreateAccessTokenArgs = {
 export type MutationQuoteCart_CreateSwedishBundleArgs = {
   id: Scalars['ID']
   input: CreateSwedishBundleInput
-}
-
-export type MutationQuoteCart_InitWidgetArgs = {
-  input: InitWidgetInput
 }
 
 export type MutationCreateQuoteArgs = {
@@ -8332,7 +8326,7 @@ export type PageInfo = {
 }
 
 export type PartnerInitWidgetInput = {
-  requestId: Scalars['String']
+  requestId?: Maybe<Scalars['String']>
   partnerId: Scalars['String']
   market?: Maybe<Market>
   locale: Scalars['String']
@@ -12413,6 +12407,13 @@ export type PaymentMethodsQuery = { __typename?: 'Query' } & {
     }
 }
 
+export type PaymentStatusQueryVariables = Exact<{ [key: string]: never }>
+
+export type PaymentStatusQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'payinMethodStatus'
+>
+
 export type PriceQueryVariables = Exact<{
   id: Scalars['ID']
   locale: Locale
@@ -14731,6 +14732,61 @@ export type PaymentMethodsLazyQueryHookResult = ReturnType<
 export type PaymentMethodsQueryResult = ApolloReactCommon.QueryResult<
   PaymentMethodsQuery,
   PaymentMethodsQueryVariables
+>
+export const PaymentStatusDocument = gql`
+  query PaymentStatus {
+    payinMethodStatus
+  }
+`
+
+/**
+ * __usePaymentStatusQuery__
+ *
+ * To run a query within a React component, call `usePaymentStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentStatusQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePaymentStatusQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    PaymentStatusQuery,
+    PaymentStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<PaymentStatusQuery, PaymentStatusQueryVariables>(
+    PaymentStatusDocument,
+    options,
+  )
+}
+export function usePaymentStatusLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PaymentStatusQuery,
+    PaymentStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<PaymentStatusQuery, PaymentStatusQueryVariables>(
+    PaymentStatusDocument,
+    options,
+  )
+}
+export type PaymentStatusQueryHookResult = ReturnType<
+  typeof usePaymentStatusQuery
+>
+export type PaymentStatusLazyQueryHookResult = ReturnType<
+  typeof usePaymentStatusLazyQuery
+>
+export type PaymentStatusQueryResult = ApolloReactCommon.QueryResult<
+  PaymentStatusQuery,
+  PaymentStatusQueryVariables
 >
 export const PriceDocument = gql`
   query Price($id: ID!, $locale: Locale!) {
