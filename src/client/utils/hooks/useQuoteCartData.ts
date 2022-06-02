@@ -20,7 +20,10 @@ import {
 } from 'pages/OfferNew/utils'
 import { GenericQuoteData } from '/pages/OfferNew/types'
 import { formatPostalNumber } from '../postalNumbers'
-import { useSelectedInsuranceTypes } from './useSelectedInsuranceTypes'
+import {
+  useSelectedInsuranceTypes,
+  InsuranceType,
+} from './useSelectedInsuranceTypes'
 
 export type Value = {
   value?: string | number
@@ -111,6 +114,7 @@ const getHouseDetails = (data: GenericQuoteData) => {
       },
     },
   ]
+
   if (data.ancillaryArea) {
     houseDetails.push({
       label: 'CHECKOUT_DETAILS_ANCILLARY_SPACE',
@@ -120,18 +124,19 @@ const getHouseDetails = (data: GenericQuoteData) => {
       },
     })
   } else if (data.yearOfOwnership) {
-    houseDetails.push(
-      {
-        label: 'CHECKOUT_DETAILS_YEAR_OF_OWNERSHIP',
-        value: { value: data.yearOfOwnership },
+    houseDetails.push({
+      label: 'CHECKOUT_DETAILS_YEAR_OF_OWNERSHIP',
+      value: { value: data.yearOfOwnership },
+    })
+  }
+
+  if (data.type === InsuranceType.NORWEGIAN_HOUSE) {
+    houseDetails.push({
+      label: 'CHECKOUT_DETAILS_WATER_LEAKAGE',
+      value: {
+        textKey: data.waterLeakageDetector ? 'YES' : 'NO',
       },
-      {
-        label: 'CHECKOUT_DETAILS_WATER_LEAKAGE',
-        value: {
-          textKey: data.waterLeakageDetector ? 'YES' : 'NO',
-        },
-      },
-    )
+    })
   }
 
   return houseDetails
