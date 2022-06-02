@@ -91,7 +91,7 @@ const getHouseSummaryDetailsMaybe = (
   data: GenericQuoteData,
 ): DetailsGroup => {
   return [
-    ...(data.ancillaryArea
+    ...(data.ancillaryArea !== undefined
       ? [
           {
             key: 'ancillaryarea',
@@ -102,7 +102,7 @@ const getHouseSummaryDetailsMaybe = (
           },
         ]
       : []),
-    ...(data.numberOfBathrooms
+    ...(data.numberOfBathrooms !== undefined
       ? [
           {
             key: 'bathrooms',
@@ -112,7 +112,7 @@ const getHouseSummaryDetailsMaybe = (
             }),
           },
         ]
-      : data.numberOfWetUnits
+      : data.numberOfWetUnits !== undefined
       ? [
           {
             key: 'bathrooms',
@@ -123,7 +123,7 @@ const getHouseSummaryDetailsMaybe = (
           },
         ]
       : []),
-    ...(data.yearOfConstruction
+    ...(data.yearOfConstruction !== undefined
       ? [
           {
             key: 'yearOfConstruction',
@@ -137,7 +137,7 @@ const getHouseSummaryDetailsMaybe = (
 
 const getLivingSpaceMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
   return [
-    ...(data.livingSpace
+    ...(data.livingSpace !== undefined
       ? [
           {
             key: 'livingspace',
@@ -148,7 +148,7 @@ const getLivingSpaceMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
           },
         ]
       : []),
-    ...(data.squareMeters
+    ...(data.squareMeters !== undefined
       ? [
           {
             key: 'livingspace',
@@ -232,7 +232,7 @@ const getCoInsuredMaybe = (
   textKeys: TextKeyMap,
   data: GenericQuoteData,
 ): DetailsGroup | null => {
-  return data.numberCoInsured
+  return typeof data.numberCoInsured === 'number'
     ? [
         {
           key: 'householdSize',
