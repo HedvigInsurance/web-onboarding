@@ -28,7 +28,6 @@ import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate } from './StartDate'
@@ -215,23 +214,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <StartDate quoteCartId={quoteCartId} modal size="sm" />
               </Body>
               <Footer>
-                {isLoadingQuoteCart ? (
-                  <Button
-                    size="sm"
-                    fullWidth
-                    style={{ height: '2.75rem' }}
-                    foreground={colorsV3.gray900}
-                    background={colorsV3.purple500}
-                  >
-                    <LoadingDots color={colorsV3.gray500} />
-                  </Button>
-                ) : isConnectPaymentAtSignEnabled ? (
+                {isConnectPaymentAtSignEnabled ? (
                   <LinkButton
                     size="sm"
                     fullWidth
                     to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
+                    disabled={isLoadingQuoteCart}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </LinkButton>
@@ -242,6 +232,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={onCheckoutOpen}
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
+                    disabled={isLoadingQuoteCart}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </Button>
