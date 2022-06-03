@@ -78,7 +78,7 @@ export const StickyBottomSidebar: React.FC<Hidable & {
   return (
     <Wrapper isVisible={reallyIsVisible} displayNone={displayNone}>
       <CtaWrapper>
-         isConnectPaymentAtSignEnabled ? (
+        {isConnectPaymentAtSignEnabled ? (
           <LinkButton
             size="sm"
             fullWidth
