@@ -8,6 +8,7 @@ import { useFeature, Features } from 'utils/hooks/useFeature'
 import { Button, LinkButton } from 'components/buttons'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 
 interface Hidable {
   isVisible: boolean
@@ -60,7 +61,8 @@ const avoidDisplayNoneGlitch = (
 
 export const StickyBottomSidebar: React.FC<Hidable & {
   onCheckoutOpen: () => void
-}> = ({ isVisible, onCheckoutOpen }) => {
+  isLoadingQuoteCart: boolean
+}> = ({ isVisible, onCheckoutOpen, isLoadingQuoteCart }) => {
   const [reallyIsVisible, setReallyIsVisible] = React.useState(false)
   const [displayNone, setDisplayNone] = React.useState(false)
   const { quoteCartId } = useQuoteCartIdFromUrl()
@@ -76,7 +78,11 @@ export const StickyBottomSidebar: React.FC<Hidable & {
   return (
     <Wrapper isVisible={reallyIsVisible} displayNone={displayNone}>
       <CtaWrapper>
-        {isConnectPaymentAtSignEnabled ? (
+        {isLoadingQuoteCart ? (
+          <Button size="sm" fullWidth disabled style={{ height: '2.75rem' }}>
+            <LoadingDots color={colorsV3.gray500} />
+          </Button>
+        ) : isConnectPaymentAtSignEnabled ? (
           <LinkButton
             size="sm"
             fullWidth

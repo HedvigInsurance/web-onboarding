@@ -7,6 +7,9 @@ import {
   useAddCampaignCodeMutation,
   useRemoveCampaignCodeMutation,
   CampaignDataFragment,
+  useQuoteCartQuery,
+  useCreateQuoteBundleMutation,
+  useQuoteBundleQuery,
 } from 'data/graphql'
 
 import { Button, TextButton, LinkButton } from 'components/buttons'
@@ -27,6 +30,8 @@ import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { LoadingDots } from 'components/LoadingDots/LoadingDots'
+import { useQuoteIds } from 'utils/hooks/useQuoteIds'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate } from './StartDate'
@@ -134,8 +139,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const textKeys = useTextKeys()
-  const { path: localePath } = useCurrentLocale()
+  const { isoLocale, path: localePath } = useCurrentLocale()
 
+  const { loading: isLoadingQuoteCart } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: isoLocale,
+    },
+    notifyOnNetworkStatusChange: true,
+  })
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
@@ -206,7 +218,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <StartDate quoteCartId={quoteCartId} modal size="sm" />
               </Body>
               <Footer>
-                {isConnectPaymentAtSignEnabled ? (
+                {isLoadingQuoteCart ? (
+                  <Button
+                    size="sm"
+                    fullWidth
+                    style={{ height: '2.75rem' }}
+                    foreground={colorsV3.gray900}
+                    background={colorsV3.purple500}
+                  >
+                    <LoadingDots color={colorsV3.gray500} />
+                  </Button>
+                ) : isConnectPaymentAtSignEnabled ? (
                   <LinkButton
                     size="sm"
                     fullWidth
@@ -257,6 +279,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <StickyBottomSidebar
         isVisible={!isSidebarVisible}
         onCheckoutOpen={onCheckoutOpen}
+        isLoadingQuoteCart={isLoadingQuoteCart}
       />
     </>
   )
