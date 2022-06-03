@@ -3,10 +3,7 @@ import { colorsV3, fonts } from '@hedviginsurance/brand'
 import React from 'react'
 import { useHistory } from 'react-router'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
-import {
-  AdyenCheckout,
-  getOnSuccessRedirectUrl,
-} from 'pages/ConnectPayment/components/AdyenCheckout'
+import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
 import { useTextKeys } from 'utils/textKeys'
 import { useBreakpoint } from 'utils/hooks/useBreakpoint'
@@ -17,6 +14,7 @@ import {
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { AVYWindow } from 'utils/tracking/gtm/signing'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { LocaleLabel } from 'l10n/locales'
 import { ErrorModal } from '../components/ErrorModal'
 import { useIsPaymentConnected } from '../useIsPaymentConnected'
 
@@ -133,6 +131,14 @@ const InstructionItemSeparator = styled.div`
   height: 0.5rem;
 `
 
+const getPaymentAlreadyConnectedUrl = ({
+  currentLocalePath,
+}: {
+  currentLocalePath: LocaleLabel
+}) => {
+  return `/${currentLocalePath}/new-member/confirmation`
+}
+
 export const ConnectPaymentPage: React.FC = () => {
   const textKeys = useTextKeys()
   const market = useMarket()
@@ -154,7 +160,7 @@ export const ConnectPaymentPage: React.FC = () => {
   }
 
   if (isPaymentConnected) {
-    history.push(getOnSuccessRedirectUrl({ currentLocalePath: path }))
+    history.push(getPaymentAlreadyConnectedUrl({ currentLocalePath: path }))
   }
 
   return (

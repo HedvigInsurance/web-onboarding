@@ -184,7 +184,7 @@ const getReturnUrl = ({
   return `${window.location.origin}/${currentLocalePath}/new-member/connect-payment/adyen-callback`
 }
 
-export const getOnSuccessRedirectUrl = ({
+const getOnSuccessRedirectUrl = ({
   currentLocalePath,
 }: {
   currentLocalePath: LocaleLabel

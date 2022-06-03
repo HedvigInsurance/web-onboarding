@@ -5,7 +5,6 @@ import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useBreakpoint } from 'utils/hooks/useBreakpoint'
 import { TOP_BAR_HEIGHT } from 'components/TopBar'
-import { DownloadHeadline } from './DownloadHeadline'
 import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'
 
@@ -69,7 +68,36 @@ const ImageSection = styled.div`
   }
 `
 
-export const DownloadPageContent: React.FC = () => {
+const Headline = styled.h1`
+  width: 100%;
+  font-size: 2rem;
+  line-height: 1.25;
+  color: ${colorsV3.gray900};
+
+  ${LARGE_SCREEN_MEDIA_QUERY} {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-size: 3rem;
+    line-height: 1.16;
+  }
+`
+
+type DownloadPageContentProps = {
+  paragraphTextKeys?: string[]
+  headlineTextKeys?: string[]
+}
+
+export const DownloadPageContent = ({
+  paragraphTextKeys = [
+    'ONBOARDING_DOWNLOAD_PARAGRAPH_1',
+    'ONBOARDING_DOWNLOAD_PARAGRAPH_2',
+  ],
+  headlineTextKeys = [
+    'ONBOARDING_DOWNLOAD_HEADLINE_PART_1',
+    'ONBOARDING_DOWNLOAD_HEADLINE_PART_2',
+  ],
+}: DownloadPageContentProps) => {
   const textKeys = useTextKeys()
 
   const { isLargeScreen } = useBreakpoint()
@@ -79,7 +107,11 @@ export const DownloadPageContent: React.FC = () => {
       <ContentContainer>
         <div>
           <HeadlineWrapper>
-            <DownloadHeadline />
+            <Headline>
+              {headlineTextKeys.map((textKey) => (
+                <span key={textKey}>{textKeys[textKey]() + ' '}</span>
+              ))}
+            </Headline>
           </HeadlineWrapper>
           {!isLargeScreen && (
             <ImageSection>
@@ -87,8 +119,9 @@ export const DownloadPageContent: React.FC = () => {
             </ImageSection>
           )}
           <TextWrapper>
-            <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_1()}</Paragraph>
-            <Paragraph>{textKeys.ONBOARDING_DOWNLOAD_PARAGRAPH_2()}</Paragraph>
+            {paragraphTextKeys.map((textKey) => (
+              <Paragraph key={textKey}>{textKeys[textKey]()}</Paragraph>
+            ))}
           </TextWrapper>
           <GetAppButtons />
         </div>
