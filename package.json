@@ -137,7 +137,7 @@
     "dotenv": "^8.2.0",
     "escape-html": "^1.0.3",
     "eventemitter3": "^4.0.7",
-    "formik": "^2.0.8",
+    "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "graphql": "^14",
     "graphql-tag": "^2.10.0",
