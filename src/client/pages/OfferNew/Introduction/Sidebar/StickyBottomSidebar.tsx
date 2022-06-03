@@ -8,7 +8,6 @@ import { useFeature, Features } from 'utils/hooks/useFeature'
 import { Button, LinkButton } from 'components/buttons'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 
 interface Hidable {
   isVisible: boolean
