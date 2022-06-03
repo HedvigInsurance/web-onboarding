@@ -32,4 +32,22 @@ export const callCenters: CallCenters = {
       lunchEndsAt: '13',
     },
   },
+  NO: {
+    callCenter: {
+      displayNumber: '38 99 41 11',
+      hrefNumber: 'tel:38 99 41 11',
+      opensAt: '09',
+      closesAt: '16',
+      lunchStartsAt: '12',
+      lunchEndsAt: '13',
+    },
+    supportNumber: {
+      displayNumber: '38 99 41 11',
+      hrefNumber: 'tel:38 99 41 11',
+      opensAt: '09',
+      closesAt: '16',
+      lunchStartsAt: '12',
+      lunchEndsAt: '13',
+    },
+  },
 }
