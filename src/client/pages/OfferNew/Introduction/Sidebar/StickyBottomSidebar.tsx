@@ -61,7 +61,7 @@ const avoidDisplayNoneGlitch = (
 
 export const StickyBottomSidebar: React.FC<Hidable & {
   onCheckoutOpen: () => void
-  isLoadingQuoteCart: boolean
+  isLoadingQuoteCart?: boolean
 }> = ({ isVisible, onCheckoutOpen, isLoadingQuoteCart }) => {
   const [reallyIsVisible, setReallyIsVisible] = React.useState(false)
   const [displayNone, setDisplayNone] = React.useState(false)
