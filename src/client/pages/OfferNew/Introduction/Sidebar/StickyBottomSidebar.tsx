@@ -78,17 +78,14 @@ export const StickyBottomSidebar: React.FC<Hidable & {
   return (
     <Wrapper isVisible={reallyIsVisible} displayNone={displayNone}>
       <CtaWrapper>
-        {isLoadingQuoteCart ? (
-          <Button size="sm" fullWidth disabled style={{ height: '2.75rem' }}>
-            <LoadingDots color={colorsV3.gray500} />
-          </Button>
-        ) : isConnectPaymentAtSignEnabled ? (
+         isConnectPaymentAtSignEnabled ? (
           <LinkButton
             size="sm"
             fullWidth
             to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
             foreground={colorsV3.gray900}
             background={colorsV3.purple500}
+            disabled={isLoadingQuoteCart}
           >
             {textKeys.SIDEBAR_PROCEED_BUTTON()}
           </LinkButton>
@@ -99,6 +96,7 @@ export const StickyBottomSidebar: React.FC<Hidable & {
             onClick={onCheckoutOpen}
             foreground={colorsV3.gray900}
             background={colorsV3.purple500}
+            disabled={isLoadingQuoteCart}
           >
             {textKeys.SIDEBAR_PROCEED_BUTTON()}
           </Button>
