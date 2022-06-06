@@ -60,7 +60,8 @@ const avoidDisplayNoneGlitch = (
 
 export const StickyBottomSidebar: React.FC<Hidable & {
   onCheckoutOpen: () => void
-}> = ({ isVisible, onCheckoutOpen }) => {
+  isLoadingQuoteCart?: boolean
+}> = ({ isVisible, onCheckoutOpen, isLoadingQuoteCart }) => {
   const [reallyIsVisible, setReallyIsVisible] = React.useState(false)
   const [displayNone, setDisplayNone] = React.useState(false)
   const { quoteCartId } = useQuoteCartIdFromUrl()
@@ -83,6 +84,7 @@ export const StickyBottomSidebar: React.FC<Hidable & {
             to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
             foreground={colorsV3.gray900}
             background={colorsV3.purple500}
+            disabled={isLoadingQuoteCart}
           >
             {textKeys.SIDEBAR_PROCEED_BUTTON()}
           </LinkButton>
@@ -93,6 +95,7 @@ export const StickyBottomSidebar: React.FC<Hidable & {
             onClick={onCheckoutOpen}
             foreground={colorsV3.gray900}
             background={colorsV3.purple500}
+            disabled={isLoadingQuoteCart}
           >
             {textKeys.SIDEBAR_PROCEED_BUTTON()}
           </Button>
