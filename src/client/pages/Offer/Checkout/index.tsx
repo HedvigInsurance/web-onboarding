@@ -15,6 +15,7 @@ import {
   CheckoutMethod,
   CampaignDataFragment,
   useCreateQuoteBundleMutation,
+  useQuoteCartQuery,
 } from 'data/graphql'
 import {
   getUniqueQuotesFromVariantList,
@@ -269,7 +270,13 @@ export const Checkout = ({
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
-
+  const { loading: isLoadingQuoteCart } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: locale.isoLocale,
+    },
+    notifyOnNetworkStatusChange: true,
+  })
   const mainQuote = selectedQuoteBundleVariant.bundle.quotes[0]
   const privacyPolicyLink = mainQuote.insuranceTerms.find(
     ({ type }) => type === InsuranceTermType.PrivacyPolicy,
@@ -522,7 +529,7 @@ export const Checkout = ({
               <PriceBreakdown
                 offerData={offerData}
                 showTotal={true}
-                isLoading={isBundleCreationInProgress}
+                isLoading={isBundleCreationInProgress || isLoadingQuoteCart}
               />
               <CheckoutDetailsForm formikProps={formik} />
               <StartDateWrapper>
@@ -551,6 +558,7 @@ export const Checkout = ({
             canInitiateSign={
               formik.isValid &&
               !isBundleCreationInProgress &&
+              !isLoadingQuoteCart &&
               signUiState !== 'STARTED'
             }
             checkoutMethod={checkoutMethod}
