@@ -208,7 +208,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const isLoadingCampaign =
     addCampaignCodeData.loading || removeCampaignCodeData.loading
-  console.log(addCampaignCodeData.loading, removeCampaignCodeData.loading)
   const isLoading =
     isLoadingQuoteCart || isLoadingCampaign || isLoadingCreateQuoteBundle
   return (
