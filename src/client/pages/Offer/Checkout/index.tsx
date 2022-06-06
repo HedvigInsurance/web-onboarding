@@ -266,10 +266,15 @@ export const Checkout = ({
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
   const [isManualReviewRequired, setIsManualReviewRequired] = useState(false)
   const [startCheckout] = useStartCheckoutMutation()
+  const createQuoteBundleMutation = useCreateQuoteBundleMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
+  })
   const [
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
-  ] = useCreateQuoteBundleMutation()
+  ] = createQuoteBundleMutation
   const { loading: isLoadingQuoteCart } = useQuoteCartQuery({
     variables: {
       id: quoteCartId,
@@ -536,7 +541,10 @@ export const Checkout = ({
                 <StartDateLabel>
                   {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
                 </StartDateLabel>
-                <StartDate quoteCartId={quoteCartId} />
+                <StartDate
+                  createQuoteBundleMutation={createQuoteBundleMutation}
+                  quoteCartId={quoteCartId}
+                />
               </StartDateWrapper>
               {isUpsellCardVisible && (
                 <UpsellCard

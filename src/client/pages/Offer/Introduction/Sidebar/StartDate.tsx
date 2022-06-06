@@ -286,12 +286,14 @@ export type StartDateProps = {
   quoteCartId: string
   modal?: boolean
   size?: Size
+  createQuoteBundleMutation: ReturnType<typeof useCreateQuoteBundleMutation>
 }
 
 export const StartDate = ({
   quoteCartId,
   modal = false,
   size = 'lg',
+  createQuoteBundleMutation,
 }: StartDateProps) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = useState(false)
@@ -300,7 +302,7 @@ export const StartDate = ({
   )
 
   const { isoLocale, marketLabel } = useCurrentLocale()
-  const [createQuoteBundle] = useCreateQuoteBundleMutation()
+  const [createQuoteBundle] = createQuoteBundleMutation
   const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: { id: quoteCartId, locale: isoLocale },
   })

@@ -8,6 +8,7 @@ import {
   useRemoveCampaignCodeMutation,
   CampaignDataFragment,
   useQuoteCartQuery,
+  useCreateQuoteBundleMutation,
 } from 'data/graphql'
 
 import { Button, TextButton, LinkButton } from 'components/buttons'
@@ -161,6 +162,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     notifyOnNetworkStatusChange: true,
   })
 
+  const createQuoteBundleMutation = useCreateQuoteBundleMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
+  })
+  const [, { loading: isLoadingCreateQuoteBundle }] = createQuoteBundleMutation
+
   const [isConnectPaymentAtSignEnabled] = useFeature([
     Features.CONNECT_PAYMENT_AT_SIGN,
   ])
@@ -201,7 +209,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isLoadingCampaign =
     addCampaignCodeData.loading || removeCampaignCodeData.loading
   console.log(addCampaignCodeData.loading, removeCampaignCodeData.loading)
-  const isLoading = isLoadingQuoteCart || isLoadingCampaign
+  const isLoading =
+    isLoadingQuoteCart || isLoadingCampaign || isLoadingCreateQuoteBundle
   return (
     <>
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -220,7 +229,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Body>
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
-                <StartDate quoteCartId={quoteCartId} modal size="sm" />
+                <StartDate
+                  createQuoteBundleMutation={createQuoteBundleMutation}
+                  quoteCartId={quoteCartId}
+                  modal
+                  size="sm"
+                />
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
