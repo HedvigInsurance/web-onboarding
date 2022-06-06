@@ -157,8 +157,6 @@ const Embark = (props: EmbarkProps) => {
   }
 
   const isCar = EmbarkStory.get()?.includes('car')
-  console.log(isCustomerServicePhoneNumberEnabled)
-  console.log(currentLocale.callCenter)
   return (
     <PassageContainer>
       <motion.div
