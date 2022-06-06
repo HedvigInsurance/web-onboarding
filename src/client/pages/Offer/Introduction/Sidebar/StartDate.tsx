@@ -229,7 +229,6 @@ const DateForm = ({
       })
     }
   }
-
   return (
     <RowButtonWrapper fieldLayout={fieldLayout}>
       {displayLabel && (
@@ -302,7 +301,7 @@ export const StartDate = ({
   )
 
   const { isoLocale, marketLabel } = useCurrentLocale()
-  const [createQuoteBundle] = createQuoteBundleMutation
+  const [createQuoteBundle, mutationData] = createQuoteBundleMutation
   const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: { id: quoteCartId, locale: isoLocale },
   })
@@ -400,7 +399,8 @@ export const StartDate = ({
               Boolean(
                 selectedQuotes[0].currentInsurer?.switchable &&
                   !selectedQuotes[0].startDate,
-              )
+              ) ||
+              mutationData.loading
             }
             fieldLayout={'full'}
             size={size}
@@ -410,7 +410,7 @@ export const StartDate = ({
                 selectedQuotes.map((q) => q.id),
               )
             }
-            loading={loadingQuoteIds.length > 0}
+            loading={loadingQuoteIds.length > 0 || mutationData.loading}
           />
         ) : (
           <>
@@ -430,7 +430,8 @@ export const StartDate = ({
                     loadingQuoteIds.length > 0 ||
                     Boolean(
                       quote.currentInsurer?.switchable && !quote.startDate,
-                    )
+                    ) ||
+                    mutationData.loading
                   }
                   fieldLayout={
                     isExpandedFirstItem
@@ -458,7 +459,7 @@ export const StartDate = ({
 
       <CancellationOptions
         quotes={selectedQuotes}
-        loadingQuoteIds={loadingQuoteIds}
+        isDisabled={loadingQuoteIds.length > 0 || mutationData.loading}
         onToggleCancellationOption={(isChecked, quoteId) =>
           handleSelectNewStartDate(isChecked ? null : new Date(), [quoteId])
         }

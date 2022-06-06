@@ -16,6 +16,7 @@ import { EventName } from 'utils/tracking/gtm/types'
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { MEDIUM_LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
+import { useCreateQuoteBundleMutation } from 'data/graphql'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
@@ -44,8 +45,13 @@ export const CheckoutDetails = () => {
 
   const sendDatadogAction = useSendDatadogAction()
   const trackOfferEvent = useTrackOfferEvent()
-  const { data, error } = useQuoteCartData()
 
+  const createQuoteBundleMutation = useCreateQuoteBundleMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
+  })
+  const { data, error } = useQuoteCartData()
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const history = useHistory()
@@ -84,11 +90,17 @@ export const CheckoutDetails = () => {
   const bundleVariants = data.bundleVariants
   const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
+
   return (
     <CheckoutDetailsWrapper handleClickBackButton={handleClickBackButton}>
       <PageSection>
         <YourPlan {...priceData} />
-        <StartDateSection />
+        <StartDateSection
+          createQuoteBundleMutation={createQuoteBundleMutation}
+          quoteCartId={quoteCartId}
+          modal
+          size="sm"
+        />
         <QuoteDetails
           groups={quoteDetails}
           onEditInfoButtonClick={() => setDetailsModalIsOpen(true)}
@@ -106,6 +118,7 @@ export const CheckoutDetails = () => {
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
         onClick={handleOnClick}
+        isLoading={createQuoteBundleMutation[1].loading}
       >
         <PaymentInfo {...priceData} />
       </Footer>
