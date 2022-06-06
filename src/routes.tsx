@@ -18,6 +18,7 @@ import { CheckoutDetails } from './client/pages/Checkout/CheckoutDetails/Checkou
 import { Checkout } from './client/pages/Checkout/CheckoutPayment'
 import { checkFeature } from './client/utils/checkFeature'
 import { Feature } from './shared/clientConfig'
+import { Confirmation } from './client/pages/Confirmation'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -108,6 +109,16 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       Component: Download,
+      exact: true,
+    },
+  },
+  {
+    path: `${onboardingLocaleBaseRoute}/confirmation`,
+    serverRouteData: {
+      titleTextKey: 'CONFIRMATION_PAGE_TITLE',
+    },
+    clientRouteData: {
+      Component: Confirmation,
       exact: true,
     },
   },
