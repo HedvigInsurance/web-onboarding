@@ -147,13 +147,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
-  const [addCampaignCode] = useAddCampaignCodeMutation({
+  const [addCampaignCode, addCampaignCodeData] = useAddCampaignCodeMutation({
     refetchQueries: ['QuoteCart'],
     awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
   })
-  const [removeCampaignCode] = useRemoveCampaignCodeMutation({
+  const [
+    removeCampaignCode,
+    removeCampaignCodeData,
+  ] = useRemoveCampaignCodeMutation({
     refetchQueries: ['QuoteCart'],
     awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
   })
 
   const [isConnectPaymentAtSignEnabled] = useFeature([
@@ -193,6 +198,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isDiscountPrice =
     offerData.cost.monthlyGross.amount !== offerData.cost.monthlyNet.amount
 
+  const isLoadingCampaign =
+    addCampaignCodeData.loading || removeCampaignCodeData.loading
+  console.log(addCampaignCodeData.loading, removeCampaignCodeData.loading)
+  const isLoading = isLoadingQuoteCart || isLoadingCampaign
   return (
     <>
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -221,7 +230,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
-                    disabled={isLoadingQuoteCart}
+                    disabled={isLoading}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </LinkButton>
@@ -232,7 +241,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={onCheckoutOpen}
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
-                    disabled={isLoadingQuoteCart}
+                    disabled={isLoading}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </Button>
@@ -267,7 +276,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <StickyBottomSidebar
         isVisible={!isSidebarVisible}
         onCheckoutOpen={onCheckoutOpen}
-        isLoadingQuoteCart={isLoadingQuoteCart}
+        isLoadingQuoteCart={isLoading}
       />
     </>
   )
