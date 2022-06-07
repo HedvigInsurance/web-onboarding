@@ -157,7 +157,6 @@ const Embark = (props: EmbarkProps) => {
   }
 
   const isCar = EmbarkStory.get()?.includes('car')
-
   return (
     <PassageContainer>
       <motion.div
