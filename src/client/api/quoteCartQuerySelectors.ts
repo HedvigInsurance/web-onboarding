@@ -6,6 +6,7 @@ import {
 } from 'data/graphql'
 import { getBundleVariantFromInsuranceTypesWithFallback } from 'pages/OfferNew/utils'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
+import { OfferData } from '../pages/OfferNew/types'
 
 export function getSelectedBundleVariant(
   quoteCartQuery: QuoteCartQuery | undefined,
@@ -83,5 +84,11 @@ export const isCarInsuranceType = (
 ) => {
   return bundleVariant?.bundle.quotes.every(
     (quote) => quote.data.type === 'SWEDISH_CAR',
+  )
+}
+
+export const hasCurrentInsurer = (offerData: OfferData | undefined) => {
+  return offerData?.quotes.every(
+    (quote) => quote.currentInsurer?.displayName != undefined,
   )
 }

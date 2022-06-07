@@ -7,7 +7,6 @@ import {
   useAddCampaignCodeMutation,
   useRemoveCampaignCodeMutation,
   CampaignDataFragment,
-  QuoteCartDocument,
 } from 'data/graphql'
 
 import { Button, TextButton, LinkButton } from 'components/buttons'
@@ -29,7 +28,7 @@ import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
-import { apolloClient } from 'apolloClient'
+import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate } from './StartDate'
@@ -114,6 +113,7 @@ const BodyTitle = styled.div`
     width: 1rem;
     :hover {
       color: ${colorsV3.gray700};
+      cursor: pointer;
     }
   }
 
@@ -152,7 +152,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const textKeys = useTextKeys()
-  const { path: localePath, isoLocale } = useCurrentLocale()
+  const { path: localePath } = useCurrentLocale()
 
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
@@ -203,13 +203,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isDiscountPrice =
     offerData.cost.monthlyGross.amount !== offerData.cost.monthlyNet.amount
 
-  const data = apolloClient?.client.readQuery({
-    query: QuoteCartDocument,
-    variables: { id: quoteCartId, locale: isoLocale },
-  })
-
-  const isSwitcher = true
-  console.log(data)
+  const isSwitcher = hasCurrentInsurer(offerData)
 
   return (
     <>
@@ -230,7 +224,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>
                   <p>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</p>
-                  {!isSwitcher && <TooltipIcon body="hej" filled={true} />}
+                  {!isSwitcher && (
+                    <TooltipIcon
+                      body={textKeys.SIDEBAR_START_DATE_INFO_TEXT()}
+                      filled={true}
+                    />
+                  )}
                 </BodyTitle>
                 <StartDate quoteCartId={quoteCartId} modal size="sm" />
               </Body>
