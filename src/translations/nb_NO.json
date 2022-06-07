@@ -418,7 +418,7 @@
   "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000": "",
   "DETAILS_MODULE_TABLE_ANNUAL_MILEAGE_OPTION_25000_PLUS": "",
   "CHECKOUT_BUTTON_CONNECT_CARD": "Koble til kredittkort",
-  "LANDING_PAGE_MULTI_MAIN_COVERAGE_SUBHEADING": "Velg minst en hovedforsikring og de tilleggsforsikringene du ønsker for å komme i gang.I de neste stegene vil vi stille noen oppfølgingsspørsmål.",
+  "LANDING_PAGE_MULTI_MAIN_COVERAGE_SUBHEADING": "Velg minst en hovedforsikring og de tilleggsforsikringene du ønsker for å komme i gang. I de neste stegene vil vi stille noen oppfølgingsspørsmål.",
   "OFFER_BUNDLE_SELECTOR_TITLE_CAR": "",
   "OFFER_BUNDLE_SELECTOR_DESCRIPTION_CAR": "",
   "OFFER_APP_PROMOTION_HEADING_CAR": "",
@@ -433,6 +433,5 @@
   "CONFIRMATION_PAGE_TITLE": "",
   "ONBOARDING_CONFIRMATION_PARAGRAPH_1": "",
   "ONBOARDING_CONFIRMATION_PARAGRAPH_2": "",
-  "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "",
-  "ONBOARDING_CONFIRMATION_HEADLINE_PART_2": ""
+  "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": ""
 }
