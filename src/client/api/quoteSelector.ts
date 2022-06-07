@@ -96,6 +96,7 @@ const HOME_OR_HOUSE_INSURANCE_TYPES = [
   InsuranceType.NORWEGIAN_HOME_CONTENT,
   InsuranceType.NORWEGIAN_HOUSE,
   InsuranceType.DANISH_HOME_CONTENT,
+  InsuranceType.DANISH_HOUSE,
 ]
 export const isHomeContentsOrHouse = (quote: BundledQuote) =>
   HOME_OR_HOUSE_INSURANCE_TYPES.includes(quote.data.type)
