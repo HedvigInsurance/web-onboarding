@@ -7,6 +7,7 @@ import {
   useAddCampaignCodeMutation,
   useRemoveCampaignCodeMutation,
   CampaignDataFragment,
+  useQuoteCartQuery,
 } from 'data/graphql'
 
 import { Button, TextButton, LinkButton } from 'components/buttons'
@@ -152,8 +153,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const textKeys = useTextKeys()
-  const { path: localePath } = useCurrentLocale()
+  const { isoLocale, path: localePath } = useCurrentLocale()
 
+  const { loading: isLoadingQuoteCart } = useQuoteCartQuery({
+    variables: {
+      id: quoteCartId,
+      locale: isoLocale,
+    },
+    notifyOnNetworkStatusChange: true,
+  })
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
@@ -241,6 +249,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
+                    disabled={isLoadingQuoteCart}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </LinkButton>
@@ -251,6 +260,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={onCheckoutOpen}
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
+                    disabled={isLoadingQuoteCart}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </Button>
@@ -285,6 +295,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <StickyBottomSidebar
         isVisible={!isSidebarVisible}
         onCheckoutOpen={onCheckoutOpen}
+        isLoadingQuoteCart={isLoadingQuoteCart}
       />
     </>
   )

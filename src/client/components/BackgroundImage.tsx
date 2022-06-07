@@ -73,12 +73,12 @@ const variants: Record<BackgroundImageVariant, ImageVariant> = {
   },
   car: {
     portrait: {
-      small: '/new-member-assets/landing/hedvig_garage_portrait_small.jpg',
-      medium: '/new-member-assets/landing/hedvig_garage_portrait_medium.jpg',
+      small: '/new-member-assets/landing/hedvig_car_portrait_small.jpg',
+      medium: '/new-member-assets/landing/hedvig_car_portrait_medium.jpg',
     },
     landscape: {
-      small: '/new-member-assets/landing/hedvig_garage_landscape_small.jpg',
-      medium: '/new-member-assets/landing/hedvig_garage_landscape_medium.jpg',
+      small: '/new-member-assets/landing/hedvig_car_landscape_small.jpg',
+      medium: '/new-member-assets/landing/hedvig_car_landscape_medium.jpg',
     },
   },
 }
