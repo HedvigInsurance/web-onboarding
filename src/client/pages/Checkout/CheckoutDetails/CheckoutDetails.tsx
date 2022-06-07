@@ -51,6 +51,7 @@ export const CheckoutDetails = () => {
     awaitRefetchQueries: true,
     notifyOnNetworkStatusChange: true,
   })
+  const [, { loading: isLoadingCreateQuoteBundle }] = createQuoteBundleMutation
   const { data, error } = useQuoteCartData()
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
@@ -118,7 +119,7 @@ export const CheckoutDetails = () => {
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
         onClick={handleOnClick}
-        isLoading={createQuoteBundleMutation[1].loading}
+        isLoading={isLoadingCreateQuoteBundle}
       >
         <PaymentInfo {...priceData} />
       </Footer>
