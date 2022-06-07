@@ -299,12 +299,10 @@ export const routes: Route[] = [
                     quoteCart: true,
                   }
                 case 'onboarding':
-                  if (isHouseEnabled) {
-                    return {
-                      baseUrl,
-                      name: EmbarkStory.DenmarkOnboarding,
-                      quoteCart: true,
-                    }
+                  return {
+                    baseUrl,
+                    name: EmbarkStory.DenmarkOnboarding,
+                    quoteCart: true,
                   }
               }
               break
