@@ -40,7 +40,6 @@ enum EmbarkStory {
   NorwayComboEnglishQuoteCart = 'Web Onboarding NO - English Combo Quote Cart',
   NorwayComboNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Combo Quote Cart',
   NorwayOnboarding = 'onboarding-NO',
-  NorwayOnboardingv2 = 'onboarding-NOv2',
 
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
@@ -257,7 +256,6 @@ export const routes: Route[] = [
             window.hedvigClientConfig.appEnvironment === 'production'
 
           const isCarEnabled = checkFeature(Feature.CAR_V1)
-          const isHouseEnabled = checkFeature(Feature.HOUSE_INSURANCE)
 
           switch (locale) {
             case 'dk':
@@ -299,12 +297,10 @@ export const routes: Route[] = [
                     quoteCart: true,
                   }
                 case 'onboarding':
-                  if (isHouseEnabled) {
-                    return {
-                      baseUrl,
-                      name: EmbarkStory.DenmarkOnboarding,
-                      quoteCart: true,
-                    }
+                  return {
+                    baseUrl,
+                    name: EmbarkStory.DenmarkOnboarding,
+                    quoteCart: true,
                   }
               }
               break
@@ -348,9 +344,7 @@ export const routes: Route[] = [
                 case 'onboarding':
                   return {
                     baseUrl,
-                    name: isHouseEnabled
-                      ? EmbarkStory.NorwayOnboardingv2
-                      : EmbarkStory.NorwayOnboarding,
+                    name: EmbarkStory.NorwayOnboarding,
                     quoteCart: true,
                   }
               }
