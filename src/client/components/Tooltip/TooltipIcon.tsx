@@ -18,7 +18,7 @@ export type TooltipIconProps = Pick<TooltipProps, 'body' | 'placement'> & {
   filled?: boolean
 }
 
-export const TooltipIcon = (props: TooltipIconProps, filled = 'false') => {
+export const TooltipIcon = ({ filled = false, ...props }: TooltipIconProps) => {
   const [isVisible, setIsVisible] = useState(false)
 
   return (
@@ -34,6 +34,7 @@ export const TooltipIcon = (props: TooltipIconProps, filled = 'false') => {
       >
         {filled ? (
           <InfoIconFilled
+            size={ICON_SIZE}
             color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
           />
         ) : (

@@ -153,8 +153,6 @@ export const OfferNew = () => {
     return <LoadingPage />
   }
 
-  console.log('hellodfg fegbefgb')
-
   if (quoteIds.length === 0) {
     return <Redirect to={`/${localePath}/new-member`} />
   }
