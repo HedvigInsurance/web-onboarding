@@ -150,7 +150,7 @@ const CardContainer = styled.div`
   }
 `
 
-export const Landing: React.FC = () => {
+export const Landing = () => {
   const textKeys = useTextKeys()
   const { marketLabel, path: localePath } = useCurrentLocale()
   const variation = useVariation()
@@ -179,7 +179,6 @@ export const Landing: React.FC = () => {
           />
           <LandingPageContainer>
             <Helmet>
-              <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
               {alternateLinksData.map(({ hrefLang, locale }) => (
                 <link
                   rel="alternate"

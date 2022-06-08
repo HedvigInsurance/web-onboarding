@@ -11,10 +11,8 @@ import { useHistory } from 'react-router'
 
 import { colorsV3 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
-import Helmet from 'react-helmet-async'
 import { apolloClient } from 'apolloClient'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
-import { useTextKeys } from 'utils/textKeys'
 import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
@@ -287,8 +285,6 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
     skip: !props.isUsingQuoteCart,
   })
 
-  const textKeys = useTextKeys()
-
   const trackPassageData = (
     eventName: string,
     payload: Record<string, any>,
@@ -369,14 +365,6 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
 
   return (
     <EmbarkStyling>
-      <Helmet>
-        <title>{textKeys.STARTPAGE_PAGE_TITLE()}</title>
-        <meta
-          property="og:image"
-          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg"
-        />
-        <meta property="og:title" content={textKeys.EMBARK_META_OG_TITLE()} />
-      </Helmet>
       <AnimatePresence>
         <motion.div
           key="embark"
