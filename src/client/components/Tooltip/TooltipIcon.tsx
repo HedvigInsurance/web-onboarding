@@ -4,6 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 
 import { Tooltip, TooltipProps } from 'components/Tooltip/Tooltip'
 import { InfoIcon, InfoIconFilled } from 'components/icons/Info'
+import { IconRootProps } from '../icons/IconRoot'
 
 const ICON_SIZE = '20px'
 
@@ -16,9 +17,13 @@ const TooltipIconWrapper = styled.div`
 `
 export type TooltipIconProps = Pick<TooltipProps, 'body' | 'placement'> & {
   filled?: boolean
-}
+} & Pick<IconRootProps, 'size'>
 
-export const TooltipIcon = (props: TooltipIconProps, filled = 'false') => {
+export const TooltipIcon = ({
+  size,
+  filled = false,
+  ...props
+}: TooltipIconProps) => {
   const [isVisible, setIsVisible] = useState(false)
 
   return (
@@ -34,11 +39,12 @@ export const TooltipIcon = (props: TooltipIconProps, filled = 'false') => {
       >
         {filled ? (
           <InfoIconFilled
+            size={size ?? ICON_SIZE}
             color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
           />
         ) : (
           <InfoIcon
-            size={ICON_SIZE}
+            size={size ?? ICON_SIZE}
             color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
           />
         )}
