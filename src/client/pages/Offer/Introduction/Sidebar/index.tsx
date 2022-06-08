@@ -110,8 +110,6 @@ const BodyTitle = styled.div`
   align-items: center;
 
   svg {
-    height: 1rem;
-    width: 1rem;
     :hover {
       color: ${colorsV3.gray700};
       cursor: pointer;
@@ -236,6 +234,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <TooltipIcon
                       body={textKeys.SIDEBAR_START_DATE_INFO_TEXT()}
                       filled={true}
+                      size="1rem"
                     />
                   )}
                 </BodyTitle>
