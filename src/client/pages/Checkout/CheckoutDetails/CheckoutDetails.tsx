@@ -16,12 +16,12 @@ import { EventName } from 'utils/tracking/gtm/types'
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { MEDIUM_LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
-import { useCreateQuoteBundleMutation } from 'data/graphql'
 import { CheckoutPageWrapper } from '../shared/CheckoutPageWrapper'
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
 import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
 import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
+import { useStartDate } from '../../Offer/Introduction/Sidebar/StartDate'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
@@ -45,18 +45,11 @@ export const CheckoutDetails = () => {
 
   const sendDatadogAction = useSendDatadogAction()
   const trackOfferEvent = useTrackOfferEvent()
-
-  const createQuoteBundleMutation = useCreateQuoteBundleMutation({
-    refetchQueries: ['QuoteCart'],
-    awaitRefetchQueries: true,
-    notifyOnNetworkStatusChange: true,
-  })
-  const [, { loading: isLoadingCreateQuoteBundle }] = createQuoteBundleMutation
   const { data, error } = useQuoteCartData()
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const history = useHistory()
-
+  const startDateProps = useStartDate()
   useScrollToTop()
 
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
@@ -96,12 +89,7 @@ export const CheckoutDetails = () => {
     <CheckoutDetailsWrapper handleClickBackButton={handleClickBackButton}>
       <PageSection>
         <YourPlan {...priceData} />
-        <StartDateSection
-          createQuoteBundleMutation={createQuoteBundleMutation}
-          quoteCartId={quoteCartId}
-          modal
-          size="sm"
-        />
+        <StartDateSection {...startDateProps} modal size="sm" />
         <QuoteDetails
           groups={quoteDetails}
           onEditInfoButtonClick={() => setDetailsModalIsOpen(true)}
@@ -119,7 +107,7 @@ export const CheckoutDetails = () => {
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
         onClick={handleOnClick}
-        isLoading={isLoadingCreateQuoteBundle}
+        isLoading={startDateProps.isLoading}
       >
         <PaymentInfo {...priceData} />
       </Footer>

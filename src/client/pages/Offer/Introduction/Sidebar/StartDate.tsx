@@ -15,9 +15,10 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { MarketLabel } from 'l10n/locales'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import {
-  useCreateQuoteBundleMutation,
   useQuoteCartQuery,
   CurrentInsurer,
+  useCreateQuoteBundleMutation,
+  BundledQuote,
 } from 'data/graphql'
 import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { StartDateLabelSwitcher } from 'pages/OfferNew/Introduction/Sidebar/StartDateLabelSwitcher'
@@ -29,6 +30,7 @@ import {
   getAllQuotes,
 } from 'api/quoteCartQuerySelectors'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { CancellationOptions } from './CancellationOptions'
 
 const DateFormsWrapper = styled.div`
@@ -282,38 +284,30 @@ const DateForm = ({
 }
 
 export type StartDateProps = {
-  quoteCartId: string
+  singleDate: boolean
+  selectedQuotes: BundledQuote[]
+  isLoading: boolean
+  onSelect: (
+    newDateValue: Date | null,
+    quoteIds: Array<string>,
+  ) => Promise<void>
   modal?: boolean
   size?: Size
-  createQuoteBundleMutation: ReturnType<typeof useCreateQuoteBundleMutation>
 }
 
 export const StartDate = ({
-  quoteCartId,
+  singleDate,
+  selectedQuotes,
+  isLoading,
+  onSelect,
   modal = false,
   size = 'lg',
-  createQuoteBundleMutation,
 }: StartDateProps) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = useState(false)
   const [loadingQuoteIds, setLoadingQuoteIds] = React.useState<Array<string>>(
     [],
   )
-
-  const { isoLocale, marketLabel } = useCurrentLocale()
-  const [createQuoteBundle, mutationData] = createQuoteBundleMutation
-  const { data: quoteCartQueryData } = useQuoteCartQuery({
-    variables: { id: quoteCartId, locale: isoLocale },
-  })
-  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-  const { bundle: selectedBundle } =
-    getSelectedBundleVariant(quoteCartQueryData, selectedInsuranceTypes) ?? {}
-  const singleDate = quoteBundleSelector.isSingleStartDate(
-    selectedBundle,
-    marketLabel,
-  )
-
-  const selectedQuotes = quoteBundleSelector.getQuotes(selectedBundle)
 
   const handleSelectNewStartDate = async (
     newDateValue: Date | null,
@@ -322,45 +316,7 @@ export const StartDate = ({
     try {
       setShowError(false)
       setLoadingQuoteIds(quoteIds)
-
-      const formattedDateValue =
-        newDateValue !== null ? formatDate(newDateValue, gqlDateFormat) : null
-
-      await createQuoteBundle({
-        variables: {
-          locale: isoLocale,
-          quoteCartId,
-          quotes: getAllQuotes(quoteCartQueryData).map((quote) => {
-            const {
-              id,
-              firstName,
-              lastName,
-              birthDate,
-              email,
-              ssn,
-              phoneNumber,
-              dataCollectionId,
-              currentInsurer,
-              data,
-            } = quote
-
-            return {
-              firstName,
-              lastName,
-              email,
-              birthDate,
-              ssn,
-              currentInsurer: currentInsurer?.id,
-              phoneNumber,
-              dataCollectionId,
-              startDate: quoteIds.includes(id)
-                ? formattedDateValue
-                : quote.startDate,
-              data,
-            }
-          }),
-        },
-      })
+      await onSelect(newDateValue, quoteIds)
     } catch {
       setShowError(true)
     } finally {
@@ -400,21 +356,21 @@ export const StartDate = ({
                 selectedQuotes[0].currentInsurer?.switchable &&
                   !selectedQuotes[0].startDate,
               ) ||
-              mutationData.loading
+              isLoading
             }
             fieldLayout={'full'}
             size={size}
             onChange={(newDate) =>
               handleSelectNewStartDate(
                 newDate,
-                selectedQuotes.map((q) => q.id),
+                selectedQuotes?.map((q) => q.id),
               )
             }
-            loading={loadingQuoteIds.length > 0 || mutationData.loading}
+            loading={loadingQuoteIds.length > 0 || isLoading}
           />
         ) : (
           <>
-            {selectedQuotes.map((quote, index, arr) => {
+            {selectedQuotes?.map((quote, index, arr) => {
               const isArrayLengthEven = arr.length % 2 === 0
               const isItemIndexEven = index % 2 === 0
               const isExpandedFirstItem = index === 0 && !isArrayLengthEven
@@ -431,7 +387,7 @@ export const StartDate = ({
                     Boolean(
                       quote.currentInsurer?.switchable && !quote.startDate,
                     ) ||
-                    mutationData.loading
+                    isLoading
                   }
                   fieldLayout={
                     isExpandedFirstItem
@@ -448,7 +404,7 @@ export const StartDate = ({
                   onChange={(newDate) =>
                     handleSelectNewStartDate(newDate, [quote.id])
                   }
-                  loading={loadingQuoteIds.includes(quote.id)}
+                  loading={loadingQuoteIds.includes(quote.id) || isLoading}
                   displayLabel
                 />
               )
@@ -459,11 +415,82 @@ export const StartDate = ({
 
       <CancellationOptions
         quotes={selectedQuotes}
-        isDisabled={loadingQuoteIds.length > 0 || mutationData.loading}
+        isDisabled={loadingQuoteIds.length > 0 || isLoading}
         onToggleCancellationOption={(isChecked, quoteId) =>
           handleSelectNewStartDate(isChecked ? null : new Date(), [quoteId])
         }
       />
     </>
   )
+}
+
+export const useStartDate = (): Omit<StartDateProps, 'size' | 'modal'> => {
+  const { quoteCartId } = useQuoteCartIdFromUrl()
+  const { isoLocale, marketLabel } = useCurrentLocale()
+
+  const [
+    createQuoteBundle,
+    { loading: isLoading },
+  ] = useCreateQuoteBundleMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
+  })
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: { id: quoteCartId, locale: isoLocale },
+  })
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+  const { bundle: selectedBundle } =
+    getSelectedBundleVariant(quoteCartQueryData, selectedInsuranceTypes) ?? {}
+  const singleDate = quoteBundleSelector.isSingleStartDate(
+    selectedBundle,
+    marketLabel,
+  )
+
+  const selectedQuotes = quoteBundleSelector.getQuotes(selectedBundle)
+
+  const onSelect = async (
+    newDateValue: Date | null,
+    quoteIds: Array<string>,
+  ) => {
+    const formattedDateValue =
+      newDateValue !== null ? formatDate(newDateValue, gqlDateFormat) : null
+
+    await createQuoteBundle({
+      variables: {
+        locale: isoLocale,
+        quoteCartId,
+        quotes: getAllQuotes(quoteCartQueryData).map((quote) => {
+          const {
+            id,
+            firstName,
+            lastName,
+            birthDate,
+            email,
+            ssn,
+            phoneNumber,
+            dataCollectionId,
+            currentInsurer,
+            data,
+          } = quote
+
+          return {
+            firstName,
+            lastName,
+            email,
+            birthDate,
+            ssn,
+            currentInsurer: currentInsurer?.id,
+            phoneNumber,
+            dataCollectionId,
+            startDate: quoteIds.includes(id)
+              ? formattedDateValue
+              : quote.startDate,
+            data,
+          }
+        }),
+      },
+    })
+  }
+  return { singleDate, selectedQuotes, isLoading, onSelect }
 }

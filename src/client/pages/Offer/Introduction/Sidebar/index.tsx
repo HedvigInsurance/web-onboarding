@@ -8,7 +8,6 @@ import {
   useRemoveCampaignCodeMutation,
   CampaignDataFragment,
   useQuoteCartQuery,
-  useCreateQuoteBundleMutation,
 } from 'data/graphql'
 
 import { Button, TextButton, LinkButton } from 'components/buttons'
@@ -31,7 +30,7 @@ import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
-import { StartDate } from './StartDate'
+import { StartDate, useStartDate } from './StartDate'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
@@ -162,12 +161,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     notifyOnNetworkStatusChange: true,
   })
 
-  const createQuoteBundleMutation = useCreateQuoteBundleMutation({
-    refetchQueries: ['QuoteCart'],
-    awaitRefetchQueries: true,
-    notifyOnNetworkStatusChange: true,
-  })
-  const [, { loading: isLoadingCreateQuoteBundle }] = createQuoteBundleMutation
+  const startDateProps = useStartDate()
 
   const [isConnectPaymentAtSignEnabled] = useFeature([
     Features.CONNECT_PAYMENT_AT_SIGN,
@@ -209,7 +203,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isLoadingCampaign =
     addCampaignCodeData.loading || removeCampaignCodeData.loading
   const isLoading =
-    isLoadingQuoteCart || isLoadingCampaign || isLoadingCreateQuoteBundle
+    isLoadingQuoteCart || isLoadingCampaign || startDateProps.isLoading
   return (
     <>
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -228,12 +222,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Body>
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
-                <StartDate
-                  createQuoteBundleMutation={createQuoteBundleMutation}
-                  quoteCartId={quoteCartId}
-                  modal
-                  size="sm"
-                />
+                <StartDate {...startDateProps} modal size="sm" />
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
@@ -244,6 +233,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
                     disabled={isLoading}
+                    onClick={(e) => {
+                      if (isLoading) e.preventDefault()
+                    }}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </LinkButton>

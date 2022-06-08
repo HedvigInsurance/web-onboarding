@@ -111,7 +111,7 @@ export const CancellationOptions = ({
 }: CancellationOptionsProps) => {
   return (
     <>
-      {quotes.map((quote) => {
+      {quotes?.map((quote) => {
         return (
           quote.currentInsurer?.switchable && (
             <CancellationOption
