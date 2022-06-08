@@ -256,7 +256,6 @@ export const routes: Route[] = [
             window.hedvigClientConfig.appEnvironment === 'production'
 
           const isCarEnabled = checkFeature(Feature.CAR_V1)
-          const isHouseEnabled = checkFeature(Feature.HOUSE_INSURANCE)
 
           switch (locale) {
             case 'dk':
@@ -298,12 +297,10 @@ export const routes: Route[] = [
                     quoteCart: true,
                   }
                 case 'onboarding':
-                  if (isHouseEnabled) {
-                    return {
-                      baseUrl,
-                      name: EmbarkStory.DenmarkOnboarding,
-                      quoteCart: true,
-                    }
+                  return {
+                    baseUrl,
+                    name: EmbarkStory.DenmarkOnboarding,
+                    quoteCart: true,
                   }
               }
               break
