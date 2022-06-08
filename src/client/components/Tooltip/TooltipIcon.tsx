@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 
 import { Tooltip, TooltipProps } from 'components/Tooltip/Tooltip'
-import { InfoIcon } from 'components/icons/Info'
+import { InfoIcon, InfoIconFilled } from 'components/icons/Info'
 
 const ICON_SIZE = '20px'
 
@@ -14,10 +14,11 @@ const TooltipIconWrapper = styled.div`
   display: flex;
   align-items: center;
 `
+export type TooltipIconProps = Pick<TooltipProps, 'body' | 'placement'> & {
+  filled?: boolean
+}
 
-export type TooltipIconProps = Pick<TooltipProps, 'body' | 'placement'>
-
-export const TooltipIcon = (props: TooltipIconProps) => {
+export const TooltipIcon = (props: TooltipIconProps, filled = 'false') => {
   const [isVisible, setIsVisible] = useState(false)
 
   return (
@@ -31,10 +32,16 @@ export const TooltipIcon = (props: TooltipIconProps) => {
         onMouseLeave={() => setIsVisible(false)}
         onTouchStart={() => setIsVisible(true)}
       >
-        <InfoIcon
-          size={ICON_SIZE}
-          color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
-        />
+        {filled ? (
+          <InfoIconFilled
+            color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
+          />
+        ) : (
+          <InfoIcon
+            size={ICON_SIZE}
+            color={isVisible ? colorsV3.gray700 : colorsV3.gray900}
+          />
+        )}
       </TooltipIconWrapper>
     </Tooltip>
   )
