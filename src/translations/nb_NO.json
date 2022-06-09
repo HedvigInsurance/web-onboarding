@@ -433,5 +433,6 @@
   "CONFIRMATION_PAGE_TITLE": "",
   "ONBOARDING_CONFIRMATION_PARAGRAPH_1": "",
   "ONBOARDING_CONFIRMATION_PARAGRAPH_2": "",
-  "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": ""
+  "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "",
+  "SIDEBAR_START_DATE_INFO_TEXT": "Har du allerede forsikring? Velg forfallsdagen for din nåværende forsikring som startdato. Hvis du ikke vet forfallsdagen angir du en nærliggende dato og endrer det i vår app senere."
 }

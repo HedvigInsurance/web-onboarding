@@ -28,6 +28,8 @@ import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
+import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate, useStartDate } from './StartDate'
@@ -103,6 +105,20 @@ const Body = styled.div`
 const BodyTitle = styled.div`
   margin-bottom: 0.75rem;
   color: ${colorsV3.gray900};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  svg {
+    :hover {
+      color: ${colorsV3.gray700};
+      cursor: pointer;
+    }
+  }
+
+  p {
+    margin-right: 0.5rem;
+  }
 `
 
 const Footer = styled.div`
@@ -204,6 +220,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     addCampaignCodeData.loading || removeCampaignCodeData.loading
   const isLoading =
     isLoadingQuoteCart || isLoadingCampaign || startDateProps.isLoading
+  const isSwitcher = hasCurrentInsurer(offerData)
+
   return (
     <>
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
@@ -221,8 +239,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </Header>
               <Body>
                 <PriceBreakdown offerData={offerData} />
-                <BodyTitle>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</BodyTitle>
+                <BodyTitle>
+                  <p>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</p>
+                  {!isSwitcher && (
+                    <TooltipIcon
+                      body={textKeys.SIDEBAR_START_DATE_INFO_TEXT()}
+                      filled={true}
+                      size="1rem"
+                    />
+                  )}
+                </BodyTitle>
                 <StartDate {...startDateProps} modal size="sm" />
+
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
