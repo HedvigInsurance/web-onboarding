@@ -82,6 +82,8 @@ const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
 
 export const routes: Route[] = [
   {
+    // TODO: this should be removed after Car has fully launched, since all /new-member routes
+    // will be pointing towards Racoon
     path: onboardingLocaleBaseRoute,
     serverRouteData: {
       titleTextKey: 'STARTPAGE_PAGE_TITLE',
@@ -135,6 +137,8 @@ export const routes: Route[] = [
     path: `${onboardingLocaleBaseRoute}/connect-payment/direct`,
     serverRouteData: {
       titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+      ogImage:
+        'https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg',
     },
     clientRouteData: {
       Component: ConnectPaymentsDirectEntry,
@@ -245,6 +249,8 @@ export const routes: Route[] = [
     path: `${onboardingLocaleBaseRoute}/:name/:id?`,
     serverRouteData: {
       titleTextKey: 'START_PAGE_TITLE',
+      ogImage:
+        'https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg',
     },
     clientRouteData: {
       render: ({ match }: RouteComponentProps<any>) => {
