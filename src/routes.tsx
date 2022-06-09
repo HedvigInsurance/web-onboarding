@@ -19,6 +19,11 @@ import { Checkout } from './client/pages/Checkout/CheckoutPayment'
 import { checkFeature } from './client/utils/checkFeature'
 import { Feature } from './shared/clientConfig'
 import { Confirmation } from './client/pages/Confirmation'
+import { LocalePath } from './client/components/utils/CurrentLocale'
+import {
+  LandingPageAlternateLinks,
+  LandingPageCanonicalLinks,
+} from './client/pages/Landing/landingPageData'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -49,11 +54,21 @@ enum EmbarkStory {
   SwedenCar = 'SE-onboarding-car',
 }
 
+export type CanonicalLinksPerLocale = Record<LocalePath, string>
+
+export type AlternateLinksData = {
+  hrefLang: string
+  locale: LocalePath
+  href: string
+}[]
+
 export type ServerSideRoute = {
   titleTextKey: string
   metaDescriptionTextKey?: string
   ogImage?: string
   status?: number
+  alternateLinks?: AlternateLinksData
+  canonicalLinks?: CanonicalLinksPerLocale
 }
 
 type ClientSideRoute = {
@@ -87,6 +102,8 @@ export const routes: Route[] = [
     path: onboardingLocaleBaseRoute,
     serverRouteData: {
       titleTextKey: 'STARTPAGE_PAGE_TITLE',
+      alternateLinks: LandingPageAlternateLinks,
+      canonicalLinks: LandingPageCanonicalLinks,
     },
     clientRouteData: {
       Component: Landing,
@@ -97,6 +114,8 @@ export const routes: Route[] = [
     path: `${onboardingLocaleBaseRoute}/home-insurance`,
     serverRouteData: {
       titleTextKey: 'STARTPAGE_PAGE_TITLE',
+      alternateLinks: LandingPageAlternateLinks,
+      canonicalLinks: LandingPageCanonicalLinks,
     },
     clientRouteData: {
       Component: Landing,
