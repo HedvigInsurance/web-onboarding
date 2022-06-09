@@ -1,4 +1,5 @@
 import { replacePlaceholders } from 'utils/textKeys'
+import { LocalePath } from 'components/utils/CurrentLocale'
 import { ServerSideRoute } from '../routes'
 import enNo from '../translations/en_NO.json'
 import enSe from '../translations/en_SE.json'
@@ -26,8 +27,9 @@ export const getPageMeta = (
   }
   const metaTitle = translations[locale]![route.titleTextKey]
   const ogDescription = getOgDescription(route, code, locale)
+  const canonical = route.canonicalLinks?.[locale as LocalePath]
 
-  return { metaTitle, ogDescription }
+  return { metaTitle, ogDescription, canonical }
 }
 
 const getOgDescription = (
