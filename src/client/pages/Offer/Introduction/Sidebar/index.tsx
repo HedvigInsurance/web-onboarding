@@ -250,7 +250,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   )}
                 </BodyTitle>
                 <StartDate {...startDateProps} modal size="sm" />
-
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
