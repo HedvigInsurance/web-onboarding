@@ -87,6 +87,29 @@ const template = (
         ? `<script nonce="${cspNonce}" defer src="${adtractionTag}"></script>`
         : ''
     }
+
+    ${
+      pageMeta?.canonical
+        ? `<link
+      rel="canonical"
+      href="${pageMeta?.canonical}"
+    />`
+        : ''
+    }
+    ${
+      serverRouteData.alternateLinks
+        ? serverRouteData.alternateLinks.reduce(
+            (prev, { hrefLang, locale, href }) =>
+              `${prev}<link
+          rel="alternate"
+          hrefLang="${hrefLang}"
+          href="${href}"
+          key="${locale}"
+        />`,
+            '',
+          )
+        : ''
+    }
   </head>
   <body>
   ${

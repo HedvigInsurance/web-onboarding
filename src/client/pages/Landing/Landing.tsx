@@ -2,7 +2,6 @@ import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React, { useMemo } from 'react'
-import Helmet from 'react-helmet-async'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import { BackgroundImage } from 'components/BackgroundImage'
@@ -17,7 +16,7 @@ import {
 } from 'utils/mediaQueries'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
-import { alternateLinksData, getProductsData } from './landingPageData'
+import { getProductsData } from './landingPageData'
 import { Card, CardHeadline, CardParagraph } from './components/Card'
 
 const LandingPageContainer = styled.div`
@@ -178,21 +177,6 @@ export const Landing = () => {
             `}
           />
           <LandingPageContainer>
-            <Helmet>
-              {alternateLinksData.map(({ hrefLang, locale }) => (
-                <link
-                  rel="alternate"
-                  hrefLang={hrefLang}
-                  href={`https://www.hedvig.com/${locale}/new-member`}
-                  key={locale}
-                />
-              ))}
-              <link
-                rel="canonical"
-                href={`https://hedvig.com/${localePath}/new-member`}
-              />
-            </Helmet>
-
             {![Variation.IOS, Variation.ANDROID].includes(variation!) && (
               <>
                 <TopBar isTransparent>
