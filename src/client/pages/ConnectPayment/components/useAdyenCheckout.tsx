@@ -30,13 +30,6 @@ interface Params {
   quoteCartId: string
 }
 
-type DropinApi = {
-  setStatus: (
-    status: 'loading' | 'success' | 'error' | 'ready',
-    options?: { message: string },
-  ) => void
-}
-
 const getAvailablePaymentMethods = (
   paymentMethodsResponseNew: PaymentMethodsQuery,
 ) => {
