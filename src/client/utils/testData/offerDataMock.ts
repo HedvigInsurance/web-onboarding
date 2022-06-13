@@ -1,5 +1,4 @@
 import {
-  InsurableLimit,
   InsurableLimitType,
   NorwegianHomeContentsType,
   PerilV2,
@@ -8,22 +7,20 @@ import {
   CurrentInsurer,
   InsuranceTerm,
   SwedishApartmentType,
+  InsurableLimit,
 } from 'data/graphql'
 import { OfferData } from '../../pages/OfferNew/types'
 
-const insurableLimitMock = new Map([
-  [
-    InsurableLimitType.InsuredAmount,
-    {
-      description:
-        'Alla dina ägodelar är sammanlagt försäkrade upp till 1 miljon kronor',
-      label: 'Dina saker är försäkrade till totalt',
-      limit: '1 000 000 kr',
-      type: 'INSURED_AMOUNT',
-      __typename: 'InsurableLimit',
-    },
-  ],
-]) as ReadonlyMap<InsurableLimitType, InsurableLimit>
+const insurableLimitMock = [
+  {
+    description:
+      'Alla dina ägodelar är sammanlagt försäkrade upp till 1 miljon kronor',
+    label: 'Dina saker är försäkrade till totalt',
+    limit: '1 000 000 kr',
+    type: InsurableLimitType.InsuredAmount,
+    __typename: 'InsurableLimit',
+  } as InsurableLimit,
+]
 
 const insuranceTermsMock = [
   {
