@@ -175,6 +175,8 @@ const PaymentResult = styled.div`
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
   svg {
     margin-right: 1rem;
   }
@@ -496,7 +498,9 @@ export const CheckoutPayment = ({
               <Button
                 fullWidth={true}
                 onClick={() => handleClickCompletePurchase()}
-                disabled={isFormikError}
+                disabled={
+                  isFormikError || isBundleCreationInProgress || isDataLoading
+                }
               >
                 {textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
               </Button>
