@@ -117,7 +117,7 @@ const BodyTitle = styled.div`
   }
 
   p {
-    margin-right: 0.5rem;
+    margin: 0 0.5rem 0 0;
   }
 `
 
