@@ -57,7 +57,6 @@ export const useAdyenCheckout = ({
   adyenRef,
   quoteCartId,
 }: Params) => {
-  const [dropinComponent, setDropinComponent] = useState<DropinApi | null>(null)
   const [adyenState, setAdyenState] = useState<ADYEN_STATE>('NOT_LOADED')
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const storage = useStorage()
@@ -116,7 +115,6 @@ export const useAdyenCheckout = ({
     })
 
     dropinApi.mount(adyenRef.current)
-    setDropinComponent(dropinApi)
     setAdyenState('MOUNTED')
   }, [
     paymentMethodsResponse,
