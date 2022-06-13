@@ -45,7 +45,7 @@ const StyledAccordionItem = styled(AccordionItem)`
   &:not(:last-child) {
     padding-bottom: 1.5rem;
     ${LARGE_SCREEN_MEDIA_QUERY} {
-      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
     }
   }
 `
