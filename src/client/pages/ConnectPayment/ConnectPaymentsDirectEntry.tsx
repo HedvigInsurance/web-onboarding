@@ -2,8 +2,6 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand/dist'
 import { motion } from 'framer-motion'
 import React from 'react'
-import Helmet from 'react-helmet-async'
-import { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router-dom'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Page } from 'components/utils/Page'
@@ -19,26 +17,12 @@ const ButtonWrapper = styled.div`
   padding-top: 1rem;
 `
 
-export const ConnectPaymentsDirectEntry: React.FC<RouteComponentProps<
-  Record<string, string | undefined>
->> = () => {
+export const ConnectPaymentsDirectEntry = () => {
   const { path: currentLocalePath } = useCurrentLocale()
   const textKeys = useTextKeys()
 
   return (
     <Page>
-      <Helmet>
-        <title>{textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}</title>
-        <meta
-          property="og:image"
-          content="https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg"
-        />
-        <meta
-          property="og:title"
-          content={textKeys.ONBOARDING_CONNECT_DD_PAGE_TITLE()}
-        />
-      </Helmet>
-
       <ExchangeTokenRetrieval>
         {({ exchangeTokenState, retry }) => (
           <LoadingPage

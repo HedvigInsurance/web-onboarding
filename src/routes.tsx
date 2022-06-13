@@ -19,6 +19,11 @@ import { Checkout } from './client/pages/Checkout/CheckoutPayment'
 import { checkFeature } from './client/utils/checkFeature'
 import { Feature } from './shared/clientConfig'
 import { Confirmation } from './client/pages/Confirmation'
+import { LocalePath } from './client/components/utils/CurrentLocale'
+import {
+  LandingPageAlternateLinks,
+  LandingPageCanonicalLinks,
+} from './client/pages/Landing/landingPageData'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -40,7 +45,6 @@ enum EmbarkStory {
   NorwayComboEnglishQuoteCart = 'Web Onboarding NO - English Combo Quote Cart',
   NorwayComboNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Combo Quote Cart',
   NorwayOnboarding = 'onboarding-NO',
-  NorwayOnboardingv2 = 'onboarding-NOv2',
 
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
@@ -50,11 +54,21 @@ enum EmbarkStory {
   SwedenCar = 'SE-onboarding-car',
 }
 
+export type CanonicalLinksPerLocale = Record<LocalePath, string>
+
+export type AlternateLinksData = {
+  hrefLang: string
+  locale: LocalePath
+  href: string
+}[]
+
 export type ServerSideRoute = {
   titleTextKey: string
   metaDescriptionTextKey?: string
   ogImage?: string
   status?: number
+  alternateLinks?: AlternateLinksData
+  canonicalLinks?: CanonicalLinksPerLocale
 }
 
 type ClientSideRoute = {
@@ -83,9 +97,13 @@ const onboardingLocaleBaseRoute = `${localePathPattern}${landingRoute}`
 
 export const routes: Route[] = [
   {
+    // TODO: this should be removed after Car has fully launched, since all /new-member routes
+    // will be pointing towards Racoon
     path: onboardingLocaleBaseRoute,
     serverRouteData: {
       titleTextKey: 'STARTPAGE_PAGE_TITLE',
+      alternateLinks: LandingPageAlternateLinks,
+      canonicalLinks: LandingPageCanonicalLinks,
     },
     clientRouteData: {
       Component: Landing,
@@ -96,6 +114,8 @@ export const routes: Route[] = [
     path: `${onboardingLocaleBaseRoute}/home-insurance`,
     serverRouteData: {
       titleTextKey: 'STARTPAGE_PAGE_TITLE',
+      alternateLinks: LandingPageAlternateLinks,
+      canonicalLinks: LandingPageCanonicalLinks,
     },
     clientRouteData: {
       Component: Landing,
@@ -136,6 +156,8 @@ export const routes: Route[] = [
     path: `${onboardingLocaleBaseRoute}/connect-payment/direct`,
     serverRouteData: {
       titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+      ogImage:
+        'https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg',
     },
     clientRouteData: {
       Component: ConnectPaymentsDirectEntry,
@@ -246,6 +268,8 @@ export const routes: Route[] = [
     path: `${onboardingLocaleBaseRoute}/:name/:id?`,
     serverRouteData: {
       titleTextKey: 'START_PAGE_TITLE',
+      ogImage:
+        'https://www.hedvig.com/new-member-assets/social/hedvig-hemforsakring-2.jpg',
     },
     clientRouteData: {
       render: ({ match }: RouteComponentProps<any>) => {
@@ -257,7 +281,6 @@ export const routes: Route[] = [
             window.hedvigClientConfig.appEnvironment === 'production'
 
           const isCarEnabled = checkFeature(Feature.CAR_V1)
-          const isHouseEnabled = checkFeature(Feature.HOUSE_INSURANCE)
 
           switch (locale) {
             case 'dk':
@@ -299,12 +322,10 @@ export const routes: Route[] = [
                     quoteCart: true,
                   }
                 case 'onboarding':
-                  if (isHouseEnabled) {
-                    return {
-                      baseUrl,
-                      name: EmbarkStory.DenmarkOnboarding,
-                      quoteCart: true,
-                    }
+                  return {
+                    baseUrl,
+                    name: EmbarkStory.DenmarkOnboarding,
+                    quoteCart: true,
                   }
               }
               break
@@ -348,9 +369,7 @@ export const routes: Route[] = [
                 case 'onboarding':
                   return {
                     baseUrl,
-                    name: isHouseEnabled
-                      ? EmbarkStory.NorwayOnboardingv2
-                      : EmbarkStory.NorwayOnboarding,
+                    name: EmbarkStory.NorwayOnboarding,
                     quoteCart: true,
                   }
               }
