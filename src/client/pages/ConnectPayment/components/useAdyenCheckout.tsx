@@ -28,7 +28,6 @@ interface Params {
   onSuccess?: () => void
   adyenRef: React.MutableRefObject<HTMLDivElement | null>
   quoteCartId: string
-  isSuccess: boolean
 }
 
 type DropinApi = {
@@ -57,7 +56,6 @@ export const useAdyenCheckout = ({
   onSuccess,
   adyenRef,
   quoteCartId,
-  isSuccess,
 }: Params) => {
   const [dropinComponent, setDropinComponent] = useState<DropinApi | null>(null)
   const [adyenState, setAdyenState] = useState<ADYEN_STATE>('NOT_LOADED')
@@ -86,17 +84,6 @@ export const useAdyenCheckout = ({
   const trackOfferEvent = useTrackOfferEvent()
 
   const successMessage = textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()
-  // @ts-ignore only need to clean up timeout
-  useEffect(() => {
-    if (isSuccess && adyenState === 'MOUNTED') {
-      // Delay success message until dropin is fully loaded
-      const timeout = setTimeout(() => {
-        dropinComponent?.setStatus('success', { message: successMessage })
-      }, 300)
-
-      return () => clearTimeout(timeout)
-    }
-  }, [isSuccess, dropinComponent, adyenState, successMessage])
 
   useEffect(() => {
     if (

@@ -32,6 +32,8 @@ import { ErrorEventType, EventName } from 'utils/tracking/gtm/types'
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { useDebounce } from 'utils/hooks/useDebounce'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
+import { Button } from 'components/buttons'
+import { ThinTick } from 'components/icons/ThinTick'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -166,6 +168,18 @@ const Terms = styled.div`
   }
 `
 
+const PaymentResult = styled.div`
+  background-color: ${colorsV3.white};
+  width: 100%;
+  padding: 1rem;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  svg {
+    margin-right: 1rem;
+  }
+`
+
 const useSubmitFormOnSsnChange = (formik: FormikProps<QuoteInput>) => {
   const sendDatadogAction = useSendDatadogAction()
   const debouncedSsn = useDebounce(formik.values.ssn, 500)
@@ -222,7 +236,7 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
-  const [isPaymentConnected, setIsPaymentConnected] = useState(false)
+  const isPaymentConnected = localStorage.getItem('paymentConnected')
 
   useScrollToTop()
 
@@ -239,7 +253,7 @@ export const CheckoutPayment = ({
   }, [is3DsError, history, trackOfferEvent])
 
   const handlePaymentSuccess = useCallback(() => {
-    setIsPaymentConnected(true)
+    localStorage.setItem('paymentConnected', 'true')
     sendDatadogAction('payment_connected')
   }, [sendDatadogAction])
 
@@ -295,7 +309,6 @@ export const CheckoutPayment = ({
     adyenRef,
     onSuccess: handlePaymentSuccess,
     quoteCartId,
-    isSuccess: isPaymentConnected,
   })
 
   const { firstName, lastName, email, ssn, phoneNumber } = mainQuote
@@ -345,7 +358,7 @@ export const CheckoutPayment = ({
   ])
 
   useEffect(() => {
-    if (isPaymentConnected) {
+    if (isPaymentConnected === 'true') {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
     }
   }, [isPaymentConnected, trackOfferEvent])
@@ -445,6 +458,7 @@ export const CheckoutPayment = ({
   }, [checkoutStatus, completeCheckout])
 
   if (checkoutStatus === CheckoutStatus.Completed) {
+    localStorage.removeItem('paymentConnected')
     return <CheckoutSuccessRedirect connectPayment={false} />
   }
 
@@ -473,18 +487,29 @@ export const CheckoutPayment = ({
           <Description>
             {textKeys.CHECKOUT_PAYMENT_DETAILS_DESCRIPTION()}
           </Description>
-          <div id="dropin-container" ref={adyenRef}></div>
+          {isPaymentConnected ? (
+            <>
+              <PaymentResult>
+                <ThinTick color={colorsV3.gray900} />
+                {textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()}
+              </PaymentResult>
+              <Button
+                fullWidth={true}
+                onClick={() => handleClickCompletePurchase()}
+                disabled={isFormikError}
+              >
+                {textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
+              </Button>
+            </>
+          ) : (
+            <div id="dropin-container" ref={adyenRef}></div>
+          )}
           <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
         </Wrapper>
       </AdyenContainer>
       <CheckoutIntercomVariation />
       {mainQuote && (
-        <Footer
-          buttonText={textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
-          buttonOnClick={handleClickCompletePurchase}
-          isLoading={isBundleCreationInProgress || isDataLoading}
-          disabled={isFormikError || !isPaymentConnected}
-        >
+        <Footer isLoading={isBundleCreationInProgress || isDataLoading}>
           <PaymentInfo {...priceData} />
         </Footer>
       )}
