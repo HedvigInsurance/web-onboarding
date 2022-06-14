@@ -100,7 +100,12 @@ export const Footer = ({
         {buttonText && (
           <ButtonWrapper>
             {buttonLinkTo && (
-              <LinkButton {...buttonProps} to={buttonLinkTo} onClick={onClick}>
+              <LinkButton
+                {...buttonProps}
+                to={buttonLinkTo}
+                onClick={onClick}
+                disabled={isLoading || disabled}
+              >
                 {buttonText}
               </LinkButton>
             )}

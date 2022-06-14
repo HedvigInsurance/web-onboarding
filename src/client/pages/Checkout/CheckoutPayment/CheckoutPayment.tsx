@@ -182,17 +182,26 @@ const PaymentResult = styled.div`
   }
 `
 
-const useSubmitFormOnSsnChange = (formik: FormikProps<QuoteInput>) => {
+const useSubmitFormOnSsnChange = (
+  formik: FormikProps<QuoteInput>,
+  isDataLoading: boolean,
+) => {
   const sendDatadogAction = useSendDatadogAction()
   const debouncedSsn = useDebounce(formik.values.ssn, 500)
   const formikInitialSsn = formik.initialValues.ssn
   const formikSubmitForm = formik.submitForm
   useEffect(() => {
-    if (debouncedSsn !== formikInitialSsn) {
+    if (debouncedSsn !== formikInitialSsn && !isDataLoading) {
       sendDatadogAction('personal_number_update')
       formikSubmitForm()
     }
-  }, [debouncedSsn, formikInitialSsn, formikSubmitForm, sendDatadogAction])
+  }, [
+    debouncedSsn,
+    formikInitialSsn,
+    formikSubmitForm,
+    sendDatadogAction,
+    isDataLoading,
+  ])
 }
 
 type Props = {
@@ -451,7 +460,7 @@ export const CheckoutPayment = ({
     await performCheckout()
   }
 
-  useSubmitFormOnSsnChange(formik)
+  useSubmitFormOnSsnChange(formik, isDataLoading)
 
   useEffect(() => {
     if (checkoutStatus === CheckoutStatus.Signed) {
