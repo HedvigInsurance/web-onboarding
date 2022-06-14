@@ -3,7 +3,7 @@ import { LimitCode } from 'api/quoteBundleErrorSelectors'
 
 export const checkIsManualReviewRequired = (errors: GraphQLError[]) => {
   const manualReviewRequiredError = errors.find((error) => {
-    return ['MANUAL_REVIEW_REQUIRED', LimitCode.DEBT_CHECK].includes(
+    return [LimitCode.MANUAL_REVIEW_REQUIRED, LimitCode.DEBT_CHECK].includes(
       error?.extensions?.body?.errorCode,
     )
   })
