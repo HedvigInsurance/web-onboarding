@@ -21,6 +21,7 @@ import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
 import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
 import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
+import { useStartDateProps } from '../../Offer/Introduction/Sidebar/StartDate'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
@@ -45,11 +46,10 @@ export const CheckoutDetails = () => {
   const sendDatadogAction = useSendDatadogAction()
   const trackOfferEvent = useTrackOfferEvent()
   const { data, error } = useQuoteCartData()
-
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const history = useHistory()
-
+  const startDateProps = useStartDateProps()
   useScrollToTop()
 
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [
@@ -84,11 +84,12 @@ export const CheckoutDetails = () => {
   const bundleVariants = data.bundleVariants
   const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
+
   return (
     <CheckoutDetailsWrapper handleClickBackButton={handleClickBackButton}>
       <PageSection>
         <YourPlan {...priceData} />
-        <StartDateSection />
+        <StartDateSection {...startDateProps} modal size="sm" />
         <QuoteDetails
           groups={quoteDetails}
           onEditInfoButtonClick={() => setDetailsModalIsOpen(true)}
@@ -106,6 +107,7 @@ export const CheckoutDetails = () => {
         buttonText={textKeys.CHECKOUT_FOOTER_CONTINUE_TO_PAYMENT()}
         buttonLinkTo={paymentPageLink}
         onClick={handleOnClick}
+        isLoading={startDateProps.isLoading}
       >
         <PaymentInfo {...priceData} />
       </Footer>
