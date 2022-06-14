@@ -20,19 +20,17 @@ type Props = {
   offer: OfferQuote
 }
 
-export const AmountCollection: React.FC<Props> = ({ offer }) => {
+export const AmountCollection = ({ offer }: Props) => {
   const textKeys = useTextKeys()
-
-  const limits = [...offer.insurableLimits.entries()]
 
   return (
     <Container>
       <HeadingXS>{textKeys.COVERAGE_INFO_HEADLINE()}</HeadingXS>
       <Grid>
-        {limits.map(([type, limit]) => (
-          <AmountItem key={type} tooltip={limit.description}>
-            <AmountItem.Label>{limit.label}</AmountItem.Label>
-            <AmountItem.Value>{limit.limit}</AmountItem.Value>
+        {offer.insurableLimits.map(({ label, description, limit }) => (
+          <AmountItem key={label} tooltip={description}>
+            <AmountItem.Label>{label}</AmountItem.Label>
+            <AmountItem.Value>{limit}</AmountItem.Value>
           </AmountItem>
         ))}
       </Grid>

@@ -14,10 +14,7 @@ export const Confirmation = () => {
             'ONBOARDING_CONFIRMATION_PARAGRAPH_1',
             'ONBOARDING_CONFIRMATION_PARAGRAPH_2',
           ]}
-          headlineTextKeys={[
-            'ONBOARDING_CONFIRMATION_HEADLINE_PART_1',
-            'ONBOARDING_CONFIRMATION_HEADLINE_PART_2',
-          ]}
+          headlineTextKeys={['ONBOARDING_CONFIRMATION_HEADLINE_PART_1']}
         />
       </SessionTokenGuard>
     </Page>

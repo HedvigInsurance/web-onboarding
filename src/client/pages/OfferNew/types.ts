@@ -4,7 +4,6 @@ import {
   CompleteHouseQuoteDetails,
   CompleteQuote,
   InsurableLimit,
-  InsurableLimitType,
   InsuranceCost,
   InsuranceTerm,
   Query,
@@ -51,7 +50,7 @@ export type OfferQuote = Pick<
   | 'perils'
 > & {
   contractType: TypeOfContract
-  insurableLimits: ReadonlyMap<InsurableLimitType, InsurableLimit>
+  insurableLimits: InsurableLimit[]
   insuranceTerms: InsuranceTerm[]
   data: GenericQuoteData
 }

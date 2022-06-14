@@ -1,20 +1,48 @@
-import { LocalePath, Market } from 'components/utils/CurrentLocale'
+import { Market } from 'components/utils/CurrentLocale'
 import { checkFeature } from 'utils/checkFeature'
 import { Feature } from 'shared/clientConfig'
+import { AlternateLinksData, CanonicalLinksPerLocale } from 'src/routes'
 
-type AlternateLinksData = {
-  hrefLang: string
-  locale: LocalePath
-}[]
-
-export const alternateLinksData: AlternateLinksData = [
-  { hrefLang: 'sv-se', locale: 'se' },
-  { hrefLang: 'en-se', locale: 'se-en' },
-  { hrefLang: 'nb-no', locale: 'no' },
-  { hrefLang: 'en-no', locale: 'no-en' },
-  { hrefLang: 'da-dk', locale: 'dk' },
-  { hrefLang: 'en-dk', locale: 'dk-en' },
+export const LandingPageAlternateLinks: AlternateLinksData = [
+  {
+    hrefLang: 'sv-se',
+    locale: 'se',
+    href: 'https://www.hedvig.com/se/new-member',
+  },
+  {
+    hrefLang: 'en-se',
+    locale: 'se-en',
+    href: 'https://www.hedvig.com/se-en/new-member',
+  },
+  {
+    hrefLang: 'nb-no',
+    locale: 'no',
+    href: 'https://www.hedvig.com/no/new-member',
+  },
+  {
+    hrefLang: 'en-no',
+    locale: 'no-en',
+    href: 'https://www.hedvig.com/no-en/new-member',
+  },
+  {
+    hrefLang: 'da-dk',
+    locale: 'dk',
+    href: 'https://www.hedvig.com/dk/new-member',
+  },
+  {
+    hrefLang: 'en-dk',
+    locale: 'dk-en',
+    href: 'https://www.hedvig.com/dk-en/new-member',
+  },
 ]
+
+export const LandingPageCanonicalLinks: CanonicalLinksPerLocale = LandingPageAlternateLinks.reduce(
+  (accumulated, { locale }) => ({
+    ...accumulated,
+    [locale]: `https://www.hedvig.com/${locale}/new-member`,
+  }),
+  {} as CanonicalLinksPerLocale,
+)
 
 type ProductData = {
   id: string
