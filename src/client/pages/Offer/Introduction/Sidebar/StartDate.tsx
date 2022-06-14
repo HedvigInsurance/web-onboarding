@@ -424,7 +424,7 @@ export const StartDate = ({
   )
 }
 
-export const useStartDate = (): Omit<StartDateProps, 'size' | 'modal'> => {
+export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const { isoLocale, marketLabel } = useCurrentLocale()
 

@@ -21,7 +21,7 @@ import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
 import { CheckoutErrorModal, onRetry } from '../shared/ErrorModal'
 import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
-import { useStartDate } from '../../Offer/Introduction/Sidebar/StartDate'
+import { useStartDateProps } from '../../Offer/Introduction/Sidebar/StartDate'
 import { YourPlan } from './components/YourPlan/YourPlan'
 import { QuoteDetails } from './components/QuoteDetails/QuoteDetails'
 import { PageSection } from './components/PageSection'
@@ -49,7 +49,7 @@ export const CheckoutDetails = () => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const history = useHistory()
-  const startDateProps = useStartDate()
+  const startDateProps = useStartDateProps()
   useScrollToTop()
 
   useEffect(() => trackOfferEvent({ eventName: EventName.CheckoutOpen }), [

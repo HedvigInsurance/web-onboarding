@@ -32,7 +32,7 @@ import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
 import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
-import { StartDate, useStartDate } from './StartDate'
+import { StartDate, useStartDateProps } from './StartDate'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
@@ -177,7 +177,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     notifyOnNetworkStatusChange: true,
   })
 
-  const startDateProps = useStartDate()
+  const startDateProps = useStartDateProps()
 
   const [isConnectPaymentAtSignEnabled] = useFeature([
     Features.CONNECT_PAYMENT_AT_SIGN,

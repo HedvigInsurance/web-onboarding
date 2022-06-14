@@ -31,7 +31,7 @@ import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import {
   StartDate,
-  useStartDate,
+  useStartDateProps,
 } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
@@ -269,7 +269,7 @@ export const Checkout = ({
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
   const [isManualReviewRequired, setIsManualReviewRequired] = useState(false)
   const [startCheckout] = useStartCheckoutMutation()
-  const startDateProps = useStartDate()
+  const startDateProps = useStartDateProps()
 
   const [
     createQuoteBundle,
