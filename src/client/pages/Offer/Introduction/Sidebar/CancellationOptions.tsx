@@ -96,7 +96,7 @@ const CancellationOption = ({
 }
 
 type CancellationOptionsProps = {
-  loadingQuoteIds: Array<string>
+  isDisabled: boolean
   quotes: BundledQuote[]
   onToggleCancellationOption: (
     isChecked: boolean,
@@ -105,12 +105,10 @@ type CancellationOptionsProps = {
 }
 
 export const CancellationOptions = ({
-  loadingQuoteIds,
+  isDisabled,
   quotes,
   onToggleCancellationOption,
 }: CancellationOptionsProps) => {
-  const isDisabled = loadingQuoteIds.length > 0
-
   return (
     <>
       {quotes.map((quote) => {
