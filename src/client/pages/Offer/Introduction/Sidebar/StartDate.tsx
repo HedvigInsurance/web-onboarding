@@ -266,7 +266,7 @@ const DateForm = ({
             setOpen={setDatePickerOpen}
             date={dateValue || new Date()}
             setDate={onChange}
-            hasCurrentInsurer={Boolean(currentInsurer)}
+            isCurrentInsurerSwichable={Boolean(currentInsurer?.switchable)}
           />
         </DateInputModalWrapper>
       ) : (
@@ -275,7 +275,7 @@ const DateForm = ({
           setOpen={setDatePickerOpen}
           date={dateValue || new Date()}
           setDate={onChange}
-          hasCurrentInsurer={Boolean(currentInsurer)}
+          isCurrentInsurerSwichable={Boolean(currentInsurer?.switchable)}
         />
       )}
     </RowButtonWrapper>
