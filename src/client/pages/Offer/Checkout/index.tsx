@@ -29,7 +29,10 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
-import { StartDate } from 'pages/Offer/Introduction/Sidebar/StartDate'
+import {
+  StartDate,
+  useStartDateProps,
+} from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
 import { OfferData } from 'pages/OfferNew/types'
@@ -266,10 +269,16 @@ export const Checkout = ({
   const [isShowingFailModal, setIsShowingFailModal] = useState(false)
   const [isManualReviewRequired, setIsManualReviewRequired] = useState(false)
   const [startCheckout] = useStartCheckoutMutation()
+  const startDateProps = useStartDateProps()
+
   const [
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
-  ] = useCreateQuoteBundleMutation()
+  ] = useCreateQuoteBundleMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
+  })
   const { loading: isLoadingQuoteCart } = useQuoteCartQuery({
     variables: {
       id: quoteCartId,
@@ -529,14 +538,18 @@ export const Checkout = ({
               <PriceBreakdown
                 offerData={offerData}
                 showTotal={true}
-                isLoading={isBundleCreationInProgress || isLoadingQuoteCart}
+                isLoading={
+                  isBundleCreationInProgress ||
+                  isLoadingQuoteCart ||
+                  startDateProps.isLoading
+                }
               />
               <CheckoutDetailsForm formikProps={formik} />
               <StartDateWrapper>
                 <StartDateLabel>
                   {textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}
                 </StartDateLabel>
-                <StartDate quoteCartId={quoteCartId} />
+                <StartDate {...startDateProps} />
               </StartDateWrapper>
               {isUpsellCardVisible && (
                 <UpsellCard
@@ -559,6 +572,7 @@ export const Checkout = ({
               formik.isValid &&
               !isBundleCreationInProgress &&
               !isLoadingQuoteCart &&
+              !startDateProps.isLoading &&
               signUiState !== 'STARTED'
             }
             checkoutMethod={checkoutMethod}
