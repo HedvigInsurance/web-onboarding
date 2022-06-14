@@ -15,7 +15,9 @@ const ICON_SIZE = '20px'
 const Container = styled.div`
   position: relative;
 
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   gap: 0.5rem;
 
   padding: ${CONTAINER_PADDING};
