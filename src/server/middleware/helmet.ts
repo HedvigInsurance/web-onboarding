@@ -19,7 +19,7 @@ const defaultSrc = [
   'wss://nexus-websocket-a.intercom.io',
   'app.getsentry.com',
   'sentry.io',
-  'www.google-analytics.com',
+  '*.google-analytics.com',
   'www.googletagmanager.com',
   'https://tagmanager.google.com',
   'https://www.googletagmanager.com',
