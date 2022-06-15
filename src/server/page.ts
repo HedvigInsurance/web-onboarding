@@ -144,9 +144,9 @@ export const getPage = (
     new ServerCookieStorage(ctx),
   )
 
-  const clientConfigData = {
+  const clientConfigData: ClientConfigServerData = {
     referer: ctx.req.headers.referer ?? null,
-  } as ClientConfigServerData
+  }
 
   const session = createSession<Session>(serverCookieStorage)
 

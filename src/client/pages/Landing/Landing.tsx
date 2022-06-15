@@ -1,7 +1,7 @@
 import { css, Global } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TopBar, TopBarFiller } from 'components/TopBar'
 import { BackgroundImage } from 'components/BackgroundImage'
@@ -16,6 +16,7 @@ import {
 } from 'utils/mediaQueries'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
+import { useTrackEvent } from 'utils/tracking/gtm/useTrackEvent'
 import { getProductsData } from './landingPageData'
 import { Card, CardHeadline, CardParagraph } from './components/Card'
 
@@ -154,6 +155,14 @@ export const Landing = () => {
   const { marketLabel, path: localePath } = useCurrentLocale()
   const variation = useVariation()
   const productsData = useMemo(getProductsData, [])
+
+  const [track, { hasTracked }] = useTrackEvent('begin_onboarding_home_page', {
+    referer: window.hedvigClientConfig.referer,
+  })
+
+  useEffect(() => {
+    if (!hasTracked) track()
+  }, [track, hasTracked])
 
   return (
     <AnimatePresence>
