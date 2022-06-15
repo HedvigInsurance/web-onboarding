@@ -20,6 +20,7 @@ const defaultSrc = [
   'app.getsentry.com',
   'sentry.io',
   '*.google-analytics.com',
+  '*.analytics.google.com',
   'www.googletagmanager.com',
   'https://tagmanager.google.com',
   'https://www.googletagmanager.com',
