@@ -1,7 +1,7 @@
 import escapeHTML from 'escape-html'
 import Router from 'koa-router'
 import { v4 as uuidv4 } from 'uuid'
-import { ClientConfig } from 'shared/clientConfig'
+import { ClientConfig, ClientConfigServerData } from 'shared/clientConfig'
 import { LocaleLabel, locales } from '../client/l10n/locales'
 import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage'
 import { ServerSideRoute } from '../routes'
@@ -45,6 +45,7 @@ const clientConfig: ClientConfig = {
     clientToken: DATADOG_CLIENT_TOKEN,
     version: HEROKU_SLUG_COMMIT,
   },
+  referer: null,
 }
 
 const template = (
@@ -53,9 +54,11 @@ const template = (
   cspNonce: string,
   adtractionTag: string | null,
   code: string | null,
+  clientConfigData: ClientConfigServerData,
 ) => {
   const pageMeta = getPageMeta(locale, serverRouteData, code)
   const htmlLang = locales[locale as LocaleLabel]?.htmlLang ?? 'en'
+  const config = { ...clientConfig, ...clientConfigData }
 
   return `<!doctype html>
   <html lang=${htmlLang}>
@@ -122,7 +125,7 @@ const template = (
 
     <script nonce="${cspNonce}">
       Object.defineProperty(window, 'hedvigClientConfig', {
-        value: Object.freeze(${JSON.stringify(clientConfig)}),
+        value: Object.freeze(${JSON.stringify(config)}),
         writable: false,
       })
     </script>
@@ -140,6 +143,11 @@ export const getPage = (
   const serverCookieStorage = new SavingCookieStorage(
     new ServerCookieStorage(ctx),
   )
+
+  const clientConfigData = {
+    referer: ctx.req.headers.referer ?? null,
+  } as ClientConfigServerData
+
   const session = createSession<Session>(serverCookieStorage)
 
   if (ctx.query.partner) {
@@ -185,6 +193,7 @@ export const getPage = (
     (ctx.res as any).cspNonce,
     adtractionScriptSrc,
     ctx.params.code ?? null,
+    clientConfigData,
   )
 
   ctx.response.set('Access-Control-Allow-Origin', '*')
