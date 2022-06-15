@@ -234,6 +234,9 @@ export const hasAddress = (offerData: OfferData): boolean =>
 export const hasCurrentInsurer = (quote: OfferQuote): boolean =>
   Boolean(quote.currentInsurer)
 
+export const isCurrentInsurerSwichable = (quote: OfferQuote): boolean =>
+  Boolean(quote.currentInsurer?.switchable)
+
 export const isStudent = (details: QuoteDetails) => {
   const studentQuoteTypesSe = [
     SwedishApartmentType.StudentBrf,
