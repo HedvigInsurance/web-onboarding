@@ -117,7 +117,7 @@ const BodyTitle = styled.div`
   }
 
   p {
-    margin-right: 0.5rem;
+    margin: 0 0.5rem 0 0;
   }
 `
 
@@ -212,7 +212,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [handleAddCampaignCode, campaign])
 
-  const showRemoveCampaignButton = campaign !== undefined
+  const showRemoveCampaignButton =
+    campaign !== undefined && campaign.incentive?.__typename !== 'NoDiscount'
   const isDiscountPrice =
     offerData.cost.monthlyGross.amount !== offerData.cost.monthlyNet.amount
 
