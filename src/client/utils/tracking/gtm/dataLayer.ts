@@ -35,10 +35,6 @@ export type GTMPageData = {
   market: string
 }
 
-export type GTMEventData = {
-  type: string
-}
-
 export type GTMPhoneNumberData = {
   path: string
   status: 'opened' | 'closed'
@@ -50,7 +46,7 @@ export type DataLayerObject = {
   offerData?: GTMOfferData
   pageData?: GTMPageData
   passageData?: Record<string, string | undefined>
-  eventData?: GTMEventData
+  eventData?: Record<string, string>
   phoneNumberData?: GTMPhoneNumberData
 }
 
