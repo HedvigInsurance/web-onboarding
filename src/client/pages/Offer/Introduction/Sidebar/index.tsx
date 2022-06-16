@@ -32,7 +32,7 @@ import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
 import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
 import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
-import { StartDate } from './StartDate'
+import { StartDate, useStartDateProps } from './StartDate'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
@@ -117,7 +117,7 @@ const BodyTitle = styled.div`
   }
 
   p {
-    margin-right: 0.5rem;
+    margin: 0 0.5rem 0 0;
   }
 `
 
@@ -163,14 +163,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [campaignCodeModalIsOpen, setCampaignCodeModalIsOpen] = useState(false)
   const [isSidebarVisible, setIsSidebarVisible] = useState(true)
 
-  const [addCampaignCode] = useAddCampaignCodeMutation({
+  const [addCampaignCode, addCampaignCodeData] = useAddCampaignCodeMutation({
     refetchQueries: ['QuoteCart'],
     awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
   })
-  const [removeCampaignCode] = useRemoveCampaignCodeMutation({
+  const [
+    removeCampaignCode,
+    removeCampaignCodeData,
+  ] = useRemoveCampaignCodeMutation({
     refetchQueries: ['QuoteCart'],
     awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
   })
+
+  const startDateProps = useStartDateProps()
 
   const [isConnectPaymentAtSignEnabled] = useFeature([
     Features.CONNECT_PAYMENT_AT_SIGN,
@@ -205,10 +212,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [handleAddCampaignCode, campaign])
 
-  const showRemoveCampaignButton = campaign !== undefined
+  const showRemoveCampaignButton =
+    campaign !== undefined && campaign.incentive?.__typename !== 'NoDiscount'
   const isDiscountPrice =
     offerData.cost.monthlyGross.amount !== offerData.cost.monthlyNet.amount
 
+  const isLoadingCampaign =
+    addCampaignCodeData.loading || removeCampaignCodeData.loading
+  const isLoading =
+    isLoadingQuoteCart || isLoadingCampaign || startDateProps.isLoading
   const isSwitcher = hasCurrentInsurer(offerData)
 
   return (
@@ -238,7 +250,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     />
                   )}
                 </BodyTitle>
-                <StartDate quoteCartId={quoteCartId} modal size="sm" />
+                <StartDate {...startDateProps} modal size="sm" />
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
@@ -248,7 +260,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
-                    disabled={isLoadingQuoteCart}
+                    disabled={isLoading}
+                    onClick={(e) => {
+                      if (isLoading) e.preventDefault()
+                    }}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </LinkButton>
@@ -259,7 +274,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={onCheckoutOpen}
                     foreground={colorsV3.gray900}
                     background={colorsV3.purple500}
-                    disabled={isLoadingQuoteCart}
+                    disabled={isLoading}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
                   </Button>
@@ -294,7 +309,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <StickyBottomSidebar
         isVisible={!isSidebarVisible}
         onCheckoutOpen={onCheckoutOpen}
-        isLoadingQuoteCart={isLoadingQuoteCart}
+        isLoadingQuoteCart={isLoading}
       />
     </>
   )

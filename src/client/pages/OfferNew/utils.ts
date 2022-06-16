@@ -2,8 +2,6 @@ import {
   BundledQuote,
   Campaign,
   DanishHomeContentsDetails,
-  InsurableLimit,
-  InsurableLimitType,
   NorwegianHomeContentsDetails,
   NorwegianTravelDetails,
   QuoteBundle,
@@ -43,12 +41,6 @@ export const getOfferData = (quoteBundle: QuoteBundle): OfferData => {
         ...bundleQuote,
         contractType: bundleQuote.typeOfContract,
         perils: bundleQuote.contractPerils,
-        insurableLimits: new Map(
-          bundleQuote.insurableLimits.map((insurableLimit) => [
-            insurableLimit.type,
-            insurableLimit,
-          ]),
-        ) as ReadonlyMap<InsurableLimitType, InsurableLimit>,
       }
     }),
     cost: quoteBundle.bundleCost,
@@ -241,6 +233,9 @@ export const hasAddress = (offerData: OfferData): boolean =>
 
 export const hasCurrentInsurer = (quote: OfferQuote): boolean =>
   Boolean(quote.currentInsurer)
+
+export const isCurrentInsurerSwichable = (quote: OfferQuote): boolean =>
+  Boolean(quote.currentInsurer?.switchable)
 
 export const isStudent = (details: QuoteDetails) => {
   const studentQuoteTypesSe = [
