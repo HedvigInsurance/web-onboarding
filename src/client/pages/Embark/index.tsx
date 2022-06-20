@@ -420,7 +420,7 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
                     Web: (path: string) => {
                       const cleanedPath = path.replace(/^\//, '')
 
-                      history.push(`/${pathLocale}/${cleanedPath}`)
+                      location.href = `/${pathLocale}/${cleanedPath}`
                     },
                   }}
                   data={data[1]}
