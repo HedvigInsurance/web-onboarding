@@ -157,7 +157,7 @@ export const Landing = () => {
   const productsData = useMemo(getProductsData, [])
 
   const [track, { hasTracked }] = useTrackEvent('begin_onboarding_home_page', {
-    referer: window.hedvigClientConfig.referer,
+    begin_from: window.hedvigClientConfig.referer,
   })
 
   useEffect(() => {
