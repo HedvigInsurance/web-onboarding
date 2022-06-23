@@ -30,6 +30,13 @@ interface Params {
   quoteCartId: string
 }
 
+type DropinApi = {
+  setStatus: (
+    status: 'loading' | 'success' | 'error' | 'ready',
+    options?: { message: string },
+  ) => void
+}
+
 const getAvailablePaymentMethods = (
   paymentMethodsResponseNew: PaymentMethodsQuery,
 ) => {
@@ -59,7 +66,7 @@ export const useAdyenCheckout = ({
   const [
     submitAdditionalPaymentDetails,
   ] = usePaymentConnection_SubmitAdditionalPaymentDetailsMutation()
-
+  const [dropinComponent, setDropinComponent] = useState<DropinApi | null>(null)
   const history = useHistory()
   const currentLocale = useCurrentLocale()
   const textKeys = useTextKeys()
@@ -108,6 +115,7 @@ export const useAdyenCheckout = ({
     })
 
     dropinApi.mount(adyenRef.current)
+    setDropinComponent(dropinApi)
     setAdyenState('MOUNTED')
   }, [
     paymentMethodsResponse,
@@ -132,6 +140,10 @@ export const useAdyenCheckout = ({
   }, [])
 
   useEffect(mountAdyenCss, [])
+  const resetAdyen = () => {
+    dropinComponent?.setStatus('ready')
+  }
+  return { resetAdyen }
 }
 
 interface AdyenCheckoutProps {

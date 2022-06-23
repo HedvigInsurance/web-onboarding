@@ -68,6 +68,9 @@ const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
 `
 
 const AdyenContainer = styled.div`
+  .d-none {
+    display: none;
+  }
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
     padding-bottom: 5rem;
   }
@@ -247,10 +250,20 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
-  const isPaymentConnected = localStorage.getItem('paymentConnected')
+  const [paymentStatus, setPaymentStatus] = useState('')
 
   useScrollToTop()
 
+  useEffect(() => {
+    localStorage.setItem('paymentStatus', paymentStatus)
+  }, [paymentStatus])
+
+  useEffect(() => {
+    const paymentStatus = localStorage.getItem('paymentStatus')
+    if (paymentStatus) {
+      setPaymentStatus(paymentStatus)
+    }
+  }, [])
   //handle 3ds error
   useEffect(() => {
     if (is3DsError) {
@@ -264,7 +277,7 @@ export const CheckoutPayment = ({
   }, [is3DsError, history, trackOfferEvent])
 
   const handlePaymentSuccess = useCallback(() => {
-    localStorage.setItem('paymentConnected', 'true')
+    setPaymentStatus('connected')
     sendDatadogAction('payment_connected')
   }, [sendDatadogAction])
 
@@ -316,7 +329,7 @@ export const CheckoutPayment = ({
     trackOfferEvent,
     sendDatadogAction,
   ])
-  useAdyenCheckout({
+  const adyenResponse = useAdyenCheckout({
     adyenRef,
     onSuccess: handlePaymentSuccess,
     quoteCartId,
@@ -369,10 +382,10 @@ export const CheckoutPayment = ({
   ])
 
   useEffect(() => {
-    if (isPaymentConnected === 'true') {
+    if (paymentStatus === 'connected') {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
     }
-  }, [isPaymentConnected, trackOfferEvent])
+  }, [paymentStatus, trackOfferEvent])
 
   const completeCheckout = useCallback(async () => {
     try {
@@ -438,7 +451,7 @@ export const CheckoutPayment = ({
   }
 
   const handleClickCompletePurchase = async () => {
-    if (!isPaymentConnected) return
+    if (!paymentStatus) return
 
     trackOfferEvent({
       eventName: EventName.ButtonClick,
@@ -460,6 +473,11 @@ export const CheckoutPayment = ({
     await performCheckout()
   }
 
+  const handleEditPayment = () => {
+    setPaymentStatus('editing')
+    adyenResponse.resetAdyen()
+  }
+
   useSubmitFormOnSsnChange(formik, isDataLoading)
 
   useEffect(() => {
@@ -469,7 +487,6 @@ export const CheckoutPayment = ({
   }, [checkoutStatus, completeCheckout])
 
   if (checkoutStatus === CheckoutStatus.Completed) {
-    localStorage.removeItem('paymentConnected')
     return <CheckoutSuccessRedirect connectPayment={false} />
   }
 
@@ -498,11 +515,17 @@ export const CheckoutPayment = ({
           <Description>
             {textKeys.CHECKOUT_PAYMENT_DETAILS_DESCRIPTION()}
           </Description>
-          {isPaymentConnected ? (
+          {paymentStatus === 'connected' && (
             <>
               <PaymentResult>
                 <ThinTick color={colorsV3.gray900} />
                 {textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()}
+                <Button
+                  onClick={() => handleEditPayment()}
+                  background={colorsV3.gray900}
+                >
+                  Edit details
+                </Button>
               </PaymentResult>
               <Button
                 fullWidth={true}
@@ -514,9 +537,14 @@ export const CheckoutPayment = ({
                 {textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
               </Button>
             </>
-          ) : (
-            <div id="dropin-container" ref={adyenRef}></div>
           )}
+          <>
+            <div
+              id="dropin-container"
+              ref={adyenRef}
+              className={paymentStatus === 'connected' ? 'd-none' : ''}
+            ></div>
+          </>
           <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
         </Wrapper>
       </AdyenContainer>
