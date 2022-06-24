@@ -34,6 +34,7 @@ import { useDebounce } from 'utils/hooks/useDebounce'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import { Button } from 'components/buttons'
 import { ThinTick } from 'components/icons/ThinTick'
+import { useLocalStorage } from 'utils/hooks/useLocalStorage'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
   CheckoutPageWrapper,
@@ -250,20 +251,10 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
-  const [paymentStatus, setPaymentStatus] = useState('')
+  const [paymentStatus, setPaymentStatus] = useLocalStorage('paymentStatus', '')
 
   useScrollToTop()
 
-  useEffect(() => {
-    localStorage.setItem('paymentStatus', paymentStatus)
-  }, [paymentStatus])
-
-  useEffect(() => {
-    const paymentStatus = localStorage.getItem('paymentStatus')
-    if (paymentStatus) {
-      setPaymentStatus(paymentStatus)
-    }
-  }, [])
   //handle 3ds error
   useEffect(() => {
     if (is3DsError) {
@@ -279,7 +270,7 @@ export const CheckoutPayment = ({
   const handlePaymentSuccess = useCallback(() => {
     setPaymentStatus('connected')
     sendDatadogAction('payment_connected')
-  }, [sendDatadogAction])
+  }, [sendDatadogAction, setPaymentStatus])
 
   const performCheckout = useCallback(async () => {
     sendDatadogAction('checkout_start')
