@@ -1,5 +1,5 @@
+import { datadogRum } from '@datadog/browser-rum'
 import { OfferData } from 'pages/OfferNew/types'
-import { captureSentryError } from 'utils/sentry-client'
 import {
   isStudentOffer,
   hasHomeQuote,
@@ -60,7 +60,7 @@ export const trackOfferGTM = (
       },
       ...phoneNumberData,
     })
-  } catch (e) {
-    captureSentryError(e)
+  } catch (error) {
+    datadogRum.addError(error)
   }
 }

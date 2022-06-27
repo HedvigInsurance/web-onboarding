@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/node'
 import Axios from 'axios'
 import Router from 'koa-router'
+import { datadogRum } from '@datadog/browser-rum'
 import { ServerCookieStorage } from 'utils/storage/ServerCookieStorage'
 import { ONBOARDING_QUOTE_CART_COOKIE_KEY } from 'shared/sessionStorage'
 import { locales } from '../../client/l10n/locales'
@@ -46,7 +46,7 @@ const isQuoteCartUsable = async (id: string, market: string) => {
     const quoteCart = response.data.data.quoteCart
     return quoteCart.market === market && quoteCart.checkout === null
   } catch (error) {
-    Sentry.captureException(error)
+    datadogRum.addError(error)
     return false
   }
 }
@@ -94,9 +94,9 @@ export const quoteCartSessionMiddleware: Router.IMiddleware<
       .getLogger('quoteCart')
       .info(`Created quote cart ${newQuoteCartId}`)
     storage.setItem(ONBOARDING_QUOTE_CART_COOKIE_KEY, newQuoteCartId)
-  } catch (e) {
-    Sentry.captureException(e)
-    ctx.state.getLogger('quoteCart').error(e.message)
+  } catch (error) {
+    datadogRum.addError(error)
+    ctx.state.getLogger('quoteCart').error(error.message)
   } finally {
     await next()
   }

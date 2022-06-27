@@ -17,8 +17,6 @@ const defaultSrc = [
   '*.intercomassets.com',
   '*.intercomusercontent.com',
   'wss://nexus-websocket-a.intercom.io',
-  'app.getsentry.com',
-  'sentry.io',
   '*.google-analytics.com',
   '*.analytics.google.com',
   'www.googletagmanager.com',
@@ -83,7 +81,6 @@ export const helmet = koaHelmet({
       defaultSrc,
       scriptSrc: [
         "'unsafe-eval'",
-        'https://browser.sentry-cdn.com',
         ...defaultSrc,
         (_request: any, response: any) => {
           response.cspNonce = uuidV4()
