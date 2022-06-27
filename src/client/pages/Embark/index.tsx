@@ -417,6 +417,11 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
                     MailingList: () => {
                       location.href = 'https://hedvigapp.typeform.com/to/xiTKWi'
                     },
+                    Web: (path: string) => {
+                      const cleanedPath = path.replace(/^\//, '')
+
+                      location.href = `/${pathLocale}/${cleanedPath}`
+                    },
                   }}
                   data={data[1]}
                   resolvers={{

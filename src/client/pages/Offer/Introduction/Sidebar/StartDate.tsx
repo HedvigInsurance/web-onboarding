@@ -31,6 +31,7 @@ import {
 } from 'api/quoteCartQuerySelectors'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { isCar } from 'api/quoteSelector'
 import { CancellationOptions } from './CancellationOptions'
 
 const DateFormsWrapper = styled.div`
@@ -267,7 +268,7 @@ const DateForm = ({
             setOpen={setDatePickerOpen}
             date={dateValue || new Date()}
             setDate={onChange}
-            hasCurrentInsurer={Boolean(currentInsurer)}
+            isCurrentInsurerSwichable={Boolean(currentInsurer?.switchable)}
           />
         </DateInputModalWrapper>
       ) : (
@@ -276,7 +277,7 @@ const DateForm = ({
           setOpen={setDatePickerOpen}
           date={dateValue || new Date()}
           setDate={onChange}
-          hasCurrentInsurer={Boolean(currentInsurer)}
+          isCurrentInsurerSwichable={Boolean(currentInsurer?.switchable)}
         />
       )}
     </RowButtonWrapper>
@@ -448,6 +449,7 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
   )
 
   const selectedQuotes = quoteBundleSelector.getQuotes(selectedBundle)
+  const hasCarSelected = quoteBundleSelector.hasCar(selectedQuotes)
 
   const onSelect = async (
     newDateValue: Date | null,
@@ -483,9 +485,10 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
             currentInsurer: currentInsurer?.id,
             phoneNumber,
             dataCollectionId,
-            startDate: quoteIds.includes(id)
-              ? formattedDateValue
-              : quote.startDate,
+            startDate:
+              quoteIds.includes(id) || (hasCarSelected && isCar(quote))
+                ? formattedDateValue
+                : quote.startDate,
             data,
           }
         }),

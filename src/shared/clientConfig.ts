@@ -23,7 +23,11 @@ export type FeatureMap = Record<Feature, Array<MarketLabel>>
 
 export type AdyenEnvironment = 'test' | 'live'
 
-export interface ClientConfig {
+export type ClientConfigServerData = {
+  referer: string | null
+}
+
+export type ClientConfig = {
   adyenEnvironment: AdyenEnvironment
   adyenClientKey: string
   contentServiceEndpoint: string
@@ -33,7 +37,7 @@ export interface ClientConfig {
   appEnvironment: AppEnvironment
   features: FeatureMap
   datadog: RumInitConfiguration
-}
+} & ClientConfigServerData
 
 declare global {
   interface Window {
