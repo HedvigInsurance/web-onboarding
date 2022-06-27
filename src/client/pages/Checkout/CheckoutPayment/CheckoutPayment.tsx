@@ -5,6 +5,7 @@ import { useFormik, FormikHelpers, FormikProps } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
 import { useHistory } from 'react-router'
+import { useLocalStorage } from 'utils/hooks/useLocalStorage'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
 import { useTextKeys } from 'utils/textKeys'
@@ -32,7 +33,7 @@ import { ErrorEventType, EventName } from 'utils/tracking/gtm/types'
 import { useScrollToTop } from 'utils/hooks/useScrollToTop'
 import { useDebounce } from 'utils/hooks/useDebounce'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
-import { Button } from 'components/buttons'
+import { Button, UnstyledButton } from 'components/buttons'
 import { ThinTick } from 'components/icons/ThinTick'
 import { useAdyenCheckout } from '../../ConnectPayment/components/useAdyenCheckout'
 import {
@@ -179,9 +180,14 @@ const PaymentResult = styled.div`
   border-radius: 8px;
   margin-bottom: 1.5rem;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   svg {
     margin-right: 1rem;
+  }
+  button {
+    color: ${colorsV3.purple900};
+    font-size: 1rem;
   }
 `
 
@@ -250,20 +256,9 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
-  const [paymentStatus, setPaymentStatus] = useState('')
+  const [paymentStatus, setPaymentStatus] = useLocalStorage('paymentStatus', '')
 
   useScrollToTop()
-
-  useEffect(() => {
-    localStorage.setItem('paymentStatus', paymentStatus)
-  }, [paymentStatus])
-
-  useEffect(() => {
-    const paymentStatus = localStorage.getItem('paymentStatus')
-    if (paymentStatus) {
-      setPaymentStatus(paymentStatus)
-    }
-  }, [])
   //handle 3ds error
   useEffect(() => {
     if (is3DsError) {
@@ -279,7 +274,7 @@ export const CheckoutPayment = ({
   const handlePaymentSuccess = useCallback(() => {
     setPaymentStatus('connected')
     sendDatadogAction('payment_connected')
-  }, [sendDatadogAction])
+  }, [sendDatadogAction, setPaymentStatus])
 
   const performCheckout = useCallback(async () => {
     sendDatadogAction('checkout_start')
@@ -398,6 +393,7 @@ export const CheckoutPayment = ({
         },
         storage,
       })
+      setPaymentStatus('editing')
       sendDatadogAction('checkout_completed')
       trackSignedCustomerEvent({ memberId })
     } catch (error) {
@@ -471,6 +467,7 @@ export const CheckoutPayment = ({
     }
 
     await performCheckout()
+    setPaymentStatus('editing')
   }
 
   const handleEditPayment = () => {
@@ -518,14 +515,13 @@ export const CheckoutPayment = ({
           {paymentStatus === 'connected' && (
             <>
               <PaymentResult>
-                <ThinTick color={colorsV3.gray900} />
-                {textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()}
-                <Button
-                  onClick={() => handleEditPayment()}
-                  background={colorsV3.gray900}
-                >
-                  Edit details
-                </Button>
+                <div>
+                  <ThinTick color={colorsV3.gray900} />
+                  {textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()}
+                </div>
+                <UnstyledButton onClick={() => handleEditPayment()}>
+                  Edit payment details
+                </UnstyledButton>
               </PaymentResult>
               <Button
                 fullWidth={true}
@@ -543,7 +539,7 @@ export const CheckoutPayment = ({
               id="dropin-container"
               ref={adyenRef}
               className={paymentStatus === 'connected' ? 'd-none' : ''}
-            ></div>
+            />
           </>
           <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
         </Wrapper>
