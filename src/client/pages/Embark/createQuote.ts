@@ -1,9 +1,9 @@
 import { CreateQuoteData, CreateQuoteVariables } from '@hedviginsurance/embark'
 import gql from 'graphql-tag'
+import { datadogRum } from '@datadog/browser-rum'
 import { apolloClient } from 'apolloClient'
 import { setupSession } from 'containers/SessionContainer'
 import { Locale } from 'data/graphql'
-import { captureSentryError } from 'utils/sentry-client'
 
 const MUTATION = gql`
   mutation CreateQuote($input: CreateQuoteInput!) {
@@ -58,9 +58,9 @@ export const createQuote = (storage: any, locale: Locale) => async (
 ): Promise<CreateQuoteData | Error> => {
   try {
     await setupSession(apolloClient!, storage, locale)
-  } catch (e) {
-    captureSentryError(e)
-    throw e
+  } catch (error) {
+    datadogRum.addError(error)
+    throw error
   }
 
   const result = await apolloClient!.client
@@ -69,7 +69,7 @@ export const createQuote = (storage: any, locale: Locale) => async (
       variables,
     })
     .catch((e) => {
-      captureSentryError(e, { email: variables.input.email })
+      datadogRum.addError(e, { email: variables.input.email })
       throw e
     })
 

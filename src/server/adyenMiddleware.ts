@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/node'
 import Axios from 'axios'
 import Router from 'koa-router'
 import { ServerCookieStorage } from 'utils/storage/ServerCookieStorage'
@@ -68,7 +67,6 @@ export const handleAdyen3dsPostRedirect: Router.IMiddleware<
     }
 
     const message = `Received error adyen resultCode "${result.data?.data?.submitAdyenRedirection?.resultCode}" when submitting adyen redirection`
-    Sentry.captureException(new Error(message))
     ctx.state.getLogger('ayden').error(message)
     ctx.redirect(
       ctx.params.locale
@@ -76,10 +74,9 @@ export const handleAdyen3dsPostRedirect: Router.IMiddleware<
         : '/new-member/connect-payment?error=yes',
     )
     ctx.body = 'Loading'
-  } catch (e) {
-    Sentry.captureException(e)
-    ctx.state.getLogger('ayden').error(e.message)
-    throw e
+  } catch (error) {
+    ctx.state.getLogger('ayden').error(error.message)
+    throw error
   }
 }
 
@@ -129,7 +126,6 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
     }
 
     const message = `Received error adyen resultCode "${result.data?.data?.submitAdyenRedirection?.status}" when submitting adyen redirection`
-    Sentry.captureException(new Error(message))
     ctx.state.getLogger('ayden').error(message)
     ctx.redirect(
       ctx.params.locale
@@ -137,11 +133,9 @@ export const handleNewAdyen3dsPostRedirect: Router.IMiddleware<
         : '/new-member/checkout/payment/${quoteCartId}?error',
     )
     ctx.body = 'Loading'
-  } catch (e) {
-    // console.log(e)
-    Sentry.captureException(e)
-    ctx.state.getLogger('ayden').error(e.message)
-    throw e
+  } catch (error) {
+    ctx.state.getLogger('ayden').error(error.message)
+    throw error
   }
 }
 

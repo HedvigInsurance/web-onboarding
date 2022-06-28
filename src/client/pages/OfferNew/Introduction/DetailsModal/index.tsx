@@ -2,6 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { Form, Formik } from 'formik'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
+import { datadogRum } from '@datadog/browser-rum'
 import { Button } from 'components/buttons'
 import { Modal, ModalProps } from 'components/ModalNew'
 import { useCurrentLocale } from 'components/utils/CurrentLocale'
@@ -13,7 +14,6 @@ import {
 import { LocaleLabel, locales } from 'l10n/locales'
 import { OfferData } from 'pages/OfferNew/types'
 import { useTextKeys } from 'utils/textKeys'
-import { captureSentryError } from 'utils/sentry-client'
 import { getMainQuote, isBundle } from '../../utils'
 import { Details } from './Details'
 import {
@@ -168,10 +168,8 @@ export const DetailsModal = ({
               }
               await refetch()
               onClose()
-            } catch (e) {
-              console.error(e)
-              captureSentryError(e)
-              // noop
+            } catch (error) {
+              datadogRum.addError(error)
             }
             setIsUpdating(false)
           }}

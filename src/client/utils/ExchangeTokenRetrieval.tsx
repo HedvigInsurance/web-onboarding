@@ -1,9 +1,9 @@
 import React from 'react'
 import { Mount } from 'react-lifecycle-components'
 import { useHistory } from 'react-router'
+import { datadogRum } from '@datadog/browser-rum'
 import { ExchangeTokenDocument } from 'data/graphql'
 import { apolloClient as realApolloClient } from 'apolloClient'
-import { captureSentryError } from 'utils/sentry-client'
 import {
   StorageContainer,
   StorageEffects,
@@ -84,8 +84,8 @@ export const ExchangeTokenRetrieval: React.FC<{
       exchangeToken = decodeURIComponent(
         location.hash.replace(/^#exchange-token=/, ''),
       )
-    } catch (e) {
-      captureSentryError(e)
+    } catch (error) {
+      datadogRum.addError(error)
       exchangeToken = null
     }
 

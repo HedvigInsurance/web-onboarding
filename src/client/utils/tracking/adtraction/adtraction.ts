@@ -1,3 +1,4 @@
+import { datadogRum } from '@datadog/browser-rum'
 import md5 from 'md5'
 import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'pages/OfferNew/types'
@@ -146,9 +147,7 @@ export const adtraction = (
 
     adt.Tag.tp = getBundleAdtractionProductValue(offerData)
     adt.Tag.doEvent()
-  } catch (e) {
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
-      ;(window as any).Sentry.captureMessage(e)
-    }
+  } catch (error) {
+    datadogRum.addError(error)
   }
 }

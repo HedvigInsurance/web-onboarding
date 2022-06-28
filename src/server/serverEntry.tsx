@@ -1,13 +1,11 @@
 import 'source-map-support/register'
 
-import * as Sentry from '@sentry/node'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import Router from 'koa-router'
 import { Logger } from 'typescript-logging'
 import proxy from 'koa-server-http-proxy'
 import { notNullable } from 'utils/nullables'
-import { sentryConfig } from 'utils/sentry-server'
 import { routes } from '../routes'
 import { localePathPattern } from '../client/l10n/localePathPattern'
 import {
@@ -33,12 +31,6 @@ import {
 import { getPage } from './page'
 import { quoteCartSessionMiddleware } from './middleware/quoteCart'
 
-Sentry.init({
-  ...sentryConfig(),
-  serverName: process.env.HEROKU_DYNO_ID,
-  attachStacktrace: true,
-})
-
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8040)
 
 const app = new Koa()
@@ -48,11 +40,6 @@ configureAssets(app)
 
 app.proxy = true
 appLogger.info(`Booting server on ${getPort()} 👢`)
-appLogger.info(
-  `Sentry is ${
-    sentryConfig().enabled ? 'enabled' : 'disabled'
-  }, with environment "${sentryConfig().environment}"`,
-)
 appLogger.info(
   `Using giraffe at http:"${GIRAFFE_HOST}" ws:"${GIRAFFE_WS_ENDPOINT}" 🦒`,
 )
