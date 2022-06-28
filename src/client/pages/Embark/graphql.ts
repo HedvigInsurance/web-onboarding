@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
+import { datadogRum } from '@datadog/browser-rum'
 import { apolloClient } from 'apolloClient'
 import { setupSession } from 'containers/SessionContainer'
 import { Locale } from 'data/graphql'
-import { captureSentryError } from 'utils/sentry-client'
 import { Storage } from 'utils/StorageContainer'
 
 export const graphQLQuery = (storage: Storage, pickedLocale: Locale) => async (
@@ -19,9 +19,9 @@ export const graphQLQuery = (storage: Storage, pickedLocale: Locale) => async (
     })
 
     return result
-  } catch (e) {
-    captureSentryError(e, { query })
-    throw e
+  } catch (error) {
+    datadogRum.addError(error, { query })
+    throw error
   }
 }
 
@@ -39,8 +39,8 @@ export const graphQLMutation = (
     })
 
     return result
-  } catch (e) {
-    captureSentryError(e, { mutation })
-    throw e
+  } catch (error) {
+    datadogRum.addError(error, { mutation })
+    throw error
   }
 }

@@ -1,6 +1,5 @@
 const path = require('path')
 const webpack = require('webpack')
-const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 const webpackConfig = require('./webpack.config.base')
 
 const root = path.resolve(__dirname, '..')
@@ -16,8 +15,6 @@ const whiteListedEnvVars = [
   'CONTENT_SERVICE_ENDPOINT',
   'USE_HELMET',
   'FORCE_HOST',
-  'SENTRY_DSN',
-  'SENTRY_ENVIRONMENT',
   'HEROKU_SLUG_COMMIT',
   'HEROKU_DYNO_ID',
   'ADYEN_CLIENT_KEY',
@@ -51,16 +48,5 @@ module.exports = webpackConfig({
         {},
       ),
     }),
-    ...(process.env.SENTRY_AUTH_TOKEN
-      ? [
-          new SentryWebpackPlugin({
-            release: process.env.HEROKU_SLUG_COMMIT,
-            include: './build',
-            org: 'hedvig',
-            project: 'web-onboarding',
-            ignore: ['node_modules', 'webpack.*.js'],
-          }),
-        ]
-      : []),
   ],
 })

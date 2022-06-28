@@ -1,4 +1,5 @@
 import md5 from 'md5'
+import { datadogRum } from '@datadog/browser-rum'
 import { QuoteBundle } from 'data/graphql'
 import { AdTractionMarketConfig } from 'l10n/adTractionConfigs'
 import {
@@ -50,9 +51,7 @@ export const adtractionQuoteCart = (
     adt.Tag.tp = adTractionConfig.tp
     adt.Tag.pc = getProductCategories(bundle)
     adt.Tag.doEvent()
-  } catch (e) {
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
-      ;(window as any).Sentry.captureMessage(e)
-    }
+  } catch (error) {
+    datadogRum.addError(error)
   }
 }

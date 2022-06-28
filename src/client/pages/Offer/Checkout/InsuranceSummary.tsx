@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
-import React from 'react'
-import { ErrorBoundary } from '@sentry/react'
+import React, { ReactNode, Component } from 'react'
+import { datadogRum } from '@datadog/browser-rum'
 import { useTextKeys } from 'utils/textKeys'
 import * as quoteBundleSelectors from 'api/quoteBundleSelectors'
 import { QuoteBundle } from 'data/graphql'
@@ -39,6 +39,38 @@ export const Row = styled.div`
   padding: 0.5rem 0;
   line-height: 1;
 `
+
+interface ErrorBoundaryProps {
+  children?: ReactNode
+  fallback?: ReactNode
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: any) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    datadogRum.addError(error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback
+    }
+
+    return this.props.children
+  }
+}
 
 type Props = {
   quoteBundle: QuoteBundle

@@ -5,8 +5,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
-import * as Sentry from '@sentry/react'
-import { Integrations } from '@sentry/tracing'
 import * as Datadog from 'utils/datadog'
 import { PageTracker } from 'containers/PageTracker'
 import { HotApp } from 'App'
@@ -18,14 +16,6 @@ import {
 import { MobileContext } from './utils/mobileContext'
 
 Datadog.initRum()
-
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  environment: process.env.SENTRY_ENVIRONMENT,
-  integrations: [new Integrations.BrowserTracing()],
-  enabled: Boolean(process.env.SENTRY_DSN),
-  release: process.env.SENTRY_RELEASE,
-})
 
 import { apolloClient } from './apolloClient'
 

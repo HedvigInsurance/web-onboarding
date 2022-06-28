@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { datadogRum } from '@datadog/browser-rum'
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   useMemberQuery,
@@ -20,7 +21,6 @@ import { handleSignedEvent } from 'utils/tracking/gtm/signing'
 import { useTextKeys } from 'utils/textKeys'
 import { useTrack } from 'utils/tracking/gtm/useTrack'
 import { Variation, useVariation } from 'utils/hooks/useVariation'
-import { useUnderwritingLimitsHitReporter } from 'utils/sentry-client'
 import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CloseButton } from 'components/CloseButton/CloseButton'
@@ -35,6 +35,23 @@ import { SignFailModal } from './SignFailModal/SignFailModal'
 import { UserDetailsForm } from './UserDetailsForm'
 import { InsuranceSummary } from './InsuranceSummary'
 import { UpsellCard } from './UpsellCard'
+
+export const useUnderwritingLimitsHitReporter = (
+  hitUnderwritingLimits: ReadonlyArray<string> | undefined | false,
+  quoteIds?: ReadonlyArray<string>,
+) => {
+  useEffect(() => {
+    if (hitUnderwritingLimits && hitUnderwritingLimits.length > 0) {
+      datadogRum.addError(
+        Error(
+          'Underwriting limits hit when editing quote: ' +
+            hitUnderwritingLimits.join(', '),
+        ),
+        { quoteIds },
+      )
+    }
+  }, [hitUnderwritingLimits, quoteIds])
+}
 
 type Openable = {
   visibilityState: VisibilityState

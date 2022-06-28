@@ -1,7 +1,7 @@
+import { datadogRum } from '@datadog/browser-rum'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { QuoteBundle } from 'data/graphql'
 import { EmbarkStory } from 'utils/embarkStory'
-import { captureSentryError } from 'utils/sentry-client'
 
 import { getGTMOfferBase } from 'utils/tracking/gtm/helpers'
 import { GTMPhoneNumberData, pushToGTMDataLayer } from './dataLayer'
@@ -60,6 +60,6 @@ export const trackOfferEvent = (
       ...optionsWithoutId,
     })
   } catch (error) {
-    captureSentryError(error)
+    datadogRum.addError(error)
   }
 }
