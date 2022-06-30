@@ -68,7 +68,7 @@ const CheckoutPaymentWrapper = styled(CheckoutPageWrapper)`
   }
 `
 
-const AdyenContainer = styled.div`
+const AdyenContainer = styled.div<{ paymentStatus: string }>`
   .d-none {
     display: none;
   }
@@ -76,6 +76,8 @@ const AdyenContainer = styled.div`
     padding-bottom: 5rem;
   }
   #dropin-container {
+    display: ${({ paymentStatus }) =>
+      paymentStatus === 'connected' ? 'none' : 'block'};
     .adyen-checkout__payment-method {
       background: transparent;
       border: 0;
@@ -505,7 +507,7 @@ export const CheckoutPayment = ({
         onClose={() => setIs3dsError(false)}
       />
       <ContactInformation formikProps={formik} />
-      <AdyenContainer>
+      <AdyenContainer paymentStatus={paymentStatus}>
         <Wrapper>
           <Headline variant="s" headingLevel="h2" colorVariant="dark">
             {textKeys.CHECKOUT_PAYMENT_DETAILS_TITLE()}
@@ -536,11 +538,7 @@ export const CheckoutPayment = ({
             </>
           )}
           <>
-            <div
-              id="dropin-container"
-              ref={adyenRef}
-              className={paymentStatus === 'connected' ? 'd-none' : ''}
-            />
+            <div id="dropin-container" ref={adyenRef} />
           </>
           <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
         </Wrapper>

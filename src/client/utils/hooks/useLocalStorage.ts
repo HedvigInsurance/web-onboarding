@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 function getStorageValue(key: string, defaultValue: string | boolean) {
   // getting stored value
@@ -14,11 +14,7 @@ export const useLocalStorage = (
   const [value, setValue] = useState(() => {
     return getStorageValue(key, defaultValue)
   })
-
-  useEffect(() => {
-    // storing input name
-    localStorage.setItem(key, JSON.stringify(value))
-  }, [key, value])
+  localStorage.setItem(key, JSON.stringify(value))
 
   return [value, setValue]
 }
