@@ -404,12 +404,13 @@ export const CheckoutPayment = ({
       throw new Error('Setup quote cart session failed')
     }
   }, [
-    client,
-    quoteCartId,
-    storage,
-    trackOfferEvent,
-    trackSignedCustomerEvent,
     sendDatadogAction,
+    quoteCartId,
+    client,
+    storage,
+    setPaymentStatus,
+    trackSignedCustomerEvent,
+    trackOfferEvent,
   ])
 
   const reCreateQuoteBundle = (form: QuoteInput) => {
@@ -519,13 +520,13 @@ export const CheckoutPayment = ({
                   <ThinTick color={colorsV3.gray900} />
                   {textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()}
                 </div>
-                <UnstyledButton onClick={() => handleEditPayment()}>
-                  Edit payment details
+                <UnstyledButton onClick={handleEditPayment}>
+                  {textKeys.CHECKOUT_PAYMENT_EDIT_DETAILS()}
                 </UnstyledButton>
               </PaymentResult>
               <Button
                 fullWidth={true}
-                onClick={() => handleClickCompletePurchase()}
+                onClick={handleClickCompletePurchase}
                 disabled={
                   isFormikError || isBundleCreationInProgress || isDataLoading
                 }

@@ -11,7 +11,7 @@
   "OFFER_PAGE_TITLE": "Your offer from Hedvig | Hedvig",
   "SIGN_EMAIL_CHECK": "Oops. Did you write you email address correctly?",
   "DOWNLOAD_PAGE_TITLE": "Download the Hedvig app | Hedvig",
-  "SIGN_PAGE_TITLE": "Sign with NemID | Hedvig",
+  "SIGN_PAGE_TITLE": "Sign with MitID | Hedvig",
   "WEB_VOUCHER_ADDEDPERK": "{FREE_MONTHS} months free from {CAMPAIGN_NAME}",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE": "",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_BODY": "Something went wrong",
@@ -62,7 +62,7 @@
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "When your old one expires",
   "CHECKOUT_EMAIL_PLACEHOLDER": "your.email@here.com",
   "CHECKOUT_SUMMARY_HEADLINE": "Summary",
-  "CHECKOUT_SIGN_BUTTON_TEXT": "Sign with NemID",
+  "CHECKOUT_SIGN_BUTTON_TEXT": "Sign with MitID",
   "CHECKOUT_SIGN_DISCLAIMER": "By clicking \"{SIGN_BUTTON_LABEL}\" I confirm that I have read and understood the terms and conditions, and that I approve that Hedvig handles [my personal information]({PRIVACY_POLICY_LINK}).",
   "CHECKOUT_DETAILS_ADDRESS": "Address",
   "CHECKOUT_DETAILS_ZIPCODE": "Postal code",
@@ -432,5 +432,6 @@
   "ONBOARDING_CONFIRMATION_PARAGRAPH_1": "Since you're already a member it's just to log in to the app to access everything related to your new insurance.",
   "ONBOARDING_CONFIRMATION_PARAGRAPH_2": "You can chat with your service team and get unlimited assistance till 10 PM, just as usual.",
   "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "Thanks for your purchase",
-  "SIDEBAR_START_DATE_INFO_TEXT": "Already insured? Set your current policy’s expiry date as the start date. If you don’t know the expiry date, you can pick an approximate date and change it later in our app."
+  "SIDEBAR_START_DATE_INFO_TEXT": "Already insured? Set your current policy’s expiry date as the start date. If you don’t know the expiry date, you can pick an approximate date and change it later in our app.",
+  "CHECKOUT_PAYMENT_EDIT_DETAILS": "Edit payment details"
 }
