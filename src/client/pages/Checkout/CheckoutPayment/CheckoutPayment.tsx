@@ -258,7 +258,8 @@ export const CheckoutPayment = ({
   const [isDataLoading, setIsDataLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
-  const [paymentStatus, setPaymentStatus] = useLocalStorage('paymentStatus', '')
+  const localStorageKey = 'paymentStatus'
+  const [paymentStatus, setPaymentStatus] = useLocalStorage(localStorageKey, '')
 
   useScrollToTop()
   //handle 3ds error
@@ -395,9 +396,9 @@ export const CheckoutPayment = ({
         },
         storage,
       })
-      setPaymentStatus('editing')
       sendDatadogAction('checkout_completed')
       trackSignedCustomerEvent({ memberId })
+      setPaymentStatus('')
     } catch (error) {
       trackOfferEvent({
         eventName: EventName.SignError,
@@ -470,7 +471,6 @@ export const CheckoutPayment = ({
     }
 
     await performCheckout()
-    setPaymentStatus('editing')
   }
 
   const handleEditPayment = () => {

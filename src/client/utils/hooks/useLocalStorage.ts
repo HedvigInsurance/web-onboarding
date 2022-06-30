@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 function getStorageValue(key: string, defaultValue: string | boolean) {
   // getting stored value
@@ -14,7 +14,18 @@ export const useLocalStorage = (
   const [value, setValue] = useState(() => {
     return getStorageValue(key, defaultValue)
   })
-  localStorage.setItem(key, JSON.stringify(value))
 
-  return [value, setValue]
+  const handleSetValue = useCallback(
+    (newValue: string | boolean) => {
+      setValue(newValue)
+      if (newValue === '') {
+        localStorage.removeItem(key)
+      } else {
+        localStorage.setItem(key, JSON.stringify(newValue))
+      }
+    },
+    [key],
+  )
+
+  return [value, handleSetValue]
 }
