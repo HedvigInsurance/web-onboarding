@@ -35,7 +35,6 @@ type DropinApi = {
     status: 'loading' | 'success' | 'error' | 'ready',
     options?: { message: string },
   ) => void
-  closeActivePaymentMethod: () => void
 }
 
 const getAvailablePaymentMethods = (
