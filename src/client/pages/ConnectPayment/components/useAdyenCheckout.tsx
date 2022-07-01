@@ -142,9 +142,7 @@ export const useAdyenCheckout = ({
 
   useEffect(mountAdyenCss, [])
   const resetAdyen = () => {
-    dropinComponent?.closeActivePaymentMethod()
     dropinComponent?.setStatus('ready')
-    dropinComponent?.openFirstPaymentMethod === false
   }
   return { resetAdyen }
 }
