@@ -35,6 +35,7 @@ type DropinApi = {
     status: 'loading' | 'success' | 'error' | 'ready',
     options?: { message: string },
   ) => void
+  closeActivePaymentMethod: () => void
 }
 
 const getAvailablePaymentMethods = (
@@ -141,7 +142,9 @@ export const useAdyenCheckout = ({
 
   useEffect(mountAdyenCss, [])
   const resetAdyen = () => {
+    dropinComponent?.closeActivePaymentMethod()
     dropinComponent?.setStatus('ready')
+    dropinComponent?.openFirstPaymentMethod === false
   }
   return { resetAdyen }
 }
@@ -220,6 +223,7 @@ const createAdyenCheckout = ({
     environment: window.hedvigClientConfig.adyenEnvironment,
     clientKey: window.hedvigClientConfig.adyenClientKey,
     paymentMethodsResponse: paymentMethodsResponse,
+    openFirstStoredPaymentMethod: false,
     paymentMethodsConfiguration: {
       card: {
         styles: {
