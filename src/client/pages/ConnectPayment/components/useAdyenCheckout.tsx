@@ -28,7 +28,6 @@ interface Params {
   onSuccess?: () => void
   adyenRef: React.MutableRefObject<HTMLDivElement | null>
   quoteCartId: string
-  isSuccess: boolean
 }
 
 type DropinApi = {
@@ -57,9 +56,7 @@ export const useAdyenCheckout = ({
   onSuccess,
   adyenRef,
   quoteCartId,
-  isSuccess,
 }: Params) => {
-  const [dropinComponent, setDropinComponent] = useState<DropinApi | null>(null)
   const [adyenState, setAdyenState] = useState<ADYEN_STATE>('NOT_LOADED')
   const [connectPaymentMutation] = usePaymentConnection_ConnectPaymentMutation()
   const storage = useStorage()
@@ -69,7 +66,7 @@ export const useAdyenCheckout = ({
   const [
     submitAdditionalPaymentDetails,
   ] = usePaymentConnection_SubmitAdditionalPaymentDetailsMutation()
-
+  const [dropinComponent, setDropinComponent] = useState<DropinApi | null>(null)
   const history = useHistory()
   const currentLocale = useCurrentLocale()
   const textKeys = useTextKeys()
@@ -86,17 +83,6 @@ export const useAdyenCheckout = ({
   const trackOfferEvent = useTrackOfferEvent()
 
   const successMessage = textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()
-  // @ts-ignore only need to clean up timeout
-  useEffect(() => {
-    if (isSuccess && adyenState === 'MOUNTED') {
-      // Delay success message until dropin is fully loaded
-      const timeout = setTimeout(() => {
-        dropinComponent?.setStatus('success', { message: successMessage })
-      }, 300)
-
-      return () => clearTimeout(timeout)
-    }
-  }, [isSuccess, dropinComponent, adyenState, successMessage])
 
   useEffect(() => {
     if (
@@ -154,6 +140,10 @@ export const useAdyenCheckout = ({
   }, [])
 
   useEffect(mountAdyenCss, [])
+  const resetAdyen = () => {
+    dropinComponent?.setStatus('ready')
+  }
+  return { resetAdyen }
 }
 
 interface AdyenCheckoutProps {
@@ -230,6 +220,7 @@ const createAdyenCheckout = ({
     environment: window.hedvigClientConfig.adyenEnvironment,
     clientKey: window.hedvigClientConfig.adyenClientKey,
     paymentMethodsResponse: paymentMethodsResponse,
+    openFirstStoredPaymentMethod: false,
     paymentMethodsConfiguration: {
       card: {
         styles: {

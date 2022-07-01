@@ -11,7 +11,7 @@
   "OFFER_PAGE_TITLE": "Dit tilbud fra Hedvig | Hedvig",
   "SIGN_EMAIL_CHECK": "Ups! Har du indtastet din e-mail korrekt?",
   "DOWNLOAD_PAGE_TITLE": "Download Hedvig-appen | Hedvig",
-  "SIGN_PAGE_TITLE": "Underskriv med NemID | Hedvig",
+  "SIGN_PAGE_TITLE": "Underskriv med MitID | Hedvig",
   "WEB_VOUCHER_ADDEDPERK": "{FREE_MONTHS} måneder gratis fra {CAMPAIGN_NAME}",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_TITLE": "",
   "ONBOARDING_CONNECT_DD_TRUSTLY_MODAL_FAIL_BODY": "Der opstod en fejl",
@@ -62,7 +62,7 @@
   "SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER": "Når din gamle udløber",
   "CHECKOUT_EMAIL_PLACEHOLDER": "din.email@her.dk",
   "CHECKOUT_SUMMARY_HEADLINE": "Opsummering",
-  "CHECKOUT_SIGN_BUTTON_TEXT": "Underskriv med NemID",
+  "CHECKOUT_SIGN_BUTTON_TEXT": "Underskriv med MitID",
   "CHECKOUT_SIGN_DISCLAIMER": "Ved at klikke på \"{SIGN_BUTTON_LABEL}\" tilkendegiver jeg, at jeg har læst og forstået vilkårene og betingelserne, og at jeg accepterer at Hedvig behandler [mine personoplysninger]({PRIVACY_POLICY_LINK}).",
   "CHECKOUT_DETAILS_ADDRESS": "Adresse",
   "CHECKOUT_DETAILS_ZIPCODE": "Postnummer",
@@ -432,5 +432,6 @@
   "ONBOARDING_CONFIRMATION_PARAGRAPH_1": "",
   "ONBOARDING_CONFIRMATION_PARAGRAPH_2": "",
   "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "",
-  "SIDEBAR_START_DATE_INFO_TEXT": "Allerede forsikret? Brug udløbsdatoen på din nuværende forsikring som startdato. Hvis ikke du kender den præcise dato, kan du vælge at angive et cirka-tidspunkt og ændre det senere i appen."
+  "SIDEBAR_START_DATE_INFO_TEXT": "Allerede forsikret? Brug udløbsdatoen på din nuværende forsikring som startdato. Hvis ikke du kender den præcise dato, kan du vælge at angive et cirka-tidspunkt og ændre det senere i appen.",
+  "CHECKOUT_PAYMENT_EDIT_DETAILS": "Rediger betalingsoplysninger"
 }

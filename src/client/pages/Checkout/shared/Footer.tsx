@@ -10,7 +10,7 @@ import { WrapperWidth } from './CheckoutPageWrapper'
 const { white, purple500, gray900 } = colorsV3
 
 export type Props = {
-  buttonText: string
+  buttonText?: string
   buttonOnClick?: () => void
   buttonLinkTo?: string
   children: React.ReactNode
