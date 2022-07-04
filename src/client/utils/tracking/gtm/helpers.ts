@@ -2,6 +2,7 @@ import { QuoteBundle, BundledQuote } from 'data/graphql'
 import * as quoteSelector from 'api/quoteSelector'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { QuoteCarSubType, QuoteOwnershipType } from 'api/quoteSelector'
+import { MarketLabel } from 'l10n/locales'
 import { GTMOfferBase } from './dataLayer'
 
 type OwnershipType = 'rent' | 'own'
@@ -51,3 +52,21 @@ export const getGTMOfferBase = (bundle: QuoteBundle): GTMOfferBase => ({
   has_car: quoteBundleSelector.hasCar(bundle.quotes),
   ...getBundleSubTypes(bundle),
 })
+
+export const getGTMUserData = (bundle: QuoteBundle, market?: MarketLabel) => {
+  const firstQuote = bundle.quotes[0]
+
+  return {
+    userData: {
+      first_name: firstQuote.firstName,
+      last_name: firstQuote.lastName,
+      email_address: firstQuote.email,
+      address: {
+        street: firstQuote.data.street,
+        postal_code: firstQuote.data.zipCode,
+        city: firstQuote.data.city,
+        country: market,
+      },
+    },
+  }
+}

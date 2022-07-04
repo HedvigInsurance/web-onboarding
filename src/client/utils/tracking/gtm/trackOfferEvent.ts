@@ -1,9 +1,10 @@
 import { datadogRum } from '@datadog/browser-rum'
+import { MarketLabel } from 'l10n/locales'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { QuoteBundle } from 'data/graphql'
 import { EmbarkStory } from 'utils/embarkStory'
 
-import { getGTMOfferBase } from 'utils/tracking/gtm/helpers'
+import { getGTMOfferBase, getGTMUserData } from 'utils/tracking/gtm/helpers'
 import { GTMPhoneNumberData, pushToGTMDataLayer } from './dataLayer'
 import { ErrorEventType, EventName } from './types'
 
@@ -12,6 +13,7 @@ export type OptionalParameters = {
   phoneNumberData?: GTMPhoneNumberData
   quoteCartId?: string
   memberId?: string
+  marketLabel?: MarketLabel
   buttonId?: string
   error?: Error | unknown
   errorType?: ErrorEventType
@@ -28,7 +30,7 @@ export const trackOfferEvent = (
   referralCodeUsed: boolean,
   options: OptionalParameters = {},
 ) => {
-  const { quoteCartId, ...optionsWithoutId } = options
+  const { quoteCartId, marketLabel, ...optionsWithoutId } = options
   const { switchedFrom, phoneNumberData, memberId } = optionsWithoutId
   const grossPrice = Math.round(
     Number(quoteBundleSelector.getGrossPrice(bundle)),
@@ -58,6 +60,7 @@ export const trackOfferEvent = (
       },
       ...phoneNumberData,
       ...optionsWithoutId,
+      ...getGTMUserData(bundle, marketLabel),
     })
   } catch (error) {
     datadogRum.addError(error)
