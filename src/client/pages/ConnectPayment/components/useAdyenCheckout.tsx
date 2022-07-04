@@ -141,6 +141,7 @@ export const useAdyenCheckout = ({
 
   useEffect(mountAdyenCss, [])
   const resetAdyen = () => {
+    mountAdyenJs(() => setAdyenState('LOADED'))()
     dropinComponent?.setStatus('ready')
   }
   return { resetAdyen }
@@ -257,7 +258,6 @@ const createAdyenCheckout = ({
         buttonType: 'subscribe',
       },
     },
-    enableStoreDetails: true,
     returnUrl,
     onSubmit: async (state: any, dropinComponent: any) => {
       onSubmit?.()
