@@ -11,7 +11,6 @@ import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
 import { FourOhFour } from './client/pages/FourOhFour'
 import { Landing } from './client/pages/Landing/Landing'
-import { OfferNew } from './client/pages/OfferNew'
 import { SignLoading } from './client/pages/SignLoading'
 import { OfferPage } from './client/pages/Offer'
 import { CheckoutDetails } from './client/pages/Checkout/CheckoutDetails/CheckoutDetails'
@@ -191,16 +190,6 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       Component: TrustlySpinnerPage,
-      exact: true,
-    },
-  },
-  {
-    path: `${onboardingLocaleBaseRoute}/(offer|sign)`,
-    serverRouteData: {
-      titleTextKey: 'OFFER_PAGE_TITLE',
-    },
-    clientRouteData: {
-      Component: OfferNew,
       exact: true,
     },
   },
