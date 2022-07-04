@@ -64,7 +64,6 @@ interface EmbarkProps {
   name: string
   baseUrl: string
   startPageLink?: string
-  isCar?: boolean
 }
 
 const Embark = (props: EmbarkProps) => {
@@ -154,7 +153,6 @@ const Embark = (props: EmbarkProps) => {
     })
   }
 
-  const isCar = EmbarkStory.get()?.includes('car')
   return (
     <PassageContainer>
       <motion.div
@@ -176,7 +174,6 @@ const Embark = (props: EmbarkProps) => {
                 storyData={state.data}
                 startPageLink={props.startPageLink}
                 customTrailingContent={
-                  !isCar &&
                   isCustomerServicePhoneNumberEnabled &&
                   currentLocale.callCenter ? (
                     <CallCenterPhoneNumber

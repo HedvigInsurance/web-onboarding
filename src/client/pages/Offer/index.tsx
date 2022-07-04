@@ -207,7 +207,6 @@ export const OfferPage = ({
       quoteCartId={quoteCartId}
       isReferralCodeUsed={isReferralCodeUsed}
       bundle={selectedBundleVariant.bundle}
-      hidePhoneNumber={hidePhoneNumber}
     >
       <>
         <Introduction
