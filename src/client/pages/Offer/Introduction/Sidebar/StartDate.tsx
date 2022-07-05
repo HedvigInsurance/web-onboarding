@@ -20,7 +20,6 @@ import {
   useCreateQuoteBundleMutation,
   BundledQuote,
 } from 'data/graphql'
-import { gqlDateFormat } from 'pages/OfferNew/Introduction/Sidebar/utils'
 import { StartDateLabelSwitcher } from 'pages/OfferNew/Introduction/Sidebar/StartDateLabelSwitcher'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
@@ -33,6 +32,8 @@ import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { isCar } from 'api/quoteSelector'
 import { CancellationOptions } from './CancellationOptions'
+
+export const gqlDateFormat = 'yyyy-MM-dd'
 
 const DateFormsWrapper = styled.div`
   display: flex;
