@@ -53,19 +53,36 @@ export const getGTMOfferBase = (bundle: QuoteBundle): GTMOfferBase => ({
   ...getBundleSubTypes(bundle),
 })
 
+const removePunctuation = (message?: string) => {
+  const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g
+  return message?.replace(regex, '')
+}
+
 export const getGTMUserData = (bundle: QuoteBundle, market?: MarketLabel) => {
   const firstQuote = bundle.quotes[0]
 
+  // Reference for formatting user data
+  // https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters
+  const firstName = removePunctuation(
+    firstQuote.firstName?.toLowerCase().trim(),
+  )
+  const lastName = removePunctuation(firstQuote.lastName?.toLowerCase().trim())
+  const email = firstQuote.email?.toLowerCase().trim()
+  const zipCode = firstQuote.data.zipCode?.replace(/\s/g, '')
+  const city = removePunctuation(
+    firstQuote.data.city?.toLowerCase().replace(/\s/g, ''),
+  )
+  const country = market?.toLowerCase()
+
   return {
     userData: {
-      first_name: firstQuote.firstName,
-      last_name: firstQuote.lastName,
-      email_address: firstQuote.email,
+      first_name: firstName,
+      last_name: lastName,
+      email_address: email,
       address: {
-        street: firstQuote.data.street,
-        postal_code: firstQuote.data.zipCode,
-        city: firstQuote.data.city,
-        country: market,
+        postal_code: zipCode,
+        city: city,
+        country: country,
       },
     },
   }
