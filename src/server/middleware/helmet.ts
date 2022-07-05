@@ -73,6 +73,8 @@ const defaultSrc = [
   'https://pay.google.com',
   GIRAFFE_WS_ENDPOINT!,
   CONTENT_SERVICE_ENDPOINT!,
+  // Google Tag Manager Server-side
+  'https://sgtm.hedvig.com',
 ]
 
 export const helmet = koaHelmet({
