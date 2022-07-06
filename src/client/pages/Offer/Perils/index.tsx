@@ -9,9 +9,9 @@ import {
   Container,
   HeadingBlack,
   HeadingWrapper,
-} from 'src/client/pages/Offer/components'
-import { PerilRow } from 'src/client/pages/Offer/Perils/PerilRow'
-import { OfferData } from 'src/client/pages/Offer/types'
+} from 'pages/Offer/components'
+import { PerilRow } from 'pages/Offer/Perils/PerilRow'
+import { OfferData } from 'pages/Offer/types'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { pushToGTMDataLayer } from 'utils/tracking/gtm/dataLayer'

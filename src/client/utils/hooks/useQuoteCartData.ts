@@ -18,7 +18,7 @@ import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
   getQuoteIdsFromBundleVariant,
-} from 'src/client/pages/Offer/utils'
+} from 'pages/Offer/utils'
 import { GenericQuoteData } from '../../pages/Offer/types'
 import { formatPostalNumber } from '../postalNumbers'
 import {

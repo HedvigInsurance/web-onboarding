@@ -20,7 +20,7 @@ import {
   useCreateQuoteBundleMutation,
   BundledQuote,
 } from 'data/graphql'
-import { StartDateLabelSwitcher } from 'src/client/pages/Offer/Introduction/Sidebar/StartDateLabelSwitcher'
+import { StartDateLabelSwitcher } from 'pages/Offer/Introduction/Sidebar/StartDateLabelSwitcher'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'

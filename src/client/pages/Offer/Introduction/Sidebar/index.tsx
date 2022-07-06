@@ -12,9 +12,9 @@ import {
 
 import { Button, TextButton, LinkButton } from 'components/buttons'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
-import { OfferData } from 'src/client/pages/Offer/types'
-import { Price } from 'src/client/pages/Offer/Checkout/Price/price'
-import { PriceBreakdown } from 'src/client/pages/Offer/Checkout/Price/PriceBreakdown'
+import { OfferData } from 'pages/Offer/types'
+import { Price } from 'pages/Offer/Checkout/Price/price'
+import { PriceBreakdown } from 'pages/Offer/Checkout/Price/PriceBreakdown'
 
 import { useTextKeys } from 'utils/textKeys'
 import { CampaignCode } from 'utils/campaignCode'

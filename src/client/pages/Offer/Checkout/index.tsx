@@ -18,7 +18,7 @@ import {
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
 } from 'data/graphql'
-import { PriceBreakdown } from 'src/client/pages/Offer/Checkout/Price/PriceBreakdown'
+import { PriceBreakdown } from 'pages/Offer/Checkout/Price/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -31,9 +31,9 @@ import {
   useStartDateProps,
 } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
-import { UpsellCard } from 'src/client/pages/Offer/Checkout/UpsellCard'
-import { OfferData } from 'src/client/pages/Offer/types'
-import { SignFailModal } from 'src/client/pages/Offer/Checkout/SignFailModal/SignFailModal'
+import { UpsellCard } from 'pages/Offer/Checkout/UpsellCard'
+import { OfferData } from 'pages/Offer/types'
+import { SignFailModal } from 'pages/Offer/Checkout/SignFailModal/SignFailModal'
 import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
