@@ -139,7 +139,7 @@ export const OfferPage = ({
         eventName: EventName.OfferCreated,
         options: { marketLabel },
       }),
-    [trackOfferEvent],
+    [marketLabel, trackOfferEvent],
   )
 
   if (isLoadingQuoteCart) return <LoadingPage loading />
