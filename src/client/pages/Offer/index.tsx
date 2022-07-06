@@ -31,7 +31,7 @@ import {
   isOfferDataAvailable,
   getInsuranceTypesFromBundleVariant,
   getTypeOfContractFromBundleVariant,
-} from '../OfferNew/utils'
+} from '../Offer/utils'
 import { apolloClient as realApolloClient } from '../../apolloClient'
 import { SetupFailedModal } from '../Embark/ErrorModal'
 import { AppPromotionSection } from './AppPromotionSection'

@@ -5,10 +5,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useApolloClient } from '@apollo/react-hooks'
 import { GraphQLError } from 'graphql'
-import {
-  getUniqueQuotesFromVariantList,
-  getQuoteIdsFromBundleVariant,
-} from 'pages/OfferNew/utils'
+
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   QuoteBundleVariant,
@@ -48,6 +45,10 @@ import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
+import {
+  getQuoteIdsFromBundleVariant,
+  getUniqueQuotesFromVariantList,
+} from '../utils'
 import { InsuranceSummary } from './InsuranceSummary/InsuranceSummary'
 import {
   CheckoutDetailsForm,

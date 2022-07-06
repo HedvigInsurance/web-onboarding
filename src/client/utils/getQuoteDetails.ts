@@ -8,7 +8,7 @@ import {
 import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
-} from 'pages/OfferNew/utils'
+} from 'pages/Offer/utils'
 import { formatPostalNumber } from './postalNumbers'
 
 export type QuoteProps = {

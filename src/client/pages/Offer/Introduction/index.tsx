@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 
-import { isBundle } from 'pages/OfferNew/utils'
+import { isBundle } from 'pages/Offer/utils'
 import { BackgroundImage } from 'components/BackgroundImage'
 import { Section } from 'src/client/pages/Offer/components'
 

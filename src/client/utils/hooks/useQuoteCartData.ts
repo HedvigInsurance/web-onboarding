@@ -1,9 +1,5 @@
 import { useParams } from 'react-router-dom'
-import {
-  typeOfResidenceTextKeys,
-  HomeInsuranceTypeOfContract,
-  getQuoteIdsFromBundleVariant,
-} from 'pages/OfferNew/utils'
+
 import { useQuoteCartQuery, BundledQuote } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
@@ -18,6 +14,11 @@ import {
   getPossibleVariations,
   getCheckoutStatus,
 } from 'api/quoteCartQuerySelectors'
+import {
+  typeOfResidenceTextKeys,
+  HomeInsuranceTypeOfContract,
+  getQuoteIdsFromBundleVariant,
+} from 'src/client/pages/Offer/utils'
 import { GenericQuoteData } from '../../pages/Offer/types'
 import { formatPostalNumber } from '../postalNumbers'
 import {

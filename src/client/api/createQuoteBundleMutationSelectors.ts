@@ -3,8 +3,8 @@ import {
   QuoteBundleVariant,
   TypeOfContract,
 } from 'data/graphql'
-import { getBundleVariantFromInsuranceTypesWithFallback } from 'pages/OfferNew/utils'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
+import { getBundleVariantFromInsuranceTypesWithFallback } from '../pages/Offer/utils'
 
 export function getSelectedBundleVariant(
   quoteBundleMutation: CreateQuoteBundleMutation | null | undefined,

@@ -43,7 +43,6 @@ import {
 import { Footer } from '../shared/Footer'
 import { PaymentInfo } from '../shared/PaymentInfo'
 import { CheckoutIntercomVariation } from '../shared/CheckoutIntercomVariation'
-import { getUniqueQuotesFromVariantList } from '../../OfferNew/utils'
 import { getCheckoutDetailsValidationSchema } from '../../Offer/Checkout/UserDetailsForm'
 import { PriceData } from '../shared/types'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
@@ -54,6 +53,7 @@ import {
   onRetry,
 } from '../shared/ErrorModal'
 import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
+import { getUniqueQuotesFromVariantList } from '../../Offer/utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3

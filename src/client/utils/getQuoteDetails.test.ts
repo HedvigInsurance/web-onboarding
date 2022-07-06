@@ -3,7 +3,7 @@ import {
   quoteDetailsDataMockRentalSe,
   quoteDetailsDataMockHomeContentStudentOwnDk,
 } from 'utils/testData/quoteDetailsDataMock'
-import { typeOfResidenceTextKeys } from 'pages/OfferNew/utils'
+import { typeOfResidenceTextKeys } from '../pages/Offer/utils'
 import { getQuoteDetails, getAddressValue } from './getQuoteDetails'
 
 describe('getQuoteDetails function', () => {

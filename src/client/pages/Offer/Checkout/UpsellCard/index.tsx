@@ -1,5 +1,5 @@
 import React from 'react'
-import { isSwedishAccident } from 'pages/OfferNew/utils'
+import { isSwedishAccident } from 'pages/Offer/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { QuoteBundleVariant } from 'data/graphql'
 import { Card } from './Card'

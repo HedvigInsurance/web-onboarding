@@ -11,7 +11,7 @@ import {
   isSwedishHouse,
   isSwedishApartment,
   isSwedishBRF,
-} from 'pages/OfferNew/utils'
+} from 'pages/Offer/utils'
 import { TypeOfContract } from 'data/graphql'
 import { OfferData } from 'src/client/pages/Offer/types'
 import {

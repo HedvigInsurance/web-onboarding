@@ -18,7 +18,7 @@ import {
   ColumnSpacing,
 } from '../components'
 import { ComparisonModal } from '../ComparisonTable/ComparisonModal'
-import { getUniqueQuotesFromVariantList } from '../../OfferNew/utils'
+import { getUniqueQuotesFromVariantList } from '../utils'
 import { SelectableInsurance, Selector } from './Selector'
 
 interface Props {

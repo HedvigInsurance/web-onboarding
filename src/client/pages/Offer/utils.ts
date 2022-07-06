@@ -150,6 +150,27 @@ export const isNorwegianQuote = (quote: OfferQuote): boolean =>
   isNorwegianTravel(quote.quoteDetails) ||
   isNorwegianAccident(quote.quoteDetails)
 
+export const isNorwegian = (offerData: OfferData): boolean =>
+  offerData.quotes.every((quote) => isNorwegianQuote(quote))
+
+export const isNorwegianHomeTravelBundle = (offerData: OfferData): boolean =>
+  isNorwegian(offerData) &&
+  offerData.quotes.length === 2 &&
+  hasTravelQuote(offerData)
+
+export const isNorwegianHomeAccidentBundle = (offerData: OfferData): boolean =>
+  isNorwegian(offerData) &&
+  offerData.quotes.length === 2 &&
+  hasAccidentQuote(offerData)
+
+export const isNorwegianHomeTravelAccidentBundle = (
+  offerData: OfferData,
+): boolean =>
+  isNorwegian(offerData) &&
+  offerData.quotes.length === 3 &&
+  hasTravelQuote(offerData) &&
+  hasAccidentQuote(offerData)
+
 export const isDanishQuote = (quote: OfferQuote): boolean =>
   isDanishHomeContents(quote.quoteDetails) ||
   isDanishAccident(quote.quoteDetails) ||
