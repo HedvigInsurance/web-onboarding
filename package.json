@@ -21,7 +21,9 @@
     "codegen": "graphql-codegen --config codegen.yml && yarn prettier --write src/client/data/graphql.tsx",
     "storybook": "start-storybook -p 6008",
     "build-storybook": "build-storybook",
-    "download-translations": "./bin/download-translations.sh"
+    "download-translations": "./bin/download-translations.sh",
+    "cypress": "cypress open --config-file cypress/cypress.config.ts",
+    "cypress:headless": "cypress run --config-file cypress/cypress.config.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
