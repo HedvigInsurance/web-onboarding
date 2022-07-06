@@ -1,6 +1,5 @@
 import {
   BundledQuote,
-  Campaign,
   DanishHomeContentsDetails,
   NorwegianHomeContentsDetails,
   NorwegianTravelDetails,
@@ -18,7 +17,6 @@ import {
 import { LocaleLabel, locales } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/inputFormats'
 import { Address, OfferData, OfferQuote } from 'pages/OfferNew/types'
-import { TextKeyMap } from 'utils/textKeys'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { getFirstInsuranceType } from 'api/quoteBundleSelectors'
 
@@ -64,20 +62,6 @@ const getHouseholdSizeFromBundledQuotes = (
   }
 
   return
-}
-
-export const getHouseholdSize = (quoteDetails: QuoteDetails): number => {
-  if ('householdSize' in quoteDetails) {
-    return quoteDetails.householdSize
-  }
-  if ('coInsured' in quoteDetails) {
-    return quoteDetails.coInsured + 1
-  }
-  throw new Error(
-    `quoteDetails ${JSON.stringify(
-      quoteDetails,
-    )} must include one of the following: "householdSize" or "coInsured".`,
-  )
 }
 
 const getAddressFromBundledQuotes = (
@@ -141,17 +125,6 @@ export const getMainQuote = (offerData: OfferData) => {
 
   return offerData.quotes[0]
 }
-
-export const checkIfMainQuote = (
-  offerData: OfferData,
-  quoteId: OfferQuote['id'],
-) => {
-  const mainQuote = getMainQuote(offerData)
-  return mainQuote.id === quoteId
-}
-
-export const getQuoteIds = (offerData: OfferData): string[] =>
-  offerData.quotes.map((quote) => quote.id)
 
 export const isBundle = (offerData: OfferData): boolean =>
   offerData.quotes.length > 1
@@ -311,30 +284,6 @@ export const isDanishTravel = (
 ): details is DanishTravelDetails =>
   details.__typename === 'DanishTravelDetails'
 
-export const isFreeMonths = (campaigns: Campaign[]) =>
-  (campaigns.length > 0 &&
-    campaigns[0].incentive &&
-    campaigns[0].incentive.__typename === 'FreeMonths') ||
-  false
-
-export const isMonthlyCostDeduction = (
-  campaigns: ReadonlyArray<Campaign | unknown>,
-) => {
-  const firstCampaign = campaigns[0] as Campaign
-  return (
-    (campaigns.length > 0 &&
-      (firstCampaign?.incentive?.__typename === 'MonthlyCostDeduction' ||
-        firstCampaign?.incentive?.__typename === 'PercentageDiscountMonths')) ||
-    false
-  )
-}
-
-export const isNoDiscount = (campaigns: Campaign[]) =>
-  (campaigns.length > 0 &&
-    campaigns[0].incentive &&
-    campaigns[0].incentive.__typename === 'NoDiscount') ||
-  false
-
 // TODO: Make Contract Types more generic
 export type HomeInsuranceTypeOfContract = Exclude<
   TypeOfContract,
@@ -388,76 +337,6 @@ export const typeOfResidenceTextKeys: Record<
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',
   [TypeOfContract.DkHomeContentStudentRent]:
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
-}
-
-// TODO: Make Contract Types more generic
-type SingleInsuranceTypeOfContract = Exclude<
-  TypeOfContract,
-  | TypeOfContract.DkAccident
-  | TypeOfContract.DkAccidentStudent
-  | TypeOfContract.DkTravel
-  | TypeOfContract.DkTravelStudent
-  | TypeOfContract.SeAccident
-  | TypeOfContract.SeAccidentStudent
-  | TypeOfContract.NoAccident
-  | TypeOfContract.SeCarFull
-  | TypeOfContract.SeCarHalf
-  | TypeOfContract.SeCarTraffic
-  | TypeOfContract.SeQasaLongTermRental
-  | TypeOfContract.SeQasaShortTermRental
->
-
-export const getInsuranceTitle = (
-  offerData: OfferData,
-  textKeys: TextKeyMap,
-) => {
-  const { quotes } = offerData
-
-  if (isBundle(offerData) && isNorwegian(offerData)) {
-    const { quoteDetails } = offerData.quotes[0]
-    const isYouthOffer = 'isYouth' in quoteDetails && quoteDetails.isYouth
-    return isYouthOffer
-      ? textKeys.QUOTE_TITLE_HOME_TRAVEL_YOUTH()
-      : textKeys.QUOTE_TITLE_HOME_TRAVEL()
-  }
-  if (isBundle(offerData) && isDanish(offerData)) {
-    const isStudentOffer = isStudent(quotes[0].quoteDetails)
-
-    if (offerData.quotes.length === 2) {
-      return isStudentOffer
-        ? textKeys.QUOTE_TITLE_HOME_ACCIDENT_STUDENT()
-        : textKeys.QUOTE_TITLE_HOME_ACCIDENT()
-    }
-    if (offerData.quotes.length === 3) {
-      return isStudentOffer
-        ? textKeys.QUOTE_TITLE_HOME_ACCIDENT_TRAVEL_STUDENT()
-        : textKeys.QUOTE_TITLE_HOME_ACCIDENT_TRAVEL()
-    }
-  }
-
-  const singleInsuranceTitles: Record<SingleInsuranceTypeOfContract, string> = {
-    [TypeOfContract.SeApartmentRent]: textKeys.QUOTE_TITLE_RENT(),
-    [TypeOfContract.SeApartmentBrf]: textKeys.QUOTE_TITLE_BRF(),
-    [TypeOfContract.SeApartmentStudentRent]: textKeys.QUOTE_TITLE_RENT_STUDENT(),
-    [TypeOfContract.SeApartmentStudentBrf]: textKeys.QUOTE_TITLE_BRF_STUDENT(),
-    [TypeOfContract.SeHouse]: textKeys.QUOTE_TITLE_HOUSE(),
-    [TypeOfContract.NoHouse]: textKeys.QUOTE_TITLE_HOUSE(),
-    [TypeOfContract.DkHouse]: textKeys.QUOTE_TITLE_HOUSE(),
-    [TypeOfContract.NoHomeContentRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
-    [TypeOfContract.NoHomeContentOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
-    [TypeOfContract.NoHomeContentYouthRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS_YOUTH(),
-    [TypeOfContract.NoHomeContentYouthOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS_YOUTH(),
-    [TypeOfContract.NoTravel]: textKeys.QUOTE_TITLE_TRAVEL(),
-    [TypeOfContract.NoTravelYouth]: textKeys.QUOTE_TITLE_TRAVEL_YOUTH(),
-    [TypeOfContract.DkHomeContentOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
-    [TypeOfContract.DkHomeContentRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS(),
-    [TypeOfContract.DkHomeContentStudentOwn]: textKeys.QUOTE_TITLE_HOME_CONTENTS_STUDENT(),
-    [TypeOfContract.DkHomeContentStudentRent]: textKeys.QUOTE_TITLE_HOME_CONTENTS_STUDENT(),
-  }
-
-  return singleInsuranceTitles[
-    quotes[0].contractType as SingleInsuranceTypeOfContract
-  ]
 }
 
 type FormattedBirthdateParams = {
