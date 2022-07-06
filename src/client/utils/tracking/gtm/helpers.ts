@@ -90,13 +90,13 @@ export const getGTMUserData = async (
 
   return {
     userData: {
-      first_name: firstName,
-      last_name: lastName,
-      email_address: email,
-      address: {
-        postal_code: zipCode,
-        city: city,
-        country: country,
+      fn: firstName,
+      ln: lastName,
+      em: email,
+      ad: {
+        zp: zipCode,
+        ct: city,
+        co: country,
       },
     },
   }

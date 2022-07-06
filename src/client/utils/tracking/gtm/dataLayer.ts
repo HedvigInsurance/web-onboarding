@@ -1,5 +1,4 @@
 import { AppEnvironment } from 'shared/clientConfig'
-import { MarketLabel } from 'l10n/locales'
 
 export type GTMUserProperties = {
   market: string
@@ -37,13 +36,13 @@ export type GTMPageData = {
 }
 
 export type GTMUserData = {
-  first_name?: string
-  last_name?: string
-  email_address?: string
-  address?: {
-    postal_code?: string
-    city?: string
-    country?: string
+  fn?: string
+  ln?: string
+  em?: string
+  ad?: {
+    zp?: string
+    ct?: string
+    co?: string
   }
 }
 
