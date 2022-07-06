@@ -105,7 +105,7 @@ export const resolveExternalInsuranceProviderStartSession = (
 const PROVIDER_STATUS_QUERY = gql`
   query ExternalProviderStatus {
     externalInsuranceProvider {
-      providerStatus {
+      providerStatusV2 {
         functional
         insuranceProvider
       }
