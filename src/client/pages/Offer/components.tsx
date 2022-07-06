@@ -6,7 +6,7 @@ import {
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
 
-export * from './common/price'
+export * from './Checkout/Price/price'
 
 export const Heading = styled('h2')`
   font-family: ${fonts.HEDVIG_LETTERS_STANDARD};

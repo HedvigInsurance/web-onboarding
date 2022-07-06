@@ -6,7 +6,7 @@ import {
 } from 'data/graphql'
 import { MarketLabel } from 'shared/clientConfig'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
-import { OfferPersonInfo, Address } from '../pages/OfferNew/types'
+import { OfferPersonInfo, Address } from '../pages/Offer/types'
 import * as quoteSelector from './quoteSelector'
 
 export const isMultiQuote = (bundle: QuoteBundle | undefined) => {

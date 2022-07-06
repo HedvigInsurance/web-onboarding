@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { OfferQuote } from 'pages/OfferNew/types'
+import { OfferQuote } from 'src/client/pages/Offer/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { PerilModal } from './PerilModal'
 import { PerilCollection } from './PerilCollection'

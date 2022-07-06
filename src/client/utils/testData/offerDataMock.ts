@@ -9,7 +9,7 @@ import {
   SwedishApartmentType,
   InsurableLimit,
 } from 'data/graphql'
-import { OfferData } from '../../pages/OfferNew/types'
+import { OfferData } from '../../pages/Offer/types'
 
 const insurableLimitMock = [
   {

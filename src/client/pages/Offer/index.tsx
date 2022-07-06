@@ -32,12 +32,12 @@ import {
   getInsuranceTypesFromBundleVariant,
   getTypeOfContractFromBundleVariant,
 } from '../OfferNew/utils'
-import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
-import { FaqSection } from '../OfferNew/FaqSection'
-import { Perils } from '../OfferNew/Perils'
-import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
-import { SetupFailedModal } from '../Embark/ErrorModal'
 import { apolloClient as realApolloClient } from '../../apolloClient'
+import { SetupFailedModal } from '../Embark/ErrorModal'
+import { AppPromotionSection } from './AppPromotionSection'
+import { InsuranceSelector } from './InsuranceSelector'
+import { FaqSection } from './FaqSection'
+import { Perils } from './Perils'
 import { Introduction } from './Introduction'
 import { Checkout } from './Checkout'
 import { PageWrapper } from './PageWrapper'
