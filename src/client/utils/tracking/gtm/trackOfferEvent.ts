@@ -39,30 +39,32 @@ export const trackOfferEvent = (
     Number(quoteBundleSelector.getTotalBundleCost(bundle)),
   )
 
-  try {
-    pushToGTMDataLayer({
-      event: eventName,
-      offerData: {
-        referral_code: referralCodeUsed ? 'yes' : 'no',
-        number_of_people: quoteBundleSelector.getHouseholdSize(bundle),
-        insurance_price: grossPrice,
-        ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
-        currency: quoteBundleSelector.getBundleCurrency(bundle),
-        quote_cart_id: quoteCartId,
-        ...getGTMOfferBase(bundle),
-        ...(switchedFrom && {
-          switch_from: {
-            ...getGTMOfferBase(switchedFrom),
-          },
-        }),
-        ...(memberId && { member_id: memberId }),
-        flow_type: EmbarkStory.get() ?? undefined,
-      },
-      ...phoneNumberData,
-      ...optionsWithoutId,
-      ...getGTMUserData(bundle, marketLabel),
-    })
-  } catch (error) {
-    datadogRum.addError(error)
-  }
+  getGTMUserData(bundle, marketLabel).then((userData) => {
+    try {
+      pushToGTMDataLayer({
+        event: eventName,
+        offerData: {
+          referral_code: referralCodeUsed ? 'yes' : 'no',
+          number_of_people: quoteBundleSelector.getHouseholdSize(bundle),
+          insurance_price: grossPrice,
+          ...(grossPrice !== netPrice && { discounted_premium: netPrice }),
+          currency: quoteBundleSelector.getBundleCurrency(bundle),
+          quote_cart_id: quoteCartId,
+          ...getGTMOfferBase(bundle),
+          ...(switchedFrom && {
+            switch_from: {
+              ...getGTMOfferBase(switchedFrom),
+            },
+          }),
+          ...(memberId && { member_id: memberId }),
+          flow_type: EmbarkStory.get() ?? undefined,
+        },
+        ...phoneNumberData,
+        ...optionsWithoutId,
+        ...userData,
+      })
+    } catch (error) {
+      datadogRum.addError(error)
+    }
+  })
 }

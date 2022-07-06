@@ -67,21 +67,26 @@ const removePunctuation = (message?: string) => {
   return message?.replace(regex, '')
 }
 
-export const getGTMUserData = (bundle: QuoteBundle, market?: MarketLabel) => {
+export const getGTMUserData = async (
+  bundle: QuoteBundle,
+  market?: MarketLabel,
+) => {
   const firstQuote = bundle.quotes[0]
 
   // Reference for formatting user data
   // https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters
-  const firstName = removePunctuation(
-    firstQuote.firstName?.toLowerCase().trim(),
+  const firstName = await hashValue(
+    removePunctuation(firstQuote.firstName?.toLowerCase().trim()),
   )
-  const lastName = removePunctuation(firstQuote.lastName?.toLowerCase().trim())
-  const email = firstQuote.email?.toLowerCase().trim()
-  const zipCode = firstQuote.data.zipCode?.replace(/\s/g, '')
-  const city = removePunctuation(
-    firstQuote.data.city?.toLowerCase().replace(/\s/g, ''),
+  const lastName = await hashValue(
+    removePunctuation(firstQuote.lastName?.toLowerCase().trim()),
   )
-  const country = market?.toLowerCase()
+  const email = await hashValue(firstQuote.email?.toLowerCase().trim())
+  const zipCode = await hashValue(firstQuote.data.zipCode?.replace(/\s/g, ''))
+  const city = await hashValue(
+    removePunctuation(firstQuote.data.city?.toLowerCase().replace(/\s/g, '')),
+  )
+  const country = await hashValue(market?.toLowerCase())
 
   return {
     userData: {
