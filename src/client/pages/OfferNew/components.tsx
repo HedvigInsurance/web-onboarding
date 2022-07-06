@@ -5,7 +5,6 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { SIDEBAR_WIDTH } from './Introduction/Sidebar/index'
 
 export * from './common/price'
 
@@ -35,42 +34,6 @@ export const HeadingXS = styled.h3`
 
 export const HeadingBlack = styled(Heading)`
   color: ${colorsV3.gray900};
-`
-
-export const SubHeading = styled('h2')`
-  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
-  font-size: 1.5rem;
-  line-height: 1.2;
-
-  @media (max-width: 600px) {
-    font-size: 1.25rem;
-  }
-`
-
-export const SubHeadingBlack = styled(SubHeading)`
-  color: ${colorsV3.gray900};
-`
-
-export const SubSubHeading = styled('h2')`
-  font-family: ${fonts.HEDVIG_LETTERS_STANDARD};
-  font-size: 1.25rem;
-  line-height: 1.2rem;
-`
-
-export const SubSubHeadingBlack = styled(SubSubHeading)`
-  color: ${colorsV3.gray900};
-`
-
-export const PreHeading = styled('div')`
-  font-size: 1rem;
-  line-height: 1.5;
-  color: ${colorsV3.gray500};
-  text-transform: uppercase;
-  margin-bottom: 1.5625rem;
-
-  @media (max-width: 600px) {
-    text-align: center;
-  }
 `
 
 export const HeadingWrapper = styled('div')`
@@ -134,7 +97,7 @@ export const Column = styled('div')`
 `
 
 export const ColumnSpacing = styled('div')`
-  width: ${SIDEBAR_WIDTH};
+  width: 26rem;
   flex-shrink: 0;
 `
 

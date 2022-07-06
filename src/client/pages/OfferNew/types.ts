@@ -1,27 +1,10 @@
 import {
   BundledQuote,
-  CompleteApartmentQuoteDetails,
-  CompleteHouseQuoteDetails,
-  CompleteQuote,
   InsurableLimit,
   InsuranceCost,
   InsuranceTerm,
-  Query,
   TypeOfContract,
 } from 'data/graphql'
-
-interface OfferCore {
-  redeemedCampaigns: Query['redeemedCampaigns']
-  member: Omit<Query['member'], 'features'>
-}
-
-export interface CompleteOfferDataForMember extends OfferCore {
-  lastQuoteOfMember: CompleteQuoteWithoutUnknownDetails
-}
-
-export type CompleteQuoteWithoutUnknownDetails = CompleteQuote & {
-  details: CompleteHouseQuoteDetails | CompleteApartmentQuoteDetails
-}
 
 export interface Address {
   street: string
@@ -101,27 +84,4 @@ export interface OfferData {
   quotes: ReadonlyArray<OfferQuote>
   cost: InsuranceCost
   memberId?: string
-}
-
-export interface WithEmailForm {
-  email: string
-  onEmailChange: (email: string) => void
-}
-
-export interface WithSsnForm {
-  ssn: string
-  onSsnChange: (ssn: string) => void
-}
-
-export interface WithFirstAndLastNameForm {
-  firstName: string
-  lastName: string
-  onFirstNameChange: (name: string) => void
-  onLastNameChange: (name: string) => void
-  isFirstAndLastNameVisible: boolean
-}
-
-export interface WithPhoneForm {
-  phoneNumber: string
-  onPhoneChange: (phoneNumber: string) => void
 }
