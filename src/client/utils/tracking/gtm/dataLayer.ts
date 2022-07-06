@@ -1,4 +1,5 @@
 import { AppEnvironment } from 'shared/clientConfig'
+import { MarketLabel } from 'l10n/locales'
 
 export type GTMUserProperties = {
   market: string

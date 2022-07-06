@@ -16,7 +16,7 @@ import {
 } from 'utils/tracking/gtm/trackSignedCustomerEvent'
 
 export const useTrackSignedCustomerEvent = () => {
-  const { isoLocale, adTractionConfig } = useCurrentLocale()
+  const { isoLocale, adTractionConfig, marketLabel } = useCurrentLocale()
 
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
@@ -51,6 +51,7 @@ export const useTrackSignedCustomerEvent = () => {
             bundle: selectedBundleVariant.bundle,
             quoteCartId,
             adTractionConfig,
+            marketLabel,
             ...restParams,
           })
         }
