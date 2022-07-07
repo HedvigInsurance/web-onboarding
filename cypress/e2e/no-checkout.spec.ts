@@ -34,7 +34,7 @@ const TRAVEL_QUOTE = {
 describe('NO Offer Page', () => {
   faker.setLocale('nb_NO')
 
-  it('should display a Norwegian price quote', async () => {
+  it('should display a Norwegian price quote', () => {
     createQuoteCart({ market: 'NORWAY', locale: 'en_NO' }).then((quoteCartId) =>
       createQuoteBundle({
         quoteCartId,

@@ -1,4 +1,5 @@
-import faker from '@faker-js/faker'
+import { faker } from '@faker-js/faker'
+import { first } from 'cypress/types/lodash'
 import { createQuoteBundle, createQuoteCart } from './helpers'
 
 const BIRTH_DATE = '1999-07-12'
@@ -25,7 +26,7 @@ const HOME_CONTENT_QUOTE = {
 describe('DK Offer Page', () => {
   faker.setLocale('en')
 
-  it('should display a Danish price quote', async () => {
+  it('should display a Danish price quote', () => {
     createQuoteCart({ market: 'DENMARK', locale: 'en_DK' }).then(
       (quoteCartId) =>
         createQuoteBundle({ quoteCartId, quotes: [HOME_CONTENT_QUOTE] }).then(
@@ -37,12 +38,8 @@ describe('DK Offer Page', () => {
             cy.contains(HOME_CONTENT_QUOTE.data.street).should('be.visible')
 
             cy.contains('button', 'Update details').click()
-            const $form = cy
-              .contains('Your information', { timeout: 5000 })
-              .parent()
             const newFirstName = faker.name.firstName()
-            $form
-              .find('input[name=firstName]')
+            cy.get('input[name=firstName]')
               .clear()
               .type(`${newFirstName}{enter}`)
             cy.contains(newFirstName).should('be.visible', { timeout: 2000 })
