@@ -17,7 +17,7 @@ import {
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/inputFormats'
-import { Address, OfferData, OfferQuote } from 'src/client/pages/Offer/types'
+import { Address, OfferData, OfferQuote } from 'pages/Offer/types'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { getFirstInsuranceType } from 'api/quoteBundleSelectors'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { InsuranceCost, InsuranceDataCollection } from 'src/client/data/graphql'
+import { InsuranceCost, InsuranceDataCollection } from 'data/graphql'
 import { TextKeyProvider } from 'utils/textKeys'
 import { Compare } from './Compare'
 

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useLocation } from 'react-router'
-import { OfferData } from 'src/client/pages/Offer/types'
+import { OfferData } from 'pages/Offer/types'
 import { getAddress, getCarMakeAndOrModel } from 'pages/Offer/utils'
 import { useTextKeys } from 'utils/textKeys'
 import {

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { OfferPersonInfo, GenericQuoteData } from 'src/client/pages/Offer/types'
+import { OfferPersonInfo, GenericQuoteData } from 'pages/Offer/types'
 import {
   formatCarRegistrationNumberSE,
   parseAddress,

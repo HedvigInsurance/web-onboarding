@@ -6,7 +6,7 @@ import {
   useExternalInsuranceDataQuery,
   InsuranceDataCollection,
 } from 'data/graphql'
-import { OfferQuote } from 'src/client/pages/Offer/types'
+import { OfferQuote } from 'pages/Offer/types'
 import { useTextKeys } from 'utils/textKeys'
 
 type Props = {
