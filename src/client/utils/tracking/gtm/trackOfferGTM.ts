@@ -5,7 +5,7 @@ import {
   hasAccidentQuote,
   hasTravelQuote,
 } from 'pages/Offer/utils'
-import { OfferData } from 'src/client/pages/Offer/types'
+import { OfferData } from 'pages/Offer/types'
 import { EmbarkStory } from 'utils/embarkStory'
 import { pushToGTMDataLayer, GTMPhoneNumberData } from './dataLayer'
 import { EventName } from './types'

@@ -4,7 +4,7 @@ import {
   useMemberQuery,
   useRedeemedCampaignsQuery,
 } from 'data/graphql'
-import { OfferData } from 'src/client/pages/Offer/types'
+import { OfferData } from 'pages/Offer/types'
 import { adtraction } from 'utils/tracking/adtraction/adtraction'
 import { EventName } from './types'
 import { trackOfferGTM } from './trackOfferGTM'

@@ -13,7 +13,7 @@ import {
   isSwedishBRF,
 } from 'pages/Offer/utils'
 import { TypeOfContract } from 'data/graphql'
-import { OfferData } from 'src/client/pages/Offer/types'
+import { OfferData } from 'pages/Offer/types'
 import {
   NoBundleTypes,
   DkBundleTypes,
