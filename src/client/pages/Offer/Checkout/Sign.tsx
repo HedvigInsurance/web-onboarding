@@ -8,7 +8,7 @@ import { Spinner } from 'components/utils'
 import { CheckoutMethod } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { WarningIcon } from '../../../components/icons/Warning'
-import { LinkToChat } from '../../OfferNew/Checkout/LinkToChat'
+import { LinkToChat } from './LinkToChat'
 import { SignUiState } from './'
 
 type WrapperProps = {

@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { OfferPersonInfo, GenericQuoteData } from 'pages/OfferNew/types'
-import { formatCarRegistrationNumberSE, parseAddress } from 'pages/Offer/utils'
+import { OfferPersonInfo, GenericQuoteData } from 'pages/Offer/types'
 import {
-  getFormattedBirthdate,
+  formatCarRegistrationNumberSE,
+  parseAddress,
   typeOfResidenceTextKeys,
+  getFormattedBirthdate,
   HomeInsuranceTypeOfContract,
-} from 'pages/OfferNew/utils'
+} from 'pages/Offer/utils'
 import { formatPostalNumber } from 'utils/postalNumbers'
 import { TextKeyMap, useTextKeys } from 'utils/textKeys'
 import { TypeOfContract, BundledQuote } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
+
 import { Group, Row } from './InsuranceSummary'
 
 const Label = styled.div`

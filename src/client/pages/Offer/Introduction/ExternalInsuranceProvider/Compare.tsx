@@ -34,7 +34,7 @@ const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
     `
     background-color: ${colorsV3.gray300};
     color: ${colorsV3.gray700};
-    box-shadow: none;  
+    box-shadow: none;
   `};
 `
 

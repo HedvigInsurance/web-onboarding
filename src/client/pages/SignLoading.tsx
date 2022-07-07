@@ -13,12 +13,12 @@ import {
   useQuoteBundleQuery,
   useSignStatusQuery,
 } from 'data/graphql'
-import { getOfferData } from 'pages/OfferNew/utils'
 import { useTextKeys } from 'utils/textKeys'
 import { handleSignedEvent } from 'utils/tracking/gtm/signing'
 import { useVariation, Variation } from 'utils/hooks/useVariation'
 import { useQuoteIds } from 'utils/hooks/useQuoteIds'
 import { useCurrentLocale } from '../l10n/useCurrentLocale'
+import { getOfferData } from './Offer/utils'
 
 const InnerWrapper = styled(motion.div)`
   text-align: center;

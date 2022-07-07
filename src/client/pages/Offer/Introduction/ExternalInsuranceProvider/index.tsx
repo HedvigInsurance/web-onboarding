@@ -4,7 +4,7 @@ import {
   useExternalInsuranceDataQuery,
   useExternalInsuranceDataStatusSubscription,
 } from 'data/graphql'
-import { OfferData } from 'pages/OfferNew/types'
+import { OfferData } from 'pages/Offer/types'
 
 import { useTextKeys } from 'utils/textKeys'
 import { Compare } from './Compare'

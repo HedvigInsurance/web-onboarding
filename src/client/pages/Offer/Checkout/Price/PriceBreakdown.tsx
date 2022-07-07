@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { OfferData } from 'pages/OfferNew/types'
+import { OfferData } from 'pages/Offer/types'
 import { useTextKeys } from 'utils/textKeys'
 import {
   SMALL_SCREEN_MEDIA_QUERY,

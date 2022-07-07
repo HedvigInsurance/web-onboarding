@@ -4,9 +4,9 @@ import {
   BundledQuote,
   TypeOfContract,
 } from 'data/graphql'
-import { getBundleVariantFromInsuranceTypesWithFallback } from 'pages/OfferNew/utils'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
-import { OfferData } from '../pages/OfferNew/types'
+import { OfferData } from '../pages/Offer/types'
+import { getBundleVariantFromInsuranceTypesWithFallback } from '../pages/Offer/utils'
 
 export function getSelectedBundleVariant(
   quoteCartQuery: QuoteCartQuery | undefined,

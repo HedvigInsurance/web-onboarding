@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+
 import { useQuoteCartQuery, BundledQuote } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
@@ -17,8 +18,8 @@ import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
   getQuoteIdsFromBundleVariant,
-} from 'pages/OfferNew/utils'
-import { GenericQuoteData } from '/pages/OfferNew/types'
+} from 'pages/Offer/utils'
+import { GenericQuoteData } from '../../pages/Offer/types'
 import { formatPostalNumber } from '../postalNumbers'
 import {
   useSelectedInsuranceTypes,

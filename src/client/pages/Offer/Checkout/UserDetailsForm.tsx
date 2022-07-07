@@ -6,7 +6,7 @@ import { useFeature, Features } from 'utils/hooks/useFeature'
 import { TextKeyMap } from 'utils/textKeys'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { QuoteInput } from 'components/DetailsModal/types'
-import { CreditCheckInfo } from '../../OfferNew/Checkout/CreditCheckInfo'
+import { CreditCheckInfo } from './CreditCheckInfo'
 import { TextInput, SsnInput } from './inputFields'
 
 export const getCheckoutDetailsValidationSchema = (

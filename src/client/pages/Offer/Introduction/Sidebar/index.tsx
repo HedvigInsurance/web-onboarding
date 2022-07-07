@@ -12,9 +12,9 @@ import {
 
 import { Button, TextButton, LinkButton } from 'components/buttons'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
-import { OfferData } from 'pages/OfferNew/types'
-import { Price } from 'pages/OfferNew/common/price'
-import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
+import { OfferData } from 'pages/Offer/types'
+import { Price } from 'pages/Offer/Checkout/Price/price'
+import { PriceBreakdown } from 'pages/Offer/Checkout/Price/PriceBreakdown'
 
 import { useTextKeys } from 'utils/textKeys'
 import { CampaignCode } from 'utils/campaignCode'
@@ -30,7 +30,7 @@ import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
 import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
-import { StickyBottomSidebar } from '../../../OfferNew/Introduction/Sidebar/StickyBottomSidebar'
+import { StickyBottomSidebar } from './StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate, useStartDateProps } from './StartDate'
 
