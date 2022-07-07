@@ -68,11 +68,9 @@ const removePunctuation = (message?: string) => {
 }
 
 export const getGTMUserData = async (
-  bundle: QuoteBundle,
+  firstQuote: BundledQuote,
   market?: MarketLabel,
 ) => {
-  const firstQuote = bundle.quotes[0]
-
   // Reference for formatting user data
   // https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters
   const firstName = await hashValue(

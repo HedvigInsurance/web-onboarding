@@ -39,7 +39,7 @@ export const trackOfferEvent = (
     Number(quoteBundleSelector.getTotalBundleCost(bundle)),
   )
 
-  getGTMUserData(bundle, marketLabel).then((userData) => {
+  getGTMUserData(bundle.quotes[0], marketLabel).then((userData) => {
     try {
       pushToGTMDataLayer({
         event: eventName,
