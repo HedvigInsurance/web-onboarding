@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-it('should get a price quote for a Swedish house', async () => {
+it('should get a price quote for a Swedish house', () => {
   const url = '/se-en/new-member/home-accident-needer'
 
   faker.setLocale('sv')

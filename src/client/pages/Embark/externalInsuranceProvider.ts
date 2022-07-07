@@ -105,7 +105,7 @@ export const resolveExternalInsuranceProviderStartSession = (
 const PROVIDER_STATUS_QUERY = gql`
   query ExternalProviderStatus {
     externalInsuranceProvider {
-      providerStatus {
+      providerStatusV2 {
         functional
         insuranceProvider
       }
@@ -120,13 +120,16 @@ export const resolveExternalInsuranceProviderProviderStatus = async () => {
 
   const response = await apolloClient.client.query<{
     externalInsuranceProvider: {
-      providerStatus: Array<{ insuranceProvider: string; functional: boolean }>
+      providerStatusV2: Array<{
+        insuranceProvider: string
+        functional: boolean
+      }>
     }
   }>({
     query: PROVIDER_STATUS_QUERY,
   })
 
-  return response.data.externalInsuranceProvider.providerStatus.map(
+  return response.data.externalInsuranceProvider.providerStatusV2.map(
     (provider) => ({
       id: provider.insuranceProvider,
       functional: provider.functional,
