@@ -2,6 +2,7 @@ import { QuoteBundle, BundledQuote } from 'data/graphql'
 import * as quoteSelector from 'api/quoteSelector'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { QuoteCarSubType, QuoteOwnershipType } from 'api/quoteSelector'
+import { MarketLabel } from 'l10n/locales'
 import { GTMOfferBase } from './dataLayer'
 
 type OwnershipType = 'rent' | 'own'
@@ -51,3 +52,50 @@ export const getGTMOfferBase = (bundle: QuoteBundle): GTMOfferBase => ({
   has_car: quoteBundleSelector.hasCar(bundle.quotes),
   ...getBundleSubTypes(bundle),
 })
+
+// https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest#converting_a_digest_to_a_hex_string
+export const hashValue = async (message?: string) => {
+  const msgUint8 = new TextEncoder().encode(message)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+  return hashHex
+}
+
+const removePunctuation = (message?: string) => {
+  const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g
+  return message?.replace(regex, '')
+}
+
+export const getGTMUserData = async (
+  firstQuote: BundledQuote,
+  market?: MarketLabel,
+) => {
+  // Reference for formatting user data
+  // https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters
+  const firstName = await hashValue(
+    removePunctuation(firstQuote.firstName?.toLowerCase().trim()),
+  )
+  const lastName = await hashValue(
+    removePunctuation(firstQuote.lastName?.toLowerCase().trim()),
+  )
+  const email = await hashValue(firstQuote.email?.toLowerCase().trim())
+  const zipCode = await hashValue(firstQuote.data.zipCode?.replace(/\s/g, ''))
+  const city = await hashValue(
+    removePunctuation(firstQuote.data.city?.toLowerCase().replace(/\s/g, '')),
+  )
+  const country = await hashValue(market?.toLowerCase())
+
+  return {
+    userData: {
+      fn: firstName,
+      ln: lastName,
+      em: email,
+      ad: {
+        zp: zipCode,
+        ct: city,
+        co: country,
+      },
+    },
+  }
+}

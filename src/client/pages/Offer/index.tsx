@@ -79,7 +79,7 @@ export const OfferPage = ({
     params: { id: quoteCartId },
   },
 }: OfferPageProps) => {
-  const { isoLocale, path: pathLocale } = useCurrentLocale()
+  const { isoLocale, path: pathLocale, marketLabel } = useCurrentLocale()
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
@@ -133,9 +133,14 @@ export const OfferPage = ({
     getUniqueQuotesFromVariantList(bundleVariants),
   )
 
-  useEffect(() => trackOfferEvent({ eventName: EventName.OfferCreated }), [
-    trackOfferEvent,
-  ])
+  useEffect(
+    () =>
+      trackOfferEvent({
+        eventName: EventName.OfferCreated,
+        options: { marketLabel },
+      }),
+    [marketLabel, trackOfferEvent],
+  )
 
   if (isLoadingQuoteCart) return <LoadingPage loading />
 

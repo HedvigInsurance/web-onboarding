@@ -35,6 +35,17 @@ export type GTMPageData = {
   market: string
 }
 
+export type GTMUserData = {
+  fn?: string
+  ln?: string
+  em?: string
+  ad?: {
+    zp?: string
+    ct?: string
+    co?: string
+  }
+}
+
 export type GTMPhoneNumberData = {
   path: string
   status: 'opened' | 'closed'
@@ -48,6 +59,7 @@ export type DataLayerObject = {
   passageData?: Record<string, string | undefined>
   eventData?: Record<string, string>
   phoneNumberData?: GTMPhoneNumberData
+  userData?: GTMUserData
 }
 
 export const pushToGTMDataLayer = (obj: DataLayerObject) => {
