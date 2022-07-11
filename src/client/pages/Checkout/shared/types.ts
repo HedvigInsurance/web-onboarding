@@ -24,7 +24,6 @@ export type QuoteDetailsInput = {
   zipCode?: string | null
   livingSpace?: number | null
   householdSize?: number | null
-  youth?: boolean | null
   coInsured?: number | null
   student?: boolean | null
   ancillarySpace?: number | null

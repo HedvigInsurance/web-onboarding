@@ -130,13 +130,6 @@ export const getMainQuote = (offerData: OfferData) => {
 export const isBundle = (offerData: OfferData): boolean =>
   offerData.quotes.length > 1
 
-export const isYouth = (offerData: OfferData): boolean =>
-  offerData.quotes.every(
-    (quote) =>
-      isNorwegianHomeContents(quote.quoteDetails) ||
-      (isNorwegianTravel(quote.quoteDetails) && quote.quoteDetails.isYouth),
-  )
-
 export const isSwedishQuote = ({ quoteDetails }: OfferQuote): boolean =>
   isSwedishApartment(quoteDetails) ||
   isSwedishHouse(quoteDetails) ||
@@ -224,10 +217,6 @@ export const isStudent = (details: QuoteDetails) => {
     return details.isStudent
   }
 
-  if ('isYouth' in details) {
-    return details.isYouth
-  }
-
   return false
 }
 
@@ -286,8 +275,9 @@ export const isDanishTravel = (
 export type HomeInsuranceTypeOfContract = Exclude<
   TypeOfContract,
   | TypeOfContract.NoTravel
-  | TypeOfContract.NoAccident
   | TypeOfContract.NoTravelYouth
+  | TypeOfContract.NoTravelStudent
+  | TypeOfContract.NoAccident
   | TypeOfContract.DkAccident
   | TypeOfContract.DkAccidentStudent
   | TypeOfContract.DkTravel
@@ -326,7 +316,11 @@ export const typeOfResidenceTextKeys: Record<
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
   [TypeOfContract.NoHomeContentYouthRent]:
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
+  [TypeOfContract.NoHomeContentStudentRent]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
   [TypeOfContract.NoHomeContentYouthOwn]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+  [TypeOfContract.NoHomeContentStudentOwn]:
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
   [TypeOfContract.DkHomeContentOwn]:
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_UNSPECIFIED',

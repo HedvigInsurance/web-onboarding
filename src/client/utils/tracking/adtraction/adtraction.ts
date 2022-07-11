@@ -3,7 +3,6 @@ import md5 from 'md5'
 import {
   isBundle,
   isNorwegian,
-  isYouth,
   isDanishAccidentBundle,
   isStudentOffer,
   isDanishTravelBundle,
@@ -58,6 +57,9 @@ export const ADTRACTION_CONTRACT_VALUES: Record<
   SE_ACCIDENT_BUNDLE_HOUSE: 1660490052,
   NO_HOUSE: 0, // not needed
   DK_HOUSE: 0, // not needed
+  NO_HOME_CONTENT_STUDENT_OWN: 0, // not needed
+  NO_HOME_CONTENT_STUDENT_RENT: 0, // not needed
+  NO_TRAVEL_STUDENT: 0, // not needed
   NO_HOME_CONTENT_OWN: 1492623645,
   NO_HOME_CONTENT_RENT: 1492623645,
   NO_HOME_CONTENT_YOUTH_OWN: 1492623719,
@@ -103,7 +105,7 @@ export const getBundleAdtractionProductValue = (offerData: OfferData) => {
     }
 
     if (isNorwegian(offerData)) {
-      return isYouth(offerData)
+      return isStudentOffer(offerData)
         ? ADTRACTION_CONTRACT_VALUES[NoBundleTypes.NoHomeTravelBundleYouth]
         : ADTRACTION_CONTRACT_VALUES[NoBundleTypes.NoHomeTravelBundle]
     }

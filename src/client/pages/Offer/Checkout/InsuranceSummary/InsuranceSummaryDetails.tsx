@@ -42,7 +42,7 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
 
   const currentLocale = useCurrentLocale()
 
-  const studentOrYouthLabel = getStudentOrYouthLabel(data, textKeys)
+  const studentLabel = getStudentLabel(data, textKeys)
 
   return (
     <>
@@ -70,11 +70,11 @@ export const InsuranceSummaryDetails: React.FC<Props> = ({
           ))}
         </Group>
       ))}
-      {studentOrYouthLabel && (
+      {studentLabel && (
         <Group>
           <Row>
             <Label>+</Label>
-            <Value>{studentOrYouthLabel}</Value>
+            <Value>{studentLabel}</Value>
           </Row>
         </Group>
       )}
@@ -341,15 +341,8 @@ const getPersonalDetails = ({
   ]
 }
 
-const getStudentOrYouthLabel = (
-  data: GenericQuoteData,
-  textKeys: TextKeyMap,
-) => {
-  if (isStudent(data)) {
-    return textKeys.CHECKOUT_DETAILS_STUDENT()
-  }
-
-  return data.isYouth ? textKeys.CHECKOUT_DETAILS_YOUTH() : null
+const getStudentLabel = (data: GenericQuoteData, textKeys: TextKeyMap) => {
+  return isStudent(data) ? textKeys.CHECKOUT_DETAILS_STUDENT() : null
 }
 
 const isStudent = (data: GenericQuoteData) => {

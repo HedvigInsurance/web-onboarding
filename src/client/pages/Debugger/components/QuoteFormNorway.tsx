@@ -15,7 +15,7 @@ const initialBaseValues = {
 export const initialNoHomeValues = {
   ...initialBaseValues,
   norwegianHomeContents: {
-    isYouth: false,
+    isStudent: false,
     coInsured: 0,
     livingSpace: 44,
     street: 'Gulebøjsveien 1',
@@ -28,7 +28,7 @@ export const initialNoTravelValues = {
   ...initialBaseValues,
   norwegianTravel: {
     coInsured: 0,
-    isYouth: false,
+    isStudent: false,
   },
 }
 
@@ -84,7 +84,7 @@ export const NorwegianTravel: React.FC<WithFormikProps> = ({ formik }) => {
   return (
     <>
       <NorwegianCommon formik={formik} />
-      <div>isYouth TODO</div>
+      <div>isStudent TODO</div>
     </>
   )
 }
