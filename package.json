@@ -119,7 +119,7 @@
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
     "@hedviginsurance/brand": "^5.0.3",
-    "@hedviginsurance/embark": "2.13.0",
+    "@hedviginsurance/embark": "2.12.0",
     "@tippyjs/react": "^4.2.6",
     "@types/dayzed": "^2.2.1",
     "@types/escape-html": "^1.0.0",
