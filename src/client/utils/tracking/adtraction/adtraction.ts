@@ -1,7 +1,5 @@
 import { datadogRum } from '@datadog/browser-rum'
 import md5 from 'md5'
-import { TypeOfContract } from 'data/graphql'
-import { OfferData } from 'pages/OfferNew/types'
 import {
   isBundle,
   isNorwegian,
@@ -13,7 +11,9 @@ import {
   isSwedishHouse,
   isSwedishApartment,
   isSwedishBRF,
-} from 'pages/OfferNew/utils'
+} from 'pages/Offer/utils'
+import { TypeOfContract } from 'data/graphql'
+import { OfferData } from 'pages/Offer/types'
 import {
   NoBundleTypes,
   DkBundleTypes,

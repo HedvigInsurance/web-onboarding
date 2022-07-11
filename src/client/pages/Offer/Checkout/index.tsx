@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useApolloClient } from '@apollo/react-hooks'
 import { GraphQLError } from 'graphql'
+
 import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import {
   QuoteBundleVariant,
@@ -17,11 +18,7 @@ import {
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
 } from 'data/graphql'
-import {
-  getUniqueQuotesFromVariantList,
-  getQuoteIdsFromBundleVariant,
-} from 'pages/OfferNew/utils'
-import { PriceBreakdown } from 'pages/OfferNew/common/PriceBreakdown'
+import { PriceBreakdown } from 'pages/Offer/Checkout/Price/PriceBreakdown'
 import { useStorage } from 'utils/StorageContainer'
 import { useTextKeys } from 'utils/textKeys'
 import { useFeature, Features } from 'utils/hooks/useFeature'
@@ -34,9 +31,9 @@ import {
   useStartDateProps,
 } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
-import { UpsellCard } from 'pages/OfferNew/Checkout/UpsellCard'
-import { OfferData } from 'pages/OfferNew/types'
-import { SignFailModal } from 'pages/OfferNew/Checkout/SignFailModal/SignFailModal'
+import { UpsellCard } from 'pages/Offer/Checkout/UpsellCard'
+import { OfferData } from 'pages/Offer/types'
+import { SignFailModal } from 'pages/Offer/Checkout/SignFailModal/SignFailModal'
 import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
 import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
@@ -48,7 +45,11 @@ import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
-import { InsuranceSummary } from './InsuranceSummary'
+import {
+  getQuoteIdsFromBundleVariant,
+  getUniqueQuotesFromVariantList,
+} from '../utils'
+import { InsuranceSummary } from './InsuranceSummary/InsuranceSummary'
 import {
   CheckoutDetailsForm,
   getCheckoutDetailsValidationSchema,

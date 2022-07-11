@@ -2,16 +2,16 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 
+import { isBundle } from 'pages/Offer/utils'
 import { BackgroundImage } from 'components/BackgroundImage'
-import { Section } from 'pages/OfferNew/components'
+import { Section } from 'pages/Offer/components'
 
-import { OfferData } from 'pages/OfferNew/types'
+import { OfferData } from 'pages/Offer/types'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { BundledQuote, CampaignDataFragment } from 'src/client/data/graphql'
-import { isBundle } from 'pages/OfferNew/utils'
+import { BundledQuote, CampaignDataFragment } from 'data/graphql'
 import { hasCar } from 'api/quoteBundleSelectors'
 
-import { ExternalInsuranceProvider } from '../../OfferNew/Introduction/ExternalInsuranceProvider'
+import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 
 import { Sidebar } from './Sidebar'
 import { HeroOfferDetails } from './HeroOfferDetails'

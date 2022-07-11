@@ -1,11 +1,11 @@
 import { datadogRum } from '@datadog/browser-rum'
-import { OfferData } from 'pages/OfferNew/types'
 import {
   isStudentOffer,
   hasHomeQuote,
   hasAccidentQuote,
   hasTravelQuote,
-} from 'pages/OfferNew/utils'
+} from 'pages/Offer/utils'
+import { OfferData } from 'pages/Offer/types'
 import { EmbarkStory } from 'utils/embarkStory'
 import { pushToGTMDataLayer, GTMPhoneNumberData } from './dataLayer'
 import { EventName } from './types'

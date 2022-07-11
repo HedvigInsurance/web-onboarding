@@ -9,7 +9,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 
 import { LoadingPage } from 'components/LoadingPage'
-import { getUniqueQuotesFromVariantList } from 'pages/OfferNew/utils'
+import { getUniqueQuotesFromVariantList } from 'pages/Offer/utils'
 import { DetailsModal } from 'components/DetailsModal'
 import { EventName } from 'utils/tracking/gtm/types'
 

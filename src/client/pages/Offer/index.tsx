@@ -31,13 +31,13 @@ import {
   isOfferDataAvailable,
   getInsuranceTypesFromBundleVariant,
   getTypeOfContractFromBundleVariant,
-} from '../OfferNew/utils'
-import { AppPromotionSection } from '../OfferNew/AppPromotionSection'
-import { FaqSection } from '../OfferNew/FaqSection'
-import { Perils } from '../OfferNew/Perils'
-import { InsuranceSelector } from '../OfferNew/InsuranceSelector'
-import { SetupFailedModal } from '../Embark/ErrorModal'
+} from '../Offer/utils'
 import { apolloClient as realApolloClient } from '../../apolloClient'
+import { SetupFailedModal } from '../Embark/ErrorModal'
+import { AppPromotionSection } from './AppPromotionSection'
+import { InsuranceSelector } from './InsuranceSelector'
+import { FaqSection } from './FaqSection'
+import { Perils } from './Perils'
 import { Introduction } from './Introduction'
 import { Checkout } from './Checkout'
 import { PageWrapper } from './PageWrapper'
@@ -79,7 +79,7 @@ export const OfferPage = ({
     params: { id: quoteCartId },
   },
 }: OfferPageProps) => {
-  const { isoLocale, path: pathLocale } = useCurrentLocale()
+  const { isoLocale, path: pathLocale, marketLabel } = useCurrentLocale()
   const [isInsuranceToggleEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
   ])
@@ -128,16 +128,19 @@ export const OfferPage = ({
   const bundleVariants = getPossibleVariations(quoteCartQueryData)
   const campaign = getCampaign(quoteCartQueryData)
 
-  const hidePhoneNumber = isCarInsuranceType(selectedBundleVariant)
-
   const trackOfferEvent = useTrackOfferEvent()
   const promotions = useGetPromotions(
     getUniqueQuotesFromVariantList(bundleVariants),
   )
 
-  useEffect(() => trackOfferEvent({ eventName: EventName.OfferCreated }), [
-    trackOfferEvent,
-  ])
+  useEffect(
+    () =>
+      trackOfferEvent({
+        eventName: EventName.OfferCreated,
+        options: { marketLabel },
+      }),
+    [marketLabel, trackOfferEvent],
+  )
 
   if (isLoadingQuoteCart) return <LoadingPage loading />
 
@@ -207,7 +210,6 @@ export const OfferPage = ({
       quoteCartId={quoteCartId}
       isReferralCodeUsed={isReferralCodeUsed}
       bundle={selectedBundleVariant.bundle}
-      hidePhoneNumber={hidePhoneNumber}
     >
       <>
         <Introduction

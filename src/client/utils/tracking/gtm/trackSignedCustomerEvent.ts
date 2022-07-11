@@ -3,6 +3,7 @@ import { Variation } from 'utils/hooks/useVariation'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { adtractionQuoteCart } from 'utils/tracking/adtraction/adtractionQuoteCart'
 import { AdTractionMarketConfig } from 'l10n/adTractionConfigs'
+import { MarketLabel } from 'l10n/locales'
 import { handleSignedEvent } from './signing'
 import { trackOfferEvent } from './trackOfferEvent'
 import { EventName } from './types'
@@ -15,6 +16,7 @@ export type TrackSignedEventParams = {
   campaignCode?: string
   isDiscountMonthlyCostDeduction: boolean
   adTractionConfig: AdTractionMarketConfig
+  marketLabel: MarketLabel
 }
 
 export const trackSignedCustomerEvent = ({
@@ -25,6 +27,7 @@ export const trackSignedCustomerEvent = ({
   campaignCode,
   isDiscountMonthlyCostDeduction,
   adTractionConfig,
+  marketLabel,
 }: TrackSignedEventParams) => {
   if (variation === Variation.AVY) {
     handleSignedEvent(memberId)
@@ -42,6 +45,6 @@ export const trackSignedCustomerEvent = ({
     EventName.SignedCustomer,
     bundle,
     isDiscountMonthlyCostDeduction,
-    { quoteCartId, memberId },
+    { quoteCartId, memberId, marketLabel },
   )
 }
