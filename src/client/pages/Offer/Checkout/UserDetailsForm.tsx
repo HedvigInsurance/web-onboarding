@@ -25,17 +25,6 @@ export const getCheckoutDetailsValidationSchema = (
       .matches(locale.ssn.formatRegex, textKeys.GENERIC_ERROR_INPUT_FORMAT())
       .max(locale.ssn.length, textKeys.GENERIC_ERROR_INPUT_FORMAT())
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-    ...(isPhoneNumberRequired
-      ? {
-          phoneNumber: Yup.string()
-            .transform((phone) => phone?.replace(/\s/g, ''))
-            .matches(
-              locale.phoneNumber.formatRegex,
-              textKeys.GENERIC_ERROR_INPUT_FORMAT(),
-            )
-            .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-        }
-      : {}),
   })
 
 export const CheckoutDetailsForm: React.FC<{
@@ -45,7 +34,6 @@ export const CheckoutDetailsForm: React.FC<{
   const { handleChange } = formikProps
   const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
-    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
   ])
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
     false,
@@ -73,17 +61,6 @@ export const CheckoutDetailsForm: React.FC<{
         formikProps={formikProps}
         onChange={handleChange}
       />
-      {isPhoneNumberRequired && (
-        <TextInput
-          label="CHECKOUT_PHONE_NUMBER_LABEL"
-          name="phoneNumber"
-          type="tel"
-          formikProps={formikProps}
-          onChange={handleChange}
-          placeholder={locale.phoneNumber.placeholder}
-          helperText="CHECKOUT_PHONE_NUMBER_HELPERTEXT"
-        />
-      )}
       <SsnInput
         name="ssn"
         formikProps={formikProps}
