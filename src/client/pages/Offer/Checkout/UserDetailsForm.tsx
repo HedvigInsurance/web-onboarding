@@ -29,7 +29,6 @@ export const getCheckoutDetailsValidationSchema = (
 export const CheckoutDetailsForm: React.FC<{
   formikProps: FormikProps<QuoteInput>
 }> = ({ formikProps }) => {
-  const locale = useCurrentLocale()
   const { handleChange } = formikProps
   const [hasEnabledCreditCheckInfo] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
