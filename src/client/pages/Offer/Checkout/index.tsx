@@ -243,10 +243,7 @@ export const Checkout = ({
   const trackSignedCustomerEvent = useTrackSignedCustomerEvent()
   const sendDatadogAction = useSendDatadogAction()
 
-  const [isUpsellCardVisible, isPhoneNumberRequired] = useFeature([
-    Features.CHECKOUT_UPSELL_CARD,
-    Features.COLLECT_PHONE_NUMBER_AT_CHECKOUT,
-  ])
+  const [isUpsellCardVisible] = useFeature([Features.CHECKOUT_UPSELL_CARD])
 
   const scrollWrapper = useRef<HTMLDivElement>()
   const [windowInnerHeight, setWindowInnerHeight] = useState(window.innerHeight)
@@ -301,11 +298,7 @@ export const Checkout = ({
       ssn,
       phoneNumber,
     } as QuoteInput,
-    validationSchema: getCheckoutDetailsValidationSchema(
-      locale,
-      textKeys,
-      isPhoneNumberRequired,
-    ),
+    validationSchema: getCheckoutDetailsValidationSchema(locale, textKeys),
     onSubmit: async (
       form: QuoteInput,
       { setErrors }: FormikHelpers<QuoteInput>,
