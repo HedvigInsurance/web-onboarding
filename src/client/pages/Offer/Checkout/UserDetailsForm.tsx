@@ -12,7 +12,6 @@ import { TextInput, SsnInput } from './inputFields'
 export const getCheckoutDetailsValidationSchema = (
   locale: LocaleData,
   textKeys: TextKeyMap,
-  isPhoneNumberRequired?: boolean,
 ) =>
   Yup.object().shape({
     firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
@@ -32,7 +31,7 @@ export const CheckoutDetailsForm: React.FC<{
 }> = ({ formikProps }) => {
   const locale = useCurrentLocale()
   const { handleChange } = formikProps
-  const [hasEnabledCreditCheckInfo, isPhoneNumberRequired] = useFeature([
+  const [hasEnabledCreditCheckInfo] = useFeature([
     Features.CHECKOUT_CREDIT_CHECK,
   ])
   const [isShowingCreditCheckInfo, setIsShowingCreditCheckInfo] = useState(
