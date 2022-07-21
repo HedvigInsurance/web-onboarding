@@ -54,6 +54,10 @@ $ yarn watch
 
 The app is running on `http://localhost:8040`. Visit [http://localhost:8040/se/new-member/](http://localhost:8040/se/new-member/) to view the first screen of the onboarding flow.
 
+### .env
+
+Create a `.env` file from the `.env.example`. Most variables are optional but to view some features you need to add corresponding feature flags.
+
 ### Debugger UI
 
 Manually stepping through the onboarding flow becomes tedious. Therefore, you can use the "debugger UI" that let's you bypass the initial steps and takes you straight to the "Offer page".
