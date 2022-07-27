@@ -218,7 +218,6 @@ export const DetailsModal = ({
       ...mainQuoteData,
       ...(!quoteSelector.isCar(mainQuote) && {
         isStudent: bundleSelector.isStudent(selectedQuoteBundle.bundle.quotes),
-        isYouth: bundleSelector.isYouth(selectedQuoteBundle.bundle.quotes),
         householdSize: numberCoInsured + 1,
         livingSpace: squareMeters ? squareMeters : livingSpace,
       }),

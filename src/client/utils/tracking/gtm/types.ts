@@ -1,5 +1,3 @@
-import { TypeOfContract } from 'data/graphql'
-
 export enum SeBundleTypes {
   SeHomeAccidentBundleStudentBrf = 'SE_ACCIDENT_BUNDLE_STUDENT_BRF',
   SeHomeAccidentBundleBrf = 'SE_ACCIDENT_BUNDLE_BRF',
@@ -23,12 +21,6 @@ export enum DkBundleTypes {
   DkTravelBundle = 'DK_TRAVEL_BUNDLE',
   DkTravelBundleStudent = 'DK_TRAVEL_BUNDLE_STUDENT',
 }
-
-export type TrackableContractType =
-  | SeBundleTypes
-  | NoBundleTypes
-  | DkBundleTypes
-  | TypeOfContract
 
 export enum TrackableContractCategory {
   Home = 'home',

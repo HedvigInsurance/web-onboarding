@@ -47,7 +47,6 @@ export type GenericQuoteData = {
 
   numberCoInsured: number
   isStudent?: boolean
-  isYouth?: boolean
 
   street?: string
   zipCode?: string
