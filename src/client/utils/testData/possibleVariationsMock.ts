@@ -693,6 +693,7 @@ export const possibleVariationsNoCombo: QuoteBundleVariant[] = [
             street: 'Gulebøjsveien 1',
             type: NorwegianHomeContentsType.Rent,
             zipCode: '1234',
+            isYouth: false,
             __typename: 'NorwegianHomeContentsDetails',
           } as NorwegianHomeContentsDetails,
           __typename: 'BundledQuote',
