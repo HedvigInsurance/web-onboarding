@@ -183,13 +183,16 @@ const getPeopleDetails = (quoteDetails: GenericQuoteData) => {
             : 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE',
       },
     },
-    ...getStudent(quoteDetails),
+    ...getStudentOrYouth(quoteDetails),
   ]
 }
 
-const getStudent = (data: GenericQuoteData) => {
+const getStudentOrYouth = (data: GenericQuoteData) => {
   if (data.isStudent) {
     return [{ label: '+', value: { textKey: 'CHECKOUT_DETAILS_STUDENT' } }]
+  }
+  if (data.isYouth) {
+    return [{ label: '+', value: { textKey: 'CHECKOUT_DETAILS_YOUTH' } }]
   }
 
   return []

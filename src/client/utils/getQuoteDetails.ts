@@ -158,9 +158,13 @@ const getExtraBuildingsDetails = ({
   return extraBuildings
 }
 
-const getStudent = (quoteDetails: QuoteDetails): DetailsGroup => {
+const getStudentOrYouth = (quoteDetails: QuoteDetails): DetailsGroup => {
   if ('isStudent' in quoteDetails && quoteDetails.isStudent) {
     return [{ label: '+', value: { textKey: 'CHECKOUT_DETAILS_STUDENT' } }]
+  }
+
+  if ('isYouth' in quoteDetails && quoteDetails.isYouth) {
+    return [{ label: '+', value: { textKey: 'CHECKOUT_DETAILS_YOUTH' } }]
   }
 
   return []
@@ -183,7 +187,7 @@ const getPeopleDetails = ({
             : 'CHECKOUT_DETAILS_NUMBER_OF_PEOPLE_SUFFIX_ONE',
       },
     },
-    ...getStudent(quoteDetailsData),
+    ...getStudentOrYouth(quoteDetailsData),
   ]
 }
 

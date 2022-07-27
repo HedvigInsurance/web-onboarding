@@ -67,12 +67,18 @@ const norwegianBundleMock = {
   ],
 } as QuoteBundle
 
-const norwegianStudentBundleMock = {
+const norwegianYouthBundleMock = {
   quotes: [
     {
       data: {
         type: 'NORWEGIAN_HOME_CONTENT',
-        isStudent: true,
+        isYouth: true,
+      },
+    },
+    {
+      data: {
+        type: 'NORWEGIAN_HOUSE',
+        isYouth: true,
       },
     },
     {
@@ -132,9 +138,9 @@ describe('getProductValue', () => {
     )
   })
 
-  it('return the correct pc value for NO Student bundle', () => {
-    expect(getProductCategories(norwegianStudentBundleMock)).toBe(
-      'homecontentstudent_0-accident_0-travel_0',
+  it('return the correct pc value for NO Youth bundle', () => {
+    expect(getProductCategories(norwegianYouthBundleMock)).toBe(
+      'homecontentstudent_0-house_0-accident_0-travel_0',
     )
   })
 

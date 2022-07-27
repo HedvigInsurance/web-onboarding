@@ -42,7 +42,9 @@ export const getBundleSubTypes = (bundle: QuoteBundle) => {
 }
 
 export const getGTMOfferBase = (bundle: QuoteBundle): GTMOfferBase => ({
-  is_student: quoteBundleSelector.isStudentOffer(bundle),
+  is_student:
+    quoteBundleSelector.isStudentOffer(bundle) ||
+    quoteBundleSelector.isYouthOffer(bundle),
   has_home: quoteBundleSelector.hasHomeContents(bundle),
   has_house: quoteBundleSelector.hasHouse(bundle),
   has_accident: quoteBundleSelector.hasAccident(bundle),

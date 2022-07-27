@@ -29,6 +29,7 @@ export type QuoteDetailsInput = {
   livingSpace?: number | null
   squareMeters?: number | null
   householdSize?: number | null
+  youth?: boolean | null
   coInsured?: number | null
   student?: boolean | null
   ancillarySpace?: number | null

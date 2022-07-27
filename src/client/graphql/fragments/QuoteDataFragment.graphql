@@ -82,10 +82,12 @@ fragment QuoteDataFragment on BundledQuote {
       street
       norwegianHomeType: type
       zipCode
+      isYouth
     }
 
     ... on NorwegianTravelDetails {
       coInsured
+      isYouth
     }
 
     ... on DanishHomeContentsDetails {
