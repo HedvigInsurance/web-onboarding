@@ -43,7 +43,7 @@ enum EmbarkStory {
   NorwayHomeContentNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Contents Quote Cart',
   NorwayComboEnglishQuoteCart = 'Web Onboarding NO - English Combo Quote Cart',
   NorwayComboNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Combo Quote Cart',
-  NorwayOnboarding = 'onboarding-NO',
+  NorwayOnboarding = 'onboarding-NO-v2',
 
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',

@@ -10,10 +10,6 @@ type StudentData = {
   isStudent?: boolean
 }
 
-type YouthData = {
-  isYouth?: boolean
-}
-
 type QuoteDataHome = QuoteDataCommon & {
   street: string
   zipCode: string
@@ -33,9 +29,9 @@ type QuoteDataSeHouse = QuoteDataHome &
 
 type QuoteDataSeAccident = QuoteDataCommon & StudentData
 
-type QuoteDataNoHomeContents = QuoteDataHome & YouthData
+type QuoteDataNoHomeContents = QuoteDataHome & StudentData
 
-type QuoteDataNoTravel = QuoteDataCommon & YouthData
+type QuoteDataNoTravel = QuoteDataCommon & StudentData
 
 type QuoteDataDkHomeContents = QuoteDataHome &
   StudentData & {

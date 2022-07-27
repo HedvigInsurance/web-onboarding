@@ -60,7 +60,7 @@ export const useTrackSignedCustomerEvent = () => {
         trackEventCallback(apolloClient)
       }
     },
-    [quoteCartId, isoLocale, adTractionConfig],
+    [quoteCartId, isoLocale, adTractionConfig, marketLabel],
   )
 
   return trackEventHandler
