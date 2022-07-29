@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3, fonts } from '@hedviginsurance/brand'
-import React from 'react'
-import { useHistory } from 'react-router'
+import React, { useMemo } from 'react'
+import { Redirect, useLocation } from 'react-router'
 import { Market, useMarket } from 'components/utils/CurrentLocale'
 import { AdyenCheckout } from 'pages/ConnectPayment/components/AdyenCheckout'
 import { TrustlyCheckout } from 'pages/ConnectPayment/components/TrustlyCheckout'
@@ -139,14 +139,15 @@ const getPaymentAlreadyConnectedUrl = ({
   return `/${currentLocalePath}/new-member/confirmation`
 }
 
-export const ConnectPaymentPage: React.FC = () => {
+export const ConnectPaymentPage = () => {
   const textKeys = useTextKeys()
   const market = useMarket()
   const { isLargeScreen } = useBreakpoint()
   const variation = useVariation()
-  const history = useHistory()
   const { path } = useCurrentLocale()
   const isPaymentConnected = useIsPaymentConnected()
+  const searchParams = useSearchParams()
+  const intent = searchParams.get('intent') ?? 'unknown'
 
   const onSuccess = () => {
     if (variation === Variation.AVY) {
@@ -159,8 +160,12 @@ export const ConnectPaymentPage: React.FC = () => {
     }
   }
 
-  if (isPaymentConnected) {
-    history.push(getPaymentAlreadyConnectedUrl({ currentLocalePath: path }))
+  if (isPaymentConnected && intent !== 'update') {
+    return (
+      <Redirect
+        to={getPaymentAlreadyConnectedUrl({ currentLocalePath: path })}
+      />
+    )
   }
 
   return (
@@ -177,15 +182,17 @@ export const ConnectPaymentPage: React.FC = () => {
           />
         </ImageContainer>
         <TextContainer>
-          <Headline>
-            <HeadlinePart>
-              {textKeys.ONBOARDING_CONNECT_DD_HEADLINE_PART_1()}
-            </HeadlinePart>
-            <HeadlinePart>
-              {!isLargeScreen && ' '}
-              {textKeys.ONBOARDING_CONNECT_DD_HEADLINE_PART_2()}
-            </HeadlinePart>
-          </Headline>
+          {intent !== 'update' && (
+            <Headline>
+              <HeadlinePart>
+                {textKeys.ONBOARDING_CONNECT_DD_HEADLINE_PART_1()}
+              </HeadlinePart>
+              <HeadlinePart>
+                {!isLargeScreen && ' '}
+                {textKeys.ONBOARDING_CONNECT_DD_HEADLINE_PART_2()}
+              </HeadlinePart>
+            </Headline>
+          )}
           <Body>
             <Introduction>{textKeys.ONBOARDING_CONNECT_DD_BODY()}</Introduction>
             <Instructions>
@@ -209,4 +216,9 @@ export const ConnectPaymentPage: React.FC = () => {
       </InnerWrapper>
     </Wrapper>
   )
+}
+
+const useSearchParams = () => {
+  const { search } = useLocation()
+  return useMemo(() => new URLSearchParams(search), [search])
 }
