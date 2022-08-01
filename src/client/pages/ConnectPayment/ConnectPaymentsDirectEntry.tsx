@@ -30,7 +30,7 @@ export const ConnectPaymentsDirectEntry = () => {
           >
             {exchangeTokenState === ExchangeTokenRetrievalState.Success && (
               <Redirect
-                to={`/${currentLocalePath}/new-member/connect-payment`}
+                to={`/${currentLocalePath}/new-member/connect-payment?intent=update`}
               />
             )}
             <FadeInUp
