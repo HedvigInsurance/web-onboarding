@@ -43,7 +43,7 @@ export const getNorwegianHomeContentsValidationSchema = (
       householdSize: Yup.number()
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-      isYouth: Yup.boolean(),
+      isStudent: Yup.boolean(),
       subType: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     }).required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
   })
@@ -101,8 +101,8 @@ export const NorwegianHomeContentsDetails: React.FC<{
             formikProps={formikProps}
           />
           <BooleanInput
-            name="data.isYouth"
-            label="DETAILS_MODULE_TABLE_YOUTH_CELL_LABEL"
+            name="data.isStudent"
+            label="DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL"
             formikProps={formikProps}
           />
           <HomeOwnershipTypeInput

@@ -54,22 +54,25 @@ $ yarn watch
 
 The app is running on `http://localhost:8040`. Visit [http://localhost:8040/se/new-member/](http://localhost:8040/se/new-member/) to view the first screen of the onboarding flow.
 
+### .env
+
+Create a `.env` file from the `.env.example`. Most variables are optional but to view some features you need to add corresponding feature flags.
+
 ### Debugger UI
 
 Manually stepping through the onboarding flow becomes tedious. Therefore, you can use the "debugger UI" that let's you bypass the initial steps and takes you straight to the "Offer page".
 
-You access it locally on this URL: `http://localhost:8040/se/new-member/debugger`.
-It also works in staging: `https://www.dev.hedvigit.com/se/new-member/debugger`.
+~~You access it locally on this URL: `http://localhost:8040/se/new-member/debugger`.~~
+The debugger is now part of racoon so you can access it on staging: `https://www.dev.hedvigit.com/se-en/debugger`.
 
-![Debugger UI Preview](.github/assets/debugger-ui-preview.png)
+![Debugger UI Preview](.github/assets/debugger-ui.png)
 
-> You might experience problems due to existing state interfering with the session. Click the "Nuke all state 💣" button to perform a reset and try again.
+1. Choose market and Insurance bundle in the dropdown
+1. Edit information. (Optional)
+1. Click the "Submit" button.
+1. You will land on the "Offer page" with the created quote.
 
-1. Fill in offer information.
-1. Click the "Create quote" button.
-1. You should see a bunch of GraphQL data and a button to take you to the "Offer page".
-
-Or, if you have an id of an existing quote you'd like to use it's possible to replace the quote id generated for this session - the existing quote will be fetched as soon as you add the id to the input field.
+To debug locally, copy the quote id from the URL (i.e. https://www.dev.hedvigit.com/se-en/new-member/offer/bf126805-8090-482c-8b26-80e6c6ef9a7d).
 
 ## E2E Tests
 

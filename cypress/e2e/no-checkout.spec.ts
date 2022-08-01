@@ -18,7 +18,7 @@ const HOME_CONTENT_QUOTE = {
     numberCoInsured: faker.datatype.number({ min: 0, max: 5 }),
     livingSpace: faker.datatype.number({ min: 30, max: 120 }),
     subType: 'RENT',
-    isYouth: false,
+    isStudent: false,
   },
 }
 
@@ -27,7 +27,7 @@ const TRAVEL_QUOTE = {
   data: {
     type: 'NORWEGIAN_TRAVEL',
     numberCoInsured: HOME_CONTENT_QUOTE.data.numberCoInsured,
-    isYouth: false,
+    isStudent: false,
   },
 }
 
