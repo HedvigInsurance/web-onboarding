@@ -11,7 +11,6 @@ import { TrustlyModal } from './TrustlyModal'
 const ButtonWrapper = styled.div`
   width: 100%;
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    margin-top: 5rem;
     max-width: 400px;
   }
 `
@@ -28,6 +27,7 @@ export const TrustlyCheckout: React.FC<Props> = ({ onSuccess }) => {
 
   const generateTrustlyUrl = async () => {
     const baseUrl = `${window.location.origin}${pathname}`
+    console.log(baseUrl)
 
     const res = await createTrustlyUrlMutation({
       variables: {

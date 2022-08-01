@@ -54,6 +54,7 @@ import {
 } from '../shared/ErrorModal'
 import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { getUniqueQuotesFromVariantList } from '../../Offer/utils'
+import { TrustlyCheckout } from '../../ConnectPayment/components/TrustlyCheckout'
 import { ContactInformation } from './ContactInformation/ContactInformation'
 
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
@@ -500,6 +501,11 @@ export const CheckoutPayment = ({
     history.push(detailsPageLink)
   }
 
+  const isSweden = locale.path === 'se' || locale.path === 'se-en'
+  const onSuccess = () => {
+    console.log('it worked')
+  }
+
   return (
     <CheckoutPaymentWrapper handleClickBackButton={handleClickBackButton}>
       <ThreeDSErrorModal
@@ -507,44 +513,52 @@ export const CheckoutPayment = ({
         onClose={() => setIs3dsError(false)}
       />
       <ContactInformation formikProps={formik} />
-      <AdyenContainer paymentStatus={paymentStatus}>
-        <Wrapper>
-          <Headline variant="s" headingLevel="h2" colorVariant="dark">
-            {textKeys.CHECKOUT_PAYMENT_DETAILS_TITLE()}
-          </Headline>
-          <Description>
-            {textKeys.CHECKOUT_PAYMENT_DETAILS_DESCRIPTION()}
-          </Description>
-          {paymentStatus === 'connected' && (
+      {!isSweden && (
+        <AdyenContainer paymentStatus={paymentStatus}>
+          <Wrapper>
+            <Headline variant="s" headingLevel="h2" colorVariant="dark">
+              {textKeys.CHECKOUT_PAYMENT_DETAILS_TITLE()}
+            </Headline>
+            <Description>
+              {textKeys.CHECKOUT_PAYMENT_DETAILS_DESCRIPTION()}
+            </Description>
+            {paymentStatus === 'connected' && (
+              <>
+                <PaymentResult>
+                  <div>
+                    <ThinTick color={colorsV3.gray900} />
+                    {textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()}
+                  </div>
+                  <UnstyledButton onClick={handleEditPayment}>
+                    {textKeys.CHECKOUT_PAYMENT_EDIT_DETAILS()}
+                  </UnstyledButton>
+                </PaymentResult>
+                <Button
+                  fullWidth={true}
+                  onClick={handleClickCompletePurchase}
+                  disabled={
+                    isFormikError || isBundleCreationInProgress || isDataLoading
+                  }
+                >
+                  {textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
+                </Button>
+              </>
+            )}
             <>
-              <PaymentResult>
-                <div>
-                  <ThinTick color={colorsV3.gray900} />
-                  {textKeys.CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE()}
-                </div>
-                <UnstyledButton onClick={handleEditPayment}>
-                  {textKeys.CHECKOUT_PAYMENT_EDIT_DETAILS()}
-                </UnstyledButton>
-              </PaymentResult>
-              <Button
-                fullWidth={true}
-                onClick={handleClickCompletePurchase}
-                disabled={
-                  isFormikError || isBundleCreationInProgress || isDataLoading
-                }
-              >
-                {textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
-              </Button>
+              <div id="dropin-container" ref={adyenRef} />
             </>
-          )}
-          <>
-            <div id="dropin-container" ref={adyenRef} />
-          </>
-          <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
-        </Wrapper>
-      </AdyenContainer>
+            <Terms>{textKeys.CHECKOUT_PAYMENT_DETAILS_TERMS()}</Terms>
+          </Wrapper>
+        </AdyenContainer>
+      )}
       <CheckoutIntercomVariation />
-      {mainQuote && (
+
+      {mainQuote && isSweden ? (
+        <Footer>
+          <PaymentInfo {...priceData} />
+          <TrustlyCheckout onSuccess={onSuccess} />
+        </Footer>
+      ) : (
         <Footer isLoading={isBundleCreationInProgress || isDataLoading}>
           <PaymentInfo {...priceData} />
         </Footer>
