@@ -476,7 +476,7 @@ export const noCombo: OfferData = {
       },
       quoteDetails: {
         coInsured: 0,
-        isYouth: false,
+        isYouth: true,
         __typename: 'NorwegianTravelDetails',
       },
       data: {
@@ -505,7 +505,7 @@ export const noCombo: OfferData = {
         street: 'Testveien 23',
         type: NorwegianHomeContentsType.Rent,
         zipCode: '1234',
-        isYouth: false,
+        isYouth: true,
         __typename: 'NorwegianHomeContentsDetails',
       },
       data: {
@@ -566,7 +566,7 @@ export const noTravel: OfferData = {
       },
       quoteDetails: {
         coInsured: 1,
-        isYouth: false,
+        isYouth: true,
         __typename: 'NorwegianTravelDetails',
       },
       data: {

@@ -7,8 +7,8 @@ import {
   isHomeContents,
   isHouse,
   isTravel,
-  isStudentOrYouth,
   isCar,
+  isStudent,
 } from 'api/quoteSelector'
 
 export const getProductCategories = (bundle: QuoteBundle) => {
@@ -20,7 +20,7 @@ export const getProductCategories = (bundle: QuoteBundle) => {
     if (isHomeContents(quote)) {
       return [
         ...acc,
-        isStudentOrYouth(quote) ? 'homecontentstudent_0' : 'homecontent_0',
+        isStudent(quote) ? 'homecontentstudent_0' : 'homecontent_0',
       ]
     }
     return acc

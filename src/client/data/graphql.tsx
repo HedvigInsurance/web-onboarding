@@ -4655,9 +4655,9 @@ export enum HedvigColor {
 
 export type HouseInformation = {
   __typename?: 'HouseInformation'
-  livingSpace: Scalars['Int']
-  ancillaryArea: Scalars['Int']
-  yearOfConstruction: Scalars['Int']
+  livingSpace?: Maybe<Scalars['Int']>
+  ancillaryArea?: Maybe<Scalars['Int']>
+  yearOfConstruction?: Maybe<Scalars['Int']>
 }
 
 export type HouseInformationInput = {
@@ -8326,18 +8326,23 @@ export type PageInfo = {
 }
 
 export type PartnerInitWidgetInput = {
-  requestId?: Maybe<Scalars['String']>
   partnerId: Scalars['String']
-  market?: Maybe<Market>
   locale: Scalars['String']
+  externalMemberId?: Maybe<Scalars['ID']>
+  requestId?: Maybe<Scalars['String']>
+  market?: Maybe<Market>
 }
 
 export type PartnerInitWidgetResult = {
   __typename?: 'PartnerInitWidgetResult'
+  /** @deprecated use quoteCartId */
   id: Scalars['ID']
+  requestId: Scalars['ID']
+  quoteCartId: Scalars['ID']
   market: Market
   partnerName: Scalars['String']
   partnerDefaultCampaignCode?: Maybe<Scalars['String']>
+  trialInfo?: Maybe<TrialInfo>
 }
 
 export enum PayinMethodStatus {
@@ -8570,6 +8575,7 @@ export type Query = {
   chatActions?: Maybe<Array<Maybe<ChatAction>>>
   geo: Geo
   angelStory?: Maybe<AngelStory>
+  slackDetails: SlackDeleteAccountDetails
   /**
    * Returns a type describing whether the 'Self Change' functionality is possible.
    * @deprecated Use angelStories in `activeContractBundles` instead
@@ -10164,6 +10170,12 @@ export type SimpleSignSession = {
   id: Scalars['ID']
 }
 
+export type SlackDeleteAccountDetails = {
+  __typename?: 'SlackDeleteAccountDetails'
+  channelId: Scalars['String']
+  token: Scalars['String']
+}
+
 /** Stage system enumeration */
 export enum Stage {
   /** The Draft is the default stage for all your content. */
@@ -10983,6 +10995,29 @@ export type TranslationWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type TrialAddress = {
+  __typename?: 'TrialAddress'
+  street: Scalars['String']
+  zipCode: Scalars['String']
+  city: Scalars['String']
+  apartmentNo?: Maybe<Scalars['String']>
+  livingSpace?: Maybe<Scalars['String']>
+  floor?: Maybe<Scalars['String']>
+}
+
+export type TrialInfo = {
+  __typename?: 'TrialInfo'
+  startDate: Scalars['LocalDate']
+  endDate: Scalars['LocalDate']
+  ssn: Scalars['String']
+  firstName: Scalars['String']
+  lastName: Scalars['String']
+  email?: Maybe<Scalars['String']>
+  phoneNumber?: Maybe<Scalars['String']>
+  birthDate: Scalars['LocalDate']
+  address: TrialAddress
+}
+
 export type TriggerClaimChatInput = {
   claimTypeId?: Maybe<Scalars['ID']>
 }
@@ -11010,8 +11045,11 @@ export enum TypeOfContract {
   NoHomeContentRent = 'NO_HOME_CONTENT_RENT',
   NoHomeContentYouthOwn = 'NO_HOME_CONTENT_YOUTH_OWN',
   NoHomeContentYouthRent = 'NO_HOME_CONTENT_YOUTH_RENT',
+  NoHomeContentStudentOwn = 'NO_HOME_CONTENT_STUDENT_OWN',
+  NoHomeContentStudentRent = 'NO_HOME_CONTENT_STUDENT_RENT',
   NoTravel = 'NO_TRAVEL',
   NoTravelYouth = 'NO_TRAVEL_YOUTH',
+  NoTravelStudent = 'NO_TRAVEL_STUDENT',
   NoAccident = 'NO_ACCIDENT',
   DkHomeContentOwn = 'DK_HOME_CONTENT_OWN',
   DkHomeContentRent = 'DK_HOME_CONTENT_RENT',
@@ -12563,12 +12601,12 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
       | { __typename?: 'SwedishCarDetails' }
       | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
           NorwegianHomeContentsDetails,
-          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+          'coInsured' | 'livingSpace' | 'street' | 'zipCode'
         > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
       | { __typename?: 'NorwegianHouseDetails' }
       | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
           NorwegianTravelDetails,
-          'coInsured' | 'isYouth'
+          'coInsured'
         >)
       | { __typename?: 'NorwegianAccidentDetails' }
       | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
@@ -13072,12 +13110,12 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
           })
       | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
           NorwegianHomeContentsDetails,
-          'coInsured' | 'livingSpace' | 'street' | 'zipCode' | 'isYouth'
+          'coInsured' | 'livingSpace' | 'street' | 'zipCode'
         > & { norwegianHomeType: NorwegianHomeContentsDetails['type'] })
       | { __typename?: 'NorwegianHouseDetails' }
       | ({ __typename?: 'NorwegianTravelDetails' } & Pick<
           NorwegianTravelDetails,
-          'coInsured' | 'isYouth'
+          'coInsured'
         >)
       | { __typename?: 'NorwegianAccidentDetails' }
       | ({ __typename?: 'DanishHomeContentsDetails' } & Pick<
@@ -13184,11 +13222,9 @@ export const QuoteDataFragmentDoc = gql`
         street
         norwegianHomeType: type
         zipCode
-        isYouth
       }
       ... on NorwegianTravelDetails {
         coInsured
-        isYouth
       }
       ... on DanishHomeContentsDetails {
         street
@@ -13356,11 +13392,9 @@ export const QuoteDataFragmentFragmentDoc = gql`
         street
         norwegianHomeType: type
         zipCode
-        isYouth
       }
       ... on NorwegianTravelDetails {
         coInsured
-        isYouth
       }
       ... on DanishHomeContentsDetails {
         street
