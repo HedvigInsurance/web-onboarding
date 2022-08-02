@@ -13,6 +13,7 @@ module.exports = (api) => {
             browsers: ['last 3 versions', 'ie >= 11'],
           },
           include: ['es6.promise', 'es6.array.iterator'],
+          shippedProposals: true,
         },
       ],
       '@babel/preset-react',
@@ -21,8 +22,6 @@ module.exports = (api) => {
     plugins: [
       'react-hot-loader/babel',
       '@babel/plugin-syntax-dynamic-import',
-      '@babel/plugin-proposal-class-properties',
-      '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
       'emotion',
     ],
