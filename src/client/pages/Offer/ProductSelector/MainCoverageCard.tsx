@@ -9,9 +9,9 @@ type MainCoverageCardProps = {
   price: string
   description: string
   image: string
+  checkboxRef?: React.MutableRefObject<HTMLInputElement | null>
   checked?: boolean
   onClick?: () => void
-  error?: string
 }
 
 export const MainCoverageCard = ({
@@ -19,6 +19,7 @@ export const MainCoverageCard = ({
   price,
   description,
   image,
+  checkboxRef,
   checked = false,
   onClick = () => null,
 }: MainCoverageCardProps) => {
@@ -34,7 +35,7 @@ export const MainCoverageCard = ({
         </Header>
         <Description>{description}</Description>
       </Section>
-      <Checkbox checked={checked} onChange={onClick} />
+      <Checkbox ref={checkboxRef} checked={checked} onChange={onClick} />
     </Card>
   )
 }
