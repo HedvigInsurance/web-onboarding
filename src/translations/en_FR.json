@@ -433,5 +433,6 @@
   "ONBOARDING_CONFIRMATION_PARAGRAPH_2": "You can chat with your service team and get unlimited assistance till 10 PM, just as usual.",
   "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "Thanks for your purchase",
   "SIDEBAR_START_DATE_INFO_TEXT": "Already insured? Set your current policy’s expiry date as the start date. If you don’t know the expiry date, you can pick an approximate date and change it later in our app.",
-  "CHECKOUT_PAYMENT_EDIT_DETAILS": "Edit payment details"
+  "CHECKOUT_PAYMENT_EDIT_DETAILS": "Edit payment details",
+  "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "At least one main coverage must be selected to continue"
 }

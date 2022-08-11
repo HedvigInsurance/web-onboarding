@@ -431,7 +431,8 @@
   "CONFIRMATION_PAGE_TITLE": "",
   "ONBOARDING_CONFIRMATION_PARAGRAPH_1": "",
   "ONBOARDING_CONFIRMATION_PARAGRAPH_2": "",
-  "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "",
+  "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "Takk for ditt kjøp",
   "SIDEBAR_START_DATE_INFO_TEXT": "Har du allerede forsikring? Velg forfallsdagen for din nåværende forsikring som startdato. Hvis du ikke vet forfallsdagen angir du en nærliggende dato og endrer det i vår app senere.",
-  "CHECKOUT_PAYMENT_EDIT_DETAILS": "Endre betalingsinformasjon"
+  "CHECKOUT_PAYMENT_EDIT_DETAILS": "Endre betalingsinformasjon",
+  "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Du må velge minst en hovedforsikring for å fortsette"
 }

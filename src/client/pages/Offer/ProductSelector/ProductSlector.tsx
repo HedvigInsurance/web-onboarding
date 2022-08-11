@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo } from 'react'
 import styled from '@emotion/styled'
-
+import { useTextKeys } from 'utils/textKeys'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
 import { MainProductCard } from './MainProductCard'
 import { AdditionalProductCard } from './AdditionalProductCard'
@@ -49,6 +49,7 @@ export const ProductSelector = ({
   mainProducts,
   additionalProducts,
 }: ProductSelectorProps) => {
+  const textKeys = useTextKeys()
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [selectedProductsByCategory, setSelectedProductsByCategory] = useState(
     getInitialState({ mainProducts, additionalProducts }),
@@ -84,7 +85,7 @@ export const ProductSelector = ({
                 onClick={() => {
                   if (isTheOnlySelectedMainProduct) {
                     inputRef.current?.setCustomValidity(
-                      'At least one main coverage must be selected to continue',
+                      textKeys.OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR(),
                     )
                     inputRef.current?.reportValidity()
                   } else {
