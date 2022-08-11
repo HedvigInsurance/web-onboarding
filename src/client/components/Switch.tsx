@@ -21,38 +21,51 @@ const SwitchContainer = styled(motion.span)`
  * a <label> element.
  * Based on https://css-tricks.com/inclusively-hidden/
  */
-const InclusiveHiddenCheckbox = styled.input`
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-`
+const InclusiveHiddenCheckbox = styled.input({
+  position: 'absolute',
+  bottom: 0,
+  left: '50%',
+  transform: 'translateX(-50%)',
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: '1px',
+  margin: '-1px',
+  overflow: 'hidden',
+  padding: '0px',
+  width: '1px',
+  whiteSpace: 'nowrap',
+})
 
 type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'>
 
-export const Switch = ({ className, ...checkboxProps }: SwitchProps) => (
-  <>
-    <InclusiveHiddenCheckbox type="checkbox" {...checkboxProps} />
-    <SwitchContainer
-      className={className}
-      aria-hidden={true}
-      animate={checkboxProps.checked ? 'checked' : 'unchecked'}
-      variants={{
-        checked: {
-          backgroundColor: colorsV3.gray900,
-          borderColor: colorsV3.gray900,
-        },
-        unchecked: {
-          backgroundColor: colorsV3.white,
-          borderColor: colorsV3.gray300,
-        },
-      }}
-      transition={{ duration: 0.1 }}
-    >
-      <Tick />
-    </SwitchContainer>
-  </>
+export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
+  ({ className, ...checkboxProps }, forwardedRef) => {
+    return (
+      <div className={className}>
+        <InclusiveHiddenCheckbox
+          ref={forwardedRef}
+          type="checkbox"
+          {...checkboxProps}
+        />
+        <SwitchContainer
+          aria-hidden={true}
+          animate={checkboxProps.checked ? 'checked' : 'unchecked'}
+          variants={{
+            checked: {
+              backgroundColor: colorsV3.gray900,
+              borderColor: colorsV3.gray900,
+            },
+            unchecked: {
+              backgroundColor: colorsV3.white,
+              borderColor: colorsV3.gray300,
+            },
+          }}
+          transition={{ duration: 0.1 }}
+        >
+          <Tick />
+        </SwitchContainer>
+      </div>
+    )
+  },
 )
