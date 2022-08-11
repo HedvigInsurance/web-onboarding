@@ -2,8 +2,8 @@ import React, { useState, useRef, useMemo } from 'react'
 import styled from '@emotion/styled'
 
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
-import { MainCoverageCard } from './MainCoverageCard'
-import { AdditionalCoverageCard } from './AdditionalCoverageCard'
+import { MainProductCard } from './MainProductCard'
+import { AdditionalProductCard } from './AdditionalProductCard'
 
 type Product = {
   id: string
@@ -71,7 +71,7 @@ export const ProductSelector = ({
               selectedMainProducts[0] === id
 
             return (
-              <MainCoverageCard
+              <MainProductCard
                 key={id}
                 checkboxRef={
                   isTheOnlySelectedMainProduct ? inputRef : undefined
@@ -106,7 +106,7 @@ export const ProductSelector = ({
         <h2>Additional Coverage</h2>
         <AdditionalCoverageCardGrid>
           {additionalProducts.map(({ id, name, price, description, image }) => (
-            <AdditionalCoverageCard
+            <AdditionalProductCard
               key={id}
               title={name}
               price={price}

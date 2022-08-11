@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
 import { Switch } from 'components/Switch'
 
-type AdditionalCoverageCardProps = {
+type AdditionalProductCardProps = {
   title: string
   price: string
   description: string
@@ -14,14 +14,14 @@ type AdditionalCoverageCardProps = {
   error?: string
 }
 
-export const AdditionalCoverageCard = ({
+export const AdditionalProductCard = ({
   title,
   price,
   description,
   image,
   checked = false,
   onClick = () => null,
-}: AdditionalCoverageCardProps) => {
+}: AdditionalProductCardProps) => {
   return (
     <Card checked={checked} onClick={onClick}>
       <ImageFrame>
@@ -39,7 +39,7 @@ export const AdditionalCoverageCard = ({
   )
 }
 
-export const Card = styled.button<Pick<AdditionalCoverageCardProps, 'checked'>>(
+export const Card = styled.button<Pick<AdditionalProductCardProps, 'checked'>>(
   ({ checked }) => ({
     all: 'unset',
     cursor: 'pointer',
@@ -89,7 +89,6 @@ export const Section = styled.section({
   justifyContent: 'space-evenly',
 
   [MEDIA_QUERIES.mediumScreen]: {
-    // padding-right: 3rem to take in the Checkbox
     padding: '1rem 3rem 1rem 1rem',
   },
 })
