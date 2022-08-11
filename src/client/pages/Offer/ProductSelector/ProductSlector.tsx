@@ -1,0 +1,158 @@
+import React, { useState, useRef, useMemo } from 'react'
+import styled from '@emotion/styled'
+
+import { MEDIA_QUERIES } from 'utils/mediaQueries'
+import { MainCoverageCard } from './MainCoverageCard'
+import { AdditionalCoverageCard } from './AdditionalCoverageCard'
+
+type Product = {
+  id: string
+  name: string
+  description: string
+  price: string
+  image: string
+}
+
+type ProductSelectorProps = {
+  className?: string
+  mainProducts: Array<Product>
+  additionalProducts: Array<Product>
+}
+
+const getInitialState = ({
+  mainProducts,
+  additionalProducts,
+}: {
+  mainProducts: Array<Product>
+  additionalProducts: Array<Product>
+}): {
+  mainProducts: Record<string, boolean>
+  additionalProducts: Record<string, boolean>
+} => {
+  const getProductIdByValueMap = (products: Array<Product>) =>
+    products.reduce(
+      (result, product) => ({
+        ...result,
+        [product.id]: false,
+      }),
+      {},
+    )
+
+  return {
+    mainProducts: getProductIdByValueMap(mainProducts),
+    additionalProducts: getProductIdByValueMap(additionalProducts),
+  }
+}
+
+export const ProductSelector = ({
+  className,
+  mainProducts,
+  additionalProducts,
+}: ProductSelectorProps) => {
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const [selectedProductsByCategory, setSelectedProductsByCategory] = useState(
+    getInitialState({ mainProducts, additionalProducts }),
+  )
+
+  const selectedMainProducts = useMemo(() => {
+    return Object.keys(selectedProductsByCategory.mainProducts).filter(
+      (productId) => selectedProductsByCategory.mainProducts[productId],
+    )
+  }, [selectedProductsByCategory])
+
+  return (
+    <Wrapper className={className}>
+      <section>
+        <h2>Main Coverage</h2>
+        <MainCoverageCardGrid>
+          {mainProducts.map(({ id, name, price, description, image }) => {
+            const isTheOnlySelectedMainProduct =
+              selectedMainProducts.length === 1 &&
+              selectedMainProducts[0] === id
+
+            return (
+              <MainCoverageCard
+                key={id}
+                checkboxRef={
+                  isTheOnlySelectedMainProduct ? inputRef : undefined
+                }
+                title={name}
+                price={price}
+                description={description}
+                image={image}
+                checked={selectedProductsByCategory.mainProducts[id]}
+                onClick={() => {
+                  if (isTheOnlySelectedMainProduct) {
+                    inputRef.current?.setCustomValidity(
+                      'At least one main coverage must be selected to continue',
+                    )
+                    inputRef.current?.reportValidity()
+                  } else {
+                    setSelectedProductsByCategory((prevState) => ({
+                      ...prevState,
+                      mainProducts: {
+                        ...prevState.mainProducts,
+                        [id]: !prevState.mainProducts[id],
+                      },
+                    }))
+                  }
+                }}
+              />
+            )
+          })}
+        </MainCoverageCardGrid>
+      </section>
+      <section>
+        <h2>Additional Coverage</h2>
+        <AdditionalCoverageCardGrid>
+          {additionalProducts.map(({ id, name, price, description, image }) => (
+            <AdditionalCoverageCard
+              key={id}
+              title={name}
+              price={price}
+              description={description}
+              image={image}
+              checked={selectedProductsByCategory.additionalProducts[id]}
+              onClick={() => {
+                setSelectedProductsByCategory((prevState) => ({
+                  ...prevState,
+                  additionalProducts: {
+                    ...prevState.additionalProducts,
+                    [id]: !prevState.additionalProducts[id],
+                  },
+                }))
+              }}
+            />
+          ))}
+        </AdditionalCoverageCardGrid>
+      </section>
+    </Wrapper>
+  )
+}
+
+const Wrapper = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '2rem',
+  maxWidth: '42rem',
+})
+
+const MainCoverageCardGrid = styled.div({
+  display: 'grid',
+  gridTemplateColumns: '1fr',
+  gap: '1rem',
+
+  [MEDIA_QUERIES.mediumScreen]: {
+    gridTemplateColumns: 'repeat(2, 1fr)',
+  },
+})
+
+const AdditionalCoverageCardGrid = styled.div({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gap: '1rem',
+
+  [MEDIA_QUERIES.mediumScreen]: {
+    gridTemplateColumns: '1f',
+  },
+})
