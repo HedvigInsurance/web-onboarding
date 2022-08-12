@@ -64,7 +64,7 @@ export const ProductSelector = ({
   return (
     <Wrapper className={className}>
       <section>
-        <h2>Main Coverage</h2>
+        <h2>{textKeys.OFFER_PAGE_SECTION_TITLE_MAIN()}</h2>
         <MainCoverageCardGrid>
           {mainProducts.map(({ id, name, price, description, image }) => {
             const isTheOnlySelectedMainProduct =
@@ -104,7 +104,7 @@ export const ProductSelector = ({
         </MainCoverageCardGrid>
       </section>
       <section>
-        <h2>Additional Coverage</h2>
+        <h2>{textKeys.OFFER_PAGE_SECTION_TITLE_ADDITIONAL()}</h2>
         <AdditionalCoverageCardGrid>
           {additionalProducts.map(({ id, name, price, description, image }) => (
             <AdditionalProductCard

@@ -434,5 +434,7 @@
   "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "Tack för ditt köp",
   "SIDEBAR_START_DATE_INFO_TEXT": "Redan försäkrad? Välj din nuvarande försäkrings förfallodag som startdatum. Om du inte vet förfallodagen anger du ett ungefärligt datum och ändrar det via vår app senare.",
   "CHECKOUT_PAYMENT_EDIT_DETAILS": "",
-  "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Du måste välja minst en huvudförsäkring för att fortsätta"
+  "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Du måste välja minst en huvudförsäkring för att fortsätta",
+  "OFFER_PAGE_SECTION_TITLE_MAIN": "Huvudförsäkring",
+  "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Tilläggsskydd"
 }
