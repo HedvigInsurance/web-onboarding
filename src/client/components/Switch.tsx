@@ -4,6 +4,11 @@ import { motion } from 'framer-motion'
 import React from 'react'
 import { Tick } from 'components/icons/Tick'
 
+const Wrapper = styled.div({
+  position: 'relative',
+  lineHeight: 0,
+})
+
 const SwitchContainer = styled(motion.span)`
   display: inline-flex;
   justify-content: center;
@@ -42,7 +47,7 @@ type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'>
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
   ({ className, ...checkboxProps }, forwardedRef) => {
     return (
-      <div className={className}>
+      <Wrapper className={className}>
         <InclusiveHiddenCheckbox
           ref={forwardedRef}
           type="checkbox"
@@ -65,7 +70,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         >
           <Tick />
         </SwitchContainer>
-      </div>
+      </Wrapper>
     )
   },
 )
