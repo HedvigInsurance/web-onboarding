@@ -433,5 +433,8 @@
   "ONBOARDING_CONFIRMATION_PARAGRAPH_2": "",
   "ONBOARDING_CONFIRMATION_HEADLINE_PART_1": "Tak for dit køb",
   "SIDEBAR_START_DATE_INFO_TEXT": "Allerede forsikret? Brug udløbsdatoen på din nuværende forsikring som startdato. Hvis ikke du kender den præcise dato, kan du vælge at angive et cirka-tidspunkt og ændre det senere i appen.",
-  "CHECKOUT_PAYMENT_EDIT_DETAILS": "Rediger betalingsoplysninger"
+  "CHECKOUT_PAYMENT_EDIT_DETAILS": "Rediger betalingsoplysninger",
+  "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Vælg mindst en hovedforsikring for at fortsætte",
+  "OFFER_PAGE_SECTION_TITLE_MAIN": "Hovedforsikring",
+  "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Øvrige forsikringer"
 }
