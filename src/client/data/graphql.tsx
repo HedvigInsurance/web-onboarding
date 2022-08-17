@@ -12720,6 +12720,12 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
   > & {
       bundle?: Maybe<
         { __typename?: 'QuoteBundle' } & {
+          standaloneQuotes: Array<
+            { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
+          >
+          additionalQuotes: Array<
+            { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
+          >
           possibleVariations: Array<
             { __typename?: 'QuoteBundleVariant' } & Pick<
               QuoteBundleVariant,
@@ -15142,6 +15148,12 @@ export const QuoteCartDocument = gql`
     quoteCart(id: $id) {
       id
       bundle {
+        standaloneQuotes {
+          ...QuoteDataFragment
+        }
+        additionalQuotes {
+          ...QuoteDataFragment
+        }
         possibleVariations {
           id
           tag(locale: $locale)
@@ -15169,8 +15181,8 @@ export const QuoteCartDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
+  ${BundleCostDataFragmentFragmentDoc}
   ${CampaignDataFragmentDoc}
 `
 
