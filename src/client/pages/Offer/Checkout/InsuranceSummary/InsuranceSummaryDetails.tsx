@@ -256,7 +256,7 @@ const getAddressDataMaybe = (textKeys: TextKeyMap, data: GenericQuoteData) => {
         street: data.street,
         zipCode: data.zipCode,
         apartment: data.apartment,
-        floor: data.floor,
+        floor: data.floor?.toString(),
       }),
     })
   }

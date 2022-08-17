@@ -68,18 +68,17 @@ const getHouseholdSizeFromBundledQuotes = (
 const getAddressFromBundledQuotes = (
   quotes: ReadonlyArray<BundledQuote>,
 ): Address | null => {
-  const quotesWithAddress = quotes.filter((quote) =>
-    quoteDetailsHasAddress(quote.quoteDetails),
-  )
-  if (
-    quotesWithAddress.length > 0 &&
-    quoteDetailsHasAddress(quotesWithAddress[0].quoteDetails)
-  ) {
+  const quoteWithAddress = quotes.find(hasAddress)
+
+  if (quoteWithAddress) {
     return {
-      street: quotesWithAddress[0].quoteDetails.street,
-      zipCode: quotesWithAddress[0].quoteDetails.zipCode,
+      street: quoteWithAddress.data.street,
+      zipCode: quoteWithAddress.data.zipCode,
+      apartment: quoteWithAddress.data.apartment,
+      floor: quoteWithAddress.data.floor,
     }
   }
+
   return null
 }
 
@@ -106,8 +105,6 @@ const isTravelQuote = (
   quoteDetails: QuoteDetails,
 ): quoteDetails is NorwegianTravelDetails | DanishTravelDetails =>
   isDanishTravel(quoteDetails) || isNorwegianTravel(quoteDetails)
-
-export const quoteDetailsHasAddress = isHomeQuote
 
 export const getMainQuote = (offerData: OfferData) => {
   if (isBundle(offerData)) {
@@ -495,39 +492,17 @@ const allBundleVariantsHaveSameInsuranceType = (
   )
 }
 
-export interface AddressType {
-  street: string
-  zipCode: string
-  apartment?: string
-  floor?: number
-}
-
 export const SE_CAR_REGISTRATION_NUMBER_REGEX = /^[A-Za-z]{3}[0-9]{2}[A-Za-z0-9]{1}$/
 
-export const parseAddress = (address: AddressType) => {
+export const parseAddress = (address: Address) => {
   const { street, apartment, floor } = address
 
-  return street
-    .concat(floor && floor !== 0 ? `, ${floor}.` : '')
-    .concat(apartment ? ` ${apartment}` : '')
+  return street.concat(floor ?? '').concat(apartment ?? '')
 }
 
 const hasAddress = (quote: BundledQuote) => {
   const interestedInFields = ['street', 'zipCode'] as const
   return interestedInFields.every((field) => quote.data[field] != null)
-}
-
-export const getAddress = (quotes: BundledQuote[]) => {
-  const quoteWithAddress = quotes.find(hasAddress)
-
-  return quoteWithAddress
-    ? parseAddress({
-        street: quoteWithAddress.data.street,
-        zipCode: quoteWithAddress.data.zipCode,
-        apartment: quoteWithAddress.data.apartment,
-        floor: quoteWithAddress.data.floor,
-      })
-    : ''
 }
 
 const formatCarInfo = (quote: BundledQuote) => {

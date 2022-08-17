@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useLocation } from 'react-router'
 import { OfferData } from 'pages/Offer/types'
-import { getAddress, getCarMakeAndOrModel } from 'pages/Offer/utils'
+import { getCarMakeAndOrModel, parseAddress } from 'pages/Offer/utils'
 import { useTextKeys } from 'utils/textKeys'
 import {
   LARGE_SCREEN_MEDIA_QUERY,
@@ -12,12 +12,6 @@ import {
 import { Button } from 'components/buttons'
 import { BundledQuote } from 'data/graphql'
 import { DetailsModal } from 'components/DetailsModal'
-
-type Props = {
-  quoteCartId: string
-  offerData: OfferData
-  allQuotes: BundledQuote[]
-}
 
 const Wrapper = styled.div`
   padding: 3.5rem 0 0;
@@ -116,27 +110,34 @@ const EditDetailsButton = styled(Button)`
   }
 `
 
-function useQuery() {
+function useQueryParams() {
   const { search } = useLocation()
   return useMemo(() => new URLSearchParams(search), [search])
 }
 
-export const HeroOfferDetails: React.FC<Props> = ({
+type Props = {
+  quoteCartId: string
+  offerData: OfferData
+  allQuotes: BundledQuote[]
+}
+
+export const HeroOfferDetails = ({
   quoteCartId,
   offerData,
   allQuotes,
-}) => {
-  const query = useQuery()
-  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(() => {
-    return query.get('showEdit') === 'true'
-  })
+}: Props) => {
+  const queryParams = useQueryParams()
+  const textKeys = useTextKeys()
+
+  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(
+    () => queryParams.get('showEdit') === 'true',
+  )
+
   const { person } = offerData
   const numberCoInsured = (person.householdSize ?? 1) - 1
 
-  const address = getAddress(allQuotes)
+  const address = person.address ? parseAddress(person.address) : ''
   const carInfo = getCarMakeAndOrModel(allQuotes)
-
-  const textKeys = useTextKeys()
 
   return (
     <Wrapper>
@@ -151,7 +152,7 @@ export const HeroOfferDetails: React.FC<Props> = ({
         {carInfo && <CarInfo>{carInfo}</CarInfo>}
       </OfferInfoWrapper>
       <EditDetailsButton
-        background={'none'}
+        background="none"
         foreground={colorsV3.gray100}
         onClick={() => setDetailsModalIsOpen(true)}
       >
