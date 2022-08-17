@@ -6,8 +6,8 @@ import {
   useEmbark,
 } from '@hedviginsurance/embark'
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { useEffect, useState, useCallback } from 'react'
-import { useHistory } from 'react-router'
+import React, { useEffect, useState } from 'react'
+import { useHistory, useLocation } from 'react-router'
 
 import { colorsV3 } from '@hedviginsurance/brand'
 import gql from 'graphql-tag'
@@ -245,29 +245,33 @@ interface AngelVariables {
 const useInitQuoteCart = ({ skip = false }) => {
   const quoteCartId = useOnboardingQuoteCartId()
   const [addCampaignCode] = useAddCampaignCodeMutation()
+  const { search } = useLocation()
 
-  const initQuoteCart = useCallback(async () => {
+  useEffect(() => {
+    if (skip) {
+      return
+    }
+
+    const searchParams = new URLSearchParams(search)
+
+    const campaignCodeFromUrl = searchParams.get('campaignCode')
     const savedCampaignCode = CampaignCode.get()
 
-    if (savedCampaignCode !== null) {
+    const campaignCode = campaignCodeFromUrl ?? savedCampaignCode
+
+    if (campaignCode !== null) {
       try {
-        await addCampaignCode({
+        addCampaignCode({
           variables: {
             id: quoteCartId,
-            code: savedCampaignCode,
+            code: campaignCode,
           },
         })
       } catch {
         CampaignCode.remove()
       }
     }
-  }, [addCampaignCode, quoteCartId])
-
-  useEffect(() => {
-    if (!skip) {
-      initQuoteCart()
-    }
-  }, [skip, initQuoteCart])
+  }, [skip, addCampaignCode, quoteCartId, search])
 
   return quoteCartId
 }
