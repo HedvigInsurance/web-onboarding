@@ -209,7 +209,6 @@ export const OfferPage = ({
     <PageWrapper
       quoteCartId={quoteCartId}
       isReferralCodeUsed={isReferralCodeUsed}
-      bundle={selectedBundleVariant.bundle}
     >
       <>
         <Introduction
