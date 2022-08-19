@@ -12,6 +12,7 @@ import { CookieStorage } from 'cookie-storage'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { datadogRum } from '@datadog/browser-rum'
+import { getLocaleParamFromPath, getCurrentLocale } from 'l10n/useCurrentLocale'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 import { createSession, Session, DEVICE_ID_KEY } from '../shared/sessionStorage'
 
@@ -48,12 +49,16 @@ export const apolloClient = (() => {
     },
   )
 
+  const localeLabel = getLocaleParamFromPath(window.location.pathname)
+  const locale = getCurrentLocale(localeLabel)
+
   const httpLink = new HttpLink({
     credentials: 'omit',
     uri: window.hedvigClientConfig.giraffeEndpoint,
     headers: {
       authorization: authorizationToken,
       'hedvig-device-id': cookieStorage.getItem(DEVICE_ID_KEY),
+      'accept-language': locale.isoLocale,
     },
   })
 

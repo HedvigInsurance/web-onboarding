@@ -5,6 +5,8 @@ import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useBreakpoint } from 'utils/hooks/useBreakpoint'
 import { TOP_BAR_HEIGHT } from 'components/TopBar'
+import { useFeature, Features } from 'utils/hooks/useFeature'
+import { useCrossSells } from '../useCrossSells'
 import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'
 
@@ -102,6 +104,10 @@ export const DownloadPageContent = ({
 
   const { isLargeScreen } = useBreakpoint()
 
+  const [isCrossSellEnabled] = useFeature([
+    Features.CONFIRMATION_PAGE_CROSS_SELL,
+  ])
+
   return (
     <Page>
       <ContentContainer>
@@ -130,7 +136,26 @@ export const DownloadPageContent = ({
             <AppImage width={IMAGE_WIDTH} />
           </ImageSection>
         )}
+
+        {isCrossSellEnabled && <CrossSells />}
       </ContentContainer>
     </Page>
+  )
+}
+
+const CrossSells = () => {
+  const { loading, crossSells } = useCrossSells()
+
+  if (loading) return null
+
+  return (
+    <div style={{ textAlign: 'center' }}>
+      {crossSells?.map((crossSell) => (
+        <div key={crossSell.id}>
+          <p>{crossSell.title}</p>
+          <p>{crossSell.description}</p>
+        </div>
+      ))}
+    </div>
   )
 }
