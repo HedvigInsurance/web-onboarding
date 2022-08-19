@@ -6,6 +6,16 @@ import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useBreakpoint } from 'utils/hooks/useBreakpoint'
 import { TOP_BAR_HEIGHT } from 'components/TopBar'
 import { useFeature, Features } from 'utils/hooks/useFeature'
+import { Arrow } from 'components/icons/Arrow'
+import {
+  Description,
+  Header,
+  Image,
+  ImageFrame,
+  LinkCard,
+  Section,
+  Title,
+} from '../../Offer/ProductSelector/AdditionalProductCard'
 import { useCrossSells } from '../useCrossSells'
 import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'
@@ -23,7 +33,7 @@ const Page = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: 24rem;
+  max-width: 32rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,7 +56,7 @@ const HeadlineWrapper = styled.div`
 `
 
 const TextWrapper = styled.div`
-  max-width: 24rem;
+  max-width: 32rem;
   padding: 3rem 0;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
@@ -84,6 +94,25 @@ const Headline = styled.h1`
     line-height: 1.16;
   }
 `
+
+const CrossSellSectionHeader = styled.p({
+  textTransform: 'uppercase',
+  marginTop: '4rem',
+})
+
+const StyledLinkCard = styled(LinkCard)({
+  maxWidth: '32rem',
+  marginTop: '1.5rem',
+  [LARGE_SCREEN_MEDIA_QUERY]: {
+    marginRight: '2rem',
+  },
+})
+
+const Cta = styled.p({
+  all: 'unset',
+  display: 'flex',
+  alignItems: 'center',
+})
 
 type DownloadPageContentProps = {
   paragraphTextKeys?: string[]
@@ -130,14 +159,13 @@ export const DownloadPageContent = ({
             ))}
           </TextWrapper>
           <GetAppButtons />
+          {isCrossSellEnabled && <CrossSells />}
         </div>
         {isLargeScreen && (
           <ImageSection>
             <AppImage width={IMAGE_WIDTH} />
           </ImageSection>
         )}
-
-        {isCrossSellEnabled && <CrossSells />}
       </ContentContainer>
     </Page>
   )
@@ -145,17 +173,36 @@ export const DownloadPageContent = ({
 
 const CrossSells = () => {
   const { loading, crossSells } = useCrossSells()
+  const textKeys = useTextKeys()
 
   if (loading) return null
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <>
+      <CrossSellSectionHeader>
+        {textKeys.ONBOARDING_CROSS_SELL_HEADER()}
+      </CrossSellSectionHeader>
       {crossSells?.map((crossSell) => (
-        <div key={crossSell.id}>
-          <p>{crossSell.title}</p>
-          <p>{crossSell.description}</p>
-        </div>
+        <StyledLinkCard
+          key={crossSell.id}
+          href={crossSell.type}
+          orientation="column"
+        >
+          <ImageFrame>
+            <Image src={crossSell.image} />
+          </ImageFrame>
+          <Section>
+            <Header>
+              <Title>{crossSell.title}</Title>
+            </Header>
+            <Description>{crossSell.description}</Description>
+            <Cta>
+              {crossSell.callToAction}{' '}
+              <Arrow size="1.25rem" direction="forward" />
+            </Cta>
+          </Section>
+        </StyledLinkCard>
       ))}
-    </div>
+    </>
   )
 }

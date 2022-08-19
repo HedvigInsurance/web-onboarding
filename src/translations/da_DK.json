@@ -436,5 +436,6 @@
   "CHECKOUT_PAYMENT_EDIT_DETAILS": "Rediger betalingsoplysninger",
   "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Vælg mindst en hovedforsikring for at fortsætte",
   "OFFER_PAGE_SECTION_TITLE_MAIN": "Hovedforsikring",
-  "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Øvrige forsikringer"
+  "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Øvrige forsikringer",
+  "ONBOARDING_CROSS_SELL_HEADER": ""
 }
