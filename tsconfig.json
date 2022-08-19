@@ -2,7 +2,14 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "lib": ["dom", "es6", "es7", "es2017.object", "esnext.asynciterable"],
+    "lib": [
+      "dom",
+      "es6",
+      "es7",
+      "es2017.object",
+      "esnext.asynciterable",
+      "ES2019.Array"
+    ],
     "jsx": "react",
     "sourceMap": true,
     "strict": true,

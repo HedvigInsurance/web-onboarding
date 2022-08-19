@@ -1,0 +1,12 @@
+query PotentialCrossSells {
+  activeContractBundles {
+    potentialCrossSells {
+      type
+      contractType
+      title
+      description
+      imageUrl
+      callToAction
+    }
+  }
+}

@@ -20,9 +20,12 @@ export const getLocaleParamFromPath = (path: string): LocaleLabel => {
   return localeFromPath
 }
 
+export const getCurrentLocale = (locale: LocaleLabel) => {
+  return locales[locale]
+}
+
 export const useCurrentLocale = () => {
   const location = useLocation()
   const localeUrlParam = getLocaleParamFromPath(location.pathname.toLowerCase())
-  const currentLocale = locales[localeUrlParam]
-  return currentLocale
+  return getCurrentLocale(localeUrlParam)
 }
