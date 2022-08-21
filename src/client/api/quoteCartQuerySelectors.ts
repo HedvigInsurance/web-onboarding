@@ -3,9 +3,11 @@ import {
   QuoteBundleVariant,
   BundledQuote,
   TypeOfContract,
+  AdditionalQuoteFragment,
+  StandaloneQuoteFragment,
 } from 'data/graphql'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
-import { OfferData } from '../pages/Offer/types'
+import { OfferData, Product } from 'pages/Offer/types'
 import { getBundleVariantFromInsuranceTypesWithFallback } from '../pages/Offer/utils'
 
 export function getSelectedBundleVariant(
@@ -91,4 +93,40 @@ export const hasCurrentInsurer = (offerData: OfferData | undefined) => {
   return offerData?.quotes.every(
     (quote) => quote.currentInsurer?.displayName != undefined,
   )
+}
+
+const parseQuoteIntoProduct = ({
+  insuranceType,
+  displayName,
+  price,
+}: StandaloneQuoteFragment | AdditionalQuoteFragment): Product => {
+  return {
+    id: insuranceType,
+    name: displayName,
+    description: '',
+    price: `${price.amount} ${price.currency}`,
+    image: 'https://via.placeholder.com/400x300.png',
+  }
+}
+
+export const getMainProducts = (
+  quoteCartQuery?: QuoteCartQuery,
+): Array<Product> => {
+  if (quoteCartQuery == null) return []
+
+  const standaloneQuotes =
+    quoteCartQuery.quoteCart.bundle?.standaloneQuotes ?? []
+
+  return standaloneQuotes.map(parseQuoteIntoProduct)
+}
+
+export const getAdditionalProducts = (
+  quoteCartQuery?: QuoteCartQuery,
+): Array<Product> => {
+  if (quoteCartQuery == null) return []
+
+  const additionalQuotes =
+    quoteCartQuery.quoteCart.bundle?.additionalQuotes ?? []
+
+  return additionalQuotes.map(parseQuoteIntoProduct)
 }

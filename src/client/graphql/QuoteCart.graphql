@@ -3,20 +3,10 @@ query QuoteCart($id: ID!, $locale: Locale!) {
     id
     bundle {
       standaloneQuotes {
-        id
-        displayName(locale: $locale)
-        price {
-          amount
-          currency
-        }
+        ...StandaloneQuote
       }
       additionalQuotes {
-        id
-        displayName(locale: $locale)
-        price {
-          amount
-          currency
-        }
+        ...AdditionalQuote
       }
       possibleVariations {
         id

@@ -13,6 +13,14 @@ export interface Address {
   floor?: string
 }
 
+export type Product = {
+  id: string
+  name: string
+  description: string
+  price: string
+  image: string
+}
+
 export type OfferPersonInfo = Pick<
   BundledQuote,
   'firstName' | 'lastName' | 'email' | 'ssn' | 'birthDate' | 'phoneNumber'
