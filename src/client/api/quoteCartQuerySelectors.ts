@@ -120,7 +120,7 @@ export const getStandaloneProducts = (
 }
 
 export const getAdditionalProducts = (
-  quoteCartQuery?: QuoteCartQuery,
+  quoteCartQuery: QuoteCartQuery,
 ): Array<Product> => {
   const additionalQuotes =
     quoteCartQuery?.quoteCart.bundle?.additionalQuotes ?? []
