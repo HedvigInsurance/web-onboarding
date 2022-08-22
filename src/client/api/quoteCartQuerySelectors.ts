@@ -98,14 +98,15 @@ export const hasCurrentInsurer = (offerData: OfferData | undefined) => {
 const parseQuoteIntoProduct = ({
   insuranceType,
   displayName,
+  description,
   price,
 }: StandaloneQuoteFragment | AdditionalQuoteFragment): Product => {
   return {
     id: insuranceType,
     name: displayName,
-    description: '',
+    description,
     price: `${price.amount} ${price.currency}`,
-    image: 'https://via.placeholder.com/400x300.png',
+    image: '',
   }
 }
 
