@@ -49,6 +49,7 @@ export const Card = styled.button<Pick<MainProductCardProps, 'checked'>>(
     position: 'relative',
     display: 'flex',
     minHeight: '8rem',
+    maxHeight: '10rem',
     borderRadius: 8,
     boxShadow: checked
       ? `0 0 0 1px ${colorsV3.black}, 0px 2px 2px rgba(0, 0, 0, 0.1)`
@@ -67,12 +68,19 @@ export const Card = styled.button<Pick<MainProductCardProps, 'checked'>>(
 
     [MEDIA_QUERIES.mediumScreen]: {
       flexDirection: 'column',
+      minHeight: '20rem',
+      maxHeight: '23rem',
     },
   }),
 )
 
 export const ImageFrame = styled.div({
   flex: '0 0 35%',
+  minHeight: 0,
+
+  [MEDIA_QUERIES.mediumScreen]: {
+    flex: '0 0 60%',
+  },
 })
 
 export const Image = styled.img({
@@ -80,6 +88,7 @@ export const Image = styled.img({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
+  objectPosition: 'top left',
 })
 
 export const Section = styled.section({
