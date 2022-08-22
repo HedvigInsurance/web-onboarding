@@ -1624,6 +1624,7 @@ export type BundledQuote = {
   typeOfContract: TypeOfContract
   initiatedFrom: Scalars['String']
   displayName: Scalars['String']
+  description: Scalars['String']
   contractPerils: Array<PerilV2>
   insurableLimits: Array<InsurableLimit>
   termsAndConditions: InsuranceTerm
@@ -1634,6 +1635,10 @@ export type BundledQuote = {
 }
 
 export type BundledQuoteDisplayNameArgs = {
+  locale: Locale
+}
+
+export type BundledQuoteDescriptionArgs = {
   locale: Locale
 }
 
@@ -12721,10 +12726,10 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
       bundle?: Maybe<
         { __typename?: 'QuoteBundle' } & {
           standaloneQuotes: Array<
-            { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
+            { __typename?: 'BundledQuote' } & StandaloneQuoteFragment
           >
           additionalQuotes: Array<
-            { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
+            { __typename?: 'BundledQuote' } & AdditionalQuoteFragment
           >
           possibleVariations: Array<
             { __typename?: 'QuoteBundleVariant' } & Pick<
@@ -13004,6 +13009,16 @@ export type UpdatePickedLocaleMutation = { __typename?: 'Mutation' } & {
   updatePickedLocale: { __typename?: 'Member' } & Pick<Member, 'id'>
 }
 
+export type AdditionalQuoteFragment = { __typename?: 'BundledQuote' } & Pick<
+  BundledQuote,
+  'id' | 'insuranceType' | 'displayName' | 'description'
+> & {
+    price: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
+  }
+
 export type BundleCostDataFragmentFragment = {
   __typename?: 'InsuranceCost'
 } & Pick<InsuranceCost, 'freeUntil'> & {
@@ -13058,6 +13073,7 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
   | 'expiresAt'
   | 'email'
   | 'typeOfContract'
+  | 'insuranceType'
   | 'displayName'
   | 'data'
 > & {
@@ -13165,6 +13181,16 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
           DanishTravelDetails,
           'street' | 'zipCode' | 'coInsured' | 'isStudent'
         >)
+  }
+
+export type StandaloneQuoteFragment = { __typename?: 'BundledQuote' } & Pick<
+  BundledQuote,
+  'id' | 'insuranceType' | 'displayName' | 'description'
+> & {
+    price: { __typename?: 'MonetaryAmountV2' } & Pick<
+      MonetaryAmountV2,
+      'amount' | 'currency'
+    >
   }
 
 export const QuoteDataFragmentDoc = gql`
@@ -13296,6 +13322,18 @@ export const BundleCostDataFragmentDoc = gql`
     }
   }
 `
+export const AdditionalQuoteFragmentDoc = gql`
+  fragment AdditionalQuote on BundledQuote {
+    id
+    insuranceType
+    displayName(locale: $locale)
+    description(locale: $locale)
+    price {
+      amount
+      currency
+    }
+  }
+`
 export const BundleCostDataFragmentFragmentDoc = gql`
   fragment BundleCostDataFragment on InsuranceCost {
     freeUntil
@@ -13358,6 +13396,7 @@ export const QuoteDataFragmentFragmentDoc = gql`
     expiresAt
     email
     typeOfContract
+    insuranceType
     displayName(locale: $locale)
     contractPerils(locale: $locale) {
       title
@@ -13454,6 +13493,18 @@ export const QuoteDataFragmentFragmentDoc = gql`
           makeAndModel
         }
       }
+    }
+  }
+`
+export const StandaloneQuoteFragmentDoc = gql`
+  fragment StandaloneQuote on BundledQuote {
+    id
+    insuranceType
+    displayName(locale: $locale)
+    description(locale: $locale)
+    price {
+      amount
+      currency
     }
   }
 `
@@ -15149,10 +15200,10 @@ export const QuoteCartDocument = gql`
       id
       bundle {
         standaloneQuotes {
-          ...QuoteDataFragment
+          ...StandaloneQuote
         }
         additionalQuotes {
-          ...QuoteDataFragment
+          ...AdditionalQuote
         }
         possibleVariations {
           id
@@ -15181,8 +15232,10 @@ export const QuoteCartDocument = gql`
       }
     }
   }
-  ${QuoteDataFragmentFragmentDoc}
+  ${StandaloneQuoteFragmentDoc}
+  ${AdditionalQuoteFragmentDoc}
   ${BundleCostDataFragmentFragmentDoc}
+  ${QuoteDataFragmentFragmentDoc}
   ${CampaignDataFragmentDoc}
 `
 
