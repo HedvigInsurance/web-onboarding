@@ -35,7 +35,6 @@ import { UpsellCard } from 'pages/Offer/Checkout/UpsellCard'
 import { OfferData } from 'pages/Offer/types'
 import { SignFailModal } from 'pages/Offer/Checkout/SignFailModal/SignFailModal'
 import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
-import * as createQuoteBundleMutationSelector from 'api/createQuoteBundleMutationSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
@@ -45,10 +44,7 @@ import { EventName, ErrorEventType } from 'utils/tracking/gtm/types'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 import { apolloClient as realApolloClient } from '../../../apolloClient'
 import { isSsnInvalid, checkIsManualReviewRequired } from '../../Checkout/utils'
-import {
-  getQuoteIdsFromBundleVariant,
-  getUniqueQuotesFromVariantList,
-} from '../utils'
+import { getUniqueQuotesFromVariantList } from '../utils'
 import { InsuranceSummary } from './InsuranceSummary/InsuranceSummary'
 import {
   CheckoutDetailsForm,
@@ -56,6 +52,7 @@ import {
 } from './UserDetailsForm'
 import { Sign } from './Sign'
 import { SignDisclaimer } from './SignDisclaimer'
+import { getQuoteCart, getQuoteIds } from './Checkout.helpers'
 
 export type SignUiState = 'NOT_STARTED' | 'STARTED' | 'FAILED' | 'MANUAL_REVIEW'
 
@@ -384,9 +381,8 @@ export const Checkout = ({
       trackSignedCustomerEvent({ memberId })
       sendDatadogAction(EventName.SignedCustomer)
     } catch (error) {
-      trackOfferEvent({
-        eventName: EventName.SignError,
-      })
+      trackOfferEvent({ eventName: EventName.SignError })
+      sendDatadogAction(EventName.SignError)
       setSignUiState('FAILED')
       setIsCompletingCheckout(false)
     }
@@ -420,21 +416,21 @@ export const Checkout = ({
         return
       }
 
-      let quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
       if (isFormDataUpdated) {
         const { data } = await submitForm()
         const isUpdateQuotesFailed = isQuoteBundleError(data)
         if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
-
-        const quoteBundleVariant = createQuoteBundleMutationSelector.getSelectedBundleVariant(
-          data,
-          selectedInsuranceTypes,
-        )
-
-        if (quoteBundleVariant) {
-          quoteIds = getQuoteIdsFromBundleVariant(quoteBundleVariant)
-        }
       }
+
+      const quoteCartQuery = await getQuoteCart({
+        apolloClient: client,
+        quoteCartId,
+        locale: locale.isoLocale,
+      })
+      const quoteIds = getQuoteIds({
+        quoteCart: quoteCartQuery,
+        insuranceTypes: selectedInsuranceTypes,
+      })
 
       sendDatadogAction('sign_started')
       const { data } = await startCheckout({
