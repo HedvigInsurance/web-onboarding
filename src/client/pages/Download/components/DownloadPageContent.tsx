@@ -15,7 +15,7 @@ import {
   LinkCard,
   Section,
   Title,
-} from '../../Offer/ProductSelector/AdditionalProductCard'
+} from 'components/AdditionalProductCard'
 import { useCrossSells } from '../useCrossSells'
 import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'

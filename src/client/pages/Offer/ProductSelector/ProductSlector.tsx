@@ -2,8 +2,8 @@ import React, { useState, useRef, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
-import { MainProductCard } from './MainProductCard'
-import { AdditionalProductCard } from './AdditionalProductCard'
+import { MainProductCard } from 'components/MainProductCard'
+import { AdditionalProductCard } from 'components/AdditionalProductCard'
 
 type Product = {
   id: string
