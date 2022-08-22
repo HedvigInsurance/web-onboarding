@@ -36,6 +36,7 @@ import { apolloClient as realApolloClient } from '../../apolloClient'
 import { SetupFailedModal } from '../Embark/ErrorModal'
 import { AppPromotionSection } from './AppPromotionSection'
 import { InsuranceSelector } from './InsuranceSelector'
+import { ProductSelector } from './ProductSelector'
 import { FaqSection } from './FaqSection'
 import { Perils } from './Perils'
 import { Introduction } from './Introduction'
@@ -80,8 +81,9 @@ export const OfferPage = ({
   },
 }: OfferPageProps) => {
   const { isoLocale, path: pathLocale, marketLabel } = useCurrentLocale()
-  const [isInsuranceToggleEnabled] = useFeature([
+  const [isInsuranceToggleEnabled, isProductSelectorEnabled] = useFeature([
     Features.OFFER_PAGE_INSURANCE_TOGGLE,
+    Features.OFFER_PAGE_PRODUCT_SELECTOR,
   ])
   const [
     selectedInsuranceTypes,
@@ -224,6 +226,9 @@ export const OfferPage = ({
             selectedQuoteBundle={selectedBundleVariant}
             onChange={onInsuranceSelectorChange}
           />
+        )}
+        {isProductSelectorEnabled && quoteCartQueryData && (
+          <ProductSelector quoteCartQueryData={quoteCartQueryData} />
         )}
         <Perils offerData={offerData} />
         <AppPromotionSection promotions={promotions} />
