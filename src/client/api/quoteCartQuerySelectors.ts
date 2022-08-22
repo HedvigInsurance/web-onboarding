@@ -10,6 +10,26 @@ import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { OfferData, Product } from 'pages/Offer/types'
 import { getBundleVariantFromInsuranceTypesWithFallback } from '../pages/Offer/utils'
 
+const homeInsuranceTypes = new Set([
+  InsuranceType.SWEDISH_APARTMENT,
+  InsuranceType.SWEDISH_HOUSE,
+  InsuranceType.NORWEGIAN_HOME_CONTENT,
+  InsuranceType.DANISH_HOME_CONTENT,
+])
+const houseInsuranceTypes = new Set([
+  InsuranceType.NORWEGIAN_HOUSE,
+  InsuranceType.DANISH_HOUSE,
+])
+const accidentInsuranceTypes = new Set([
+  InsuranceType.SWEDISH_ACCIDENT,
+  InsuranceType.NORWEGIAN_ACCIDENT,
+  InsuranceType.DANISH_ACCIDENT,
+])
+const travelInsuranceTypes = new Set([
+  InsuranceType.NORWEGIAN_TRAVEL,
+  InsuranceType.DANISH_TRAVEL,
+])
+
 export function getSelectedBundleVariant(
   quoteCartQuery: QuoteCartQuery | undefined,
   selectedInsuranceTypes: InsuranceType[] | TypeOfContract[],
@@ -101,12 +121,23 @@ const parseQuoteIntoProduct = ({
   description,
   price,
 }: StandaloneQuoteFragment | AdditionalQuoteFragment): Product => {
+  let image = ''
+  if (homeInsuranceTypes.has(insuranceType as InsuranceType)) {
+    image = '/new-member-assets/offer/home.jpg'
+  } else if (houseInsuranceTypes.has(insuranceType as InsuranceType)) {
+    image = '/new-member-assets/offer/house.jpg'
+  } else if (accidentInsuranceTypes.has(insuranceType as InsuranceType)) {
+    image = '/new-member-assets/offer/accident.jpg'
+  } else if (travelInsuranceTypes.has(insuranceType as InsuranceType)) {
+    image = '/new-member-assets/offer/travel.jpg'
+  }
+
   return {
     id: insuranceType,
     name: displayName,
     description,
     price: `${price.amount} ${price.currency}`,
-    image: '',
+    image,
   }
 }
 

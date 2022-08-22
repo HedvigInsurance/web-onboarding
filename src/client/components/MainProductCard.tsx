@@ -25,15 +25,17 @@ export const MainProductCard = ({
 }: MainProductCardProps) => {
   return (
     <Card checked={checked} onClick={onClick}>
-      <ImageFrame>
-        <Image src={image} />
-      </ImageFrame>
+      {image && (
+        <ImageFrame>
+          <Image src={image} />
+        </ImageFrame>
+      )}
       <Section>
         <Header>
           <Title>{title}</Title>
           <Price>{price}</Price>
         </Header>
-        <Description>{description}</Description>
+        {description && <Description>{description}</Description>}
       </Section>
       <Checkbox ref={checkboxRef} checked={checked} onChange={onClick} />
     </Card>
