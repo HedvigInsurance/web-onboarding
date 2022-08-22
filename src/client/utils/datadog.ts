@@ -1,4 +1,5 @@
 import { datadogRum } from '@datadog/browser-rum'
+import { getCurrentLocale, getLocaleParamFromPath } from 'l10n/useCurrentLocale'
 
 export const initRum = () => {
   datadogRum.init({
@@ -14,6 +15,12 @@ export const initRum = () => {
       window.location.origin,
     ],
   })
+
+  const localeUrlParam = getLocaleParamFromPath(
+    window.location.pathname.toLowerCase(),
+  )
+  const { marketLabel } = getCurrentLocale(localeUrlParam)
+  datadogRum.setRumGlobalContext({ market: marketLabel })
 
   datadogRum.startSessionReplayRecording()
 }
