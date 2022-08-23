@@ -5,11 +5,18 @@ import { useTextKeys } from 'utils/textKeys'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
 import { StandaloneProductCard } from 'components/StandaloneProductCard'
 import { AdditionalProductCard } from 'components/AdditionalProductCard'
-import { Product } from 'pages/Offer/types'
 
 const SEARCH_PARAM = 'type'
 
-type SelectorProps = {
+export type Product = {
+  id: string
+  name: string
+  description: string
+  price: string
+  image: string
+}
+
+export type SelectorProps = {
   className?: string
   standaloneProducts: Array<Product>
   additionalProducts: Array<Product>
