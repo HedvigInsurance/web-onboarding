@@ -113,10 +113,8 @@ const parseQuoteIntoProduct = ({
 export const getStandaloneProducts = (
   quoteCartQuery?: QuoteCartQuery,
 ): Array<Product> => {
-  if (quoteCartQuery == null) return []
-
   const standaloneQuotes =
-    quoteCartQuery.quoteCart.bundle?.standaloneQuotes ?? []
+    quoteCartQuery?.quoteCart.bundle?.standaloneQuotes ?? []
 
   return standaloneQuotes.map(parseQuoteIntoProduct)
 }
@@ -124,10 +122,8 @@ export const getStandaloneProducts = (
 export const getAdditionalProducts = (
   quoteCartQuery?: QuoteCartQuery,
 ): Array<Product> => {
-  if (quoteCartQuery == null) return []
-
   const additionalQuotes =
-    quoteCartQuery.quoteCart.bundle?.additionalQuotes ?? []
+    quoteCartQuery?.quoteCart.bundle?.additionalQuotes ?? []
 
   return additionalQuotes.map(parseQuoteIntoProduct)
 }
