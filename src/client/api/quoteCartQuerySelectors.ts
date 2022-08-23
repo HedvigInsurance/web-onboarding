@@ -110,7 +110,7 @@ const parseQuoteIntoProduct = ({
   }
 }
 
-export const getMainProducts = (
+export const getStandaloneProducts = (
   quoteCartQuery?: QuoteCartQuery,
 ): Array<Product> => {
   if (quoteCartQuery == null) return []
