@@ -436,5 +436,6 @@
   "CHECKOUT_PAYMENT_EDIT_DETAILS": "",
   "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Du måste välja minst en huvudförsäkring för att fortsätta",
   "OFFER_PAGE_SECTION_TITLE_MAIN": "Huvudförsäkring",
-  "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Tilläggsskydd"
+  "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Tilläggsskydd",
+  "ONBOARDING_CROSS_SELL_HEADER": "Andra köpte även"
 }

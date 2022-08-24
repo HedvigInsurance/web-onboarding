@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
+import { css } from '@emotion/core'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
 import { Switch } from 'components/Switch'
 
@@ -39,35 +40,53 @@ export const AdditionalProductCard = ({
   )
 }
 
+const commonStyles = css({
+  all: 'unset',
+  cursor: 'pointer',
+  position: 'relative',
+  display: 'flex',
+  minHeight: '8rem',
+  borderRadius: 8,
+
+  overflow: 'hidden',
+  backgroundColor: colorsV3.white,
+  transition: 'all 150ms',
+  '&:hover:not([disabled]), &:focus-visible': {
+    boxShadow: `0 0 0 1px ${colorsV3.black}, 0px 2px 2px rgba(0, 0, 0, 0.1)`,
+
+    // otherwise text in the LinkCard will turn purple on hover since they're inside an anchor element
+    color: 'initial',
+  },
+
+  '&:disabled': {
+    opacity: 0.5,
+  },
+})
+
 export const Card = styled.button<Pick<AdditionalProductCardProps, 'checked'>>(
   ({ checked }) => ({
-    all: 'unset',
-    cursor: 'pointer',
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '8rem',
-    borderRadius: 8,
+    ...commonStyles,
+
     boxShadow: checked
       ? `0 0 0 1px ${colorsV3.black}, 0px 2px 2px rgba(0, 0, 0, 0.1)`
       : 'initial',
-    overflow: 'hidden',
-    backgroundColor: colorsV3.white,
-    transition: 'all 150ms',
-
-    '&:hover:not([disabled]), &:focus-visible': {
-      boxShadow: `0 0 0 1px ${colorsV3.black}, 0px 2px 2px rgba(0, 0, 0, 0.1)`,
-    },
-
-    '&:disabled': {
-      opacity: 0.5,
-    },
+    flexDirection: 'column',
 
     [MEDIA_QUERIES.mediumScreen]: {
       flexDirection: 'row',
     },
   }),
 )
+
+type LinkCardProps = {
+  orientation?: 'row' | 'column'
+}
+
+export const LinkCard = styled.a<LinkCardProps>(({ orientation = 'row' }) => ({
+  ...commonStyles,
+
+  flexDirection: orientation === 'row' ? 'row' : 'column',
+}))
 
 export const ImageFrame = styled.div({
   flex: '0 0 35%',

@@ -436,5 +436,6 @@
   "CHECKOUT_PAYMENT_EDIT_DETAILS": "Edit payment details",
   "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "At least one main coverage must be selected to continue",
   "OFFER_PAGE_SECTION_TITLE_MAIN": "Main Coverage",
-  "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Additional Coverage"
+  "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Additional Coverage",
+  "ONBOARDING_CROSS_SELL_HEADER": "Others also bought"
 }
