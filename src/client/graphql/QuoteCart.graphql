@@ -2,6 +2,12 @@ query QuoteCart($id: ID!, $locale: Locale!) {
   quoteCart(id: $id) {
     id
     bundle {
+      standaloneQuotes {
+        ...StandaloneQuote
+      }
+      additionalQuotes {
+        ...AdditionalQuote
+      }
       possibleVariations {
         id
         tag(locale: $locale)

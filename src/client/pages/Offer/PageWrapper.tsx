@@ -8,12 +8,10 @@ import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { CallCenterPhoneNumber } from 'components/CallCenterPhoneNumber/CallCenterPhoneNumber'
 import { LanguagePicker } from 'components/LanguagePicker/LanguagePicker'
-import { QuoteBundle } from 'data/graphql'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 
 type PageWrapperProps = {
   quoteCartId: string
-  bundle?: QuoteBundle
   isReferralCodeUsed?: boolean
   children: React.ReactNode
 }

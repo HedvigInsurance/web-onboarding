@@ -19,6 +19,7 @@ fragment QuoteDataFragment on BundledQuote {
   expiresAt
   email
   typeOfContract
+  insuranceType
   displayName(locale: $locale)
   contractPerils(locale: $locale) {
     title
