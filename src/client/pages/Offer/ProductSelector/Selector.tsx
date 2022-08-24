@@ -5,9 +5,18 @@ import { useTextKeys } from 'utils/textKeys'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
 import { StandaloneProductCard } from 'components/StandaloneProductCard'
 import { AdditionalProductCard } from 'components/AdditionalProductCard'
-import { Product } from 'pages/Offer/types'
 
-type SelectorProps = {
+const SEARCH_PARAM = 'type'
+
+export type Product = {
+  id: string
+  name: string
+  description: string
+  price: string
+  image: string
+}
+
+export type SelectorProps = {
   className?: string
   standaloneProducts: Array<Product>
   additionalProducts: Array<Product>
@@ -28,7 +37,7 @@ const getStateFromURL = ({
   searchParams: string
 }): State => {
   const selectedInsuranceTypes = new Set(
-    new URLSearchParams(searchParams).getAll('type'),
+    new URLSearchParams(searchParams).getAll(SEARCH_PARAM),
   )
 
   const getProductIdByValueMap = (quotes: Array<Product>) =>
@@ -59,7 +68,7 @@ const getSearchParamsFromState = (state: State) => {
   ]
 
   const searchParams = new URLSearchParams()
-  selectedProducts.forEach((type) => searchParams.append('type', type))
+  selectedProducts.forEach((type) => searchParams.append(SEARCH_PARAM, type))
 
   return searchParams.toString()
 }
@@ -124,7 +133,7 @@ export const Selector = ({
 
                     setSelectedProductsByCategory(newState)
 
-                    history.push({
+                    history.replace({
                       search: getSearchParamsFromState(newState),
                     })
                   }
@@ -156,7 +165,7 @@ export const Selector = ({
 
                 setSelectedProductsByCategory(newState)
 
-                history.push({
+                history.replace({
                   search: getSearchParamsFromState(newState),
                 })
               }}
