@@ -2,6 +2,8 @@
 node_modules
 yarn-error.log
 /coverage/*
+storybook-static/
+
 .env
 .DS_Store
-storybook-static/
+.idea
