@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
 import { Switch } from 'components/Switch'
 
-type MainProductCardProps = {
+type StandaloneProductCardProps = {
   title: string
   price: string
   description: string
@@ -14,7 +14,7 @@ type MainProductCardProps = {
   onClick?: () => void
 }
 
-export const MainProductCard = ({
+export const StandaloneProductCard = ({
   title,
   price,
   description,
@@ -22,7 +22,7 @@ export const MainProductCard = ({
   checkboxRef,
   checked = false,
   onClick = () => null,
-}: MainProductCardProps) => {
+}: StandaloneProductCardProps) => {
   return (
     <Card checked={checked} onClick={onClick}>
       {image && (
@@ -42,7 +42,7 @@ export const MainProductCard = ({
   )
 }
 
-export const Card = styled.button<Pick<MainProductCardProps, 'checked'>>(
+export const Card = styled.button<Pick<StandaloneProductCardProps, 'checked'>>(
   ({ checked }) => ({
     all: 'unset',
     cursor: 'pointer',

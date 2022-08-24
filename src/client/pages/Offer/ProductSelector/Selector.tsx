@@ -3,7 +3,7 @@ import { useLocation, useHistory } from 'react-router'
 import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
-import { MainProductCard } from 'components/MainProductCard'
+import { StandaloneProductCard } from 'components/StandaloneProductCard'
 import { AdditionalProductCard } from 'components/AdditionalProductCard'
 import { Product } from 'pages/Offer/types'
 
@@ -92,23 +92,21 @@ export const Selector = ({
         <h2>{textKeys.OFFER_PAGE_SECTION_TITLE_MAIN()}</h2>
         <MainCoverageCardGrid>
           {standaloneProducts.map(({ id, name, price, description, image }) => {
-            const isTheOnlySelectedMainProduct =
+            const isTheOnlyStandaloneProduct =
               selectedStandaloneProducts.length === 1 &&
               selectedStandaloneProducts[0] === id
 
             return (
-              <MainProductCard
+              <StandaloneProductCard
                 key={id}
-                checkboxRef={
-                  isTheOnlySelectedMainProduct ? inputRef : undefined
-                }
+                checkboxRef={isTheOnlyStandaloneProduct ? inputRef : undefined}
                 title={name}
                 price={price}
                 description={description}
                 image={image}
                 checked={selectedProductsByCategory.standaloneProducts[id]}
                 onClick={() => {
-                  if (isTheOnlySelectedMainProduct) {
+                  if (isTheOnlyStandaloneProduct) {
                     inputRef.current?.setCustomValidity(
                       textKeys.OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR(),
                     )
