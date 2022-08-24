@@ -25,15 +25,17 @@ export const AdditionalProductCard = ({
 }: AdditionalProductCardProps) => {
   return (
     <Card checked={checked} onClick={onClick}>
-      <ImageFrame>
-        <Image src={image} />
-      </ImageFrame>
+      {image && (
+        <ImageFrame>
+          <Image src={image} />
+        </ImageFrame>
+      )}
       <Section>
         <Header>
           <Title>{title}</Title>
           <Price>{price}</Price>
         </Header>
-        <Description>{description}</Description>
+        {description && <Description>{description}</Description>}
       </Section>
       <Checkbox checked={checked} onChange={onClick} />
     </Card>
@@ -66,14 +68,17 @@ const commonStyles = css({
 export const Card = styled.button<Pick<AdditionalProductCardProps, 'checked'>>(
   ({ checked }) => ({
     ...commonStyles,
-
     boxShadow: checked
       ? `0 0 0 1px ${colorsV3.black}, 0px 2px 2px rgba(0, 0, 0, 0.1)`
       : 'initial',
     flexDirection: 'column',
+    minHeight: '20rem',
+    maxHeight: '23rem',
 
     [MEDIA_QUERIES.mediumScreen]: {
       flexDirection: 'row',
+      minHeight: '8rem',
+      maxHeight: '10rem',
     },
   }),
 )
@@ -89,7 +94,12 @@ export const LinkCard = styled.a<LinkCardProps>(({ orientation = 'row' }) => ({
 }))
 
 export const ImageFrame = styled.div({
-  flex: '0 0 35%',
+  flex: '0 0 45%',
+  minHeight: 0,
+
+  [MEDIA_QUERIES.mediumScreen]: {
+    flex: '0 0 35%',
+  },
 })
 
 export const Image = styled.img({
