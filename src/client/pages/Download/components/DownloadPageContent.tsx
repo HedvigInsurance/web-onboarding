@@ -16,6 +16,7 @@ import {
   Section,
   Title,
 } from 'components/AdditionalProductCard'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useCrossSells } from '../useCrossSells'
 import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'
@@ -174,8 +175,9 @@ export const DownloadPageContent = ({
 const CrossSells = () => {
   const { loading, crossSells } = useCrossSells()
   const textKeys = useTextKeys()
+  const currentLocale = useCurrentLocale()
 
-  if (loading) return null
+  if (loading || !crossSells?.length) return null
 
   return (
     <>
@@ -185,7 +187,7 @@ const CrossSells = () => {
       {crossSells?.map((crossSell) => (
         <StyledLinkCard
           key={crossSell.id}
-          href={crossSell.type}
+          href={`/${currentLocale.path}${crossSell.href}`}
           orientation="column"
         >
           <ImageFrame>
