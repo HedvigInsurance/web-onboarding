@@ -7,6 +7,12 @@ const RELEVANT_CROSS_SELL_TYPES = new Set<CrossSellType>([
   CrossSellType.House,
 ])
 
+const CROSS_SELL_URLS: Partial<Record<CrossSellType, string>> = {
+  [CrossSellType.Car]: '/new-member/car?code=getcar20',
+  [CrossSellType.HomeContent]: '/new-member/home-insurance?code=gethome20',
+  [CrossSellType.House]: '/new-member/home-insurance?code=gethome20',
+}
+
 export const useCrossSells = () => {
   const result = usePotentialCrossSellsQuery()
 
@@ -25,7 +31,11 @@ export const useCrossSells = () => {
             callToAction: crossSell.callToAction,
           })),
         )
-        .filter((crossSell) => RELEVANT_CROSS_SELL_TYPES.has(crossSell.type)),
+        .filter((crossSell) => RELEVANT_CROSS_SELL_TYPES.has(crossSell.type))
+        .map((crossSell) => ({
+          ...crossSell,
+          href: CROSS_SELL_URLS[crossSell.type],
+        })),
     }
   }, [result])
 }
