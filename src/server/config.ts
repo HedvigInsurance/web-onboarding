@@ -33,6 +33,9 @@ export const DATADOG_CLIENT_TOKEN = process.env.DATADOG_CLIENT_TOKEN!
 
 export const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT ?? 'development'
 
+export const EMBARK_STORY_NO = process.env.EMBARK_STORY_NO ?? 'onboarding-NO-v2'
+export const EMBARK_STORY_DK = process.env.EMBARK_STORY_DK ?? 'onboarding-DK'
+
 export const FEATURES = (Object.keys(Feature) as Array<Feature>).reduce(
   (featureMap, key) => {
     const envKey = `FEATURE_${key}`
