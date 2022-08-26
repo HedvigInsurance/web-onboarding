@@ -23,6 +23,8 @@ import {
   DATADOG_APPLICATION_ID,
   DATADOG_CLIENT_TOKEN,
   GIRAFFE_HOST,
+  EMBARK_STORY_NO,
+  EMBARK_STORY_DK,
 } from './config'
 import { favicons } from './favicons'
 import { getPageMeta } from './meta'
@@ -46,6 +48,11 @@ const clientConfig: ClientConfig = {
     version: HEROKU_SLUG_COMMIT,
   },
   referer: null,
+
+  embarkStory: {
+    NO: EMBARK_STORY_NO,
+    DK: EMBARK_STORY_DK,
+  },
 }
 
 const template = (

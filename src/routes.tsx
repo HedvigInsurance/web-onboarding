@@ -29,7 +29,6 @@ enum EmbarkStory {
   DenmarkContentsQuoteCart = 'Web Onboarding DK - Quote Cart Home Content',
   DenmarkContentsAccidentQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident',
   DenmarkContentsAccidentTravelQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident Travel',
-  DenmarkOnboarding = 'onboarding-DK-v2',
 
   NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
   NorwayContentsEnglish = 'Web Onboarding NO - English Contents',
@@ -41,7 +40,6 @@ enum EmbarkStory {
   NorwayHomeContentNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Contents Quote Cart',
   NorwayComboEnglishQuoteCart = 'Web Onboarding NO - English Combo Quote Cart',
   NorwayComboNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Combo Quote Cart',
-  NorwayOnboarding = 'onboarding-NO-v3',
 
   SwedenNeeder = 'Web Onboarding SE - Needer',
   SwedenSwitcher = 'Web Onboarding SE - Switcher',
@@ -309,7 +307,7 @@ export const routes: Route[] = [
                 case 'onboarding':
                   return {
                     baseUrl,
-                    name: EmbarkStory.DenmarkOnboarding,
+                    name: window.hedvigClientConfig.embarkStory.DK,
                     quoteCart: true,
                   }
               }
@@ -354,7 +352,7 @@ export const routes: Route[] = [
                 case 'onboarding':
                   return {
                     baseUrl,
-                    name: EmbarkStory.NorwayOnboarding,
+                    name: window.hedvigClientConfig.embarkStory.NO,
                     quoteCart: true,
                   }
               }
