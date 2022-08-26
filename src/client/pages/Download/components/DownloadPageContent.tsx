@@ -173,11 +173,11 @@ export const DownloadPageContent = ({
 }
 
 const CrossSells = () => {
-  const { loading, crossSells } = useCrossSells()
+  const { crossSells } = useCrossSells()
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
 
-  if (loading || !crossSells?.length) return null
+  if (!crossSells || crossSells.length === 0) return null
 
   return (
     <>
