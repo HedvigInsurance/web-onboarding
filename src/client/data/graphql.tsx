@@ -216,16 +216,6 @@ export type AdditionalPaymentsDetailsResponseFinished = {
 
 export type AddPaymentTokenResult = QuoteCart | BasicError
 
-export type AddPhotoToKeyGearItemInput = {
-  itemId: Scalars['ID']
-  file: S3FileInput
-}
-
-export type AddReceiptToKeyGearItemInput = {
-  itemId: Scalars['ID']
-  file: S3FileInput
-}
-
 export type Address = {
   __typename?: 'Address'
   street: Scalars['String']
@@ -2702,14 +2692,6 @@ export type CreateHouseInput = {
   extraBuildings: Array<ExtraBuildingInput>
 }
 
-export type CreateKeyGearItemInput = {
-  photos: Array<S3FileInput>
-  category: KeyGearItemCategory
-  purchasePrice?: Maybe<MonetaryAmountV2Input>
-  physicalReferenceHash?: Maybe<Scalars['String']>
-  name?: Maybe<Scalars['String']>
-}
-
 export type CreateNorwegianHomeContentsInput = {
   street: Scalars['String']
   zipCode: Scalars['String']
@@ -4614,7 +4596,6 @@ export type FaqWhereUniqueInput = {
 }
 
 export enum Feature {
-  KeyGear = 'KeyGear',
   Referrals = 'Referrals',
 }
 
@@ -5491,6 +5472,7 @@ export type InsuranceTerm = {
 
 export enum InsuranceTermType {
   TermsAndConditions = 'TERMS_AND_CONDITIONS',
+  PreSaleInfo = 'PRE_SALE_INFO',
   PreSaleInfoEuStandard = 'PRE_SALE_INFO_EU_STANDARD',
   GeneralTerms = 'GENERAL_TERMS',
   PrivacyPolicy = 'PRIVACY_POLICY',
@@ -5648,40 +5630,6 @@ export type KeyEdge = {
   node: Key
   /** A cursor for use in pagination. */
   cursor: Scalars['String']
-}
-
-export type KeyGearItem = {
-  __typename?: 'KeyGearItem'
-  id: Scalars['ID']
-  deleted: Scalars['Boolean']
-  /**
-   * If this item was added automatically - what was the Hash of the identifiable information?
-   * Use this to avoid automatically adding an Item which the user has already automatically added or
-   * does not wish to have automatically added
-   */
-  name?: Maybe<Scalars['String']>
-  physicalReferenceHash?: Maybe<Scalars['String']>
-  photos: Array<KeyGearItemPhoto>
-  category: KeyGearItemCategory
-  receipts: Array<KeyGearItemReceipt>
-  purchasePrice?: Maybe<MonetaryAmountV2>
-  timeOfPurchase?: Maybe<Scalars['LocalDate']>
-  valuation?: Maybe<KeyGearItemValuation>
-  maxInsurableAmount?: Maybe<MonetaryAmountV2>
-  deductible: MonetaryAmountV2
-  covered: Array<KeyGearItemCoverage>
-  exceptions: Array<KeyGearItemCoverage>
-}
-
-export enum KeyGearItemCategory {
-  Phone = 'PHONE',
-  Computer = 'COMPUTER',
-  Tv = 'TV',
-  Bike = 'BIKE',
-  Jewelry = 'JEWELRY',
-  Watch = 'WATCH',
-  SmartWatch = 'SMART_WATCH',
-  Tablet = 'TABLET',
 }
 
 export type KeyGearItemCoverage = Node & {
@@ -6052,42 +6000,6 @@ export type KeyGearItemCoverageWhereInput = {
 /** References KeyGearItemCoverage record uniquely */
 export type KeyGearItemCoverageWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
-}
-
-export type KeyGearItemPhoto = {
-  __typename?: 'KeyGearItemPhoto'
-  id: Scalars['ID']
-  file: S3File
-  markedAsDeleted: Scalars['Boolean']
-}
-
-export type KeyGearItemReceipt = {
-  __typename?: 'KeyGearItemReceipt'
-  id: Scalars['ID']
-  file: S3File
-  markedAsDeleted: Scalars['Boolean']
-}
-
-export type KeyGearItemsFilter = {
-  /** default: false */
-  deleted?: Maybe<Scalars['Boolean']>
-}
-
-export type KeyGearItemValuation =
-  | KeyGearItemValuationFixed
-  | KeyGearItemValuationMarketValue
-
-export type KeyGearItemValuationFixed = {
-  __typename?: 'KeyGearItemValuationFixed'
-  /** Value between 100 and 0 which corresponds to the percentage of the item's value relative to purchase price */
-  ratio: Scalars['Int']
-  valuation: MonetaryAmountV2
-}
-
-export type KeyGearItemValuationMarketValue = {
-  __typename?: 'KeyGearItemValuationMarketValue'
-  /** Value between 100 and 0 which corresponds to the percentage of the item's value relative to current market value */
-  ratio: Scalars['Int']
 }
 
 /** Identifies documents */
@@ -7703,11 +7615,6 @@ export type MonetaryAmountV2 = {
   currency: Scalars['String']
 }
 
-export type MonetaryAmountV2Input = {
-  amount: Scalars['String']
-  currency: Scalars['String']
-}
-
 export type MonthlyCostDeduction = {
   __typename?: 'MonthlyCostDeduction'
   amount?: Maybe<MonetaryAmountV2>
@@ -7735,24 +7642,6 @@ export type Mutation = {
   removeDiscountCode: RedemedCodeResult
   removeAllDiscountCodes: RemoveCampaignCodeResult
   updateReferralCampaignCode: UpdateReferralCampaignCodeResult
-  createKeyGearItem: KeyGearItem
-  addPhotoToKeyGearItem: KeyGearItem
-  deletePhotoFromKeyGearItem: KeyGearItem
-  addReceiptToKeyGearItem: KeyGearItem
-  deleteReceiptFromKeyGearItem: KeyGearItem
-  updateCategoryForKeyGearItem: KeyGearItem
-  /** # send null to remove */
-  updatePurchasePriceForKeyGearItem: KeyGearItem
-  /** # send null to remove */
-  updateTimeOfPurchaseForKeyGearItem: KeyGearItem
-  updateKeyGearItemName: KeyGearItem
-  /**
-   * """
-   * When we've deleted an item, we mark it as deleted and should probably redact all information
-   * except for the physicalReferenceHash.
-   * """
-   */
-  deleteKeyGearItem: KeyGearItem
   externalInsuranceProvider?: Maybe<ExternalInsuranceProviderMutation>
   _?: Maybe<Scalars['Boolean']>
   /** @deprecated Use `swedishBankIdAuth`. */
@@ -7900,52 +7789,6 @@ export type MutationRemoveAllDiscountCodesArgs = {
 
 export type MutationUpdateReferralCampaignCodeArgs = {
   code: Scalars['String']
-}
-
-export type MutationCreateKeyGearItemArgs = {
-  input: CreateKeyGearItemInput
-}
-
-export type MutationAddPhotoToKeyGearItemArgs = {
-  input: AddPhotoToKeyGearItemInput
-}
-
-export type MutationDeletePhotoFromKeyGearItemArgs = {
-  itemId: Scalars['ID']
-  id: Scalars['ID']
-}
-
-export type MutationAddReceiptToKeyGearItemArgs = {
-  input: AddReceiptToKeyGearItemInput
-}
-
-export type MutationDeleteReceiptFromKeyGearItemArgs = {
-  itemId: Scalars['ID']
-  id: Scalars['ID']
-}
-
-export type MutationUpdateCategoryForKeyGearItemArgs = {
-  itemId: Scalars['ID']
-  category: KeyGearItemCategory
-}
-
-export type MutationUpdatePurchasePriceForKeyGearItemArgs = {
-  itemId: Scalars['ID']
-  newPrice?: Maybe<MonetaryAmountV2Input>
-}
-
-export type MutationUpdateTimeOfPurchaseForKeyGearItemArgs = {
-  id: Scalars['ID']
-  newTimeOfPurchase?: Maybe<Scalars['LocalDate']>
-}
-
-export type MutationUpdateKeyGearItemNameArgs = {
-  itemId: Scalars['ID']
-  updatedName?: Maybe<Scalars['String']>
-}
-
-export type MutationDeleteKeyGearItemArgs = {
-  id: Scalars['ID']
 }
 
 export type MutationNorwegianBankIdAuthArgs = {
@@ -8345,6 +8188,7 @@ export type PartnerInitWidgetResult = {
   requestId: Scalars['ID']
   quoteCartId: Scalars['ID']
   market: Market
+  locale: Scalars['String']
   partnerName: Scalars['String']
   partnerDefaultCampaignCode?: Maybe<Scalars['String']>
   trialInfo?: Maybe<TrialInfo>
@@ -8496,8 +8340,6 @@ export type Query = {
   faqs: Array<Faq>
   /** Retrieve multiple coreMLModels */
   coreMLModels: Array<CoreMlModel>
-  /** Retrieve multiple keyGearItemCoverages */
-  keyGearItemCoverages: Array<KeyGearItemCoverage>
   /** Retrieve multiple importantMessages */
   importantMessages: Array<ImportantMessage>
   /** Retrieve multiple appMarketingImages */
@@ -8539,9 +8381,6 @@ export type Query = {
   perils: Array<PerilV2>
   insuranceProviders: Array<InsuranceProvider>
   referralTerms: ReferralTerm
-  /** Used */
-  keyGearItems: Array<KeyGearItem>
-  keyGearItem?: Maybe<KeyGearItem>
   personalInformation?: Maybe<PersonalInformation>
   houseInformation?: Maybe<HouseInformation>
   externalInsuranceProvider?: Maybe<ExternalInsuranceProvider>
@@ -8631,18 +8470,6 @@ export type QueryCoreMlModelsArgs = {
   locales?: Array<Locale>
 }
 
-export type QueryKeyGearItemCoveragesArgs = {
-  where?: Maybe<KeyGearItemCoverageWhereInput>
-  orderBy?: Maybe<KeyGearItemCoverageOrderByInput>
-  skip?: Maybe<Scalars['Int']>
-  after?: Maybe<Scalars['String']>
-  before?: Maybe<Scalars['String']>
-  first?: Maybe<Scalars['Int']>
-  last?: Maybe<Scalars['Int']>
-  stage?: Stage
-  locales?: Array<Locale>
-}
-
 export type QueryImportantMessagesArgs = {
   where?: Maybe<ImportantMessageWhereInput>
   orderBy?: Maybe<ImportantMessageOrderByInput>
@@ -8717,14 +8544,6 @@ export type QueryInsuranceProvidersArgs = {
 
 export type QueryReferralTermsArgs = {
   locale: Locale
-}
-
-export type QueryKeyGearItemsArgs = {
-  where?: Maybe<KeyGearItemsFilter>
-}
-
-export type QueryKeyGearItemArgs = {
-  id: Scalars['ID']
 }
 
 export type QueryPersonalInformationArgs = {
@@ -9088,16 +8907,6 @@ export type RichText = {
   markdown: Scalars['String']
   /** Returns plain-text contents of RichText */
   text: Scalars['String']
-}
-
-export type S3File = {
-  __typename?: 'S3File'
-  preSignedUrl: Scalars['String']
-}
-
-export type S3FileInput = {
-  bucket: Scalars['String']
-  key: Scalars['String']
 }
 
 /** Scheduled Operation system model */
@@ -12459,7 +12268,9 @@ export type PaymentStatusQuery = { __typename?: 'Query' } & Pick<
   'payinMethodStatus'
 >
 
-export type PotentialCrossSellsQueryVariables = Exact<{ [key: string]: never }>
+export type PotentialCrossSellsQueryVariables = Exact<{
+  locale: Locale
+}>
 
 export type PotentialCrossSellsQuery = { __typename?: 'Query' } & {
   activeContractBundles: Array<
@@ -14902,9 +14713,9 @@ export type PaymentStatusQueryResult = ApolloReactCommon.QueryResult<
   PaymentStatusQueryVariables
 >
 export const PotentialCrossSellsDocument = gql`
-  query PotentialCrossSells {
+  query PotentialCrossSells($locale: Locale!) {
     activeContractBundles {
-      potentialCrossSells {
+      potentialCrossSells(locale: $locale) {
         type
         contractType
         title
@@ -14928,11 +14739,12 @@ export const PotentialCrossSellsDocument = gql`
  * @example
  * const { data, loading, error } = usePotentialCrossSellsQuery({
  *   variables: {
+ *      locale: // value for 'locale'
  *   },
  * });
  */
 export function usePotentialCrossSellsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     PotentialCrossSellsQuery,
     PotentialCrossSellsQueryVariables
   >,

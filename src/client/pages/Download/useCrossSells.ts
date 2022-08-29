@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { usePotentialCrossSellsQuery, CrossSellType } from 'data/graphql'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 const RELEVANT_CROSS_SELL_TYPES = new Set<CrossSellType>([
   CrossSellType.Car,
@@ -14,7 +15,11 @@ const CROSS_SELL_URLS: Partial<Record<CrossSellType, string>> = {
 }
 
 export const useCrossSells = () => {
-  const result = usePotentialCrossSellsQuery()
+  const { isoLocale } = useCurrentLocale()
+
+  const result = usePotentialCrossSellsQuery({
+    variables: { locale: isoLocale },
+  })
 
   return useMemo(() => {
     return {
