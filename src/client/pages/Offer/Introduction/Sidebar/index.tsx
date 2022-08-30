@@ -10,7 +10,7 @@ import {
   useQuoteCartQuery,
 } from 'data/graphql'
 
-import { Button, TextButton, LinkButton } from 'components/buttons'
+import { Button, TextButton, LinkWithQueryButton } from 'components/buttons'
 import { CampaignBadge } from 'components/CampaignBadge/CampaignBadge'
 import { OfferData } from 'pages/Offer/types'
 import { Price } from 'pages/Offer/Checkout/Price/price'
@@ -254,7 +254,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
-                  <LinkButton
+                  <LinkWithQueryButton
                     size="sm"
                     fullWidth
                     to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
@@ -266,7 +266,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     }}
                   >
                     {textKeys.SIDEBAR_PROCEED_BUTTON()}
-                  </LinkButton>
+                  </LinkWithQueryButton>
                 ) : (
                   <Button
                     size="sm"

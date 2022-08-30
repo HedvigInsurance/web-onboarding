@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
@@ -9,7 +9,6 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 
 import { LoadingPage } from 'components/LoadingPage'
-import { getUniqueQuotesFromVariantList } from 'pages/Offer/utils'
 import { DetailsModal } from 'components/DetailsModal'
 import { EventName } from 'utils/tracking/gtm/types'
 
@@ -49,6 +48,7 @@ export const CheckoutDetails = () => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
 
   const history = useHistory()
+  const { search } = useLocation()
   const startDateProps = useStartDateProps()
   useScrollToTop()
 
@@ -66,7 +66,7 @@ export const CheckoutDetails = () => {
   }
 
   const handleClickBackButton = () => {
-    const offerPageLink = `/${localePath}/new-member/offer/${quoteCartId}`
+    const offerPageLink = `/${localePath}/new-member/offer/${quoteCartId}${search}`
     trackOfferEvent({ eventName: EventName.CheckoutOpenGoBack })
     history.push(offerPageLink)
   }
@@ -81,9 +81,8 @@ export const CheckoutDetails = () => {
 
   const priceData = data.priceData
   const quoteDetails = data.quoteDetails
-  const bundleVariants = data.bundleVariants
-  const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
-  const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
+  const allQuotes = data.selectedQuoteBundleVariant.bundle.quotes
+  const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}${search}`
 
   return (
     <CheckoutDetailsWrapper handleClickBackButton={handleClickBackButton}>
