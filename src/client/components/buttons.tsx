@@ -1,8 +1,9 @@
+import React from 'react'
+import { Link, LinkProps, useLocation } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import { colorsV3 } from '@hedviginsurance/brand'
 import color from 'color'
-import { Link } from 'react-router-dom'
 import { Size } from './types'
 import { getMargins, Margins } from './utils/margins'
 
@@ -86,7 +87,15 @@ export const Button = styled(UnstyledButton)<ButtonProps>`
     `}
 `
 
+const LinkWithQuery = ({ to, ...others }: LinkProps) => {
+  const { search } = useLocation()
+
+  return <Link to={to + search} {...others} />
+}
+
 export const LinkButton = Button.withComponent(Link)
+
+export const LinkWithQueryButton = Button.withComponent(LinkWithQuery)
 
 export type TextButtonProps = {
   color?: string
