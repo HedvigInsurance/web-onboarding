@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers, FormikProps } from 'formik'
 import { GraphQLError } from 'graphql'
 import { useApolloClient } from '@apollo/client'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import { useLocalStorage } from 'utils/hooks/useLocalStorage'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
@@ -250,9 +250,7 @@ export const CheckoutPayment = ({
     pollInterval: 1000,
   })
   const history = useHistory()
-  const {
-    location: { search },
-  } = history
+  const { search } = useLocation()
   const is3DsError = search.includes('error')
   const is3DsComplete = search.includes('3dsSuccess')
   const [isDataLoading, setIsDataLoading] = useState(false)
