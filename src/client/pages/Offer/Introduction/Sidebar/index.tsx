@@ -30,9 +30,11 @@ import { useFeature, Features } from 'utils/hooks/useFeature'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
 import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
+import { isCar } from 'api/quoteSelector'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate, useStartDateProps } from './StartDate'
+import { SwitchingNotice } from './SwitchingNotice'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
@@ -152,6 +154,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const textKeys = useTextKeys()
   const { isoLocale, path: localePath } = useCurrentLocale()
+  const isCarQuote = offerData.quotes.some((quote) => isCar(quote))
 
   const { loading: isLoadingQuoteCart } = useQuoteCartQuery({
     variables: {
@@ -222,6 +225,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isLoading =
     isLoadingQuoteCart || isLoadingCampaign || startDateProps.isLoading
   const isSwitcher = hasCurrentInsurer(offerData)
+  const isSwitchableForCar = false
+
+  // we might need to have a different data point for checking current insurer for car... // siau 2022-09-01
+  // It seems that `hasCurrentInsurer` returns true for some Car offers even though we do not support that yet. So let's play it safe and just define it as false for now.
+  const showSwitchingNotice = isCarQuote && isSwitchableForCar
 
   return (
     <>
@@ -251,6 +259,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   )}
                 </BodyTitle>
                 <StartDate {...startDateProps} modal size="sm" />
+                {showSwitchingNotice && <SwitchingNotice />}
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
