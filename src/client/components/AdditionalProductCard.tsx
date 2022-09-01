@@ -66,8 +66,8 @@ const commonStyles = css({
 })
 
 export const Card = styled.button<Pick<AdditionalProductCardProps, 'checked'>>(
+  commonStyles,
   ({ checked }) => ({
-    ...commonStyles,
     boxShadow: checked
       ? `0 0 0 1px ${colorsV3.black}, 0px 2px 2px rgba(0, 0, 0, 0.1)`
       : 'initial',
@@ -87,11 +87,12 @@ type LinkCardProps = {
   orientation?: 'row' | 'column'
 }
 
-export const LinkCard = styled.a<LinkCardProps>(({ orientation = 'row' }) => ({
-  ...commonStyles,
-
-  flexDirection: orientation === 'row' ? 'row' : 'column',
-}))
+export const LinkCard = styled.a<LinkCardProps>(
+  commonStyles,
+  ({ orientation = 'row' }) => ({
+    flexDirection: orientation === 'row' ? 'row' : 'column',
+  }),
+)
 
 export const ImageFrame = styled.div({
   flex: '0 0 45%',
