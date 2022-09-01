@@ -437,5 +437,8 @@
   "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "At least one main coverage must be selected to continue",
   "OFFER_PAGE_SECTION_TITLE_MAIN": "Main Coverage",
   "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Additional Coverage",
-  "ONBOARDING_CROSS_SELL_HEADER": "Others also bought"
+  "ONBOARDING_CROSS_SELL_HEADER": "Others also bought",
+  "SIDEBAR_SWITCHING_NOTICE_HEADING": "Already insured? Switching couldn’t be simpler",
+  "SIDEBAR_SWITCHING_NOTICE_BODY": "After signing up for Hedvig, simply follow the link we send you, authorize the switch using mobile BankID, and we’ll take it from there.",
+  "SIDEBAR_SWITCHING_NOTICE_LINK": "Learn more"
 }

@@ -437,5 +437,8 @@
   "OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Du måste välja minst en huvudförsäkring för att fortsätta",
   "OFFER_PAGE_SECTION_TITLE_MAIN": "Huvudförsäkring",
   "OFFER_PAGE_SECTION_TITLE_ADDITIONAL": "Tilläggsskydd",
-  "ONBOARDING_CROSS_SELL_HEADER": "Andra köpte även"
+  "ONBOARDING_CROSS_SELL_HEADER": "Andra köpte även",
+  "SIDEBAR_SWITCHING_NOTICE_HEADING": "Redan försäkrad? Att byta kan inte vara enklare",
+  "SIDEBAR_SWITCHING_NOTICE_BODY": "Efter att du tecknat Hedvig, följ bara länken vi mejlar till dig för att enkelt säga upp din tidigare försäkring med BankID.",
+  "SIDEBAR_SWITCHING_NOTICE_LINK": "Läs mer"
 }

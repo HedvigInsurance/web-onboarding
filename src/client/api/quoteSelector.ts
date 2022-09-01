@@ -93,7 +93,9 @@ const HOME_OR_HOUSE_INSURANCE_TYPES = [
 export const isHomeContentsOrHouse = (quote: BundledQuote) =>
   HOME_OR_HOUSE_INSURANCE_TYPES.includes(quote.data.type)
 
-export const isCar = (quote: BundledQuote) =>
+// This type is so that we can call if with the type OfferQuote as well, which
+// picks some properties from BundledQuote, but not all of them
+export const isCar = (quote: Pick<BundledQuote, 'data'>) =>
   quote.data.type === InsuranceType.SWEDISH_CAR
 
 export type QuoteOwnershipType = 'RENT' | 'OWN' | 'STUDENT_RENT' | 'STUDENT_OWN'
