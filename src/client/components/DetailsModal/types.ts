@@ -1,8 +1,8 @@
-import { ExtraBuildingInput, CreateQuoteInput } from 'data/graphql'
+import { BundledQuote, ExtraBuilding } from 'src/client/data/graphql'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
 type QuoteHolderInput = Pick<
-  CreateQuoteInput,
+  BundledQuote,
   | 'firstName'
   | 'lastName'
   | 'birthDate'
@@ -13,7 +13,6 @@ type QuoteHolderInput = Pick<
   | 'ssn'
   | 'dataCollectionId'
 >
-
 export type QuoteDetailsInput = {
   street?: string | null
   city?: string | null
@@ -24,7 +23,7 @@ export type QuoteDetailsInput = {
   yearOfConstruction?: number | null
   numberOfBathrooms?: number | null
   isSubleted?: boolean | null
-  extraBuildings?: Array<ExtraBuildingInput> | null
+  extraBuildings?: Array<ExtraBuilding> | null
   zipCode?: string | null
   livingSpace?: number | null
   squareMeters?: number | null

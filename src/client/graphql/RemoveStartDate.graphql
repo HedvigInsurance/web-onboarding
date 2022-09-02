@@ -1,9 +1,0 @@
-mutation RemoveStartDate($quoteId: ID!) {
-    removeStartDate(input: {
-        id: $quoteId
-    }) {
-        ... on CompleteQuote {
-            startDate
-        }
-    }
-}

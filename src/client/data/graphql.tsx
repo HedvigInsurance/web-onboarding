@@ -358,13 +358,6 @@ export type AngelStory = {
   content: Scalars['String']
 }
 
-export enum ApartmentType {
-  StudentRent = 'STUDENT_RENT',
-  Rent = 'RENT',
-  StudentBrf = 'STUDENT_BRF',
-  Brf = 'BRF',
-}
-
 /** The background image for the login screen */
 export type AppMarketingImage = Node & {
   __typename?: 'AppMarketingImage'
@@ -1613,6 +1606,7 @@ export type BundledQuote = {
   dataCollectionId?: Maybe<Scalars['ID']>
   typeOfContract: TypeOfContract
   initiatedFrom: Scalars['String']
+  attributedTo: Scalars['String']
   displayName: Scalars['String']
   description: Scalars['String']
   contractPerils: Array<PerilV2>
@@ -1976,28 +1970,6 @@ export type CommonClaim = {
 
 export type CommonClaimLayouts = TitleAndBulletPoints | Emergency
 
-export type CompleteApartmentQuoteDetails = {
-  __typename?: 'CompleteApartmentQuoteDetails'
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  type: ApartmentType
-}
-
-export type CompleteHouseQuoteDetails = {
-  __typename?: 'CompleteHouseQuoteDetails'
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  ancillarySpace: Scalars['Int']
-  extraBuildings: Array<ExtraBuilding>
-  numberOfBathrooms: Scalars['Int']
-  yearOfConstruction: Scalars['Int']
-  isSubleted: Scalars['Boolean']
-}
-
 export type CompleteQuote = {
   __typename?: 'CompleteQuote'
   id: Scalars['ID']
@@ -2007,8 +1979,6 @@ export type CompleteQuote = {
   lastName: Scalars['String']
   ssn?: Maybe<Scalars['String']>
   birthDate: Scalars['LocalDate']
-  /** @deprecated Use quoteDetails */
-  details: CompleteQuoteDetails
   quoteDetails: QuoteDetails
   startDate?: Maybe<Scalars['LocalDate']>
   expiresAt: Scalars['LocalDate']
@@ -2055,11 +2025,6 @@ export type CompleteQuotePerilsArgs = {
 export type CompleteQuoteDetailsTableArgs = {
   locale: Locale
 }
-
-export type CompleteQuoteDetails =
-  | CompleteApartmentQuoteDetails
-  | CompleteHouseQuoteDetails
-  | UnknownQuoteDetails
 
 /** An inception where all quotes need to have the same startDate and currentInsurer */
 export type ConcurrentInception = {
@@ -2637,75 +2602,6 @@ export type CoreMlModelWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
-export type CreateApartmentInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  type: ApartmentType
-}
-
-export type CreateDanishAccidentInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  bbrId?: Maybe<Scalars['String']>
-  apartment?: Maybe<Scalars['String']>
-  floor?: Maybe<Scalars['String']>
-  city?: Maybe<Scalars['String']>
-  coInsured: Scalars['Int']
-  isStudent: Scalars['Boolean']
-}
-
-export type CreateDanishHomeContentsInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  bbrId?: Maybe<Scalars['String']>
-  apartment?: Maybe<Scalars['String']>
-  floor?: Maybe<Scalars['String']>
-  city?: Maybe<Scalars['String']>
-  livingSpace: Scalars['Int']
-  coInsured: Scalars['Int']
-  isStudent: Scalars['Boolean']
-  type: DanishHomeContentsType
-}
-
-export type CreateDanishTravelInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  bbrId?: Maybe<Scalars['String']>
-  apartment?: Maybe<Scalars['String']>
-  floor?: Maybe<Scalars['String']>
-  city?: Maybe<Scalars['String']>
-  coInsured: Scalars['Int']
-  isStudent: Scalars['Boolean']
-}
-
-export type CreateHouseInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  ancillarySpace: Scalars['Int']
-  yearOfConstruction: Scalars['Int']
-  numberOfBathrooms: Scalars['Int']
-  isSubleted: Scalars['Boolean']
-  extraBuildings: Array<ExtraBuildingInput>
-}
-
-export type CreateNorwegianHomeContentsInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  coInsured: Scalars['Int']
-  livingSpace: Scalars['Int']
-  isYouth: Scalars['Boolean']
-  type: NorwegianHomeContentsType
-}
-
-export type CreateNorwegianTravelInput = {
-  coInsured: Scalars['Int']
-  isYouth: Scalars['Boolean']
-}
-
 export type CreateOnboardingQuoteCartInput = {
   market: Market
   locale: Scalars['String']
@@ -2734,63 +2630,10 @@ export type CreateQuoteCartResult = {
   id: Scalars['ID']
 }
 
-export type CreateQuoteInput = {
-  id: Scalars['ID']
-  firstName: Scalars['String']
-  lastName: Scalars['String']
-  currentInsurer?: Maybe<Scalars['String']>
-  ssn?: Maybe<Scalars['String']>
-  birthDate?: Maybe<Scalars['LocalDate']>
-  startDate?: Maybe<Scalars['LocalDate']>
-  apartment?: Maybe<CreateApartmentInput>
-  house?: Maybe<CreateHouseInput>
-  swedishApartment?: Maybe<CreateSwedishApartmentInput>
-  swedishHouse?: Maybe<CreateSwedishHouseInput>
-  swedishAccident?: Maybe<CreateSwedishAccidentInput>
-  norwegianHomeContents?: Maybe<CreateNorwegianHomeContentsInput>
-  norwegianTravel?: Maybe<CreateNorwegianTravelInput>
-  danishHomeContents?: Maybe<CreateDanishHomeContentsInput>
-  danishAccident?: Maybe<CreateDanishAccidentInput>
-  danishTravel?: Maybe<CreateDanishTravelInput>
-  email?: Maybe<Scalars['String']>
-  dataCollectionId?: Maybe<Scalars['ID']>
-  phoneNumber?: Maybe<Scalars['String']>
-}
-
-export type CreateQuoteResult = CompleteQuote | UnderwritingLimitsHit
-
-export type CreateSwedishAccidentInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  isStudent: Scalars['Boolean']
-}
-
-export type CreateSwedishApartmentInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  type: ApartmentType
-}
-
 export type CreateSwedishBundleInput = {
   ssn: Scalars['String']
   isStudent: Scalars['Boolean']
   address?: Maybe<AddressInput>
-}
-
-export type CreateSwedishHouseInput = {
-  street: Scalars['String']
-  zipCode: Scalars['String']
-  householdSize: Scalars['Int']
-  livingSpace: Scalars['Int']
-  ancillarySpace: Scalars['Int']
-  yearOfConstruction: Scalars['Int']
-  numberOfBathrooms: Scalars['Int']
-  isSubleted: Scalars['Boolean']
-  extraBuildings: Array<ExtraBuildingInput>
 }
 
 export type CrossSell = {
@@ -2798,7 +2641,9 @@ export type CrossSell = {
   type: CrossSellType
   contractType: TypeOfContract
   title: Scalars['String']
+  webTitle?: Maybe<Scalars['String']>
   description: Scalars['String']
+  webDescription?: Maybe<Scalars['String']>
   imageUrl: Scalars['String']
   blurHash: Scalars['String']
   callToAction: Scalars['String']
@@ -2912,12 +2757,6 @@ export enum DanishAccidentLineOfBusiness {
 export type DanishBankIdAuthResponse = {
   __typename?: 'DanishBankIdAuthResponse'
   redirectUrl: Scalars['String']
-}
-
-export type DanishBankIdSession = {
-  __typename?: 'DanishBankIdSession'
-  /** @deprecated This type i not in use any more */
-  redirectUrl?: Maybe<Scalars['String']>
 }
 
 export type DanishHomeContentAgreement = AgreementCore & {
@@ -3143,126 +2982,7 @@ export type DocumentVersion = {
   data?: Maybe<Scalars['Json']>
 }
 
-export type EditApartmentInput = {
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  householdSize?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  type?: Maybe<ApartmentType>
-}
-
-export type EditDanishAccidentInput = {
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  apartment?: Maybe<Scalars['String']>
-  floor?: Maybe<Scalars['String']>
-  city?: Maybe<Scalars['String']>
-  bbrId?: Maybe<Scalars['String']>
-  coInsured?: Maybe<Scalars['Int']>
-  isStudent?: Maybe<Scalars['Boolean']>
-}
-
-export type EditDanishHomeContentsInput = {
-  street?: Maybe<Scalars['String']>
-  apartment?: Maybe<Scalars['String']>
-  floor?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  city?: Maybe<Scalars['String']>
-  bbrId?: Maybe<Scalars['String']>
-  coInsured?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  isStudent?: Maybe<Scalars['Boolean']>
-  type?: Maybe<DanishHomeContentsType>
-}
-
-export type EditDanishTravelInput = {
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  apartment?: Maybe<Scalars['String']>
-  floor?: Maybe<Scalars['String']>
-  city?: Maybe<Scalars['String']>
-  bbrId?: Maybe<Scalars['String']>
-  coInsured?: Maybe<Scalars['Int']>
-  isStudent?: Maybe<Scalars['Boolean']>
-}
-
-export type EditHouseInput = {
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  householdSize?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  ancillarySpace?: Maybe<Scalars['Int']>
-  yearOfConstruction?: Maybe<Scalars['Int']>
-  numberOfBathrooms?: Maybe<Scalars['Int']>
-  isSubleted?: Maybe<Scalars['Boolean']>
-  extraBuildings?: Maybe<Array<ExtraBuildingInput>>
-}
-
-export type EditNorwegianHomeContentsInput = {
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  coInsured?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  isYouth?: Maybe<Scalars['Boolean']>
-  type?: Maybe<NorwegianHomeContentsType>
-}
-
-export type EditNorwegianTravelInput = {
-  coInsured?: Maybe<Scalars['Int']>
-  isYouth?: Maybe<Scalars['Boolean']>
-}
-
-export type EditQuoteInput = {
-  id: Scalars['ID']
-  firstName?: Maybe<Scalars['String']>
-  lastName?: Maybe<Scalars['String']>
-  currentInsurer?: Maybe<Scalars['String']>
-  ssn?: Maybe<Scalars['String']>
-  birthDate?: Maybe<Scalars['LocalDate']>
-  startDate?: Maybe<Scalars['LocalDate']>
-  apartment?: Maybe<EditApartmentInput>
-  swedishApartment?: Maybe<EditSwedishApartmentInput>
-  house?: Maybe<EditHouseInput>
-  swedishHouse?: Maybe<EditSwedishHouseInput>
-  swedishAccident?: Maybe<EditSwedishAccidentInput>
-  norwegianHomeContents?: Maybe<EditNorwegianHomeContentsInput>
-  norwegianTravel?: Maybe<EditNorwegianTravelInput>
-  danishHomeContents?: Maybe<EditDanishHomeContentsInput>
-  danishAccident?: Maybe<EditDanishAccidentInput>
-  danishTravel?: Maybe<EditDanishTravelInput>
-  email?: Maybe<Scalars['String']>
-  phoneNumber?: Maybe<Scalars['String']>
-}
-
 export type EditQuoteResult = QuoteCart | QuoteBundleError
-
-export type EditSwedishAccidentInput = {
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  householdSize?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  isStudent?: Maybe<Scalars['Boolean']>
-}
-
-export type EditSwedishApartmentInput = {
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  householdSize?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  type?: Maybe<ApartmentType>
-}
-
-export type EditSwedishHouseInput = {
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  householdSize?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  ancillarySpace?: Maybe<Scalars['Int']>
-  yearOfConstruction?: Maybe<Scalars['Int']>
-  numberOfBathrooms?: Maybe<Scalars['Int']>
-  isSubleted?: Maybe<Scalars['Boolean']>
-  extraBuildings?: Maybe<Array<ExtraBuildingInput>>
-}
 
 export type EmbarkAction =
   | EmbarkExternalInsuranceProviderAction
@@ -4100,12 +3820,6 @@ export type ExtraBuildingCore = {
   type: ExtraBuildingType
   area: Scalars['Int']
   displayName: Scalars['String']
-  hasWaterConnected: Scalars['Boolean']
-}
-
-export type ExtraBuildingInput = {
-  type: ExtraBuildingType
-  area: Scalars['Int']
   hasWaterConnected: Scalars['Boolean']
 }
 
@@ -5271,42 +4985,6 @@ export type Incentive =
   | VisibleNoDiscount
   | PercentageDiscountMonths
   | IndefinitePercentageDiscount
-
-export type IncompleteApartmentQuoteDetails = {
-  __typename?: 'IncompleteApartmentQuoteDetails'
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  householdSize?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  type?: Maybe<ApartmentType>
-}
-
-export type IncompleteHouseQuoteDetails = {
-  __typename?: 'IncompleteHouseQuoteDetails'
-  street?: Maybe<Scalars['String']>
-  zipCode?: Maybe<Scalars['String']>
-  householdSize?: Maybe<Scalars['Int']>
-  livingSpace?: Maybe<Scalars['Int']>
-  ancillarySpace?: Maybe<Scalars['Int']>
-  extraBuildings?: Maybe<Array<ExtraBuilding>>
-  numberOfBathrooms?: Maybe<Scalars['Int']>
-  yearOfConstruction?: Maybe<Scalars['Int']>
-  isSubleted?: Maybe<Scalars['Boolean']>
-}
-
-export type IncompleteQuote = {
-  __typename?: 'IncompleteQuote'
-  id: Scalars['ID']
-  currentInsurer?: Maybe<CurrentInsurer>
-  startDate?: Maybe<Scalars['LocalDate']>
-  details?: Maybe<IncompleteQuoteDetails>
-  email?: Maybe<Scalars['String']>
-  dataCollectionId?: Maybe<Scalars['ID']>
-}
-
-export type IncompleteQuoteDetails =
-  | IncompleteApartmentQuoteDetails
-  | IncompleteHouseQuoteDetails
 
 export type IndefinitePercentageDiscount = {
   __typename?: 'IndefinitePercentageDiscount'
@@ -7708,12 +7386,6 @@ export type Mutation = {
   quoteCart_createAccessToken: CreateQuoteCartAccessTokenResult
   /** Create a Swedish quote bundle based on SSN. */
   quoteCart_createSwedishBundle: CreateQuoteBundleResult
-  createQuote: CreateQuoteResult
-  editQuote: CreateQuoteResult
-  removeCurrentInsurer: CreateQuoteResult
-  removeStartDate: CreateQuoteResult
-  signQuotes: StartSignResponse
-  approveQuotes?: Maybe<Scalars['Boolean']>
   logout: Scalars['Boolean']
   createClaim: Scalars['ID']
   createSession: Scalars['String']
@@ -7735,7 +7407,6 @@ export type Mutation = {
   triggerFreeTextChat?: Maybe<Scalars['Boolean']>
   triggerClaimChat?: Maybe<Scalars['Boolean']>
   triggerCallMeChat?: Maybe<Scalars['Boolean']>
-  emailSign?: Maybe<Scalars['Boolean']>
   markMessageAsRead: Message
   log?: Maybe<Scalars['Boolean']>
   registerBranchCampaign?: Maybe<Scalars['Boolean']>
@@ -7878,30 +7549,6 @@ export type MutationQuoteCart_CreateSwedishBundleArgs = {
   input: CreateSwedishBundleInput
 }
 
-export type MutationCreateQuoteArgs = {
-  input: CreateQuoteInput
-}
-
-export type MutationEditQuoteArgs = {
-  input: EditQuoteInput
-}
-
-export type MutationRemoveCurrentInsurerArgs = {
-  input: RemoveCurrentInsurerInput
-}
-
-export type MutationRemoveStartDateArgs = {
-  input: RemoveStartDateInput
-}
-
-export type MutationSignQuotesArgs = {
-  input: SignQuotesInput
-}
-
-export type MutationApproveQuotesArgs = {
-  quoteIds: Array<Scalars['ID']>
-}
-
 export type MutationCreateClaimArgs = {
   audioFile: Scalars['Upload']
 }
@@ -8038,12 +7685,6 @@ export type NorwegianBankIdAuthResponse = {
 export type NorwegianBankIdExtraInfo = {
   __typename?: 'NorwegianBankIdExtraInfo'
   norwegianBankIdWords?: Maybe<Scalars['String']>
-}
-
-export type NorwegianBankIdSession = {
-  __typename?: 'NorwegianBankIdSession'
-  /** @deprecated This type i not in use any more */
-  redirectUrl?: Maybe<Scalars['String']>
 }
 
 export type NorwegianHomeContentAgreement = AgreementCore & {
@@ -8400,7 +8041,6 @@ export type Query = {
   quoteBundle: QuoteBundle
   /** Fetch quote cart by its ID. */
   quoteCart: QuoteCart
-  quote: Quote
   /** @deprecated Legacy concept that should not be used */
   lastQuoteOfMember: Quote
   signMethodForQuotes: SignMethod
@@ -8420,11 +8060,6 @@ export type Query = {
   geo: Geo
   angelStory?: Maybe<AngelStory>
   slackDetails: SlackDeleteAccountDetails
-  /**
-   * Returns a type describing whether the 'Self Change' functionality is possible.
-   * @deprecated Use angelStories in `activeContractBundles` instead
-   */
-  selfChangeEligibility: SelfChangeEligibility
   /** All locales that are available and activated */
   availableLocales: Array<Locale>
   /** Returns perils from promise-cms */
@@ -8580,10 +8215,6 @@ export type QueryQuoteCartArgs = {
   id: Scalars['ID']
 }
 
-export type QueryQuoteArgs = {
-  id?: Maybe<Scalars['ID']>
-}
-
 export type QuerySignMethodForQuotesArgs = {
   input: Array<Scalars['ID']>
 }
@@ -8665,7 +8296,7 @@ export type QueryClaims_StatusCardsArgs = {
   locale: Locale
 }
 
-export type Quote = CompleteQuote | IncompleteQuote
+export type Quote = CompleteQuote
 
 export type QuoteBundle = {
   __typename?: 'QuoteBundle'
@@ -8864,14 +8495,6 @@ export type RemoveCampaignCodeResult =
   | CannotRemoveActiveCampaignCode
 
 export type RemoveCampaignResult = QuoteCart | BasicError
-
-export type RemoveCurrentInsurerInput = {
-  id: Scalars['ID']
-}
-
-export type RemoveStartDateInput = {
-  id: Scalars['ID']
-}
 
 export type Renewal = {
   __typename?: 'Renewal'
@@ -9919,16 +9542,6 @@ export enum SelfChangeBlocker {
   TooManyContracts = 'TOO_MANY_CONTRACTS',
 }
 
-export type SelfChangeEligibility = {
-  __typename?: 'SelfChangeEligibility'
-  /** @deprecated Use addressChangeEmbarkStoryId instead */
-  blockers: Array<SelfChangeBlocker>
-  /** @deprecated Use addressChangeEmbarkStoryId instead */
-  embarkStoryId?: Maybe<Scalars['ID']>
-  /** The ID of an embark story that contains an address change flow, if eligible. */
-  addressChangeEmbarkStoryId?: Maybe<Scalars['ID']>
-}
-
 export type SelfChangeInput = {
   startDate: Scalars['LocalDate']
   payload: Scalars['JSON']
@@ -9962,12 +9575,6 @@ export type SignQuoteResponse = {
   signResponse: StartSignResponse
 }
 
-export type SignQuotesInput = {
-  quoteIds: Array<Scalars['ID']>
-  successUrl?: Maybe<Scalars['String']>
-  failUrl?: Maybe<Scalars['String']>
-}
-
 export enum SignState {
   Initiated = 'INITIATED',
   InProgress = 'IN_PROGRESS',
@@ -9979,11 +9586,6 @@ export type SignStatus = {
   __typename?: 'SignStatus'
   collectStatus?: Maybe<CollectStatus>
   signState?: Maybe<SignState>
-}
-
-export type SimpleSignSession = {
-  __typename?: 'SimpleSignSession'
-  id: Scalars['ID']
 }
 
 export type SlackDeleteAccountDetails = {
@@ -10002,12 +9604,7 @@ export enum Stage {
 
 export type StartCheckoutResult = QuoteCart | BasicError
 
-export type StartSignResponse =
-  | SwedishBankIdSession
-  | NorwegianBankIdSession
-  | DanishBankIdSession
-  | SimpleSignSession
-  | FailedToStartSign
+export type StartSignResponse = SwedishBankIdSession | FailedToStartSign
 
 export type StoredCardDetails = {
   __typename?: 'StoredCardDetails'
@@ -10889,16 +10486,6 @@ export enum TypeOfContractGradientOption {
 export type UnderwritingLimit = {
   __typename?: 'UnderwritingLimit'
   code: Scalars['String']
-}
-
-export type UnderwritingLimitsHit = {
-  __typename?: 'UnderwritingLimitsHit'
-  limits: Array<UnderwritingLimit>
-}
-
-export type UnknownQuoteDetails = {
-  __typename?: 'UnknownQuoteDetails'
-  unknown?: Maybe<Scalars['String']>
 }
 
 export type UnpublishLocaleInput = {
@@ -11842,112 +11429,6 @@ export type CreateAccessTokenMutation = { __typename?: 'Mutation' } & {
   } & Pick<CreateQuoteCartAccessTokenResult, 'accessToken'>
 }
 
-export type CreateDanishHomeAccidentQuoteMutationVariables = Exact<{
-  homeInput: CreateQuoteInput
-  accidentInput: CreateQuoteInput
-}>
-
-export type CreateDanishHomeAccidentQuoteMutation = {
-  __typename?: 'Mutation'
-} & {
-  createHomeContents:
-    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
-          quoteDetails:
-            | { __typename: 'SwedishApartmentQuoteDetails' }
-            | { __typename: 'SwedishHouseQuoteDetails' }
-            | { __typename: 'SwedishAccidentDetails' }
-            | { __typename: 'SwedishCarDetails' }
-            | { __typename: 'NorwegianHomeContentsDetails' }
-            | { __typename: 'NorwegianHouseDetails' }
-            | { __typename: 'NorwegianTravelDetails' }
-            | { __typename: 'NorwegianAccidentDetails' }
-            | { __typename: 'DanishHomeContentsDetails' }
-            | { __typename: 'DanishHouseDetails' }
-            | { __typename: 'DanishAccidentDetails' }
-            | { __typename: 'DanishTravelDetails' }
-        })
-    | { __typename: 'UnderwritingLimitsHit' }
-  createAccident:
-    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
-          quoteDetails:
-            | { __typename: 'SwedishApartmentQuoteDetails' }
-            | { __typename: 'SwedishHouseQuoteDetails' }
-            | { __typename: 'SwedishAccidentDetails' }
-            | { __typename: 'SwedishCarDetails' }
-            | { __typename: 'NorwegianHomeContentsDetails' }
-            | { __typename: 'NorwegianHouseDetails' }
-            | { __typename: 'NorwegianTravelDetails' }
-            | { __typename: 'NorwegianAccidentDetails' }
-            | { __typename: 'DanishHomeContentsDetails' }
-            | { __typename: 'DanishHouseDetails' }
-            | { __typename: 'DanishAccidentDetails' }
-            | { __typename: 'DanishTravelDetails' }
-        })
-    | { __typename: 'UnderwritingLimitsHit' }
-}
-
-export type CreateDanishHomeAccidentTravelQuoteMutationVariables = Exact<{
-  homeInput: CreateQuoteInput
-  accidentInput: CreateQuoteInput
-  travelInput: CreateQuoteInput
-}>
-
-export type CreateDanishHomeAccidentTravelQuoteMutation = {
-  __typename?: 'Mutation'
-} & {
-  createHomeContents:
-    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
-          quoteDetails:
-            | { __typename: 'SwedishApartmentQuoteDetails' }
-            | { __typename: 'SwedishHouseQuoteDetails' }
-            | { __typename: 'SwedishAccidentDetails' }
-            | { __typename: 'SwedishCarDetails' }
-            | { __typename: 'NorwegianHomeContentsDetails' }
-            | { __typename: 'NorwegianHouseDetails' }
-            | { __typename: 'NorwegianTravelDetails' }
-            | { __typename: 'NorwegianAccidentDetails' }
-            | { __typename: 'DanishHomeContentsDetails' }
-            | { __typename: 'DanishHouseDetails' }
-            | { __typename: 'DanishAccidentDetails' }
-            | { __typename: 'DanishTravelDetails' }
-        })
-    | { __typename: 'UnderwritingLimitsHit' }
-  createAccident:
-    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
-          quoteDetails:
-            | { __typename: 'SwedishApartmentQuoteDetails' }
-            | { __typename: 'SwedishHouseQuoteDetails' }
-            | { __typename: 'SwedishAccidentDetails' }
-            | { __typename: 'SwedishCarDetails' }
-            | { __typename: 'NorwegianHomeContentsDetails' }
-            | { __typename: 'NorwegianHouseDetails' }
-            | { __typename: 'NorwegianTravelDetails' }
-            | { __typename: 'NorwegianAccidentDetails' }
-            | { __typename: 'DanishHomeContentsDetails' }
-            | { __typename: 'DanishHouseDetails' }
-            | { __typename: 'DanishAccidentDetails' }
-            | { __typename: 'DanishTravelDetails' }
-        })
-    | { __typename: 'UnderwritingLimitsHit' }
-  createTravel:
-    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
-          quoteDetails:
-            | { __typename: 'SwedishApartmentQuoteDetails' }
-            | { __typename: 'SwedishHouseQuoteDetails' }
-            | { __typename: 'SwedishAccidentDetails' }
-            | { __typename: 'SwedishCarDetails' }
-            | { __typename: 'NorwegianHomeContentsDetails' }
-            | { __typename: 'NorwegianHouseDetails' }
-            | { __typename: 'NorwegianTravelDetails' }
-            | { __typename: 'NorwegianAccidentDetails' }
-            | { __typename: 'DanishHomeContentsDetails' }
-            | { __typename: 'DanishHouseDetails' }
-            | { __typename: 'DanishAccidentDetails' }
-            | { __typename: 'DanishTravelDetails' }
-        })
-    | { __typename: 'UnderwritingLimitsHit' }
-}
-
 export type CreateQuoteBundleMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
   quotes: Array<Scalars['JSON']> | Scalars['JSON']
@@ -12004,58 +11485,6 @@ export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
         })
 }
 
-export type CreateSwedishHomeAccidentQuoteMutationVariables = Exact<{
-  homeInput: CreateQuoteInput
-  accidentInput: CreateQuoteInput
-}>
-
-export type CreateSwedishHomeAccidentQuoteMutation = {
-  __typename?: 'Mutation'
-} & {
-  createHomeContents:
-    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
-          quoteDetails:
-            | { __typename: 'SwedishApartmentQuoteDetails' }
-            | { __typename: 'SwedishHouseQuoteDetails' }
-            | { __typename: 'SwedishAccidentDetails' }
-            | { __typename: 'SwedishCarDetails' }
-            | { __typename: 'NorwegianHomeContentsDetails' }
-            | { __typename: 'NorwegianHouseDetails' }
-            | { __typename: 'NorwegianTravelDetails' }
-            | { __typename: 'NorwegianAccidentDetails' }
-            | { __typename: 'DanishHomeContentsDetails' }
-            | { __typename: 'DanishHouseDetails' }
-            | { __typename: 'DanishAccidentDetails' }
-            | { __typename: 'DanishTravelDetails' }
-        })
-    | ({ __typename: 'UnderwritingLimitsHit' } & {
-        limits: Array<
-          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
-        >
-      })
-  createAccident:
-    | ({ __typename: 'CompleteQuote' } & Pick<CompleteQuote, 'id'> & {
-          quoteDetails:
-            | { __typename: 'SwedishApartmentQuoteDetails' }
-            | { __typename: 'SwedishHouseQuoteDetails' }
-            | { __typename: 'SwedishAccidentDetails' }
-            | { __typename: 'SwedishCarDetails' }
-            | { __typename: 'NorwegianHomeContentsDetails' }
-            | { __typename: 'NorwegianHouseDetails' }
-            | { __typename: 'NorwegianTravelDetails' }
-            | { __typename: 'NorwegianAccidentDetails' }
-            | { __typename: 'DanishHomeContentsDetails' }
-            | { __typename: 'DanishHouseDetails' }
-            | { __typename: 'DanishAccidentDetails' }
-            | { __typename: 'DanishTravelDetails' }
-        })
-    | ({ __typename: 'UnderwritingLimitsHit' } & {
-        limits: Array<
-          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
-        >
-      })
-}
-
 export type EditBundledQuoteMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
   locale: Locale
@@ -12104,20 +11533,6 @@ export type EditBundledQuoteMutation = { __typename?: 'Mutation' } & {
             >
           >
         })
-}
-
-export type EditQuoteMutationVariables = Exact<{
-  input: EditQuoteInput
-}>
-
-export type EditQuoteMutation = { __typename?: 'Mutation' } & {
-  editQuote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'id'>)
-    | ({ __typename?: 'UnderwritingLimitsHit' } & {
-        limits: Array<
-          { __typename?: 'UnderwritingLimit' } & Pick<UnderwritingLimit, 'code'>
-        >
-      })
 }
 
 export type ExchangeTokenMutationVariables = Exact<{
@@ -12690,16 +12105,6 @@ export type RemoveDiscountCodeMutation = { __typename?: 'Mutation' } & {
   removeDiscountCode: { __typename: 'RedemedCodeResult' }
 }
 
-export type RemoveStartDateMutationVariables = Exact<{
-  quoteId: Scalars['ID']
-}>
-
-export type RemoveStartDateMutation = { __typename?: 'Mutation' } & {
-  removeStartDate:
-    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
-    | { __typename?: 'UnderwritingLimitsHit' }
-}
-
 export type SignMethodForQuotesQueryVariables = Exact<{
   input: Array<Scalars['ID']> | Scalars['ID']
 }>
@@ -12708,33 +12113,6 @@ export type SignMethodForQuotesQuery = { __typename?: 'Query' } & Pick<
   Query,
   'signMethodForQuotes'
 >
-
-export type SignQuotesMutationVariables = Exact<{
-  quoteIds: Array<Scalars['ID']> | Scalars['ID']
-  successUrl?: Maybe<Scalars['String']>
-  failUrl?: Maybe<Scalars['String']>
-}>
-
-export type SignQuotesMutation = { __typename?: 'Mutation' } & {
-  signQuotes:
-    | ({ __typename: 'SwedishBankIdSession' } & Pick<
-        SwedishBankIdSession,
-        'autoStartToken'
-      >)
-    | ({ __typename: 'NorwegianBankIdSession' } & Pick<
-        NorwegianBankIdSession,
-        'redirectUrl'
-      >)
-    | ({ __typename: 'DanishBankIdSession' } & Pick<
-        DanishBankIdSession,
-        'redirectUrl'
-      >)
-    | { __typename: 'SimpleSignSession' }
-    | ({ __typename: 'FailedToStartSign' } & Pick<
-        FailedToStartSign,
-        'errorMessage' | 'errorCode'
-      >)
-}
 
 export type SignStatusQueryVariables = Exact<{ [key: string]: never }>
 
@@ -12764,17 +12142,6 @@ export type StartCheckoutMutation = { __typename?: 'Mutation' } & {
         >
       })
     | ({ __typename?: 'BasicError' } & Pick<BasicError, 'message'>)
-}
-
-export type StartDateMutationVariables = Exact<{
-  quoteId: Scalars['ID']
-  date?: Maybe<Scalars['LocalDate']>
-}>
-
-export type StartDateMutation = { __typename?: 'Mutation' } & {
-  editQuote:
-    | ({ __typename?: 'CompleteQuote' } & Pick<CompleteQuote, 'startDate'>)
-    | { __typename?: 'UnderwritingLimitsHit' }
 }
 
 export type SubmitAdditionalPaymentDetialsMutationVariables = Exact<{
@@ -13731,157 +13098,6 @@ export type CreateAccessTokenMutationOptions = ApolloReactCommon.BaseMutationOpt
   CreateAccessTokenMutation,
   CreateAccessTokenMutationVariables
 >
-export const CreateDanishHomeAccidentQuoteDocument = gql`
-  mutation CreateDanishHomeAccidentQuote(
-    $homeInput: CreateQuoteInput!
-    $accidentInput: CreateQuoteInput!
-  ) {
-    createHomeContents: createQuote(input: $homeInput) {
-      __typename
-      ... on CompleteQuote {
-        id
-        quoteDetails {
-          __typename
-        }
-      }
-    }
-    createAccident: createQuote(input: $accidentInput) {
-      __typename
-      ... on CompleteQuote {
-        id
-        quoteDetails {
-          __typename
-        }
-      }
-    }
-  }
-`
-export type CreateDanishHomeAccidentQuoteMutationFn = ApolloReactCommon.MutationFunction<
-  CreateDanishHomeAccidentQuoteMutation,
-  CreateDanishHomeAccidentQuoteMutationVariables
->
-
-/**
- * __useCreateDanishHomeAccidentQuoteMutation__
- *
- * To run a mutation, you first call `useCreateDanishHomeAccidentQuoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDanishHomeAccidentQuoteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDanishHomeAccidentQuoteMutation, { data, loading, error }] = useCreateDanishHomeAccidentQuoteMutation({
- *   variables: {
- *      homeInput: // value for 'homeInput'
- *      accidentInput: // value for 'accidentInput'
- *   },
- * });
- */
-export function useCreateDanishHomeAccidentQuoteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateDanishHomeAccidentQuoteMutation,
-    CreateDanishHomeAccidentQuoteMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateDanishHomeAccidentQuoteMutation,
-    CreateDanishHomeAccidentQuoteMutationVariables
-  >(CreateDanishHomeAccidentQuoteDocument, options)
-}
-export type CreateDanishHomeAccidentQuoteMutationHookResult = ReturnType<
-  typeof useCreateDanishHomeAccidentQuoteMutation
->
-export type CreateDanishHomeAccidentQuoteMutationResult = ApolloReactCommon.MutationResult<
-  CreateDanishHomeAccidentQuoteMutation
->
-export type CreateDanishHomeAccidentQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateDanishHomeAccidentQuoteMutation,
-  CreateDanishHomeAccidentQuoteMutationVariables
->
-export const CreateDanishHomeAccidentTravelQuoteDocument = gql`
-  mutation CreateDanishHomeAccidentTravelQuote(
-    $homeInput: CreateQuoteInput!
-    $accidentInput: CreateQuoteInput!
-    $travelInput: CreateQuoteInput!
-  ) {
-    createHomeContents: createQuote(input: $homeInput) {
-      __typename
-      ... on CompleteQuote {
-        id
-        quoteDetails {
-          __typename
-        }
-      }
-    }
-    createAccident: createQuote(input: $accidentInput) {
-      __typename
-      ... on CompleteQuote {
-        id
-        quoteDetails {
-          __typename
-        }
-      }
-    }
-    createTravel: createQuote(input: $travelInput) {
-      __typename
-      ... on CompleteQuote {
-        id
-        quoteDetails {
-          __typename
-        }
-      }
-    }
-  }
-`
-export type CreateDanishHomeAccidentTravelQuoteMutationFn = ApolloReactCommon.MutationFunction<
-  CreateDanishHomeAccidentTravelQuoteMutation,
-  CreateDanishHomeAccidentTravelQuoteMutationVariables
->
-
-/**
- * __useCreateDanishHomeAccidentTravelQuoteMutation__
- *
- * To run a mutation, you first call `useCreateDanishHomeAccidentTravelQuoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDanishHomeAccidentTravelQuoteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDanishHomeAccidentTravelQuoteMutation, { data, loading, error }] = useCreateDanishHomeAccidentTravelQuoteMutation({
- *   variables: {
- *      homeInput: // value for 'homeInput'
- *      accidentInput: // value for 'accidentInput'
- *      travelInput: // value for 'travelInput'
- *   },
- * });
- */
-export function useCreateDanishHomeAccidentTravelQuoteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateDanishHomeAccidentTravelQuoteMutation,
-    CreateDanishHomeAccidentTravelQuoteMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateDanishHomeAccidentTravelQuoteMutation,
-    CreateDanishHomeAccidentTravelQuoteMutationVariables
-  >(CreateDanishHomeAccidentTravelQuoteDocument, options)
-}
-export type CreateDanishHomeAccidentTravelQuoteMutationHookResult = ReturnType<
-  typeof useCreateDanishHomeAccidentTravelQuoteMutation
->
-export type CreateDanishHomeAccidentTravelQuoteMutationResult = ApolloReactCommon.MutationResult<
-  CreateDanishHomeAccidentTravelQuoteMutation
->
-export type CreateDanishHomeAccidentTravelQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateDanishHomeAccidentTravelQuoteMutation,
-  CreateDanishHomeAccidentTravelQuoteMutationVariables
->
 export const CreateQuoteBundleDocument = gql`
   mutation CreateQuoteBundle(
     $quoteCartId: ID!
@@ -13973,86 +13189,6 @@ export type CreateQuoteBundleMutationOptions = ApolloReactCommon.BaseMutationOpt
   CreateQuoteBundleMutation,
   CreateQuoteBundleMutationVariables
 >
-export const CreateSwedishHomeAccidentQuoteDocument = gql`
-  mutation CreateSwedishHomeAccidentQuote(
-    $homeInput: CreateQuoteInput!
-    $accidentInput: CreateQuoteInput!
-  ) {
-    createHomeContents: createQuote(input: $homeInput) {
-      __typename
-      ... on CompleteQuote {
-        id
-        quoteDetails {
-          __typename
-        }
-      }
-      ... on UnderwritingLimitsHit {
-        limits {
-          code
-        }
-      }
-    }
-    createAccident: createQuote(input: $accidentInput) {
-      __typename
-      ... on CompleteQuote {
-        id
-        quoteDetails {
-          __typename
-        }
-      }
-      ... on UnderwritingLimitsHit {
-        limits {
-          code
-        }
-      }
-    }
-  }
-`
-export type CreateSwedishHomeAccidentQuoteMutationFn = ApolloReactCommon.MutationFunction<
-  CreateSwedishHomeAccidentQuoteMutation,
-  CreateSwedishHomeAccidentQuoteMutationVariables
->
-
-/**
- * __useCreateSwedishHomeAccidentQuoteMutation__
- *
- * To run a mutation, you first call `useCreateSwedishHomeAccidentQuoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateSwedishHomeAccidentQuoteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createSwedishHomeAccidentQuoteMutation, { data, loading, error }] = useCreateSwedishHomeAccidentQuoteMutation({
- *   variables: {
- *      homeInput: // value for 'homeInput'
- *      accidentInput: // value for 'accidentInput'
- *   },
- * });
- */
-export function useCreateSwedishHomeAccidentQuoteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateSwedishHomeAccidentQuoteMutation,
-    CreateSwedishHomeAccidentQuoteMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateSwedishHomeAccidentQuoteMutation,
-    CreateSwedishHomeAccidentQuoteMutationVariables
-  >(CreateSwedishHomeAccidentQuoteDocument, options)
-}
-export type CreateSwedishHomeAccidentQuoteMutationHookResult = ReturnType<
-  typeof useCreateSwedishHomeAccidentQuoteMutation
->
-export type CreateSwedishHomeAccidentQuoteMutationResult = ApolloReactCommon.MutationResult<
-  CreateSwedishHomeAccidentQuoteMutation
->
-export type CreateSwedishHomeAccidentQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateSwedishHomeAccidentQuoteMutation,
-  CreateSwedishHomeAccidentQuoteMutationVariables
->
 export const EditBundledQuoteDocument = gql`
   mutation EditBundledQuote(
     $quoteCartId: ID!
@@ -14141,64 +13277,6 @@ export type EditBundledQuoteMutationResult = ApolloReactCommon.MutationResult<
 export type EditBundledQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
   EditBundledQuoteMutation,
   EditBundledQuoteMutationVariables
->
-export const EditQuoteDocument = gql`
-  mutation EditQuote($input: EditQuoteInput!) {
-    editQuote(input: $input) {
-      ... on CompleteQuote {
-        id
-      }
-      ... on UnderwritingLimitsHit {
-        limits {
-          code
-        }
-      }
-    }
-  }
-`
-export type EditQuoteMutationFn = ApolloReactCommon.MutationFunction<
-  EditQuoteMutation,
-  EditQuoteMutationVariables
->
-
-/**
- * __useEditQuoteMutation__
- *
- * To run a mutation, you first call `useEditQuoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEditQuoteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [editQuoteMutation, { data, loading, error }] = useEditQuoteMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useEditQuoteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    EditQuoteMutation,
-    EditQuoteMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<EditQuoteMutation, EditQuoteMutationVariables>(
-    EditQuoteDocument,
-    options,
-  )
-}
-export type EditQuoteMutationHookResult = ReturnType<
-  typeof useEditQuoteMutation
->
-export type EditQuoteMutationResult = ApolloReactCommon.MutationResult<
-  EditQuoteMutation
->
-export type EditQuoteMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  EditQuoteMutation,
-  EditQuoteMutationVariables
 >
 export const ExchangeTokenDocument = gql`
   mutation ExchangeToken($exchangeToken: String!) {
@@ -15479,59 +14557,6 @@ export type RemoveDiscountCodeMutationOptions = ApolloReactCommon.BaseMutationOp
   RemoveDiscountCodeMutation,
   RemoveDiscountCodeMutationVariables
 >
-export const RemoveStartDateDocument = gql`
-  mutation RemoveStartDate($quoteId: ID!) {
-    removeStartDate(input: { id: $quoteId }) {
-      ... on CompleteQuote {
-        startDate
-      }
-    }
-  }
-`
-export type RemoveStartDateMutationFn = ApolloReactCommon.MutationFunction<
-  RemoveStartDateMutation,
-  RemoveStartDateMutationVariables
->
-
-/**
- * __useRemoveStartDateMutation__
- *
- * To run a mutation, you first call `useRemoveStartDateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveStartDateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeStartDateMutation, { data, loading, error }] = useRemoveStartDateMutation({
- *   variables: {
- *      quoteId: // value for 'quoteId'
- *   },
- * });
- */
-export function useRemoveStartDateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveStartDateMutation,
-    RemoveStartDateMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RemoveStartDateMutation,
-    RemoveStartDateMutationVariables
-  >(RemoveStartDateDocument, options)
-}
-export type RemoveStartDateMutationHookResult = ReturnType<
-  typeof useRemoveStartDateMutation
->
-export type RemoveStartDateMutationResult = ApolloReactCommon.MutationResult<
-  RemoveStartDateMutation
->
-export type RemoveStartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  RemoveStartDateMutation,
-  RemoveStartDateMutationVariables
->
 export const SignMethodForQuotesDocument = gql`
   query SignMethodForQuotes($input: [ID!]!) {
     signMethodForQuotes(input: $input)
@@ -15587,78 +14612,6 @@ export type SignMethodForQuotesLazyQueryHookResult = ReturnType<
 export type SignMethodForQuotesQueryResult = ApolloReactCommon.QueryResult<
   SignMethodForQuotesQuery,
   SignMethodForQuotesQueryVariables
->
-export const SignQuotesDocument = gql`
-  mutation SignQuotes(
-    $quoteIds: [ID!]!
-    $successUrl: String
-    $failUrl: String
-  ) {
-    signQuotes(
-      input: { quoteIds: $quoteIds, successUrl: $successUrl, failUrl: $failUrl }
-    ) {
-      __typename
-      ... on FailedToStartSign {
-        errorMessage
-        errorCode
-      }
-      ... on SwedishBankIdSession {
-        autoStartToken
-      }
-      ... on NorwegianBankIdSession {
-        redirectUrl
-      }
-      ... on DanishBankIdSession {
-        redirectUrl
-      }
-    }
-  }
-`
-export type SignQuotesMutationFn = ApolloReactCommon.MutationFunction<
-  SignQuotesMutation,
-  SignQuotesMutationVariables
->
-
-/**
- * __useSignQuotesMutation__
- *
- * To run a mutation, you first call `useSignQuotesMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignQuotesMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [signQuotesMutation, { data, loading, error }] = useSignQuotesMutation({
- *   variables: {
- *      quoteIds: // value for 'quoteIds'
- *      successUrl: // value for 'successUrl'
- *      failUrl: // value for 'failUrl'
- *   },
- * });
- */
-export function useSignQuotesMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SignQuotesMutation,
-    SignQuotesMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<SignQuotesMutation, SignQuotesMutationVariables>(
-    SignQuotesDocument,
-    options,
-  )
-}
-export type SignQuotesMutationHookResult = ReturnType<
-  typeof useSignQuotesMutation
->
-export type SignQuotesMutationResult = ApolloReactCommon.MutationResult<
-  SignQuotesMutation
->
-export type SignQuotesMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  SignQuotesMutation,
-  SignQuotesMutationVariables
 >
 export const SignStatusDocument = gql`
   query SignStatus {
@@ -15778,60 +14731,6 @@ export type StartCheckoutMutationResult = ApolloReactCommon.MutationResult<
 export type StartCheckoutMutationOptions = ApolloReactCommon.BaseMutationOptions<
   StartCheckoutMutation,
   StartCheckoutMutationVariables
->
-export const StartDateDocument = gql`
-  mutation StartDate($quoteId: ID!, $date: LocalDate) {
-    editQuote(input: { id: $quoteId, startDate: $date }) {
-      ... on CompleteQuote {
-        startDate
-      }
-    }
-  }
-`
-export type StartDateMutationFn = ApolloReactCommon.MutationFunction<
-  StartDateMutation,
-  StartDateMutationVariables
->
-
-/**
- * __useStartDateMutation__
- *
- * To run a mutation, you first call `useStartDateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStartDateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [startDateMutation, { data, loading, error }] = useStartDateMutation({
- *   variables: {
- *      quoteId: // value for 'quoteId'
- *      date: // value for 'date'
- *   },
- * });
- */
-export function useStartDateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    StartDateMutation,
-    StartDateMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<StartDateMutation, StartDateMutationVariables>(
-    StartDateDocument,
-    options,
-  )
-}
-export type StartDateMutationHookResult = ReturnType<
-  typeof useStartDateMutation
->
-export type StartDateMutationResult = ApolloReactCommon.MutationResult<
-  StartDateMutation
->
-export type StartDateMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  StartDateMutation,
-  StartDateMutationVariables
 >
 export const SubmitAdditionalPaymentDetialsDocument = gql`
   mutation SubmitAdditionalPaymentDetials(

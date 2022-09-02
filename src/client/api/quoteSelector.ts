@@ -1,11 +1,11 @@
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
-import { BundledQuote, ApartmentType } from 'data/graphql'
+import { BundledQuote, SwedishApartmentType } from 'data/graphql'
 
 export const isSwedishApartment = (quote: BundledQuote) =>
   quote.data.type === InsuranceType.SWEDISH_APARTMENT
 
 export const isSwedishBRF = (quote: BundledQuote) =>
-  isSwedishApartment(quote) && quote.data.subType === ApartmentType.Brf
+  isSwedishApartment(quote) && quote.data.subType === SwedishApartmentType.Brf
 
 export const isSwedishHouse = (quote: BundledQuote) =>
   quote.data.type === InsuranceType.SWEDISH_HOUSE
@@ -40,8 +40,8 @@ export const isDanish = (quote: BundledQuote) =>
   isDanishTravel(quote)
 
 const SWEDISH_STUDENT_APARTMENT_TYPES = [
-  ApartmentType.StudentBrf,
-  ApartmentType.StudentRent,
+  SwedishApartmentType.StudentBrf,
+  SwedishApartmentType.StudentRent,
 ]
 export const isStudent = (quote: BundledQuote) => {
   if (SWEDISH_STUDENT_APARTMENT_TYPES.includes(quote.data.subType)) {
