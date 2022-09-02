@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -5,7 +6,6 @@ import { format as formatDate, isToday, Locale, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { match } from 'matchly'
-import React, { useState, useEffect } from 'react'
 import {
   DateInput as DateInputForm,
   getLocaleImport,
@@ -17,20 +17,17 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import {
   useQuoteCartQuery,
   CurrentInsurer,
-  useCreateQuoteBundleMutation,
+  useEditBundledQuoteMutation,
   BundledQuote,
 } from 'data/graphql'
 import { StartDateLabelSwitcher } from 'pages/Offer/Introduction/Sidebar/StartDateLabelSwitcher'
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
-import {
-  getSelectedBundleVariant,
-  getAllQuotes,
-} from 'api/quoteCartQuerySelectors'
+import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import { isCar } from 'api/quoteSelector'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
-import { isCar } from 'api/quoteSelector'
 import { CancellationOptions } from './CancellationOptions'
 
 export const gqlDateFormat = 'yyyy-MM-dd'
@@ -289,10 +286,7 @@ export type StartDateProps = {
   singleDate: boolean
   selectedQuotes: BundledQuote[]
   isLoading: boolean
-  onSelect: (
-    newDateValue: Date | null,
-    quoteIds: Array<string>,
-  ) => Promise<void>
+  onSelect: (quoteId: string, startDate: Date | null) => Promise<void>
   modal?: boolean
   size?: Size
 }
@@ -307,9 +301,7 @@ export const StartDate = ({
 }: StartDateProps) => {
   const textKeys = useTextKeys()
   const [showError, setShowError] = useState(false)
-  const [loadingQuoteIds, setLoadingQuoteIds] = React.useState<Array<string>>(
-    [],
-  )
+  const [loadingQuoteIds, setLoadingQuoteIds] = useState<Array<string>>([])
 
   const handleSelectNewStartDate = async (
     newDateValue: Date | null,
@@ -317,8 +309,17 @@ export const StartDate = ({
   ) => {
     try {
       setShowError(false)
-      setLoadingQuoteIds(quoteIds)
-      await onSelect(newDateValue, quoteIds)
+
+      const quotesToBeUpdated = [...quoteIds]
+      const selectedCarQuote = selectedQuotes.find(isCar)
+      if (selectedCarQuote != null) {
+        quotesToBeUpdated.push(selectedCarQuote.id)
+      }
+
+      setLoadingQuoteIds(quotesToBeUpdated)
+      await Promise.all(
+        quotesToBeUpdated.map((quoteId) => onSelect(quoteId, newDateValue)),
+      )
     } catch {
       setShowError(true)
     } finally {
@@ -376,6 +377,7 @@ export const StartDate = ({
               const isArrayLengthEven = arr.length % 2 === 0
               const isItemIndexEven = index % 2 === 0
               const isExpandedFirstItem = index === 0 && !isArrayLengthEven
+
               return (
                 <DateForm
                   key={quote.id}
@@ -430,14 +432,6 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
   const { quoteCartId } = useQuoteCartIdFromUrl()
   const { isoLocale, marketLabel } = useCurrentLocale()
 
-  const [
-    createQuoteBundle,
-    { loading: isLoading },
-  ] = useCreateQuoteBundleMutation({
-    refetchQueries: ['QuoteCart'],
-    awaitRefetchQueries: true,
-    notifyOnNetworkStatusChange: true,
-  })
   const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: { id: quoteCartId, locale: isoLocale },
   })
@@ -450,51 +444,32 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
   )
 
   const selectedQuotes = quoteBundleSelector.getQuotes(selectedBundle)
-  const hasCarSelected = quoteBundleSelector.hasCar(selectedQuotes)
+  const [editQuote, { loading: isLoading }] = useEditBundledQuoteMutation({
+    refetchQueries: ['QuoteCart'],
+    awaitRefetchQueries: true,
+    notifyOnNetworkStatusChange: true,
+  })
 
-  const onSelect = async (
-    newDateValue: Date | null,
-    quoteIds: Array<string>,
-  ) => {
+  const onSelect = async (quoteId: string, startDate: Date | null) => {
     const formattedDateValue =
-      newDateValue !== null ? formatDate(newDateValue, gqlDateFormat) : null
+      startDate !== null ? formatDate(startDate, gqlDateFormat) : null
 
-    await createQuoteBundle({
+    await editQuote({
       variables: {
-        locale: isoLocale,
         quoteCartId,
-        quotes: getAllQuotes(quoteCartQueryData).map((quote) => {
-          const {
-            id,
-            firstName,
-            lastName,
-            birthDate,
-            email,
-            ssn,
-            phoneNumber,
-            dataCollectionId,
-            currentInsurer,
-            data,
-          } = quote
-
-          return {
-            firstName,
-            lastName,
-            email,
-            birthDate,
-            ssn,
-            currentInsurer: currentInsurer?.id,
-            phoneNumber,
-            dataCollectionId,
-            startDate:
-              quoteIds.includes(id) || (hasCarSelected && isCar(quote))
-                ? formattedDateValue
-                : quote.startDate,
-            data,
-          }
-        }),
+        quoteId,
+        locale: isoLocale,
+        payload: {
+          startDate: formattedDateValue,
+        },
       },
     })
   }
-  return { singleDate, selectedQuotes, isLoading, onSelect }
+
+  return {
+    singleDate,
+    selectedQuotes,
+    isLoading: isLoading,
+    onSelect,
+  }
 }
