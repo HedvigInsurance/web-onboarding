@@ -55,6 +55,7 @@ import {
 import { checkIsManualReviewRequired, isSsnInvalid } from '../utils'
 import { getUniqueQuotesFromVariantList } from '../../Offer/utils'
 import { ContactInformation } from './ContactInformation/ContactInformation'
+import { useFetchSelectedQuoteIds } from './CheckoutPayment.helpers'
 
 const { gray100, gray600, gray700, gray300, gray900 } = colorsV3
 
@@ -220,7 +221,6 @@ type Props = {
   quoteCartId: string
   priceData: PriceData
   mainQuote: BundledQuote
-  quoteIds: string[]
   checkoutStatus?: CheckoutStatus
 }
 
@@ -229,7 +229,6 @@ export const CheckoutPayment = ({
   quoteCartId,
   priceData,
   mainQuote,
-  quoteIds,
   checkoutStatus,
 }: Props) => {
   const textKeys = useTextKeys()
@@ -258,6 +257,7 @@ export const CheckoutPayment = ({
   const [is3dsError, setIs3dsError] = useState(false)
   const localStorageKey = 'paymentStatus'
   const [paymentStatus, setPaymentStatus] = useLocalStorage(localStorageKey, '')
+  const fetchSelectedQuoteIds = useFetchSelectedQuoteIds({ quoteCartId })
 
   useScrollToTop()
   //handle 3ds error
@@ -281,6 +281,8 @@ export const CheckoutPayment = ({
     sendDatadogAction('checkout_start')
     try {
       setIsDataLoading(true)
+      const quoteIds = await fetchSelectedQuoteIds()
+
       const { data } = await startCheckout({
         variables: { quoteIds, quoteCartId },
       })
@@ -320,10 +322,10 @@ export const CheckoutPayment = ({
   }, [
     getStatus,
     quoteCartId,
-    quoteIds,
     startCheckout,
     trackOfferEvent,
     sendDatadogAction,
+    fetchSelectedQuoteIds,
   ])
   const adyenResponse = useAdyenCheckout({
     adyenRef,
