@@ -19,6 +19,7 @@ import { Telephone } from '../Telephone'
 import { UnselectedOptionCircle } from '../UnselectedOptionCircle'
 import { ChevronDown } from '../ChevronDown'
 import { ThinTick } from '../ThinTick'
+import { Shuffle } from '../Shuffle'
 
 const { gray100, gray300, gray900 } = colorsV3
 
@@ -106,6 +107,9 @@ export const IconsOverview = ({ background }: Props) => {
       </IconWrapper>
       <IconWrapper title="HedvigSymbol">
         <HedvigSymbol size={24} />
+      </IconWrapper>
+      <IconWrapper title="Shuffle">
+        <Shuffle />
       </IconWrapper>
     </Container>
   )
