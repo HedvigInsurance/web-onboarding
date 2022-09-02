@@ -440,5 +440,8 @@
   "ONBOARDING_CROSS_SELL_HEADER": "Andra köpte även",
   "SIDEBAR_SWITCHING_NOTICE_HEADING": "Redan försäkrad? Att byta kan inte vara enklare",
   "SIDEBAR_SWITCHING_NOTICE_BODY": "Efter att du tecknat Hedvig, följ bara länken vi mejlar till dig för att enkelt säga upp din tidigare försäkring med BankID.",
-  "SIDEBAR_SWITCHING_NOTICE_LINK": "Läs mer"
+  "SIDEBAR_SWITCHING_NOTICE_LINK": "Läs mer",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_SECTION_HEADING": "Din tidigare försäkring",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_HEADING": "Så säger du upp din tidigare försäkring",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_BODY": "Klicka bara på länken du fått via mejl och följ instruktionerna. Frågor? Skriv till oss i chatten i appen, vi är glada att hjälpa till."
 }

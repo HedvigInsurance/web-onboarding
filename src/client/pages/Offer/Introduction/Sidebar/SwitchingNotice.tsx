@@ -11,7 +11,7 @@ const StyleedNoticeRoot = styled(Notice.Root)({
 export const SwitchingNotice = () => {
   const textKeys = useTextKeys()
   return (
-    <StyleedNoticeRoot icon={<Shuffle size="1.25rem" />}>
+    <StyleedNoticeRoot size="sm" icon={<Shuffle size="1.25rem" />}>
       <Notice.Header>
         {textKeys.SIDEBAR_SWITCHING_NOTICE_HEADING()}
       </Notice.Header>
