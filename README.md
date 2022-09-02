@@ -58,22 +58,6 @@ The app is running on `http://localhost:8040`. Visit [http://localhost:8040/se/n
 
 Create a `.env` file from the `.env.example`. Most variables are optional but to view some features you need to add corresponding feature flags.
 
-### Debugger UI
-
-Manually stepping through the onboarding flow becomes tedious. Therefore, you can use the "debugger UI" that let's you bypass the initial steps and takes you straight to the "Offer page".
-
-~~You access it locally on this URL: `http://localhost:8040/se/new-member/debugger`.~~
-The debugger is now part of racoon so you can access it on staging: `https://www.dev.hedvigit.com/se-en/debugger`.
-
-![Debugger UI Preview](.github/assets/debugger-ui.png)
-
-1. Choose market and Insurance bundle in the dropdown
-1. Edit information. (Optional)
-1. Click the "Submit" button.
-1. You will land on the "Offer page" with the created quote.
-
-To debug locally, copy the quote id from the URL (i.e. https://www.dev.hedvigit.com/se-en/new-member/offer/bf126805-8090-482c-8b26-80e6c6ef9a7d).
-
 ## E2E Tests
 
 ### 1. Prerequisites
