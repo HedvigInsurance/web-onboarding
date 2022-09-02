@@ -20,6 +20,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useCrossSells } from '../useCrossSells'
 import { GetAppButtons } from './GetAppButtons'
 import { AppImage } from './AppImage'
+import { SwitchingNotice } from './SwitchingNotice'
 
 const IMAGE_WIDTH = 560
 
@@ -138,6 +139,9 @@ export const DownloadPageContent = ({
     Features.CONFIRMATION_PAGE_CROSS_SELL,
   ])
 
+  // FIXME: This will be fixed in GRW-1453
+  const isCarSwitcher = false
+
   return (
     <Page>
       <ContentContainer>
@@ -160,6 +164,7 @@ export const DownloadPageContent = ({
             ))}
           </TextWrapper>
           <GetAppButtons />
+          {isCarSwitcher && <SwitchingNotice />}
           {isCrossSellEnabled && <CrossSells />}
         </div>
         {isLargeScreen && (
@@ -188,7 +193,7 @@ const CrossSells = () => {
         <StyledLinkCard
           key={crossSell.id}
           href={`/${currentLocale.path}${crossSell.href}`}
-          orientation="column"
+          orientation="row"
         >
           <ImageFrame>
             <Image src={crossSell.image} />
