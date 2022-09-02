@@ -188,7 +188,7 @@ const CrossSells = () => {
         <StyledLinkCard
           key={crossSell.id}
           href={`/${currentLocale.path}${crossSell.href}`}
-          orientation="column"
+          orientation="row"
         >
           <ImageFrame>
             <Image src={crossSell.image} />

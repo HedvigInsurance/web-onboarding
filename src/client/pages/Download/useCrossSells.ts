@@ -30,8 +30,8 @@ export const useCrossSells = () => {
           bundle.potentialCrossSells.map((crossSell) => ({
             id: crossSell.contractType,
             type: crossSell.type,
-            title: crossSell.title,
-            description: crossSell.description,
+            title: crossSell.webTitle,
+            description: crossSell.webDescription,
             image: crossSell.imageUrl,
             callToAction: crossSell.callToAction,
           })),
