@@ -9,7 +9,7 @@ type StandaloneProductCardProps = {
   price: string
   description: string
   image: string
-  disabled?: boolean
+  checkboxRef?: React.MutableRefObject<HTMLInputElement | null>
   checked?: boolean
   onClick?: () => void
 }
@@ -19,12 +19,12 @@ export const StandaloneProductCard = ({
   price,
   description,
   image,
+  checkboxRef,
   checked = false,
-  disabled = false,
   onClick = () => null,
 }: StandaloneProductCardProps) => {
   return (
-    <Card disabled={disabled} checked={checked} onClick={onClick}>
+    <Card checked={checked} onClick={onClick}>
       {image && (
         <ImageFrame>
           <Image src={image} />
@@ -37,7 +37,7 @@ export const StandaloneProductCard = ({
         </Header>
         {description && <Description>{description}</Description>}
       </Section>
-      <Checkbox checked={checked} onChange={onClick} disabled={disabled} />
+      <Checkbox ref={checkboxRef} checked={checked} onChange={onClick} />
     </Card>
   )
 }
