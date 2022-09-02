@@ -6,7 +6,6 @@ import { ConnectPayment } from './client/pages/ConnectPayment'
 import { TrustlyFailPage } from './client/pages/ConnectPayment/components/TrustlyFailPage'
 import { TrustlySpinnerPage } from './client/pages/ConnectPayment/components/TrustlySpinnerPage'
 import { ConnectPaymentsDirectEntry } from './client/pages/ConnectPayment/ConnectPaymentsDirectEntry'
-import { Debugger } from './client/pages/Debugger'
 import { Download } from './client/pages/Download'
 import { EmbarkRoot } from './client/pages/Embark'
 import { FourOhFour } from './client/pages/FourOhFour'
@@ -238,14 +237,6 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       Component: Checkout,
-      exact: true,
-    },
-  },
-  {
-    path: `${onboardingLocaleBaseRoute}/debugger`,
-    isHiddenInProd: true,
-    clientRouteData: {
-      Component: Debugger,
       exact: true,
     },
   },
