@@ -29,7 +29,6 @@ export const Checkout = () => {
     priceData,
     quoteCartId,
     mainQuote,
-    quoteIds,
     checkoutStatus,
   } = data
 
@@ -40,7 +39,6 @@ export const Checkout = () => {
         quoteCartId={quoteCartId}
         priceData={priceData}
         mainQuote={mainQuote}
-        quoteIds={quoteIds}
         checkoutStatus={checkoutStatus}
       />
 
