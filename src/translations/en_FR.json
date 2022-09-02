@@ -440,5 +440,8 @@
   "ONBOARDING_CROSS_SELL_HEADER": "Others also bought",
   "SIDEBAR_SWITCHING_NOTICE_HEADING": "Already insured? Switching couldn’t be simpler",
   "SIDEBAR_SWITCHING_NOTICE_BODY": "After signing up for Hedvig, simply follow the link we send you, authorize the switch using mobile BankID, and we’ll take it from there.",
-  "SIDEBAR_SWITCHING_NOTICE_LINK": "Learn more"
+  "SIDEBAR_SWITCHING_NOTICE_LINK": "Learn more",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_SECTION_HEADING": "Your previous insurance",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_HEADING": "How to cancel your previous insurance",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_BODY": "Simply click the link you’ll have in your inbox shortly and follow the instructions. Questions? Chat with us in the app, and we’ll be happy to help."
 }
