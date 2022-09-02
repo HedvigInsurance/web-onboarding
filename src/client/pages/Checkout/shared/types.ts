@@ -1,4 +1,4 @@
-import { ExtraBuildingInput } from 'data/graphql'
+import { ExtraBuildingType } from 'src/client/data/graphql'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 
 export type PriceData = {
@@ -20,7 +20,7 @@ export type QuoteDetailsInput = {
   yearOfConstruction?: number | null
   numberOfBathrooms?: number | null
   isSubleted?: boolean | null
-  extraBuildings?: Array<ExtraBuildingInput> | null
+  extraBuildings?: Array<ExtraBuildingType> | null
   zipCode?: string | null
   livingSpace?: number | null
   householdSize?: number | null
