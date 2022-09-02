@@ -3,8 +3,8 @@ query PotentialCrossSells($locale: Locale!) {
     potentialCrossSells(locale: $locale) {
       type
       contractType
-      title
-      description
+      webTitle
+      webDescription
       imageUrl
       callToAction
     }
