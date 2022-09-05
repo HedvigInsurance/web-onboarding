@@ -8,8 +8,8 @@ import {
   useCreateQuoteBundleMutation,
   useQuoteCartQuery,
   UnderwritingLimit,
-  ApartmentType,
   BundledQuote,
+  SwedishApartmentType,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
@@ -144,12 +144,16 @@ function getFormErrorsFromUnderwritterLimits(
 
 const getSubType = (data: QuoteDetailsInput) => {
   switch (data.subType) {
-    case ApartmentType.Brf:
-    case ApartmentType.StudentBrf:
-      return data.isStudent ? ApartmentType.StudentBrf : ApartmentType.Brf
-    case ApartmentType.Rent:
-    case ApartmentType.StudentRent:
-      return data.isStudent ? ApartmentType.StudentRent : ApartmentType.Rent
+    case SwedishApartmentType.Brf:
+    case SwedishApartmentType.StudentBrf:
+      return data.isStudent
+        ? SwedishApartmentType.StudentBrf
+        : SwedishApartmentType.Brf
+    case SwedishApartmentType.Rent:
+    case SwedishApartmentType.StudentRent:
+      return data.isStudent
+        ? SwedishApartmentType.StudentRent
+        : SwedishApartmentType.Rent
     default:
       return data.subType
   }

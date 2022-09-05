@@ -6,9 +6,9 @@ import {
 } from 'formik'
 import React from 'react'
 import {
-  ApartmentType,
-  ExtraBuildingInput,
+  SwedishApartmentType,
   ExtraBuildingType,
+  ExtraBuildingValue,
 } from 'data/graphql'
 import {
   InputField,
@@ -249,21 +249,21 @@ export const SwedishApartmentOwnershipTypeInput: React.FC<SwedishApartmentOwners
           ? [
               {
                 label: 'SIDEBAR_INSURANCE_TYPE_BRF',
-                value: ApartmentType.StudentBrf,
+                value: SwedishApartmentType.StudentBrf,
               },
               {
                 label: 'SIDEBAR_INSURANCE_TYPE_RENT',
-                value: ApartmentType.StudentRent,
+                value: SwedishApartmentType.StudentRent,
               },
             ]
           : [
               {
                 label: 'SIDEBAR_INSURANCE_TYPE_BRF',
-                value: ApartmentType.Brf,
+                value: SwedishApartmentType.Brf,
               },
               {
                 label: 'SIDEBAR_INSURANCE_TYPE_RENT',
-                value: ApartmentType.Rent,
+                value: SwedishApartmentType.Rent,
               },
             ]),
       ],
@@ -391,10 +391,11 @@ export const ExtraBuildingsInput: React.FC<ExtraBuildingsInputProps> = ({
             <ContentColumnTitleButton
               type="button"
               onClick={() => {
-                const defaultExtraBuilding: ExtraBuildingInput = {
+                const defaultExtraBuilding: ExtraBuildingValue = {
                   type: ExtraBuildingType.Garage,
                   area: 10,
                   hasWaterConnected: false,
+                  displayName: ExtraBuildingType.Garage,
                 }
                 arrayHelpers.insert(0, defaultExtraBuilding)
               }}
