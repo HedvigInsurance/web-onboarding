@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef, useMemo } from 'react'
 import { useLocation, useHistory } from 'react-router'
 import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
@@ -22,6 +22,57 @@ export type SelectorProps = {
   additionalProducts: Array<Product>
 }
 
+type State = {
+  standaloneProducts: Record<string, boolean>
+  additionalProducts: Record<string, boolean>
+}
+
+const getStateFromURL = ({
+  standaloneProducts,
+  additionalProducts,
+  searchParams,
+}: {
+  standaloneProducts: Array<Product>
+  additionalProducts: Array<Product>
+  searchParams: string
+}): State => {
+  const selectedInsuranceTypes = new Set(
+    new URLSearchParams(searchParams).getAll(SEARCH_PARAM),
+  )
+
+  const getProductIdByValueMap = (quotes: Array<Product>) =>
+    quotes.reduce(
+      (result, quote) => ({
+        ...result,
+        [quote.id]: selectedInsuranceTypes.has(quote.id),
+      }),
+      {},
+    )
+
+  return {
+    standaloneProducts: getProductIdByValueMap(standaloneProducts),
+    additionalProducts: getProductIdByValueMap(additionalProducts),
+  }
+}
+
+const getSearchParamsFromState = (state: State) => {
+  const selectedStandaloneProducts = Object.keys(
+    state.standaloneProducts,
+  ).filter((productId) => state.standaloneProducts[productId])
+  const selectedAdditionalProducts = Object.keys(
+    state.additionalProducts,
+  ).filter((productId) => state.additionalProducts[productId])
+  const selectedProducts = [
+    ...selectedStandaloneProducts,
+    ...selectedAdditionalProducts,
+  ]
+
+  const searchParams = new URLSearchParams()
+  selectedProducts.forEach((type) => searchParams.append(SEARCH_PARAM, type))
+
+  return searchParams.toString()
+}
+
 export const Selector = ({
   className,
   standaloneProducts,
@@ -32,34 +83,17 @@ export const Selector = ({
   const { search: searchParams } = useLocation()
   const history = useHistory()
 
-  const selectedProductIds = new URLSearchParams(searchParams).getAll(
-    SEARCH_PARAM,
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  const [selectedProductsByCategory, setSelectedProductsByCategory] = useState(
+    getStateFromURL({ standaloneProducts, additionalProducts, searchParams }),
   )
-  const selectedStandaloneProducts = standaloneProducts.filter(({ id }) =>
-    selectedProductIds.includes(id),
-  )
 
-  const handleClick = (productId: string) => {
-    const searchParams = new URLSearchParams()
-
-    const isProductSelected = selectedProductIds.includes(productId)
-    let newSelectedProductIds: Array<string> = []
-    if (isProductSelected) {
-      newSelectedProductIds = selectedProductIds.filter(
-        (insuranceType) => insuranceType !== productId,
-      )
-    } else {
-      newSelectedProductIds = [...selectedProductIds, productId]
-    }
-
-    newSelectedProductIds.forEach((insuranceType) =>
-      searchParams.append(SEARCH_PARAM, insuranceType),
+  const selectedStandaloneProducts = useMemo(() => {
+    return Object.keys(selectedProductsByCategory.standaloneProducts).filter(
+      (productId) => selectedProductsByCategory.standaloneProducts[productId],
     )
-
-    history.replace({
-      search: searchParams.toString(),
-    })
-  }
+  }, [selectedProductsByCategory])
 
   return (
     <Wrapper className={className}>
@@ -69,18 +103,41 @@ export const Selector = ({
           {standaloneProducts.map(({ id, name, price, description, image }) => {
             const isTheOnlyStandaloneProduct =
               selectedStandaloneProducts.length === 1 &&
-              selectedStandaloneProducts[0].id === id
+              selectedStandaloneProducts[0] === id
 
             return (
               <StandaloneProductCard
                 key={id}
+                checkboxRef={isTheOnlyStandaloneProduct ? inputRef : undefined}
                 title={name}
                 price={price}
                 description={description}
                 image={image}
-                checked={selectedProductIds.includes(id)}
-                disabled={isTheOnlyStandaloneProduct}
-                onClick={() => handleClick(id)}
+                checked={selectedProductsByCategory.standaloneProducts[id]}
+                onClick={() => {
+                  if (isTheOnlyStandaloneProduct) {
+                    inputRef.current?.setCustomValidity(
+                      textKeys.OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR(),
+                    )
+                    inputRef.current?.reportValidity()
+                  } else {
+                    const newState = {
+                      ...selectedProductsByCategory,
+                      standaloneProducts: {
+                        ...selectedProductsByCategory.standaloneProducts,
+                        [id]: !selectedProductsByCategory.standaloneProducts[
+                          id
+                        ],
+                      },
+                    }
+
+                    setSelectedProductsByCategory(newState)
+
+                    history.replace({
+                      search: getSearchParamsFromState(newState),
+                    })
+                  }
+                }}
               />
             )
           })}
@@ -96,8 +153,22 @@ export const Selector = ({
               price={price}
               description={description}
               image={image}
-              checked={selectedProductIds.includes(id)}
-              onClick={() => handleClick(id)}
+              checked={selectedProductsByCategory.additionalProducts[id]}
+              onClick={() => {
+                const newState = {
+                  ...selectedProductsByCategory,
+                  additionalProducts: {
+                    ...selectedProductsByCategory.additionalProducts,
+                    [id]: !selectedProductsByCategory.additionalProducts[id],
+                  },
+                }
+
+                setSelectedProductsByCategory(newState)
+
+                history.replace({
+                  search: getSearchParamsFromState(newState),
+                })
+              }}
             />
           ))}
         </AdditionalCoverageCardGrid>
@@ -127,4 +198,8 @@ const AdditionalCoverageCardGrid = styled.div({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: '1rem',
+
+  [MEDIA_QUERIES.mediumScreen]: {
+    gridTemplateColumns: '1f',
+  },
 })
