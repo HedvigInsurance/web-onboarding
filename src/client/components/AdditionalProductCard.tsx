@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { css } from '@emotion/core'
-import { MEDIA_QUERIES } from 'utils/mediaQueries'
+import { MEDIA_QUERIES, MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { Switch } from 'components/Switch'
 
 type AdditionalProductCardProps = {
@@ -126,7 +126,11 @@ export const Section = styled.section({
 export const Header = styled.header({
   display: 'flex',
   flexDirection: 'column',
-  fontSize: '1.175rem',
+  fontSize: '1rem',
+
+  [MEDIUM_SCREEN_MEDIA_QUERY]: {
+    fontSize: '1.25rem',
+  },
 })
 
 export const Title = styled.h1({
@@ -141,6 +145,7 @@ export const Price = styled.span({
 export const Description = styled.p({
   all: 'unset',
   color: colorsV3.gray700,
+  fontSize: '0.875rem',
 })
 
 export const Checkbox = styled(Switch)({
