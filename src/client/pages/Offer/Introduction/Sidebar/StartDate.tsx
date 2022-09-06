@@ -24,7 +24,10 @@ import { StartDateLabelSwitcher } from 'pages/Offer/Introduction/Sidebar/StartDa
 import { useTextKeys } from 'utils/textKeys'
 import { Size } from 'components/types'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
-import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
+import {
+  getSelectedBundleVariant,
+  getAllQuotes,
+} from 'api/quoteCartQuerySelectors'
 import { isCar } from 'api/quoteSelector'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
@@ -309,16 +312,9 @@ export const StartDate = ({
   ) => {
     try {
       setShowError(false)
-
-      const quotesToBeUpdated = [...quoteIds]
-      const selectedCarQuote = selectedQuotes.find(isCar)
-      if (selectedCarQuote != null) {
-        quotesToBeUpdated.push(selectedCarQuote.id)
-      }
-
-      setLoadingQuoteIds(quotesToBeUpdated)
+      setLoadingQuoteIds(quoteIds)
       await Promise.all(
-        quotesToBeUpdated.map((quoteId) => onSelect(quoteId, newDateValue)),
+        quoteIds.map((quoteId) => onSelect(quoteId, newDateValue)),
       )
     } catch {
       setShowError(true)
@@ -453,17 +449,34 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
   const onSelect = async (quoteId: string, startDate: Date | null) => {
     const formattedDateValue =
       startDate !== null ? formatDate(startDate, gqlDateFormat) : null
+    const quotes = getAllQuotes(quoteCartQueryData)
+    const quotesToBeUpdated = [quoteId]
 
-    await editQuote({
-      variables: {
-        quoteCartId,
-        quoteId,
-        locale: isoLocale,
-        payload: {
-          startDate: formattedDateValue,
-        },
-      },
-    })
+    // Car quotes need to share the same start date
+    const selectedQuote = quotes.find(({ id }) => quoteId === id)
+    const isUpdatingCarQuote =
+      selectedQuote !== undefined && isCar(selectedQuote)
+    if (isUpdatingCarQuote) {
+      const remainingCarQuotes = quotes.filter(
+        (quote) => quote.id !== quoteId && isCar(quote),
+      )
+      remainingCarQuotes.forEach((quote) => quotesToBeUpdated.push(quote.id))
+    }
+
+    await Promise.all(
+      quotesToBeUpdated.map((quoteId) =>
+        editQuote({
+          variables: {
+            quoteCartId,
+            quoteId,
+            locale: isoLocale,
+            payload: {
+              startDate: formattedDateValue,
+            },
+          },
+        }),
+      ),
+    )
   }
 
   return {
