@@ -1,119 +1,83 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { colorsV3 } from '@hedviginsurance/brand'
+import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { useTextKeys } from 'utils/textKeys'
-import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { useBreakpoint } from 'utils/hooks/useBreakpoint'
-import { TOP_BAR_HEIGHT } from 'components/TopBar'
-import { useFeature, Features } from 'utils/hooks/useFeature'
-import { Arrow } from 'components/icons/Arrow'
 import {
-  Description,
-  Header,
-  Image,
-  ImageFrame,
-  LinkCard,
-  Section,
-  Title,
-} from 'components/AdditionalProductCard'
-import { useCurrentLocale } from 'l10n/useCurrentLocale'
-import { useCrossSells } from '../useCrossSells'
+  LARGE_SCREEN_MEDIA_QUERY,
+  MEDIUM_SCREEN_MEDIA_QUERY,
+} from 'utils/mediaQueries'
+import { useFeature, Features } from 'utils/hooks/useFeature'
 import { GetAppButtons } from './GetAppButtons'
-import { AppImage } from './AppImage'
 import { SwitchingNotice } from './SwitchingNotice'
+import { useGetImageUrl } from './useGetImageUrl'
+import { CrossSells } from './CrossSells'
 
-const IMAGE_WIDTH = 560
+type HeadlineWrapperProps = {
+  imageUrl: string
+}
 
-const Page = styled.div`
-  background: ${colorsV3.gray100};
-  max-width: 100vw;
-  min-height: 100vh;
-  padding: ${TOP_BAR_HEIGHT} 2rem 8rem;
-  display: flex;
-  justify-content: center;
-`
+const HeadlineWrapper = styled.div(({ imageUrl }: HeadlineWrapperProps) => ({
+  backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${imageUrl})`,
+  backgroundPosition: 'center',
+  backgroundSize: 'cover',
+  color: colorsV3.gray100,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '3rem 1rem',
 
-const ContentContainer = styled.div`
-  width: 100%;
-  max-width: 32rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  [MEDIUM_SCREEN_MEDIA_QUERY]: {
+    padding: '11rem 0',
+  },
+}))
 
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: 70rem;
-    padding-top: 5rem;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-`
+const Headline = styled.h1({
+  fontSize: '1.5rem',
+  margin: 0,
+  textAlign: 'center',
+  fontFamily: fonts.HEDVIG_LETTERS_BIG,
 
-const HeadlineWrapper = styled.div`
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    max-width: 30rem;
-    margin-right: 3rem;
-  }
-`
-
-const TextWrapper = styled.div`
-  max-width: 32rem;
-  padding: 3rem 0;
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding-bottom: 4rem;
-  }
-`
-
-const Paragraph = styled.div`
-  font-size: 1.125rem;
-  line-height: 1.5rem;
-  color: ${colorsV3.gray700};
-
-  :not(:last-of-type) {
-    margin-bottom: 0.75rem;
-  }
-`
-
-const ImageSection = styled.div`
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    flex-shrink: 1;
-  }
-`
-
-const Headline = styled.h1`
-  width: 100%;
-  font-size: 2rem;
-  line-height: 1.25;
-  color: ${colorsV3.gray900};
-
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    font-size: 3rem;
-    line-height: 1.16;
-  }
-`
-
-const CrossSellSectionHeader = styled.p({
-  textTransform: 'uppercase',
-  marginTop: '4rem',
-})
-
-const StyledLinkCard = styled(LinkCard)({
-  maxWidth: '32rem',
-  marginTop: '1.5rem',
-  [LARGE_SCREEN_MEDIA_QUERY]: {
-    marginRight: '2rem',
+  [MEDIUM_SCREEN_MEDIA_QUERY]: {
+    fontSize: '2.5rem',
   },
 })
 
-const Cta = styled.p({
-  all: 'unset',
+const TextWrapper = styled.div({
+  maxWidth: '32rem',
+  marginTop: '0.5rem',
+  marginBottom: '1.5rem',
+  fontSize: '0.875rem',
+  lineHeight: '1.5rem',
+
+  [MEDIUM_SCREEN_MEDIA_QUERY]: {
+    marginBottom: '3rem',
+    marginTop: '1.5rem',
+    fontSize: '1rem',
+  },
+})
+
+const Paragraph = styled.p({
+  textAlign: 'center',
+  margin: 0,
+
+  ':not(:last-of-type)': {
+    marginBottom: '0.75rem',
+  },
+})
+
+const AdditionalContentWrapper = styled.div({
   display: 'flex',
+  padding: '2rem 1rem',
+  gap: '1.5rem',
   alignItems: 'center',
+  flexDirection: 'column',
+
+  [LARGE_SCREEN_MEDIA_QUERY]: {
+    padding: '4rem 5rem',
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'center',
+  },
 })
 
 type DownloadPageContentProps = {
@@ -132,8 +96,7 @@ export const DownloadPageContent = ({
   ],
 }: DownloadPageContentProps) => {
   const textKeys = useTextKeys()
-
-  const { isLargeScreen } = useBreakpoint()
+  const imageUrl = useGetImageUrl()
 
   const [isCrossSellEnabled] = useFeature([
     Features.CONFIRMATION_PAGE_CROSS_SELL,
@@ -143,73 +106,24 @@ export const DownloadPageContent = ({
   const isCarSwitcher = false
 
   return (
-    <Page>
-      <ContentContainer>
-        <div>
-          <HeadlineWrapper>
-            <Headline>
-              {headlineTextKeys.map((textKey) => (
-                <span key={textKey}>{textKeys[textKey]() + ' '}</span>
-              ))}
-            </Headline>
-          </HeadlineWrapper>
-          {!isLargeScreen && (
-            <ImageSection>
-              <AppImage width={IMAGE_WIDTH} />
-            </ImageSection>
-          )}
-          <TextWrapper>
-            {paragraphTextKeys.map((textKey) => (
-              <Paragraph key={textKey}>{textKeys[textKey]()}</Paragraph>
-            ))}
-          </TextWrapper>
-          <GetAppButtons />
-          {isCarSwitcher && <SwitchingNotice />}
-          {isCrossSellEnabled && <CrossSells />}
-        </div>
-        {isLargeScreen && (
-          <ImageSection>
-            <AppImage width={IMAGE_WIDTH} />
-          </ImageSection>
-        )}
-      </ContentContainer>
-    </Page>
-  )
-}
-
-const CrossSells = () => {
-  const { crossSells } = useCrossSells()
-  const textKeys = useTextKeys()
-  const currentLocale = useCurrentLocale()
-
-  if (!crossSells || crossSells.length === 0) return null
-
-  return (
     <>
-      <CrossSellSectionHeader>
-        {textKeys.ONBOARDING_CROSS_SELL_HEADER()}
-      </CrossSellSectionHeader>
-      {crossSells?.map((crossSell) => (
-        <StyledLinkCard
-          key={crossSell.id}
-          href={`/${currentLocale.path}${crossSell.href}`}
-          orientation="row"
-        >
-          <ImageFrame>
-            <Image src={crossSell.image} />
-          </ImageFrame>
-          <Section>
-            <Header>
-              <Title>{crossSell.title}</Title>
-            </Header>
-            <Description>{crossSell.description}</Description>
-            <Cta>
-              {crossSell.callToAction}{' '}
-              <Arrow size="1.25rem" direction="forward" />
-            </Cta>
-          </Section>
-        </StyledLinkCard>
-      ))}
+      <HeadlineWrapper imageUrl={imageUrl}>
+        <Headline>
+          {headlineTextKeys.map((textKey) => textKeys[textKey]() + ' ')}
+        </Headline>
+
+        <TextWrapper>
+          {paragraphTextKeys.map((textKey) => (
+            <Paragraph key={textKey}>{textKeys[textKey]()}</Paragraph>
+          ))}
+        </TextWrapper>
+        <GetAppButtons fill={colorsV3.gray100} />
+      </HeadlineWrapper>
+
+      <AdditionalContentWrapper>
+        {isCarSwitcher && <SwitchingNotice />}
+        {isCrossSellEnabled && <CrossSells />}
+      </AdditionalContentWrapper>
     </>
   )
 }
