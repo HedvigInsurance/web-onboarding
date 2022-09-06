@@ -22,39 +22,44 @@ const buttonData: ButtonData[] = [
   },
 ]
 
-const ButtonContainer = styled.div`
-  width: 100%;
-  display: grid;
-  gap: 1rem;
-  grid-auto-flow: column;
-  justify-content: flex-start;
-`
+const ButtonContainer = styled.div({
+  display: 'flex',
+  gap: '1rem',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+})
 
-const AnchorLinkButton = styled.a`
-  height: 48px;
-  padding: 0 24px;
-  margin: 8px 0;
-  border: 1px solid ${ICON_COLOR};
-  border-radius: 8px;
-  display: inline-flex;
-  justify-content: center;
-  color: ${ICON_COLOR};
-  transition: 0.1s ease-in-out;
+const AnchorLinkButton = styled.a(
+  ({ fill }: Pick<GetAppButtonsProps, 'fill'>) => ({
+    height: '48px',
+    padding: '0 24px',
+    margin: '8px 0',
+    borderRadius: '8px',
+    display: 'inline-flex',
+    justifyContent: 'center',
+    color: ICON_COLOR,
+    transition: '0.1s ease-in-out',
+    backgroundColor: fill,
 
-  svg {
-    width: 120px;
-  }
+    svg: {
+      width: '120px',
+    },
 
-  &:hover {
-    color: ${colorsV3.gray700};
-  }
-`
+    '&:hover': {
+      color: colorsV3.gray700,
+    },
+  }),
+)
 
-export const GetAppButtons = () => {
+type GetAppButtonsProps = {
+  fill?: string
+}
+
+export const GetAppButtons = ({ fill }: GetAppButtonsProps) => {
   return (
     <ButtonContainer>
       {buttonData.map(({ url, iconComponent }) => (
-        <AnchorLinkButton key={url} href={url}>
+        <AnchorLinkButton key={url} href={url} fill={fill}>
           {iconComponent}
         </AnchorLinkButton>
       ))}
