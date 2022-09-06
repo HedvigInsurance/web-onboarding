@@ -11695,8 +11695,8 @@ export type PotentialCrossSellsQuery = { __typename?: 'Query' } & {
           CrossSell,
           | 'type'
           | 'contractType'
-          | 'title'
-          | 'description'
+          | 'webTitle'
+          | 'webDescription'
           | 'imageUrl'
           | 'callToAction'
         >
@@ -13796,8 +13796,8 @@ export const PotentialCrossSellsDocument = gql`
       potentialCrossSells(locale: $locale) {
         type
         contractType
-        title
-        description
+        webTitle
+        webDescription
         imageUrl
         callToAction
       }
