@@ -148,11 +148,11 @@ export const OfferPage = ({
   )
 
   useEffect(() => {
-    if (isProductSelectorEnabled) {
-      const selectedQuotes = (selectedBundleVariant?.bundle.quotes ?? []).map(
+    if (isProductSelectorEnabled && selectedBundleVariant) {
+      const insuranceTypes = selectedBundleVariant?.bundle.quotes.map(
         (quote) => quote.insuranceType as InsuranceType,
       )
-      setSelectedInsuranceTypes(selectedQuotes)
+      setSelectedInsuranceTypes(insuranceTypes)
     }
   }, [
     isProductSelectorEnabled,
