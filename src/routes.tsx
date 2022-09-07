@@ -1,6 +1,7 @@
 import React from 'react'
 import { Redirect, RouteComponentProps } from 'react-router'
 
+import { datadogRum } from '@datadog/browser-rum'
 import { localePathPattern } from './client/l10n/localePathPattern'
 import { ConnectPayment } from './client/pages/ConnectPayment'
 import { TrustlyFailPage } from './client/pages/ConnectPayment/components/TrustlyFailPage'
@@ -40,9 +41,6 @@ enum EmbarkStory {
   NorwayComboEnglishQuoteCart = 'Web Onboarding NO - English Combo Quote Cart',
   NorwayComboNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Combo Quote Cart',
 
-  SwedenNeeder = 'Web Onboarding SE - Needer',
-  SwedenSwitcher = 'Web Onboarding SE - Switcher',
-  SwedenSwitcherWithoutAccident = 'Web Onboarding SE - Switcher Without Accident',
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
   SwedenQuoteCartSwitcher = 'Web Onboarding SE - Quote Cart Switcher',
   SwedenCar = 'SE-onboarding-car',
@@ -253,8 +251,6 @@ export const routes: Route[] = [
           const { locale, name } = match.params
           const baseUrl = `/${locale}/new-member/${name}`
           const landingPageRedirect = { redirect: `/${locale}/new-member` }
-          const isProductionEnvironment =
-            window.hedvigClientConfig.appEnvironment === 'production'
 
           switch (locale) {
             case 'dk':
@@ -351,22 +347,6 @@ export const routes: Route[] = [
             case 'se':
             case 'se-en':
               switch (name) {
-                case 'new':
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.SwedenNeeder,
-                  }
-                case 'switch':
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.SwedenSwitcherWithoutAccident,
-                  }
-                case 'home-accident-switcher':
-                  if (isProductionEnvironment) return landingPageRedirect
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.SwedenSwitcher,
-                  }
                 case 'home-accident-needer':
                   return {
                     baseUrl,
@@ -389,6 +369,7 @@ export const routes: Route[] = [
               break
           }
 
+          datadogRum.addError('Unsupported Embark flow', { url: match.url })
           return landingPageRedirect
         }
 
