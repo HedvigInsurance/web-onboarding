@@ -11,7 +11,10 @@ import {
 import { EventName } from 'utils/tracking/gtm/types'
 import { localePathPattern } from 'l10n/localePathPattern'
 import { Features, useFeature } from 'utils/hooks/useFeature'
-import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import {
+  useSelectedInsuranceTypes,
+  InsuranceType,
+} from 'utils/hooks/useSelectedInsuranceTypes'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { LocaleLabel } from 'l10n/locales'
 import {
@@ -143,6 +146,19 @@ export const OfferPage = ({
       }),
     [marketLabel, trackOfferEvent],
   )
+
+  useEffect(() => {
+    if (isProductSelectorEnabled) {
+      const selectedQuotes = (selectedBundleVariant?.bundle.quotes ?? []).map(
+        (quote) => quote.insuranceType as InsuranceType,
+      )
+      setSelectedInsuranceTypes(selectedQuotes)
+    }
+  }, [
+    isProductSelectorEnabled,
+    selectedBundleVariant,
+    setSelectedInsuranceTypes,
+  ])
 
   if (isLoadingQuoteCart) return <LoadingPage loading />
 

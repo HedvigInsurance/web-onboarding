@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { useLocation, useHistory } from 'react-router'
 import { TypeOfContract } from 'data/graphql'
 
@@ -50,19 +50,20 @@ export const useSelectedInsuranceTypes = () => {
     searchParams,
   ])
 
-  const changeSelectedInsuranceTypes = (
-    newTypes: Array<InsuranceType | TypeOfContract>,
-  ) => {
-    searchParams.delete(SEARCH_PARAM_NAME)
+  const changeSelectedInsuranceTypes = useCallback(
+    (newTypes: Array<InsuranceType | TypeOfContract>) => {
+      searchParams.delete(SEARCH_PARAM_NAME)
 
-    for (const type of newTypes) {
-      searchParams.append(SEARCH_PARAM_NAME, type)
-    }
+      for (const type of newTypes) {
+        searchParams.append(SEARCH_PARAM_NAME, type)
+      }
 
-    history.replace({
-      search: searchParams.toString(),
-    })
-  }
+      history.replace({
+        search: searchParams.toString(),
+      })
+    },
+    [searchParams, history],
+  )
 
   return [insuranceTypes, changeSelectedInsuranceTypes] as const
 }
