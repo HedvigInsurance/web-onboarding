@@ -5007,6 +5007,15 @@ export type IndependentInceptions = {
   inceptions: Array<IndependentInception>
 }
 
+export type InitiateCancelOldCarInsuranceInput = {
+  contractId: Scalars['String']
+}
+
+export type InitiateCancelOldCarInsuranceResponse = {
+  __typename?: 'InitiateCancelOldCarInsuranceResponse'
+  url: Scalars['String']
+}
+
 export type InitiateDataCollectionInput = {
   reference: Scalars['ID']
   insuranceProvider: Scalars['String']
@@ -7327,6 +7336,7 @@ export type Mutation = {
   swedishBankIdAuth: BankIdAuthResponse
   norwegianBankIdAuth: NorwegianBankIdAuthResponse
   danishBankIdAuth: DanishBankIdAuthResponse
+  initiateCancelOldCarInsurance?: Maybe<InitiateCancelOldCarInsuranceResponse>
   /** Creates a login attempt which sends an OTP to the provided credential */
   login_createOtpAttempt: Scalars['ID']
   /** Verifies an ongoing login attempt, returning an access token on success */
@@ -7468,6 +7478,10 @@ export type MutationNorwegianBankIdAuthArgs = {
 
 export type MutationDanishBankIdAuthArgs = {
   personalNumber: Scalars['String']
+}
+
+export type MutationInitiateCancelOldCarInsuranceArgs = {
+  input: InitiateCancelOldCarInsuranceInput
 }
 
 export type MutationLogin_CreateOtpAttemptArgs = {
@@ -11608,6 +11622,19 @@ export type FaqsQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type InitiateCarCancellationMutationVariables = Exact<{
+  input: InitiateCancelOldCarInsuranceInput
+}>
+
+export type InitiateCarCancellationMutation = { __typename?: 'Mutation' } & {
+  initiateCancelOldCarInsurance?: Maybe<
+    { __typename?: 'InitiateCancelOldCarInsuranceResponse' } & Pick<
+      InitiateCancelOldCarInsuranceResponse,
+      'url'
+    >
+  >
+}
+
 export type MemberQueryVariables = Exact<{ [key: string]: never }>
 
 export type MemberQuery = { __typename?: 'Query' } & {
@@ -13493,6 +13520,59 @@ export type FaqsLazyQueryHookResult = ReturnType<typeof useFaqsLazyQuery>
 export type FaqsQueryResult = ApolloReactCommon.QueryResult<
   FaqsQuery,
   FaqsQueryVariables
+>
+export const InitiateCarCancellationDocument = gql`
+  mutation initiateCarCancellation(
+    $input: InitiateCancelOldCarInsuranceInput!
+  ) {
+    initiateCancelOldCarInsurance(input: $input) {
+      url
+    }
+  }
+`
+export type InitiateCarCancellationMutationFn = ApolloReactCommon.MutationFunction<
+  InitiateCarCancellationMutation,
+  InitiateCarCancellationMutationVariables
+>
+
+/**
+ * __useInitiateCarCancellationMutation__
+ *
+ * To run a mutation, you first call `useInitiateCarCancellationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInitiateCarCancellationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [initiateCarCancellationMutation, { data, loading, error }] = useInitiateCarCancellationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useInitiateCarCancellationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    InitiateCarCancellationMutation,
+    InitiateCarCancellationMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    InitiateCarCancellationMutation,
+    InitiateCarCancellationMutationVariables
+  >(InitiateCarCancellationDocument, options)
+}
+export type InitiateCarCancellationMutationHookResult = ReturnType<
+  typeof useInitiateCarCancellationMutation
+>
+export type InitiateCarCancellationMutationResult = ApolloReactCommon.MutationResult<
+  InitiateCarCancellationMutation
+>
+export type InitiateCarCancellationMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  InitiateCarCancellationMutation,
+  InitiateCarCancellationMutationVariables
 >
 export const MemberDocument = gql`
   query Member {

@@ -21,6 +21,7 @@ import {
   LandingPageAlternateLinks,
   LandingPageCanonicalLinks,
 } from './client/pages/Landing/landingPageData'
+import { InitiateCarCancellationPage } from './client/pages/IntiateCarCancellation'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -121,6 +122,16 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       Component: Download,
+      exact: true,
+    },
+  },
+  {
+    path: `${onboardingLocaleBaseRoute}/initiate-car-cancellation`,
+    serverRouteData: {
+      titleTextKey: 'INITIATE_CAR_CANCELLATION_PAGE_TITLE',
+    },
+    clientRouteData: {
+      Component: InitiateCarCancellationPage,
       exact: true,
     },
   },
