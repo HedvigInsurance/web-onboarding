@@ -1,0 +1,5 @@
+mutation initiateCarCancellation($input: InitiateCancelOldCarInsuranceInput!) {
+  initiateCancelOldCarInsurance(input: $input) {
+    url
+  }
+}
