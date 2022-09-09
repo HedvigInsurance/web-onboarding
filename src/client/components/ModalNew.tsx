@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { motion } from 'framer-motion'
-import React, { ReactNode, useRef } from 'react'
+import React, { ReactNode, useRef, useEffect } from 'react'
 import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from '../utils/mediaQueries'
 import { CloseButton } from './CloseButton/CloseButton'
@@ -94,6 +94,18 @@ export const Modal = ({
   )
 
   const hasOnCloseFunction = Boolean(onClose)
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !!onClose) {
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [hasOnCloseFunction, onClose])
 
   return (
     <Wrapper
