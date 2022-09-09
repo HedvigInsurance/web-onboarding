@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { format as formatDate, isToday, Locale, parse } from 'date-fns'
+import {
+  differenceInDays,
+  format as formatDate,
+  isToday,
+  Locale,
+  parse,
+  startOfDay,
+} from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { match } from 'matchly'
@@ -32,6 +39,7 @@ import { isCar } from 'api/quoteSelector'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { CancellationOptions } from './CancellationOptions'
+import { TooSoonSwitcherErrorModal } from './TooSoonSwitcherErrorModal'
 
 export const gqlDateFormat = 'yyyy-MM-dd'
 
@@ -158,13 +166,14 @@ const DateInputModalWrapper = styled.div<{
 
 const getDefaultDateValue = (
   startDate: string | null,
-  currentInsurer?: CurrentInsurer,
+  isSwitcher?: boolean,
 ) => {
   if (startDate) {
     return parse(startDate, 'yyyy-MM-dd', new Date())
   }
 
-  if (currentInsurer?.switchable) {
+  // If user is a switcher, we accept null as default start date - it translates to "as soon as possible"
+  if (isSwitcher) {
     return null
   }
 
@@ -207,16 +216,14 @@ const DateForm = ({
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
 
-  const [dateValue, setDateValue] = useState(() =>
-    getDefaultDateValue(startDate, currentInsurer),
-  )
+  // FIXME: get this data from BE
+  const isCarSwitcher = false
+  const isSwitcher = currentInsurer?.switchable || isCarSwitcher
+
+  const dateValue = getDefaultDateValue(startDate, isSwitcher)
   const [dateLocale, setDateLocale] = useState<Locale | null>(null)
 
   const [datePickerOpen, setDatePickerOpen] = useState(false)
-
-  useEffect(() => {
-    setDateValue(getDefaultDateValue(startDate, currentInsurer))
-  }, [startDate, currentInsurer])
 
   useEffect(() => {
     getLocaleImport(isoLocale).then((m) => setDateLocale(m.default))
@@ -253,8 +260,11 @@ const DateForm = ({
           )}
           {!loading && (
             <>
-              {currentInsurer?.switchable && !dateValue && (
-                <StartDateLabelSwitcher dataCollectionId={dataCollectionId} />
+              {isSwitcher && !dateValue && (
+                <StartDateLabelSwitcher
+                  dataCollectionId={dataCollectionId}
+                  isCarSwitcher={isCarSwitcher}
+                />
               )}
               {dateValue && getDateLabel()}
               <ChevronDown />
@@ -269,7 +279,7 @@ const DateForm = ({
             setOpen={setDatePickerOpen}
             date={dateValue || new Date()}
             setDate={onChange}
-            isCurrentInsurerSwichable={Boolean(currentInsurer?.switchable)}
+            isCurrentInsurerSwichable={isSwitcher}
           />
         </DateInputModalWrapper>
       ) : (
@@ -278,11 +288,17 @@ const DateForm = ({
           setOpen={setDatePickerOpen}
           date={dateValue || new Date()}
           setDate={onChange}
-          isCurrentInsurerSwichable={Boolean(currentInsurer?.switchable)}
+          isCurrentInsurerSwichable={isSwitcher}
         />
       )}
     </RowButtonWrapper>
   )
+}
+
+const isLessThanOneWeekAway = (date: Date | null): boolean => {
+  if (!date) return false
+
+  return differenceInDays(startOfDay(date), startOfDay(new Date())) < 7
 }
 
 export type StartDateProps = {
@@ -302,8 +318,11 @@ export const StartDate = ({
   modal = false,
   size = 'lg',
 }: StartDateProps) => {
+  // FIXME: use actual data from BE
+  const isCarSwitcher = false
   const textKeys = useTextKeys()
   const [showError, setShowError] = useState(false)
+  const [showTooSoonError, setShowToSoonError] = useState(false)
   const [loadingQuoteIds, setLoadingQuoteIds] = useState<Array<string>>([])
 
   const handleSelectNewStartDate = async (
@@ -311,6 +330,9 @@ export const StartDate = ({
     quoteIds: Array<string>,
   ) => {
     try {
+      const dateIsTooSoon = isLessThanOneWeekAway(newDateValue)
+      setShowToSoonError(isCarSwitcher && dateIsTooSoon)
+
       setShowError(false)
       setLoadingQuoteIds(quoteIds)
       await Promise.all(
@@ -341,6 +363,10 @@ export const StartDate = ({
       >
         {textKeys.SIDEBAR_UPDATE_START_DATE_FAILED()}
       </ErrorMessage>
+      <TooSoonSwitcherErrorModal
+        isVisible={showTooSoonError}
+        onClose={() => setShowToSoonError(false)}
+      />
       <DateFormsWrapper>
         {singleDate ? (
           <DateForm
