@@ -72,13 +72,13 @@ export const Card = styled.button<Pick<AdditionalProductCardProps, 'checked'>>(
       ? `0 0 0 1px ${colorsV3.black}, 0px 2px 2px rgba(0, 0, 0, 0.1)`
       : 'initial',
     flexDirection: 'column',
-    minHeight: '20rem',
-    maxHeight: '23rem',
+    minHeight: '16rem',
+    maxHeight: '20rem',
 
     [MEDIA_QUERIES.mediumScreen]: {
       flexDirection: 'row',
-      minHeight: '8rem',
-      maxHeight: '10rem',
+      minHeight: '10rem',
+      maxHeight: '16rem',
     },
   }),
 )
@@ -116,7 +116,7 @@ export const Section = styled.section({
   flexDirection: 'column',
   padding: '1rem',
   gap: '1rem',
-  justifyContent: 'space-evenly',
+  justifyContent: 'space-around',
 
   [MEDIA_QUERIES.mediumScreen]: {
     padding: '1rem 3rem 1rem 1rem',

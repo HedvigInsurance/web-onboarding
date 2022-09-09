@@ -97,7 +97,7 @@ export const Section = styled.section({
   flexDirection: 'column',
   padding: '1rem 3rem 1rem 1rem',
   gap: '1rem',
-  justifyContent: 'space-evenly',
+  justifyContent: 'space-around',
 
   [MEDIA_QUERIES.mediumScreen]: {
     padding: '1rem',
