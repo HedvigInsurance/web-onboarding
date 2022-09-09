@@ -4,7 +4,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { MEDIUM_SMALL_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { WarningTriangleOutlined } from './icons/WarningTriangle'
 import { Modal, ModalProps } from './ModalNew'
-import { Button } from './CloseButton/CloseButton'
+import { Button } from './buttons'
 
 type Props = ModalProps & {
   children: React.ReactNode
@@ -66,16 +66,40 @@ const ErrorModalWrapper = styled(Modal)`
     max-width: min(36rem, 100% - 2rem);
     min-height: auto;
   }
-  ${Button} {
-    width: 1rem;
-    height: 1rem;
+`
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  gap: 0.875rem;
+`
+
+export const ButtonOutlined = styled(Button)`
+  border: 1px solid ${colorsV3.gray900};
+  background: ${colorsV3.white};
+  color: ${colorsV3.gray900};
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+
+  &:hover,
+  &:focus {
+    color: ${colorsV3.gray900};
   }
 
   ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
-    ${Button} {
-      width: 2rem;
-      height: 2rem;
-    }
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
+  }
+`
+
+export const ButtonFilled = styled(Button)`
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+  ${MEDIUM_SMALL_SCREEN_MEDIA_QUERY} {
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
   }
 `
 
