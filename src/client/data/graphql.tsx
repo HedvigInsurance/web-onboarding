@@ -7343,6 +7343,8 @@ export type Mutation = {
   login_verifyOtpAttempt: VerifyOtpLoginAttemptResult
   /** Resends the OTP to the provided credential */
   login_resendOtp: Scalars['ID']
+  /** Registers a device to receive push notifications */
+  notification_registerDevice?: Maybe<Scalars['Boolean']>
   /** Initiate widget, widget should send requestId, locale, partner id */
   initWidget: PartnerInitWidgetResult
   /**
@@ -7495,6 +7497,10 @@ export type MutationLogin_VerifyOtpAttemptArgs = {
 
 export type MutationLogin_ResendOtpArgs = {
   id: Scalars['ID']
+}
+
+export type MutationNotification_RegisterDeviceArgs = {
+  input: NotificationRegisterDeviceInput
 }
 
 export type MutationInitWidgetArgs = {
@@ -7797,6 +7803,16 @@ export type NorwegianTravelDetails = {
 export enum NorwegianTravelLineOfBusiness {
   Regular = 'REGULAR',
   Youth = 'YOUTH',
+}
+
+export enum NotificationDevice {
+  Android = 'ANDROID',
+  Ios = 'IOS',
+}
+
+export type NotificationRegisterDeviceInput = {
+  token: Scalars['String']
+  device: NotificationDevice
 }
 
 export type OnboardingSigningSuccess = {
@@ -9834,6 +9850,7 @@ export type SwedishCarInfo = {
   modelYear?: Maybe<Scalars['String']>
   registrationNumber?: Maybe<Scalars['String']>
   personalRegistrationNumber?: Maybe<Scalars['String']>
+  currentInsuranceHolderSsn?: Maybe<Scalars['String']>
 }
 
 export enum SwedishCarLineOfBusiness {
@@ -11878,7 +11895,20 @@ export type QuoteDataFragment = { __typename?: 'BundledQuote' } & Pick<
           SwedishAccidentDetails,
           'isStudent'
         >)
-      | { __typename?: 'SwedishCarDetails' }
+      | ({ __typename?: 'SwedishCarDetails' } & Pick<
+          SwedishCarDetails,
+          'registrationNumber'
+        > & {
+            info?: Maybe<
+              { __typename?: 'SwedishCarInfo' } & Pick<
+                SwedishCarInfo,
+                | 'model'
+                | 'modelYear'
+                | 'makeAndModel'
+                | 'currentInsuranceHolderSsn'
+              >
+            >
+          })
       | ({ __typename?: 'NorwegianHomeContentsDetails' } & Pick<
           NorwegianHomeContentsDetails,
           'coInsured' | 'livingSpace' | 'street' | 'zipCode'
@@ -12353,7 +12383,10 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
             info?: Maybe<
               { __typename?: 'SwedishCarInfo' } & Pick<
                 SwedishCarInfo,
-                'model' | 'modelYear' | 'makeAndModel'
+                | 'model'
+                | 'modelYear'
+                | 'makeAndModel'
+                | 'currentInsuranceHolderSsn'
               >
             >
           })
@@ -12474,6 +12507,15 @@ export const QuoteDataFragmentDoc = gql`
       }
       ... on SwedishAccidentDetails {
         isStudent
+      }
+      ... on SwedishCarDetails {
+        registrationNumber
+        info {
+          model
+          modelYear
+          makeAndModel
+          currentInsuranceHolderSsn
+        }
       }
       ... on NorwegianHomeContentsDetails {
         coInsured
@@ -12658,6 +12700,15 @@ export const QuoteDataFragmentFragmentDoc = gql`
       ... on SwedishAccidentDetails {
         isStudent
       }
+      ... on SwedishCarDetails {
+        registrationNumber
+        info {
+          model
+          modelYear
+          makeAndModel
+          currentInsuranceHolderSsn
+        }
+      }
       ... on NorwegianHomeContentsDetails {
         coInsured
         livingSpace
@@ -12689,14 +12740,6 @@ export const QuoteDataFragmentFragmentDoc = gql`
         zipCode
         coInsured
         isStudent
-      }
-      ... on SwedishCarDetails {
-        registrationNumber
-        info {
-          model
-          modelYear
-          makeAndModel
-        }
       }
     }
   }
