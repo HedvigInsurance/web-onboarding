@@ -14949,7 +14949,7 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-personnummer@^3.1.4:
+personnummer@3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/personnummer/-/personnummer-3.1.4.tgz#e924c983d80096ef99576fdf6dadd746d5519198"
   integrity sha512-Bhc3dosCqMlUuAVxKzHeGGClbhGuBCE5OCAkomf2edraStsrGQlQmq0rla4kVR4a1D0G/HEJCE829lP/LJjd/g==
