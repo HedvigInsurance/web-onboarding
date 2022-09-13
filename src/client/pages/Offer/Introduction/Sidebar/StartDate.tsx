@@ -243,6 +243,15 @@ const DateForm = ({
       })
     }
   }
+  const dateInputForm = (
+    <DateInputForm
+      open={datePickerOpen}
+      setOpen={setDatePickerOpen}
+      date={dateValue || new Date()}
+      setDate={onChange}
+      isCurrentInsurerSwichable={isSwitcher}
+    />
+  )
   return (
     <RowButtonWrapper fieldLayout={fieldLayout}>
       {displayLabel && (
@@ -277,23 +286,10 @@ const DateForm = ({
       </RowButton>
       {modal ? (
         <DateInputModalWrapper isOpen={datePickerOpen}>
-          {/* FIXME: extract and reuse */}
-          <DateInputForm
-            open={datePickerOpen}
-            setOpen={setDatePickerOpen}
-            date={dateValue || new Date()}
-            setDate={onChange}
-            isCurrentInsurerSwichable={isSwitcher}
-          />
+          {dateInputForm}
         </DateInputModalWrapper>
       ) : (
-        <DateInputForm
-          open={datePickerOpen}
-          setOpen={setDatePickerOpen}
-          date={dateValue || new Date()}
-          setDate={onChange}
-          isCurrentInsurerSwichable={isSwitcher}
-        />
+        dateInputForm
       )}
     </RowButtonWrapper>
   )
