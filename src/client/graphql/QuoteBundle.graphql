@@ -74,6 +74,15 @@ fragment QuoteData on BundledQuote {
     ... on SwedishAccidentDetails {
       isStudent
     }
+    ... on SwedishCarDetails {
+      registrationNumber
+      info {
+        model
+        modelYear
+        makeAndModel
+        currentInsuranceHolderSsn
+      }
+    }
 
     ... on NorwegianHomeContentsDetails {
       coInsured

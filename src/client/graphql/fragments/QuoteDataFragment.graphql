@@ -76,6 +76,15 @@ fragment QuoteDataFragment on BundledQuote {
     ... on SwedishAccidentDetails {
       isStudent
     }
+    ... on SwedishCarDetails {
+      registrationNumber
+      info {
+        model
+        modelYear
+        makeAndModel
+        currentInsuranceHolderSsn
+      }
+    }
 
     ... on NorwegianHomeContentsDetails {
       coInsured
@@ -110,14 +119,6 @@ fragment QuoteDataFragment on BundledQuote {
       zipCode
       coInsured
       isStudent
-    }
-    ... on SwedishCarDetails {
-      registrationNumber
-      info {
-        model
-        modelYear
-        makeAndModel
-      }
     }
   }
 }

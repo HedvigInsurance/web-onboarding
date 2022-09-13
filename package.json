@@ -157,6 +157,7 @@
     "node-fetch": "^2.6.0",
     "path-browserify": "^1.0.1",
     "path-to-regexp": "1.7.0",
+    "personnummer": "3.1.4",
     "querystring": "^0.2.0",
     "react": "^16.13.0",
     "react-animate-height": "2.1.2",

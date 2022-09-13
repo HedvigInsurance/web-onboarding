@@ -31,6 +31,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
 import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
 import { isCar } from 'api/quoteSelector'
+import { isCarSwitcher } from 'api/quoteBundleSelectors'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate, useStartDateProps } from './StartDate'
@@ -225,7 +226,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const isLoading =
     isLoadingQuoteCart || isLoadingCampaign || startDateProps.isLoading
   const isSwitcher = hasCurrentInsurer(offerData)
-  const isSwitchableForCar = false
+  const [carCancellationEnabled] = useFeature([Features.CAR_CANCELLATION])
+  const isSwitchableForCar =
+    carCancellationEnabled && isCarSwitcher(offerData.quotes)
 
   // we might need to have a different data point for checking current insurer for car... // siau 2022-09-01
   // It seems that `hasCurrentInsurer` returns true for some Car offers even though we do not support that yet. So let's play it safe and just define it as false for now.
