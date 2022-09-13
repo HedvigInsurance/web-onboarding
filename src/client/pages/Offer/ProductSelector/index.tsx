@@ -79,6 +79,12 @@ export const ProductSelector = ({
     [quoteCartQueryData],
   )
 
+  const areChoicesAvailable =
+    standaloneProducts.length + additionalProducts.length > 1
+  if (!areChoicesAvailable) {
+    return null
+  }
+
   return (
     <ContainerWrapper>
       <Container>
