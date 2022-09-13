@@ -444,5 +444,9 @@
   "DOWNLOAD_PAGE_CAR_SWITCHER_SECTION_HEADING": "Your previous insurance",
   "DOWNLOAD_PAGE_CAR_SWITCHER_HEADING": "How to cancel your previous insurance",
   "DOWNLOAD_PAGE_CAR_SWITCHER_BODY": "Simply click the link you’ll have in your inbox shortly and follow the instructions. Questions? Chat with us in the app, and we’ll be happy to help.",
-  "INITIATE_CAR_CANCELLATION_PAGE_TITLE": "Cancel your old car insurance"
+  "INITIATE_CAR_CANCELLATION_PAGE_TITLE": "Cancel your old car insurance",
+  "CAR_SWITCHER_TOO_SOON_HEADING": "For your information",
+  "CAR_SWITCHER_TOO_SOON_BODY": "Since your previous insurance seem to expire quite soon, you’ll need to contact the insurer yourself to cancel it. Don’t worry, it’s easy.\n\n1. Sign an insurance with Hedvig\n2. Contact your previous insurer and let them know you want to cancel your insurance\n3. Done, your new insurance with Hedvig activates on your selected date. ",
+  "CAR_SWITCHER_TOO_SOON_CONFIRM": "OK, I understand",
+  "START_DATE_SELECT_DATE": "Select date"
 }

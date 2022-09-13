@@ -97,15 +97,15 @@ export const Modal = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !!onClose) {
-        onClose()
+      if (e.key === 'Escape') {
+        onClose?.()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [hasOnCloseFunction, onClose])
+  }, [onClose])
 
   return (
     <Wrapper
