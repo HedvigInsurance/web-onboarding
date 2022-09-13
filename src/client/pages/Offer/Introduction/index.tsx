@@ -13,7 +13,7 @@ import { hasCar } from 'api/quoteBundleSelectors'
 
 import { ExternalInsuranceProvider } from './ExternalInsuranceProvider'
 
-import { Sidebar } from './Sidebar'
+import { Sidebar } from './Sidebar/Sidebar'
 import { HeroOfferDetails } from './HeroOfferDetails'
 
 const HERO_HEIGHT_LARGE_SCREEN = 600
