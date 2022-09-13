@@ -146,10 +146,8 @@ export const isCarSwitcher = (
   }
   const carQuote = quotes.find(quoteSelector.isCar)!
   const inputSsn = carQuote.ssn
-  const currentHolderSsn = normalizeSsn(
-    (carQuote?.quoteDetails as SwedishCarDetails).info
-      ?.currentInsuranceHolderSsn,
-  )
+  const currentHolderSsn = (carQuote?.quoteDetails as SwedishCarDetails).info
+    ?.currentInsuranceHolderSsn
   return isEqualSsn(inputSsn, currentHolderSsn)
 }
 
