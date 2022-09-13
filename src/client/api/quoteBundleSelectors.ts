@@ -1,7 +1,13 @@
-import { QuoteBundle, BundledQuote, PerilV2 } from 'data/graphql'
+import Personnummer from 'personnummer'
+import {
+  QuoteBundle,
+  BundledQuote,
+  PerilV2,
+  SwedishCarDetails,
+} from 'data/graphql'
 import { MarketLabel } from 'shared/clientConfig'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
-import { OfferPersonInfo, Address } from '../pages/Offer/types'
+import { OfferPersonInfo, Address } from 'pages/Offer/types'
 import * as quoteSelector from './quoteSelector'
 
 export const isMultiQuote = (bundle: QuoteBundle | undefined) => {
@@ -128,8 +134,38 @@ export const getFirstInsuranceType = (bundle: QuoteBundle) => {
   return bundle.quotes?.[0]?.data.type
 }
 
-export const hasCar = (quotes: BundledQuote[]) => {
+export const hasCar = (quotes: readonly Pick<BundledQuote, 'data'>[]) => {
   return quotes.some(quoteSelector.isCar)
+}
+
+export const isCarSwitcher = (
+  quotes: readonly Pick<BundledQuote, 'data' | 'ssn' | 'quoteDetails'>[],
+) => {
+  if (!hasCar(quotes)) {
+    return false
+  }
+  const carQuote = quotes.find(quoteSelector.isCar)!
+  const inputSsn = carQuote.ssn
+  const currentHolderSsn = normalizeSsn(
+    (carQuote?.quoteDetails as SwedishCarDetails).info
+      ?.currentInsuranceHolderSsn,
+  )
+  return isEqualSsn(inputSsn, currentHolderSsn)
+}
+
+const isEqualSsn = (
+  a: string | undefined | null,
+  b: string | undefined | null,
+): boolean => {
+  return (
+    !!(a && b) && Personnummer.valid(a) && normalizeSsn(a) === normalizeSsn(b)
+  )
+}
+
+// 198009123657 vs 800912-3657
+const normalizeSsn = (ssn: string | undefined | null) => {
+  if (!ssn || !Personnummer.valid(ssn)) return ssn
+  return Personnummer.parse(ssn).format(true)
 }
 
 export const isStudent = (quotes: BundledQuote[]) => {
@@ -186,6 +222,7 @@ export const getAllPerilsForQuoteBundle = (bundle: QuoteBundle) => {
 }
 
 export const getUniquePerilsForQuoteBundles = (bundles: QuoteBundle[]) => {
+  // noinspection UnnecessaryLocalVariableJS
   const uniquePerils = bundles
     .reduce(
       (accumulated, bundle) =>

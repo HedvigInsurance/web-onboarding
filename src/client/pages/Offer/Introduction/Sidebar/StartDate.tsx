@@ -38,6 +38,8 @@ import {
 import { isCar } from 'api/quoteSelector'
 import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { isCarSwitcher } from 'api/quoteBundleSelectors'
+import { Features, useFeature } from 'utils/hooks/useFeature'
 import { CancellationOptions } from './CancellationOptions'
 import { TooSoonSwitcherErrorModal } from './TooSoonSwitcherErrorModal'
 
@@ -189,6 +191,7 @@ const getDateFormat = match<MarketLabel, string>([
 type DateFormProps = {
   startDate: string | null
   currentInsurer?: CurrentInsurer
+  userIsCarSwitcher?: boolean
   dataCollectionId?: string
   quoteDisplayName: string
   fieldLayout: TFieldLayout
@@ -203,6 +206,7 @@ type DateFormProps = {
 const DateForm = ({
   startDate,
   currentInsurer,
+  userIsCarSwitcher = false,
   dataCollectionId,
   quoteDisplayName,
   fieldLayout,
@@ -216,9 +220,8 @@ const DateForm = ({
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
 
-  // FIXME: get this data from BE
-  const isCarSwitcher = false
-  const isSwitcher = currentInsurer?.switchable || isCarSwitcher
+  // We should take car-specific switchable from backend.  So far we don't have Insurely integration for car yet
+  const isSwitcher = currentInsurer?.switchable || userIsCarSwitcher
 
   const dateValue = getDefaultDateValue(startDate, isSwitcher)
   const [dateLocale, setDateLocale] = useState<Locale | null>(null)
@@ -263,7 +266,7 @@ const DateForm = ({
               {isSwitcher && !dateValue && (
                 <StartDateLabelSwitcher
                   dataCollectionId={dataCollectionId}
-                  isCarSwitcher={isCarSwitcher}
+                  isCarSwitcher={isSwitcher}
                 />
               )}
               {dateValue && getDateLabel()}
@@ -274,6 +277,7 @@ const DateForm = ({
       </RowButton>
       {modal ? (
         <DateInputModalWrapper isOpen={datePickerOpen}>
+          {/* FIXME: extract and reuse */}
           <DateInputForm
             open={datePickerOpen}
             setOpen={setDatePickerOpen}
@@ -318,8 +322,9 @@ export const StartDate = ({
   modal = false,
   size = 'lg',
 }: StartDateProps) => {
-  // FIXME: use actual data from BE
-  const isCarSwitcher = false
+  const [carCancellationEnabled] = useFeature([Features.CAR_CANCELLATION])
+  const userIsCarSwitcher =
+    carCancellationEnabled && isCarSwitcher(selectedQuotes)
   const textKeys = useTextKeys()
   const [showError, setShowError] = useState(false)
   const [showTooSoonError, setShowToSoonError] = useState(false)
@@ -331,7 +336,7 @@ export const StartDate = ({
   ) => {
     try {
       const dateIsTooSoon = isLessThanOneWeekAway(newDateValue)
-      setShowToSoonError(isCarSwitcher && dateIsTooSoon)
+      setShowToSoonError(userIsCarSwitcher && dateIsTooSoon)
 
       setShowError(false)
       setLoadingQuoteIds(quoteIds)
@@ -372,6 +377,7 @@ export const StartDate = ({
           <DateForm
             startDate={selectedQuotes[0].startDate}
             currentInsurer={selectedQuotes[0].currentInsurer ?? undefined}
+            userIsCarSwitcher={userIsCarSwitcher}
             quoteDisplayName={selectedQuotes[0].displayName}
             dataCollectionId={selectedQuotes[0].dataCollectionId ?? undefined}
             modal={modal}
@@ -405,6 +411,7 @@ export const StartDate = ({
                   key={quote.id}
                   startDate={quote.startDate}
                   currentInsurer={quote.currentInsurer ?? undefined}
+                  userIsCarSwitcher={userIsCarSwitcher}
                   quoteDisplayName={quote.displayName}
                   dataCollectionId={quote.dataCollectionId ?? undefined}
                   modal={modal}
