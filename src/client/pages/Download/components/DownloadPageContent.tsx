@@ -6,7 +6,10 @@ import {
   LARGE_SCREEN_MEDIA_QUERY,
   MEDIUM_SCREEN_MEDIA_QUERY,
 } from 'utils/mediaQueries'
-import { useFeature, Features } from 'utils/hooks/useFeature'
+import { Features, useFeature } from 'utils/hooks/useFeature'
+import { useActiveContractBundles } from 'pages/Download/useActiveContractBundles'
+import { TypeOfContract } from 'data/graphql'
+import { Feature } from 'shared/clientConfig'
 import { GetAppButtons } from './GetAppButtons'
 import { SwitchingNotice } from './SwitchingNotice'
 import { useGetImageUrl } from './useGetImageUrl'
@@ -98,13 +101,17 @@ export const DownloadPageContent = ({
   const textKeys = useTextKeys()
   const imageUrl = useGetImageUrl()
 
-  const [isCrossSellEnabled] = useFeature([
+  const [crossSellEnabled, carCancellationEnabled] = useFeature([
     Features.CONFIRMATION_PAGE_CROSS_SELL,
+    Feature.CAR_CANCELLATION,
   ])
 
-  // FIXME: This will be fixed in GRW-1453
-  const isCarSwitcher = false
-
+  const { contracts = [] } = useActiveContractBundles()
+  const carSwitchingContract = contracts.find(
+    (contract) =>
+      isCarContract(contract) && contract.switchedFromInsuranceProvider,
+  )
+  const isCarSwitcher = carCancellationEnabled && !!carSwitchingContract
   return (
     <>
       <HeadlineWrapper imageUrl={imageUrl}>
@@ -121,9 +128,19 @@ export const DownloadPageContent = ({
       </HeadlineWrapper>
 
       <AdditionalContentWrapper>
-        {isCarSwitcher && <SwitchingNotice />}
-        {isCrossSellEnabled && <CrossSells />}
+        {isCarSwitcher && (
+          <SwitchingNotice inception={carSwitchingContract?.inception} />
+        )}
+        {crossSellEnabled && <CrossSells />}
       </AdditionalContentWrapper>
     </>
   )
+}
+
+const isCarContract = (contract: { typeOfContract: string }) => {
+  return [
+    TypeOfContract.SeCarTraffic,
+    TypeOfContract.SeCarHalf,
+    TypeOfContract.SeCarFull,
+  ].includes(contract.typeOfContract as TypeOfContract)
 }

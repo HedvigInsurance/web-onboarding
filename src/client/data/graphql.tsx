@@ -11368,6 +11368,34 @@ export type Welcome = {
   paragraph: Scalars['String']
 }
 
+export type ActiveContractBundlesQueryVariables = Exact<{
+  locale: Locale
+}>
+
+export type ActiveContractBundlesQuery = { __typename?: 'Query' } & {
+  activeContractBundles: Array<
+    { __typename?: 'ContractBundle' } & {
+      contracts: Array<
+        { __typename?: 'Contract' } & Pick<
+          Contract,
+          'typeOfContract' | 'inception' | 'switchedFromInsuranceProvider'
+        >
+      >
+      potentialCrossSells: Array<
+        { __typename?: 'CrossSell' } & Pick<
+          CrossSell,
+          | 'type'
+          | 'contractType'
+          | 'webTitle'
+          | 'webDescription'
+          | 'imageUrl'
+          | 'callToAction'
+        >
+      >
+    }
+  >
+}
+
 export type AddCampaignCodeMutationVariables = Exact<{
   id: Scalars['ID']
   code: Scalars['String']
@@ -11726,28 +11754,6 @@ export type PaymentStatusQuery = { __typename?: 'Query' } & Pick<
   Query,
   'payinMethodStatus'
 >
-
-export type PotentialCrossSellsQueryVariables = Exact<{
-  locale: Locale
-}>
-
-export type PotentialCrossSellsQuery = { __typename?: 'Query' } & {
-  activeContractBundles: Array<
-    { __typename?: 'ContractBundle' } & {
-      potentialCrossSells: Array<
-        { __typename?: 'CrossSell' } & Pick<
-          CrossSell,
-          | 'type'
-          | 'contractType'
-          | 'webTitle'
-          | 'webDescription'
-          | 'imageUrl'
-          | 'callToAction'
-        >
-      >
-    }
-  >
-}
 
 export type PriceQueryVariables = Exact<{
   id: Scalars['ID']
@@ -12756,6 +12762,76 @@ export const StandaloneQuoteFragmentDoc = gql`
     }
   }
 `
+export const ActiveContractBundlesDocument = gql`
+  query ActiveContractBundles($locale: Locale!) {
+    activeContractBundles {
+      contracts {
+        typeOfContract
+        inception
+        switchedFromInsuranceProvider
+      }
+      potentialCrossSells(locale: $locale) {
+        type
+        contractType
+        webTitle
+        webDescription
+        imageUrl
+        callToAction
+      }
+    }
+  }
+`
+
+/**
+ * __useActiveContractBundlesQuery__
+ *
+ * To run a query within a React component, call `useActiveContractBundlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActiveContractBundlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActiveContractBundlesQuery({
+ *   variables: {
+ *      locale: // value for 'locale'
+ *   },
+ * });
+ */
+export function useActiveContractBundlesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ActiveContractBundlesQuery,
+    ActiveContractBundlesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    ActiveContractBundlesQuery,
+    ActiveContractBundlesQueryVariables
+  >(ActiveContractBundlesDocument, options)
+}
+export function useActiveContractBundlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ActiveContractBundlesQuery,
+    ActiveContractBundlesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ActiveContractBundlesQuery,
+    ActiveContractBundlesQueryVariables
+  >(ActiveContractBundlesDocument, options)
+}
+export type ActiveContractBundlesQueryHookResult = ReturnType<
+  typeof useActiveContractBundlesQuery
+>
+export type ActiveContractBundlesLazyQueryHookResult = ReturnType<
+  typeof useActiveContractBundlesLazyQuery
+>
+export type ActiveContractBundlesQueryResult = ApolloReactCommon.QueryResult<
+  ActiveContractBundlesQuery,
+  ActiveContractBundlesQueryVariables
+>
 export const AddCampaignCodeDocument = gql`
   mutation AddCampaignCode($id: ID!, $code: String!) {
     quoteCart_addCampaign(id: $id, code: $code) {
@@ -13912,71 +13988,6 @@ export type PaymentStatusLazyQueryHookResult = ReturnType<
 export type PaymentStatusQueryResult = ApolloReactCommon.QueryResult<
   PaymentStatusQuery,
   PaymentStatusQueryVariables
->
-export const PotentialCrossSellsDocument = gql`
-  query PotentialCrossSells($locale: Locale!) {
-    activeContractBundles {
-      potentialCrossSells(locale: $locale) {
-        type
-        contractType
-        webTitle
-        webDescription
-        imageUrl
-        callToAction
-      }
-    }
-  }
-`
-
-/**
- * __usePotentialCrossSellsQuery__
- *
- * To run a query within a React component, call `usePotentialCrossSellsQuery` and pass it any options that fit your needs.
- * When your component renders, `usePotentialCrossSellsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePotentialCrossSellsQuery({
- *   variables: {
- *      locale: // value for 'locale'
- *   },
- * });
- */
-export function usePotentialCrossSellsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    PotentialCrossSellsQuery,
-    PotentialCrossSellsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    PotentialCrossSellsQuery,
-    PotentialCrossSellsQueryVariables
-  >(PotentialCrossSellsDocument, options)
-}
-export function usePotentialCrossSellsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    PotentialCrossSellsQuery,
-    PotentialCrossSellsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    PotentialCrossSellsQuery,
-    PotentialCrossSellsQueryVariables
-  >(PotentialCrossSellsDocument, options)
-}
-export type PotentialCrossSellsQueryHookResult = ReturnType<
-  typeof usePotentialCrossSellsQuery
->
-export type PotentialCrossSellsLazyQueryHookResult = ReturnType<
-  typeof usePotentialCrossSellsLazyQuery
->
-export type PotentialCrossSellsQueryResult = ApolloReactCommon.QueryResult<
-  PotentialCrossSellsQuery,
-  PotentialCrossSellsQueryVariables
 >
 export const PriceDocument = gql`
   query Price($id: ID!, $locale: Locale!) {

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { usePotentialCrossSellsQuery, CrossSellType } from 'data/graphql'
+import { CrossSellType, useActiveContractBundlesQuery } from 'data/graphql'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
 const RELEVANT_CROSS_SELL_TYPES = new Set<CrossSellType>([
@@ -14,10 +14,10 @@ const CROSS_SELL_URLS: Partial<Record<CrossSellType, string>> = {
   [CrossSellType.House]: '/new-member/home-insurance?code=gethome20',
 }
 
-export const useCrossSells = () => {
+export const useActiveContractBundles = () => {
   const { isoLocale } = useCurrentLocale()
 
-  const result = usePotentialCrossSellsQuery({
+  const result = useActiveContractBundlesQuery({
     variables: { locale: isoLocale },
   })
 
@@ -41,6 +41,9 @@ export const useCrossSells = () => {
           ...crossSell,
           href: CROSS_SELL_URLS[crossSell.type],
         })),
+      contracts: result.data?.activeContractBundles.flatMap(
+        (bundle) => bundle.contracts,
+      ),
     }
   }, [result])
 }

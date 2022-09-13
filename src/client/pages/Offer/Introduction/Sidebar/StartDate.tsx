@@ -2,14 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { css } from '@emotion/core'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import {
-  differenceInDays,
-  format as formatDate,
-  isToday,
-  Locale,
-  parse,
-  startOfDay,
-} from 'date-fns'
+import { format as formatDate, isToday, Locale, parse } from 'date-fns'
 import { motion } from 'framer-motion'
 import hexToRgba from 'hex-to-rgba'
 import { match } from 'matchly'
@@ -40,6 +33,7 @@ import * as quoteBundleSelector from 'api/quoteBundleSelectors'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { isCarSwitcher } from 'api/quoteBundleSelectors'
 import { Features, useFeature } from 'utils/hooks/useFeature'
+import { isStartDateValidForCarSwitching } from 'utils/isStartDateValidForCarSwitching'
 import { CancellationOptions } from './CancellationOptions'
 import { TooSoonSwitcherErrorModal } from './TooSoonSwitcherErrorModal'
 
@@ -295,12 +289,6 @@ const DateForm = ({
   )
 }
 
-const isLessThanOneWeekAway = (date: Date | null): boolean => {
-  if (!date) return false
-
-  return differenceInDays(startOfDay(date), startOfDay(new Date())) < 7
-}
-
 export type StartDateProps = {
   singleDate: boolean
   selectedQuotes: BundledQuote[]
@@ -331,8 +319,9 @@ export const StartDate = ({
     quoteIds: Array<string>,
   ) => {
     try {
-      const dateIsTooSoon = isLessThanOneWeekAway(newDateValue)
-      setShowToSoonError(userIsCarSwitcher && dateIsTooSoon)
+      setShowToSoonError(
+        userIsCarSwitcher && !isStartDateValidForCarSwitching(newDateValue),
+      )
 
       setShowError(false)
       setLoadingQuoteIds(quoteIds)
