@@ -32,6 +32,7 @@ import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
 import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
 import { isCar } from 'api/quoteSelector'
 import { isCarSwitcher } from 'api/quoteBundleSelectors'
+import { isStartDateValidForCarSwitching } from 'utils/isStartDateValidForCarSwitching'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate, useStartDateProps } from './StartDate'
@@ -229,10 +230,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [carCancellationEnabled] = useFeature([Features.CAR_CANCELLATION])
   const isSwitchableForCar =
     carCancellationEnabled && isCarSwitcher(offerData.quotes)
+  const carStartDate = offerData.quotes.find(isCar)?.startDate
 
   // we might need to have a different data point for checking current insurer for car... // siau 2022-09-01
   // It seems that `hasCurrentInsurer` returns true for some Car offers even though we do not support that yet. So let's play it safe and just define it as false for now.
-  const showSwitchingNotice = isCarQuote && isSwitchableForCar
+  const showSwitchingNotice =
+    isCarQuote &&
+    isSwitchableForCar &&
+    // Show notice if date is valid _or_ user hasn't selected a date yet
+    (isStartDateValidForCarSwitching(carStartDate) || !carStartDate)
 
   return (
     <>
@@ -252,7 +258,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Body>
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>
-                  <p>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</p>
+                  {isSwitchableForCar ? (
+                    <p>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL_SWITCHER()}</p>
+                  ) : (
+                    <p>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</p>
+                  )}
                   {!isSwitcher && (
                     <TooltipIcon
                       body={textKeys.SIDEBAR_START_DATE_INFO_TEXT()}
@@ -262,7 +272,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   )}
                 </BodyTitle>
                 <StartDate {...startDateProps} modal size="sm" />
-                {showSwitchingNotice && <SwitchingNotice />}
+                {showSwitchingNotice && (
+                  <SwitchingNotice
+                    isDateValid={isStartDateValidForCarSwitching(carStartDate)}
+                  />
+                )}
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
