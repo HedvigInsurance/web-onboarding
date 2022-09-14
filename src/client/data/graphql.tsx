@@ -11553,32 +11553,15 @@ export type EditBundledQuoteMutationVariables = Exact<{
 
 export type EditBundledQuoteMutation = { __typename?: 'Mutation' } & {
   quoteCart_editQuote:
-    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
-          bundle?: Maybe<
-            { __typename?: 'QuoteBundle' } & {
-              possibleVariations: Array<
-                { __typename?: 'QuoteBundleVariant' } & Pick<
-                  QuoteBundleVariant,
-                  'id' | 'tag'
-                > & {
-                    bundle: { __typename?: 'QuoteBundle' } & Pick<
-                      QuoteBundle,
-                      'displayName'
-                    > & {
-                        bundleCost: {
-                          __typename?: 'InsuranceCost'
-                        } & BundleCostDataFragmentFragment
-                        quotes: Array<
-                          {
-                            __typename?: 'BundledQuote'
-                          } & QuoteDataFragmentFragment
-                        >
-                      }
-                  }
-              >
-            }
-          >
-        })
+    | ({ __typename?: 'QuoteCart' } & {
+        bundle?: Maybe<
+          { __typename?: 'QuoteBundle' } & {
+            quotes: Array<
+              { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
+            >
+          }
+        >
+      })
     | ({ __typename?: 'QuoteBundleError' } & Pick<
         QuoteBundleError,
         'message' | 'type'
@@ -13348,20 +13331,9 @@ export const EditBundledQuoteDocument = gql`
       payload: $payload
     ) {
       ... on QuoteCart {
-        id
         bundle {
-          possibleVariations {
-            id
-            tag(locale: $locale)
-            bundle {
-              displayName(locale: $locale)
-              bundleCost {
-                ...BundleCostDataFragment
-              }
-              quotes {
-                ...QuoteDataFragment
-              }
-            }
+          quotes {
+            ...QuoteDataFragment
           }
         }
       }
@@ -13374,7 +13346,6 @@ export const EditBundledQuoteDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
 `
 export type EditBundledQuoteMutationFn = ApolloReactCommon.MutationFunction<
