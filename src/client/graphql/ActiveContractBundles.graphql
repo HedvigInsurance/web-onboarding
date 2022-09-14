@@ -1,5 +1,10 @@
-query PotentialCrossSells($locale: Locale!) {
+query ActiveContractBundles($locale: Locale!) {
   activeContractBundles {
+    contracts {
+      typeOfContract
+      inception
+      switchedFromInsuranceProvider
+    }
     potentialCrossSells(locale: $locale) {
       type
       contractType

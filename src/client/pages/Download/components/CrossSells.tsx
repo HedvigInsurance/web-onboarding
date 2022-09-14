@@ -13,7 +13,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { Arrow } from 'components/icons/Arrow'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
-import { useCrossSells } from '../useCrossSells'
+import { useActiveContractBundles } from '../useActiveContractBundles'
 
 const CrossSellSectionHeader = styled.p({
   textTransform: 'uppercase',
@@ -39,7 +39,7 @@ const Cta = styled.p({
 })
 
 export const CrossSells = () => {
-  const { crossSells } = useCrossSells()
+  const { crossSells } = useActiveContractBundles()
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
 
