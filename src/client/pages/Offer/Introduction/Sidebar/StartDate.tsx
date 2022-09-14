@@ -468,11 +468,7 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
   )
 
   const selectedQuotes = quoteBundleSelector.getQuotes(selectedBundle)
-  const [editQuote, { loading: isLoading }] = useEditBundledQuoteMutation({
-    refetchQueries: ['QuoteCart'],
-    awaitRefetchQueries: true,
-    notifyOnNetworkStatusChange: true,
-  })
+  const [editQuote, { loading: isLoading }] = useEditBundledQuoteMutation()
 
   const onSelect = async (quoteId: string, startDate: Date | null) => {
     const formattedDateValue =
