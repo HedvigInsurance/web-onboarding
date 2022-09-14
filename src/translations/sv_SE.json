@@ -448,5 +448,6 @@
   "CAR_SWITCHER_TOO_SOON_HEADING": "För din information",
   "CAR_SWITCHER_TOO_SOON_BODY": "Eftersom din nuvarande försäkring verkar gå ut ganska snart behöver du själv kontakta försäkringsbolaget för att säga upp den. Oroa dig inte, det är enkelt.\n\n1. Teckna en försäkring med Hedvig\n2. Kontakta försäkringsbolaget och säg att du vill säga upp din tidigare försäkring\n3. Din försäkring med Hedvig aktiveras på ditt valda startdatum. ",
   "CAR_SWITCHER_TOO_SOON_CONFIRM": "Ok, jag förstår",
-  "LANDING_PAGE_UPDATE_CHOICES_SUBHEADING": ""
+  "LANDING_PAGE_UPDATE_CHOICES_SUBHEADING": "",
+  "OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V2": "Vi ser att din bil redan är försäkrad med ett annat försäkringsbolag. Oroa dig inte, det är enkelt att byta.\n\n1. Teckna en bilförsäkring med Hedvig\n2. Du får ett mejl med en länk till att säga upp din tidigare försäkring med BankID.\n3. Vi kontaktar ditt tidigare försäkringsbolag och säger upp din försäkring åt dig.\n4. Klart! Din nya bilförsäkring med Hedvig aktiveras automatiskt samma dag som din tidigare går ut.\n\nObservera: om din tidigare bilförsäkring går ut inom 1 vecka behöver du själv kontakta ditt försäkringsbolag för att säga upp den."
 }
