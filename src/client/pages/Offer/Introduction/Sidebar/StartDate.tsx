@@ -223,7 +223,9 @@ const DateForm = ({
   // We should take car-specific switchable from backend.  So far we don't have Insurely integration for car yet
   const isSwitcher = currentInsurer?.switchable || userIsCarSwitcher
 
-  const dateValue = getDefaultDateValue(startDate, isSwitcher)
+  // We do not accept null as default value for Car insurances, so even if user is a switcher, we do not include
+  // car switchers in this logic
+  const dateValue = getDefaultDateValue(startDate, !!currentInsurer?.switchable)
   const [dateLocale, setDateLocale] = useState<Locale | null>(null)
 
   const [datePickerOpen, setDatePickerOpen] = useState(false)
@@ -273,10 +275,7 @@ const DateForm = ({
           {!loading && (
             <>
               {isSwitcher && !dateValue && (
-                <StartDateLabelSwitcher
-                  dataCollectionId={dataCollectionId}
-                  isCarSwitcher={isSwitcher}
-                />
+                <StartDateLabelSwitcher dataCollectionId={dataCollectionId} />
               )}
               {dateValue && getDateLabel()}
               <ChevronDown />

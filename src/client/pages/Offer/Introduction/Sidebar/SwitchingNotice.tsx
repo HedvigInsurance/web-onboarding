@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 import * as Notice from 'components/Notice/Notice'
 import { Shuffle } from 'components/icons/Shuffle'
 import { useTextKeys } from 'utils/textKeys'
@@ -15,8 +16,8 @@ export const SwitchingNotice = () => {
       <Notice.Header>
         {textKeys.SIDEBAR_SWITCHING_NOTICE_HEADING()}
       </Notice.Header>
-      {textKeys.SIDEBAR_SWITCHING_NOTICE_BODY()}
-      <br />
+      <ReactMarkdown source={textKeys.SIDEBAR_SWITCHING_NOTICE_BODY()} />
+
       <a href="#">{textKeys.SIDEBAR_SWITCHING_NOTICE_LINK()}</a>
     </StyleedNoticeRoot>
   )

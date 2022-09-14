@@ -448,5 +448,5 @@
   "CAR_SWITCHER_TOO_SOON_HEADING": "For your information",
   "CAR_SWITCHER_TOO_SOON_BODY": "Since your previous insurance seem to expire quite soon, you’ll need to contact the insurer yourself to cancel it. Don’t worry, it’s easy.\n\n1. Sign an insurance with Hedvig\n2. Contact your previous insurer and let them know you want to cancel your insurance\n3. Done, your new insurance with Hedvig activates on your selected date. ",
   "CAR_SWITCHER_TOO_SOON_CONFIRM": "OK, I understand",
-  "START_DATE_SELECT_DATE": "Select date"
+  "LANDING_PAGE_UPDATE_CHOICES_SUBHEADING": "You can always update your choices later."
 }

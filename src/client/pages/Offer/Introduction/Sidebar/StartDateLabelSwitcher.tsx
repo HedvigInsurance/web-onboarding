@@ -11,7 +11,6 @@ import { useTextKeys } from 'utils/textKeys'
 
 type Props = {
   dataCollectionId: OfferQuote['dataCollectionId']
-  isCarSwitcher?: boolean
 }
 
 const DataCollectedStartDateWrapper = styled.div`
@@ -66,7 +65,6 @@ const getValidCurrentInsurerName = (
 
 export const StartDateLabelSwitcher: React.FC<Props> = ({
   dataCollectionId,
-  isCarSwitcher,
 }) => {
   const {
     data: externalInsuranceData,
@@ -106,9 +104,7 @@ export const StartDateLabelSwitcher: React.FC<Props> = ({
       )}
       {!renewalDate && (
         <GenericLabel>
-          {isCarSwitcher
-            ? textKeys.START_DATE_SELECT_DATE()
-            : textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()}
+          {textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()}
         </GenericLabel>
       )}
     </>
