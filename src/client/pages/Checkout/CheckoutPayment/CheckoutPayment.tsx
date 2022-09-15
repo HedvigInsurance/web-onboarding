@@ -14,7 +14,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
   useStartCheckoutMutation,
   useCheckoutStatusLazyQuery,
-  useCreateQuoteBundleMutation,
+  useEditBundledQuoteMutation,
   QuoteBundleVariant,
   BundledQuote,
   CheckoutStatus,
@@ -25,7 +25,10 @@ import {
 } from 'utils/mediaQueries'
 import { Headline } from 'components/Headline/Headline'
 
-import { isQuoteBundleError, getLimitsHit } from 'api/quoteBundleErrorSelectors'
+import {
+  isQuoteBundleError,
+  getLimitsHitFromEditQuoteMutation,
+} from 'api/quoteBundleErrorSelectors'
 import { setupQuoteCartSession } from 'containers/SessionContainer'
 import { useStorage } from 'utils/StorageContainer'
 import { ErrorEventType, EventName } from 'utils/tracking/gtm/types'
@@ -241,9 +244,9 @@ export const CheckoutPayment = ({
   const sendDatadogAction = useSendDatadogAction()
   const adyenRef = useRef<HTMLDivElement | null>(null)
   const [
-    createQuoteBundle,
-    { loading: isBundleCreationInProgress },
-  ] = useCreateQuoteBundleMutation()
+    editQuote,
+    { data: editQuoteData, loading: isEditingQuote },
+  ] = useEditBundledQuoteMutation()
   const [startCheckout] = useStartCheckoutMutation()
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
@@ -349,23 +352,39 @@ export const CheckoutPayment = ({
       { setErrors }: FormikHelpers<QuoteInput>,
     ) => {
       try {
-        const { data } = await reCreateQuoteBundle(form)
-        const isUpdateQuotesFailed = isQuoteBundleError(data)
-        const limits = getLimitsHit(data)
-        if (isUpdateQuotesFailed && limits.length) {
-          setErrors({ ssn: textKeys.INVALID_FIELD() })
+        const { firstName, lastName, ssn, email, phoneNumber } = form
+        const allQuotes = getUniqueQuotesFromVariantList(bundleVariants)
+
+        for (const quote of allQuotes) {
+          await editQuote({
+            variables: {
+              quoteCartId,
+              quoteId: quote.id,
+              locale: locale.isoLocale,
+              payload: {
+                firstName,
+                lastName,
+                ssn,
+                email,
+                phoneNumber: phoneNumber?.replace(/\s/g, ''),
+              },
+            },
+          })
+
+          const limits = getLimitsHitFromEditQuoteMutation(editQuoteData)
+          if (limits.length) {
+            setErrors({ ssn: textKeys.INVALID_FIELD() })
+          }
         }
-        return data
       } catch (error) {
         if (isSsnInvalid(error.graphQLErrors)) {
           setErrors({ ssn: textKeys.INVALID_FIELD() })
         }
-        return undefined
       }
     },
     enableReinitialize: true,
   })
-  const isFormikError = Object.keys(formik.errors).length > 0
+
   useEffect(() => {
     if (is3DsComplete && checkoutStatus === undefined) {
       trackOfferEvent({ eventName: EventName.PaymentDetailsConfirmed })
@@ -416,40 +435,6 @@ export const CheckoutPayment = ({
     trackOfferEvent,
   ])
 
-  const reCreateQuoteBundle = (form: QuoteInput) => {
-    const {
-      firstName,
-      lastName,
-      birthDate,
-      email,
-      ssn,
-      phoneNumber,
-      dataCollectionId,
-    } = form
-    return createQuoteBundle({
-      variables: {
-        locale: locale.isoLocale,
-        quoteCartId,
-        quotes: getUniqueQuotesFromVariantList(bundleVariants).map(
-          ({ startDate, currentInsurer, data }) => {
-            return {
-              firstName,
-              lastName,
-              email,
-              birthDate,
-              ssn,
-              startDate,
-              currentInsurer: currentInsurer?.id,
-              phoneNumber: phoneNumber?.replace(/\s/g, ''),
-              dataCollectionId,
-              data,
-            }
-          },
-        ),
-      },
-    })
-  }
-
   const handleClickCompletePurchase = async () => {
     if (!paymentStatus) return
 
@@ -465,8 +450,8 @@ export const CheckoutPayment = ({
 
     if (isFormDataUpdated) {
       sendDatadogAction('holder_form_submit')
-      const { data } = await submitForm()
-      const isUpdateQuotesFailed = isQuoteBundleError(data)
+      await submitForm()
+      const isUpdateQuotesFailed = isQuoteBundleError(editQuoteData)
       if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
     }
 
@@ -509,7 +494,7 @@ export const CheckoutPayment = ({
       <ContactInformation formikProps={formik} />
       <AdyenContainer paymentStatus={paymentStatus}>
         <Wrapper>
-          <Headline variant="s" headingLevel="h2" colorVariant="dark">
+          <Headline variant="xs" headingLevel="h2" colorVariant="dark">
             {textKeys.CHECKOUT_PAYMENT_DETAILS_TITLE()}
           </Headline>
           <Description>
@@ -529,9 +514,7 @@ export const CheckoutPayment = ({
               <Button
                 fullWidth={true}
                 onClick={handleClickCompletePurchase}
-                disabled={
-                  isFormikError || isBundleCreationInProgress || isDataLoading
-                }
+                disabled={isEditingQuote || isDataLoading}
               >
                 {textKeys.CHECKOUT_FOOTER_COMPLETE_PURCHASE()}
               </Button>
@@ -545,7 +528,7 @@ export const CheckoutPayment = ({
       </AdyenContainer>
       <CheckoutIntercomVariation />
       {mainQuote && (
-        <Footer isLoading={isBundleCreationInProgress || isDataLoading}>
+        <Footer isLoading={isEditingQuote || isDataLoading}>
           <PaymentInfo {...priceData} />
         </Footer>
       )}

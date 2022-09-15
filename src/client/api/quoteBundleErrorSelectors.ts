@@ -1,4 +1,8 @@
-import { QuoteBundleError, CreateQuoteBundleMutation } from 'data/graphql'
+import {
+  QuoteBundleError,
+  CreateQuoteBundleMutation,
+  EditBundledQuoteMutation,
+} from 'data/graphql'
 
 // Underwriter limit codes
 // https://github.com/HedvigInsurance/underwriter/blob/master/src/main/kotlin/com/hedvig/underwriter/service/guidelines/BreachedGuidelinesCodes.kt
@@ -43,12 +47,9 @@ function isError(
 }
 
 export function isQuoteBundleError(
-  createQuoteBundleMutation: CreateQuoteBundleMutation | null | undefined,
-) {
-  return (
-    createQuoteBundleMutation?.quoteCart_createQuoteBundle.__typename ===
-    'QuoteBundleError'
-  )
+  graphqlType: any,
+): graphqlType is QuoteBundleError {
+  return graphqlType?.__typename === 'QuoteBundleError'
 }
 
 export function getLimitsHit(
@@ -74,4 +75,13 @@ export function isLimitHit(
   }
 
   return false
+}
+
+export function getLimitsHitFromEditQuoteMutation(
+  editQuoteMutation: EditBundledQuoteMutation | null | undefined,
+) {
+  if (isQuoteBundleError(editQuoteMutation?.quoteCart_editQuote))
+    return editQuoteMutation?.quoteCart_editQuote.limits || []
+
+  return []
 }
