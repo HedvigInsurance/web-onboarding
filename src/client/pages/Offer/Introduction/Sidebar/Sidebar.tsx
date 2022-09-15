@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -37,9 +37,11 @@ import { StickyBottomSidebar } from './StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate, useStartDateProps } from './StartDate'
 import { SwitchingNotice } from './SwitchingNotice'
+import { useHasScrolledPastElement } from './useHasScrolledPastElement'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
+const FIXED_MARGIN = 16
 
 const Wrapper = styled.div`
   width: calc(${SIDEBAR_WIDTH} + ${SIDEBAR_SPACING_LEFT});
@@ -52,21 +54,40 @@ const Wrapper = styled.div`
   }
 `
 
-const Container = styled.div`
-  width: ${SIDEBAR_WIDTH};
-  max-width: 100%;
-  padding: 1.25rem 1rem 1rem 1rem;
-  margin-top: 3rem;
-  background-color: ${colorsV3.white};
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+type ContainerProps = {
+  stickyToTop?: boolean
+  stickyToBottom?: boolean
+}
 
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    position: fixed;
-    top: 8rem;
-    margin-top: 0;
-  }
-`
+const Container = styled.div(
+  ({ stickyToTop, stickyToBottom }: ContainerProps) => ({
+    width: SIDEBAR_WIDTH,
+    maxWidth: '100%',
+    padding: '1.25rem 1rem 1rem 1rem',
+    marginTop: '3rem',
+    backgroundColor: colorsV3.white,
+    borderRadius: '8px',
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.08)',
+
+    [LARGE_SCREEN_MEDIA_QUERY]: stickyToTop
+      ? {
+          margin: 0,
+          position: 'fixed',
+          top: `${FIXED_MARGIN}px`,
+        }
+      : stickyToBottom
+      ? {
+          margin: 0,
+          position: 'fixed',
+          bottom: `${FIXED_MARGIN}px`,
+        }
+      : {
+          margin: 0,
+          position: 'absolute',
+          top: '8rem',
+        },
+  }),
+)
 
 const StyledCampaignBadge = styled(CampaignBadge)`
   margin-bottom: 1rem;
@@ -217,6 +238,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [handleAddCampaignCode, campaign])
 
+  const containerReference = useRef<HTMLDivElement>(null)
+  // This is because the Sidebar might be too high for small screens, therefore
+  // we want it to stick to top or bottom of screen when user scrolls past it
+  const [isStickyToTop, isStickyToBottom] = useHasScrolledPastElement(
+    containerReference,
+    {
+      margin: FIXED_MARGIN,
+    },
+  )
+
   const showRemoveCampaignButton =
     campaign !== undefined && campaign.incentive?.__typename !== 'NoDiscount'
   const isDiscountPrice =
@@ -245,7 +276,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
         {() => (
           <Wrapper data-testid="offer-sidebar">
-            <Container>
+            <Container
+              ref={containerReference}
+              stickyToBottom={isStickyToBottom}
+              stickyToTop={isStickyToTop}
+            >
               <StyledCampaignBadge quoteCartId={quoteCartId} />
               <Header>
                 <Title>{textKeys.SIDEBAR_TITLE()}</Title>
