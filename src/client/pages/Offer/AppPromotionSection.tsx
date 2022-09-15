@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import { Element } from 'react-scroll'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { LocalizedImage } from 'components/LocalizedImage'
 import { Space } from 'components/Space'
@@ -25,13 +26,6 @@ const PromotionImage = styled(LocalizedImage)`
   }
 `
 
-const StyledAnchor = styled.a({
-  color: colorsV3.gray900,
-  '&:hover': {
-    color: colorsV3.gray900,
-  },
-})
-
 type PromotionSectionProps = {
   promotions: Promotion[]
 }
@@ -44,9 +38,7 @@ export const AppPromotionSection = ({ promotions }: PromotionSectionProps) => {
           <Container key={promotion.headingText}>
             <Column>
               <Heading>
-                <StyledAnchor id={promotion.id}>
-                  {promotion.headingText}
-                </StyledAnchor>
+                <Element name={promotion.id}>{promotion.headingText}</Element>
               </Heading>
               <Body>
                 <ReactMarkdown source={promotion.bodyText} />
