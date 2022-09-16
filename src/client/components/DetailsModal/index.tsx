@@ -241,7 +241,7 @@ export const DetailsModal = ({
     )
 
     for (const quote of allQuotes) {
-      const { id, data } = quote
+      const { id: quoteId, data } = quote
       const payload = {
         ...form,
         data: Object.keys(data).reduce<
@@ -300,7 +300,7 @@ export const DetailsModal = ({
       await editQuote({
         variables: {
           quoteCartId,
-          quoteId: id,
+          quoteId,
           locale: isoLocale,
           payload,
         },
