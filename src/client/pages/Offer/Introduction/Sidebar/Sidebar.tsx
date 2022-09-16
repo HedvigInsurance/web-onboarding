@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import { colorsV3 } from '@hedviginsurance/brand'
@@ -32,13 +32,16 @@ import { TooltipIcon } from 'components/Tooltip/TooltipIcon'
 import { hasCurrentInsurer } from 'api/quoteCartQuerySelectors'
 import { isCar } from 'api/quoteSelector'
 import { isCarSwitcher } from 'api/quoteBundleSelectors'
+import { isStartDateValidForCarSwitching } from 'utils/isStartDateValidForCarSwitching'
 import { StickyBottomSidebar } from './StickyBottomSidebar'
 import { CampaignCodeModal } from './CampaignCodeModal'
 import { StartDate, useStartDateProps } from './StartDate'
 import { SwitchingNotice } from './SwitchingNotice'
+import { useHasScrolledPastElement } from './useHasScrolledPastElement'
 
 const SIDEBAR_WIDTH = '26rem'
 const SIDEBAR_SPACING_LEFT = '2rem'
+const FIXED_MARGIN = 16
 
 const Wrapper = styled.div`
   width: calc(${SIDEBAR_WIDTH} + ${SIDEBAR_SPACING_LEFT});
@@ -51,21 +54,40 @@ const Wrapper = styled.div`
   }
 `
 
-const Container = styled.div`
-  width: ${SIDEBAR_WIDTH};
-  max-width: 100%;
-  padding: 1.25rem 1rem 1rem 1rem;
-  margin-top: 3rem;
-  background-color: ${colorsV3.white};
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+type ContainerProps = {
+  stickyToTop?: boolean
+  stickyToBottom?: boolean
+}
 
-  ${LARGE_SCREEN_MEDIA_QUERY} {
-    position: fixed;
-    top: 8rem;
-    margin-top: 0;
-  }
-`
+const Container = styled.div(
+  ({ stickyToTop, stickyToBottom }: ContainerProps) => ({
+    width: SIDEBAR_WIDTH,
+    maxWidth: '100%',
+    padding: '1.25rem 1rem 1rem 1rem',
+    marginTop: '3rem',
+    backgroundColor: colorsV3.white,
+    borderRadius: '8px',
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.08)',
+
+    [LARGE_SCREEN_MEDIA_QUERY]: stickyToTop
+      ? {
+          margin: 0,
+          position: 'fixed',
+          top: `${FIXED_MARGIN}px`,
+        }
+      : stickyToBottom
+      ? {
+          margin: 0,
+          position: 'fixed',
+          bottom: `${FIXED_MARGIN}px`,
+        }
+      : {
+          margin: 0,
+          position: 'absolute',
+          top: '8rem',
+        },
+  }),
+)
 
 const StyledCampaignBadge = styled(CampaignBadge)`
   margin-bottom: 1rem;
@@ -216,6 +238,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   }, [handleAddCampaignCode, campaign])
 
+  const containerReference = useRef<HTMLDivElement>(null)
+  // This is because the Sidebar might be too high for small screens, therefore
+  // we want it to stick to top or bottom of screen when user scrolls past it
+  const [isStickyToTop, isStickyToBottom] = useHasScrolledPastElement(
+    containerReference,
+    {
+      margin: FIXED_MARGIN,
+    },
+  )
+
   const showRemoveCampaignButton =
     campaign !== undefined && campaign.incentive?.__typename !== 'NoDiscount'
   const isDiscountPrice =
@@ -229,17 +261,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [carCancellationEnabled] = useFeature([Features.CAR_CANCELLATION])
   const isSwitchableForCar =
     carCancellationEnabled && isCarSwitcher(offerData.quotes)
+  const carStartDate = offerData.quotes.find(isCar)?.startDate
 
   // we might need to have a different data point for checking current insurer for car... // siau 2022-09-01
   // It seems that `hasCurrentInsurer` returns true for some Car offers even though we do not support that yet. So let's play it safe and just define it as false for now.
-  const showSwitchingNotice = isCarQuote && isSwitchableForCar
+  const showSwitchingNotice =
+    isCarQuote &&
+    isSwitchableForCar &&
+    // Show notice if date is valid _or_ user hasn't selected a date yet
+    (isStartDateValidForCarSwitching(carStartDate) || !carStartDate)
 
   return (
     <>
       <ReactVisibilitySensor partialVisibility onChange={setIsSidebarVisible}>
         {() => (
           <Wrapper data-testid="offer-sidebar">
-            <Container>
+            <Container
+              ref={containerReference}
+              stickyToBottom={isStickyToBottom}
+              stickyToTop={isStickyToTop}
+            >
               <StyledCampaignBadge quoteCartId={quoteCartId} />
               <Header>
                 <Title>{textKeys.SIDEBAR_TITLE()}</Title>
@@ -252,7 +293,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <Body>
                 <PriceBreakdown offerData={offerData} />
                 <BodyTitle>
-                  <p>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</p>
+                  {isSwitchableForCar ? (
+                    <p>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL_SWITCHER()}</p>
+                  ) : (
+                    <p>{textKeys.SIDEBAR_STARTDATE_CELL_LABEL()}</p>
+                  )}
                   {!isSwitcher && (
                     <TooltipIcon
                       body={textKeys.SIDEBAR_START_DATE_INFO_TEXT()}
@@ -262,7 +307,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   )}
                 </BodyTitle>
                 <StartDate {...startDateProps} modal size="sm" />
-                {showSwitchingNotice && <SwitchingNotice />}
+                {showSwitchingNotice && (
+                  <SwitchingNotice
+                    isDateValid={isStartDateValidForCarSwitching(carStartDate)}
+                  />
+                )}
               </Body>
               <Footer>
                 {isConnectPaymentAtSignEnabled ? (
