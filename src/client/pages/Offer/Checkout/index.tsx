@@ -15,7 +15,7 @@ import {
   InsuranceTermType,
   CheckoutMethod,
   CampaignDataFragment,
-  useCreateQuoteBundleMutation,
+  useEditBundledQuoteMutation,
   useQuoteCartQuery,
 } from 'data/graphql'
 import { PriceBreakdown } from 'pages/Offer/Checkout/Price/PriceBreakdown'
@@ -34,7 +34,10 @@ import { useScrollLock, VisibilityState } from 'utils/hooks/useScrollLock'
 import { UpsellCard } from 'pages/Offer/Checkout/UpsellCard'
 import { OfferData } from 'pages/Offer/types'
 import { SignFailModal } from 'pages/Offer/Checkout/SignFailModal/SignFailModal'
-import { isQuoteBundleError } from 'api/quoteBundleErrorSelectors'
+import {
+  isQuoteBundleError,
+  getLimitsHitFromEditQuoteMutation,
+} from 'api/quoteBundleErrorSelectors'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import { QuoteInput } from 'components/DetailsModal/types'
 import { useTrackSignedCustomerEvent } from 'utils/tracking/hooks/useTrackSignedCustomerEvent'
@@ -267,13 +270,9 @@ export const Checkout = ({
   const startDateProps = useStartDateProps()
 
   const [
-    createQuoteBundle,
-    { loading: isBundleCreationInProgress },
-  ] = useCreateQuoteBundleMutation({
-    refetchQueries: ['QuoteCart'],
-    awaitRefetchQueries: true,
-    notifyOnNetworkStatusChange: true,
-  })
+    editQuote,
+    { data: editQuoteData, loading: isEditingQuote },
+  ] = useEditBundledQuoteMutation()
   const { loading: isLoadingQuoteCart } = useQuoteCartQuery({
     variables: {
       id: quoteCartId,
@@ -301,19 +300,34 @@ export const Checkout = ({
       { setErrors }: FormikHelpers<QuoteInput>,
     ) => {
       try {
-        const result = await reCreateQuoteBundle(form)
+        const { firstName, lastName, ssn, email, phoneNumber } = form
+        const allQuotes = getUniqueQuotesFromVariantList(quoteBundleVariants)
 
-        if (isQuoteBundleError(result.data)) {
-          setErrors({ ssn: textKeys.INVALID_FIELD() })
-          return undefined
+        for (const quote of allQuotes) {
+          await editQuote({
+            variables: {
+              quoteCartId,
+              quoteId: quote.id,
+              locale: locale.isoLocale,
+              payload: {
+                firstName,
+                lastName,
+                ssn,
+                email,
+                phoneNumber: phoneNumber?.replace(/\s/g, ''),
+              },
+            },
+          })
+
+          const limits = getLimitsHitFromEditQuoteMutation(editQuoteData)
+          if (limits.length) {
+            setErrors({ ssn: textKeys.INVALID_FIELD() })
+          }
         }
-
-        return result
       } catch (error) {
         if (isSsnInvalid(error.graphQLErrors)) {
           setErrors({ ssn: textKeys.INVALID_FIELD() })
         }
-        return undefined
       }
     },
     enableReinitialize: true,
@@ -417,8 +431,8 @@ export const Checkout = ({
       }
 
       if (isFormDataUpdated) {
-        const { data } = await submitForm()
-        const isUpdateQuotesFailed = isQuoteBundleError(data)
+        await submitForm()
+        const isUpdateQuotesFailed = isQuoteBundleError(editQuoteData)
         if (isUpdateQuotesFailed) throw Error('Updating quotes has failed')
       }
 
@@ -478,41 +492,6 @@ export const Checkout = ({
     }
   }
 
-  const reCreateQuoteBundle = (form: QuoteInput) => {
-    const {
-      firstName,
-      lastName,
-      birthDate,
-      email,
-      ssn,
-      phoneNumber,
-      dataCollectionId,
-    } = form
-    return createQuoteBundle({
-      variables: {
-        locale: locale.isoLocale,
-        quoteCartId,
-        quotes: getUniqueQuotesFromVariantList(quoteBundleVariants).map(
-          ({ startDate, currentInsurer, data }) => {
-            return {
-              firstName,
-              lastName,
-              email,
-              birthDate,
-              ssn,
-              startDate,
-              currentInsurer: currentInsurer?.id,
-              phoneNumber: phoneNumber?.replace(/\s/g, ''),
-              dataCollectionId,
-              data,
-            }
-          },
-        ),
-      },
-    })
-    // TODO: Handle reporting of underwritting limits as part of GRW-705
-  }
-
   return (
     <>
       <OuterWrapper visibilityState={visibilityState}>
@@ -529,7 +508,7 @@ export const Checkout = ({
                 offerData={offerData}
                 showTotal={true}
                 isLoading={
-                  isBundleCreationInProgress ||
+                  isEditingQuote ||
                   isLoadingQuoteCart ||
                   startDateProps.isLoading
                 }
@@ -560,7 +539,7 @@ export const Checkout = ({
           <Sign
             canInitiateSign={
               formik.isValid &&
-              !isBundleCreationInProgress &&
+              !isEditingQuote &&
               !isLoadingQuoteCart &&
               !startDateProps.isLoading &&
               signUiState !== 'STARTED'
