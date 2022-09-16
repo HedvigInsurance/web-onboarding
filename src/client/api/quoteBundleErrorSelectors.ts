@@ -47,9 +47,9 @@ function isError(
 }
 
 export function isQuoteBundleError(
-  graphqlType: any,
-): graphqlType is QuoteBundleError {
-  return graphqlType?.__typename === 'QuoteBundleError'
+  graphqlOperationResult?: Record<string, unknown> | null,
+): graphqlOperationResult is QuoteBundleError {
+  return graphqlOperationResult?.__typename === 'QuoteBundleError'
 }
 
 export function getLimitsHit(
