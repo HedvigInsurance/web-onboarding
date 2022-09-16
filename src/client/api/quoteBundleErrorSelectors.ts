@@ -80,8 +80,9 @@ export function isLimitHit(
 export function getLimitsHitFromEditQuoteMutation(
   editQuoteMutation: EditBundledQuoteMutation | null | undefined,
 ) {
-  if (isQuoteBundleError(editQuoteMutation?.quoteCart_editQuote))
+  if (isQuoteBundleError(editQuoteMutation?.quoteCart_editQuote)) {
     return editQuoteMutation?.quoteCart_editQuote.limits || []
+  }
 
   return []
 }
