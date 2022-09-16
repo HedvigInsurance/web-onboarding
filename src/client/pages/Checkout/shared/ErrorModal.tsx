@@ -24,6 +24,7 @@ const InlineTextButton = styled(TextButton)`
 
 type SetupFailedModalProps = Omit<ModalProps, 'onClose'> & {
   onRetry: () => void
+  isManualReviewRequired: boolean
 }
 
 export const onRetry = () => {
@@ -33,6 +34,7 @@ export const onRetry = () => {
 
 export const CheckoutErrorModal = ({
   onRetry,
+  isManualReviewRequired,
   ...props
 }: SetupFailedModalProps) => {
   const textKeys = useTextKeys()
@@ -47,11 +49,17 @@ export const CheckoutErrorModal = ({
     <ErrorModal {...props}>
       <ErrorHeading>{textKeys.GENERIC_ERROR_HEADING()}</ErrorHeading>
       <ErrorText>
-        {textKeys.CHECKOUT_ERROR_TEXT_PART_1()}{' '}
-        <InlineTextButton onClick={openIntercomChat}>
-          {textKeys.CHECKOUT_ERROR_TEXT_PART_2()}
-        </InlineTextButton>{' '}
-        <ReactMarkdown source={textKeys.CHECKOUT_ERROR_TEXT_PART_3()} />
+        {isManualReviewRequired ? (
+          <ReactMarkdown source={textKeys.CHECKOUT_SIGN_FAIL_MANUAL_REVIEW()} />
+        ) : (
+          <>
+            {textKeys.CHECKOUT_ERROR_TEXT_PART_1()}{' '}
+            <InlineTextButton onClick={openIntercomChat}>
+              {textKeys.CHECKOUT_ERROR_TEXT_PART_2()}
+            </InlineTextButton>{' '}
+            <ReactMarkdown source={textKeys.CHECKOUT_ERROR_TEXT_PART_3()} />
+          </>
+        )}
       </ErrorText>
 
       <ButtonContainer>

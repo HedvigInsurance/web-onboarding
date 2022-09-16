@@ -60,7 +60,11 @@ export const CheckoutDetails = () => {
     return (
       <>
         <LoadingPage loading />
-        <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
+        <CheckoutErrorModal
+          isVisible={error !== undefined}
+          onRetry={onRetry}
+          isManualReviewRequired={false}
+        />
       </>
     )
   }
@@ -111,7 +115,11 @@ export const CheckoutDetails = () => {
         <PaymentInfo {...priceData} />
       </Footer>
 
-      <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
+      <CheckoutErrorModal
+        isVisible={error !== undefined}
+        onRetry={onRetry}
+        isManualReviewRequired={false}
+      />
     </CheckoutDetailsWrapper>
   )
 }

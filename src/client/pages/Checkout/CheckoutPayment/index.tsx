@@ -19,7 +19,11 @@ export const Checkout = () => {
     return (
       <>
         <LoadingPage loading />
-        <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
+        <CheckoutErrorModal
+          isVisible={error !== undefined}
+          onRetry={onRetry}
+          isManualReviewRequired={false}
+        />
       </>
     )
   }
@@ -42,7 +46,11 @@ export const Checkout = () => {
         checkoutStatus={checkoutStatus}
       />
 
-      <CheckoutErrorModal isVisible={error !== undefined} onRetry={onRetry} />
+      <CheckoutErrorModal
+        isVisible={error !== undefined}
+        onRetry={onRetry}
+        isManualReviewRequired={false}
+      />
     </>
   )
 }
