@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
 import { useFormik, FormikHelpers, FormikProps } from 'formik'
 import { GraphQLError } from 'graphql'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, ApolloError } from '@apollo/client'
 import { useHistory, useLocation } from 'react-router'
 import { useLocalStorage } from 'utils/hooks/useLocalStorage'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
@@ -216,6 +216,18 @@ const useSubmitFormOnSsnChange = (
   ])
 }
 
+const getCheckoutErrorState = (error?: ApolloError) => {
+  if (!error) return null
+
+  const isManualReviewRequired = checkIsManualReviewRequired(
+    (error?.graphQLErrors || []) as GraphQLError[],
+  )
+
+  if (isManualReviewRequired) return 'MANUAL_REVIEW_REQUIRED'
+
+  return 'GENERIC_ERROR'
+}
+
 type Props = {
   bundleVariants: QuoteBundleVariant[]
   quoteCartId: string
@@ -244,7 +256,10 @@ export const CheckoutPayment = ({
     createQuoteBundle,
     { loading: isBundleCreationInProgress },
   ] = useCreateQuoteBundleMutation()
-  const [startCheckout] = useStartCheckoutMutation()
+
+  const [startCheckout, { error: checkoutError }] = useStartCheckoutMutation()
+  const checkoutErrorState = getCheckoutErrorState(checkoutError)
+
   const [getStatus] = useCheckoutStatusLazyQuery({
     pollInterval: 1000,
   })
@@ -253,7 +268,6 @@ export const CheckoutPayment = ({
   const is3DsError = search.includes('error')
   const is3DsComplete = search.includes('3dsSuccess')
   const [isDataLoading, setIsDataLoading] = useState(false)
-  const [isError, setIsError] = useState(false)
   const [is3dsError, setIs3dsError] = useState(false)
   const localStorageKey = 'paymentStatus'
   const [paymentStatus, setPaymentStatus] = useLocalStorage(localStorageKey, '')
@@ -292,7 +306,6 @@ export const CheckoutPayment = ({
           eventName: EventName.SignError,
           options: { errorType: ErrorEventType.BasicError },
         })
-        setIsError(true)
       }
       // Poll for Status
       getStatus({
@@ -301,23 +314,21 @@ export const CheckoutPayment = ({
         },
       })
     } catch (error) {
-      const isManualReviewRequired = checkIsManualReviewRequired(
-        (error.graphQLErrors || []) as GraphQLError[],
-      )
-      if (isManualReviewRequired) {
+      const errorState = getCheckoutErrorState(error)
+
+      if (errorState === 'MANUAL_REVIEW_REQUIRED') {
         trackOfferEvent({
           eventName: EventName.SignError,
           options: { error, errorType: ErrorEventType.ManualReviewRequired },
         })
-        throw new Error('Manual Review required')
+      } else if (errorState === 'GENERIC_ERROR') {
+        trackOfferEvent({
+          eventName: EventName.SignError,
+          options: { error, errorType: ErrorEventType.CheckoutStart },
+        })
       }
+    } finally {
       setIsDataLoading(false)
-      trackOfferEvent({
-        eventName: EventName.SignError,
-        options: { error, errorType: ErrorEventType.CheckoutStart },
-      })
-      console.error('Could not start checkout')
-      setIsError(true)
     }
   }, [
     getStatus,
@@ -490,8 +501,14 @@ export const CheckoutPayment = ({
     return <CheckoutSuccessRedirect connectPayment={false} />
   }
 
-  if (isError) {
-    return <CheckoutErrorModal isVisible onRetry={onRetry} />
+  if (checkoutErrorState) {
+    return (
+      <CheckoutErrorModal
+        isVisible
+        onRetry={onRetry}
+        isManualReviewRequired={checkoutErrorState === 'MANUAL_REVIEW_REQUIRED'}
+      />
+    )
   }
 
   const handleClickBackButton = () => {
