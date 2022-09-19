@@ -7,3 +7,7 @@ storybook-static/
 .env
 .DS_Store
 .idea
+
+# yalc is used for linking dependencies locally
+.yalc
+yalc.lock
