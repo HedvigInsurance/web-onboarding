@@ -22,6 +22,7 @@ import {
   LandingPageCanonicalLinks,
 } from './client/pages/Landing/landingPageData'
 import { InitiateCarCancellationPage } from './client/pages/IntiateCarCancellation'
+import { Feature } from './shared/clientConfig'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -263,6 +264,7 @@ export const routes: Route[] = [
           const { locale, name } = match.params
           const baseUrl = `/${locale}/new-member/${name}`
           const landingPageRedirect = { redirect: `/${locale}/new-member` }
+          const features = window.hedvigClientConfig.features
 
           switch (locale) {
             case 'dk':
@@ -374,10 +376,9 @@ export const routes: Route[] = [
                 case 'car':
                   return {
                     baseUrl,
-                    name:
-                      process.env.FEATURE_CAR_PRICE_MATCHING === 'SE'
-                        ? EmbarkStory.SwedenCarV2
-                        : EmbarkStory.SwedenCar,
+                    name: features[Feature.CAR_PRICE_MATCHING]?.includes('SE')
+                      ? EmbarkStory.SwedenCarV2
+                      : EmbarkStory.SwedenCar,
                     quoteCart: true,
                   }
               }
