@@ -75,6 +75,8 @@ const defaultSrc = [
   CONTENT_SERVICE_ENDPOINT!,
   // Google Tag Manager Server-side
   'https://sgtm.hedvig.com',
+  'https://dc.insurely.com',
+  'https://dc.insurely.se',
 ]
 
 export const helmet = koaHelmet({
