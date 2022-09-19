@@ -1,4 +1,4 @@
-import { QuoteBundleError, CreateQuoteBundleMutation } from 'data/graphql'
+import { QuoteBundleError, EditBundledQuoteMutation } from 'data/graphql'
 
 // Underwriter limit codes
 // https://github.com/HedvigInsurance/underwriter/blob/master/src/main/kotlin/com/hedvig/underwriter/service/guidelines/BreachedGuidelinesCodes.kt
@@ -36,42 +36,18 @@ export enum LimitCode {
   MANUAL_REVIEW_REQUIRED = 'MANUAL_REVIEW_REQUIRED',
 }
 
-function isError(
-  quoteCartMutationResult: CreateQuoteBundleMutation['quoteCart_createQuoteBundle'],
-): quoteCartMutationResult is QuoteBundleError {
-  return quoteCartMutationResult.__typename === 'QuoteBundleError'
-}
-
 export function isQuoteBundleError(
-  createQuoteBundleMutation: CreateQuoteBundleMutation | null | undefined,
-) {
-  return (
-    createQuoteBundleMutation?.quoteCart_createQuoteBundle.__typename ===
-    'QuoteBundleError'
-  )
+  graphqlOperationResult?: Record<string, unknown> | null,
+): graphqlOperationResult is QuoteBundleError {
+  return graphqlOperationResult?.__typename === 'QuoteBundleError'
 }
 
-export function getLimitsHit(
-  createQuoteBundleMutation: CreateQuoteBundleMutation | null | undefined,
+export function getLimitsHitFromEditQuoteMutation(
+  editQuoteMutation: EditBundledQuoteMutation | null | undefined,
 ) {
-  if (
-    createQuoteBundleMutation &&
-    isError(createQuoteBundleMutation.quoteCart_createQuoteBundle)
-  )
-    return createQuoteBundleMutation.quoteCart_createQuoteBundle.limits || []
-
-  return []
-}
-
-export function isLimitHit(
-  createQuoteBundleMutation: CreateQuoteBundleMutation | null | undefined,
-) {
-  if (
-    createQuoteBundleMutation &&
-    isError(createQuoteBundleMutation.quoteCart_createQuoteBundle)
-  ) {
-    return createQuoteBundleMutation.quoteCart_createQuoteBundle.limits?.length
+  if (isQuoteBundleError(editQuoteMutation?.quoteCart_editQuote)) {
+    return editQuoteMutation?.quoteCart_editQuote.limits || []
   }
 
-  return false
+  return []
 }
