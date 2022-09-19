@@ -5,7 +5,7 @@ import { colorsV3, fonts } from '@hedviginsurance/brand'
 import { Button, ButtonGroup } from 'components/buttons'
 import { Modal, ModalFooter, ModalProps } from 'components/ModalNew'
 import {
-  useCreateQuoteBundleMutation,
+  useEditBundledQuoteMutation,
   useQuoteCartQuery,
   UnderwritingLimit,
   BundledQuote,
@@ -19,10 +19,9 @@ import { getSelectedBundleVariant } from 'api/quoteCartQuerySelectors'
 import * as quoteSelector from 'api/quoteSelector'
 import * as bundleSelector from 'api/quoteBundleSelectors'
 import {
-  getLimitsHit,
   LimitCode,
-  isLimitHit,
   isQuoteBundleError,
+  getLimitsHitFromEditQuoteMutation,
 } from 'api/quoteBundleErrorSelectors'
 import { QuoteDataCommon } from 'api/quoteDetailsDataTypes'
 import { QuoteDetailsInput, QuoteInput } from './types'
@@ -174,13 +173,13 @@ export const DetailsModal = ({
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
   const [
-    createQuoteBundle,
+    editQuote,
     {
-      data: createQuoteBundleData,
-      error: unexpectedQuoteBundleError,
-      loading: isBundleCreationInProgress,
+      data: editQuoteData,
+      error: unexpectedEditQuoteError,
+      loading: isEditingQuote,
     },
-  ] = useCreateQuoteBundleMutation()
+  ] = useEditBundledQuoteMutation()
 
   const { data: quoteCartQueryData } = useQuoteCartQuery({
     variables: { id: quoteCartId, locale: isoLocale },
@@ -228,10 +227,12 @@ export const DetailsModal = ({
     },
   } as QuoteInput
 
-  const isUnderwritingGuidelinesHit = isLimitHit(createQuoteBundleData)
-  const isQuoteCreationFailed = isQuoteBundleError(createQuoteBundleData)
+  const isUnderwritingGuidelinesHit = getLimitsHitFromEditQuoteMutation(
+    editQuoteData,
+  ).length
+  const isQuoteCreationFailed = isQuoteBundleError(editQuoteData)
 
-  const reCreateQuoteBundle = (form: QuoteInput) => {
+  const editQuotes = async (form: QuoteInput) => {
     // cleanup null form fields
     Object.keys(form).forEach(
       (k) =>
@@ -239,90 +240,87 @@ export const DetailsModal = ({
         delete form[k as keyof QuoteInput],
     )
 
-    const newQuotes = allQuotes.map((quote) => {
-      const { startDate, currentInsurer, data } = quote
-      const quoteData = Object.keys(data).reduce<
-        Partial<QuoteDetailsInput & QuoteDataCommon>
-      >((acc, key) => {
-        switch (key) {
-          case 'numberCoInsured':
-            acc[key] =
-              typeof form.data.householdSize === 'number'
-                ? form.data.householdSize - 1
-                : data[key]
-            return acc
-          case 'livingSpace':
-          case 'squareMeters':
-            acc.squareMeters =
-              form.data['livingSpace'] ||
-              form.data['squareMeters'] ||
-              data['livingSpace'] ||
-              data['squareMeters']
-            acc.livingSpace =
-              form.data['livingSpace'] ||
-              form.data['squareMeters'] ||
-              data['livingSpace'] ||
-              data['squareMeters']
-            return acc
-          case 'subType':
-            if (marketLabel === 'SE') {
-              acc[key] =
-                mainQuote.id === quote.id
-                  ? getSubType(form.data)
-                  : getSubType(data)
-            } else {
-              acc[key] =
-                mainQuote.id === quote.id
-                  ? form.data['subType']
-                  : data['subType']
-            }
-            return acc
-          case 'id':
-          case 'type':
-          case 'typeOfContract':
-            acc[key] = data[key]
-            return acc
-          default: {
-            const formValue = form.data[key as keyof QuoteDetailsInput]
-            acc[key as keyof QuoteDetailsInput] =
-              formValue !== undefined && formValue !== null
-                ? formValue
-                : data[key]
-            return acc
-          }
-        }
-      }, {})
-      return {
+    for (const quote of allQuotes) {
+      const { id: quoteId, data } = quote
+      const payload = {
         ...form,
-        startDate,
-        currentInsurer: currentInsurer?.id,
-        data: quoteData,
+        data: Object.keys(data).reduce<
+          Partial<QuoteDetailsInput & QuoteDataCommon>
+        >((acc, key) => {
+          switch (key) {
+            case 'numberCoInsured':
+              acc[key] =
+                typeof form.data.householdSize === 'number'
+                  ? form.data.householdSize - 1
+                  : data[key]
+              return acc
+            case 'livingSpace':
+            case 'squareMeters':
+              acc.squareMeters =
+                form.data['livingSpace'] ||
+                form.data['squareMeters'] ||
+                data['livingSpace'] ||
+                data['squareMeters']
+              acc.livingSpace =
+                form.data['livingSpace'] ||
+                form.data['squareMeters'] ||
+                data['livingSpace'] ||
+                data['squareMeters']
+              return acc
+            case 'subType':
+              if (marketLabel === 'SE') {
+                acc[key] =
+                  mainQuote.id === quote.id
+                    ? getSubType(form.data)
+                    : getSubType(data)
+              } else {
+                acc[key] =
+                  mainQuote.id === quote.id
+                    ? form.data['subType']
+                    : data['subType']
+              }
+              return acc
+            case 'id':
+            case 'type':
+            case 'typeOfContract':
+              acc[key] = data[key]
+              return acc
+            default: {
+              const formValue = form.data[key as keyof QuoteDetailsInput]
+              acc[key as keyof QuoteDetailsInput] =
+                formValue !== undefined && formValue !== null
+                  ? formValue
+                  : data[key]
+              return acc
+            }
+          }
+        }, {}),
       }
-    })
-    return createQuoteBundle({
-      variables: {
-        locale: isoLocale,
-        quoteCartId,
-        quotes: newQuotes,
-      },
-    })
+
+      await editQuote({
+        variables: {
+          quoteCartId,
+          quoteId,
+          locale: isoLocale,
+          payload,
+        },
+      })
+    }
   }
+
   const onSubmit = async (
     form: QuoteInput,
     { setErrors }: FormikHelpers<QuoteInput>,
   ) => {
-    const { data } = await reCreateQuoteBundle(form)
-    const isCreationFailed = isQuoteBundleError(data)
-    const limits = getLimitsHit(data)
+    await editQuotes(form)
+    const limits = getLimitsHitFromEditQuoteMutation(editQuoteData)
 
-    if (isCreationFailed) {
-      if (limits.length) {
-        const errors = getFormErrorsFromUnderwritterLimits(
-          limits,
-          textKeys.INVALID_FIELD(),
-        )
-        setErrors(errors)
-      }
+    if (limits.length) {
+      const errors = getFormErrorsFromUnderwritterLimits(
+        limits,
+        textKeys.INVALID_FIELD(),
+      )
+      setErrors(errors)
     } else {
       onClose()
     }
@@ -330,7 +328,7 @@ export const DetailsModal = ({
 
   return (
     <Modal isVisible={isVisible} onClose={onClose} dynamicHeight>
-      <LoadingDimmer visible={isBundleCreationInProgress} />
+      <LoadingDimmer visible={isEditingQuote} />
       <Formik
         initialValues={initialValues}
         validationSchema={getValidationSchema(
@@ -368,9 +366,7 @@ export const DetailsModal = ({
                   <Button
                     type="submit"
                     fullWidth
-                    disabled={
-                      isBundleCreationInProgress || !formikProps.isValid
-                    }
+                    disabled={isEditingQuote || !formikProps.isValid}
                   >
                     {textKeys.DETAILS_MODULE_BUTTON()}
                   </Button>
@@ -381,14 +377,14 @@ export const DetailsModal = ({
                     {textKeys.DETAILS_MODULE_BUTTON_UNDERWRITING_GUIDELINE_HIT()}
                   </ErrorMessage>
                 ) : (
-                  (unexpectedQuoteBundleError || isQuoteCreationFailed) && (
+                  (unexpectedEditQuoteError || isQuoteCreationFailed) && (
                     <ErrorMessage>
                       {textKeys.DETAILS_MODULE_BUTTON_ERROR()}
                     </ErrorMessage>
                   )
                 )}
 
-                {!unexpectedQuoteBundleError &&
+                {!unexpectedEditQuoteError &&
                   !isQuoteCreationFailed &&
                   !isUnderwritingGuidelinesHit && (
                     <Warning>
