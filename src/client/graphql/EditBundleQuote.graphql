@@ -6,20 +6,9 @@ mutation EditBundledQuote(
 ) {
   quoteCart_editQuote(id: $quoteCartId, quoteId: $quoteId, payload: $payload) {
     ... on QuoteCart {
-      id
       bundle {
-        possibleVariations {
-          id
-          tag(locale: $locale)
-          bundle {
-            displayName(locale: $locale)
-            bundleCost {
-              ...BundleCostDataFragment
-            }
-            quotes {
-              ...QuoteDataFragment
-            }
-          }
+        quotes {
+          ...QuoteDataFragment
         }
       }
     }

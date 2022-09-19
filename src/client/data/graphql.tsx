@@ -11488,62 +11488,6 @@ export type CreateAccessTokenMutation = { __typename?: 'Mutation' } & {
   } & Pick<CreateQuoteCartAccessTokenResult, 'accessToken'>
 }
 
-export type CreateQuoteBundleMutationVariables = Exact<{
-  quoteCartId: Scalars['ID']
-  quotes: Array<Scalars['JSON']> | Scalars['JSON']
-  locale: Locale
-}>
-
-export type CreateQuoteBundleMutation = { __typename?: 'Mutation' } & {
-  quoteCart_createQuoteBundle:
-    | ({ __typename?: 'QuoteCart' } & Pick<
-        QuoteCart,
-        'id' | 'checkoutMethods'
-      > & {
-          bundle?: Maybe<
-            { __typename?: 'QuoteBundle' } & {
-              possibleVariations: Array<
-                { __typename?: 'QuoteBundleVariant' } & Pick<
-                  QuoteBundleVariant,
-                  'id' | 'tag'
-                > & {
-                    bundle: { __typename?: 'QuoteBundle' } & Pick<
-                      QuoteBundle,
-                      'displayName'
-                    > & {
-                        bundleCost: {
-                          __typename?: 'InsuranceCost'
-                        } & BundleCostDataFragmentFragment
-                        quotes: Array<
-                          {
-                            __typename?: 'BundledQuote'
-                          } & QuoteDataFragmentFragment
-                        >
-                      }
-                  }
-              >
-            }
-          >
-          campaign?: Maybe<{ __typename?: 'Campaign' } & CampaignDataFragment>
-          checkout?: Maybe<
-            { __typename?: 'Checkout' } & Pick<Checkout, 'status'>
-          >
-        })
-    | ({ __typename?: 'QuoteBundleError' } & Pick<
-        QuoteBundleError,
-        'message' | 'type'
-      > & {
-          limits?: Maybe<
-            Array<
-              { __typename?: 'UnderwritingLimit' } & Pick<
-                UnderwritingLimit,
-                'code'
-              >
-            >
-          >
-        })
-}
-
 export type EditBundledQuoteMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
   locale: Locale
@@ -11553,32 +11497,15 @@ export type EditBundledQuoteMutationVariables = Exact<{
 
 export type EditBundledQuoteMutation = { __typename?: 'Mutation' } & {
   quoteCart_editQuote:
-    | ({ __typename?: 'QuoteCart' } & Pick<QuoteCart, 'id'> & {
-          bundle?: Maybe<
-            { __typename?: 'QuoteBundle' } & {
-              possibleVariations: Array<
-                { __typename?: 'QuoteBundleVariant' } & Pick<
-                  QuoteBundleVariant,
-                  'id' | 'tag'
-                > & {
-                    bundle: { __typename?: 'QuoteBundle' } & Pick<
-                      QuoteBundle,
-                      'displayName'
-                    > & {
-                        bundleCost: {
-                          __typename?: 'InsuranceCost'
-                        } & BundleCostDataFragmentFragment
-                        quotes: Array<
-                          {
-                            __typename?: 'BundledQuote'
-                          } & QuoteDataFragmentFragment
-                        >
-                      }
-                  }
-              >
-            }
-          >
-        })
+    | ({ __typename?: 'QuoteCart' } & {
+        bundle?: Maybe<
+          { __typename?: 'QuoteBundle' } & {
+            quotes: Array<
+              { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
+            >
+          }
+        >
+      })
     | ({ __typename?: 'QuoteBundleError' } & Pick<
         QuoteBundleError,
         'message' | 'type'
@@ -13244,97 +13171,6 @@ export type CreateAccessTokenMutationOptions = ApolloReactCommon.BaseMutationOpt
   CreateAccessTokenMutation,
   CreateAccessTokenMutationVariables
 >
-export const CreateQuoteBundleDocument = gql`
-  mutation CreateQuoteBundle(
-    $quoteCartId: ID!
-    $quotes: [JSON!]!
-    $locale: Locale!
-  ) {
-    quoteCart_createQuoteBundle(id: $quoteCartId, input: { payload: $quotes }) {
-      ... on QuoteCart {
-        id
-        bundle {
-          possibleVariations {
-            id
-            tag(locale: $locale)
-            bundle {
-              displayName(locale: $locale)
-              bundleCost {
-                ...BundleCostDataFragment
-              }
-              quotes {
-                ...QuoteDataFragment
-              }
-            }
-          }
-        }
-        campaign {
-          ...CampaignData
-        }
-        checkoutMethods
-        checkout {
-          status
-        }
-      }
-      ... on QuoteBundleError {
-        message
-        type
-        limits {
-          code
-        }
-      }
-    }
-  }
-  ${BundleCostDataFragmentFragmentDoc}
-  ${QuoteDataFragmentFragmentDoc}
-  ${CampaignDataFragmentDoc}
-`
-export type CreateQuoteBundleMutationFn = ApolloReactCommon.MutationFunction<
-  CreateQuoteBundleMutation,
-  CreateQuoteBundleMutationVariables
->
-
-/**
- * __useCreateQuoteBundleMutation__
- *
- * To run a mutation, you first call `useCreateQuoteBundleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateQuoteBundleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createQuoteBundleMutation, { data, loading, error }] = useCreateQuoteBundleMutation({
- *   variables: {
- *      quoteCartId: // value for 'quoteCartId'
- *      quotes: // value for 'quotes'
- *      locale: // value for 'locale'
- *   },
- * });
- */
-export function useCreateQuoteBundleMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateQuoteBundleMutation,
-    CreateQuoteBundleMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateQuoteBundleMutation,
-    CreateQuoteBundleMutationVariables
-  >(CreateQuoteBundleDocument, options)
-}
-export type CreateQuoteBundleMutationHookResult = ReturnType<
-  typeof useCreateQuoteBundleMutation
->
-export type CreateQuoteBundleMutationResult = ApolloReactCommon.MutationResult<
-  CreateQuoteBundleMutation
->
-export type CreateQuoteBundleMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateQuoteBundleMutation,
-  CreateQuoteBundleMutationVariables
->
 export const EditBundledQuoteDocument = gql`
   mutation EditBundledQuote(
     $quoteCartId: ID!
@@ -13348,20 +13184,9 @@ export const EditBundledQuoteDocument = gql`
       payload: $payload
     ) {
       ... on QuoteCart {
-        id
         bundle {
-          possibleVariations {
-            id
-            tag(locale: $locale)
-            bundle {
-              displayName(locale: $locale)
-              bundleCost {
-                ...BundleCostDataFragment
-              }
-              quotes {
-                ...QuoteDataFragment
-              }
-            }
+          quotes {
+            ...QuoteDataFragment
           }
         }
       }
@@ -13374,7 +13199,6 @@ export const EditBundledQuoteDocument = gql`
       }
     }
   }
-  ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
 `
 export type EditBundledQuoteMutationFn = ApolloReactCommon.MutationFunction<
