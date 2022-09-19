@@ -1,12 +1,13 @@
 import React, { useRef } from 'react'
-import { useLocation, useHistory } from 'react-router'
 import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
 import { StandaloneProductCard } from 'components/StandaloneProductCard'
 import { AdditionalProductCard } from 'components/AdditionalProductCard'
-
-const SEARCH_PARAM = 'type'
+import {
+  useSelectedInsuranceTypes,
+  validateInsuranceTypes,
+} from 'utils/hooks/useSelectedInsuranceTypes'
 
 export type Product = {
   id: string
@@ -28,37 +29,30 @@ export const Selector = ({
   additionalProducts,
 }: SelectorProps) => {
   const textKeys = useTextKeys()
-
-  const { search: searchParams } = useLocation()
-  const history = useHistory()
-
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const selectedProductIds = new Set(
-    new URLSearchParams(searchParams).getAll(SEARCH_PARAM),
+  const [
+    selectedInsuranceTypes,
+    changeInsuranceTypes,
+  ] = useSelectedInsuranceTypes()
+
+  const selectedInsuranceTypesSet = new Set(
+    selectedInsuranceTypes as Array<string>,
   )
+
   const selectedStandaloneProducts = standaloneProducts.filter(({ id }) =>
-    selectedProductIds.has(id),
+    selectedInsuranceTypesSet.has(id),
   )
 
-  const handleClick = (productId: string) => {
-    const searchParams = new URLSearchParams()
-
-    const newSelectedProductIds = new Set(selectedProductIds)
-    const isProductSelected = selectedProductIds.has(productId)
-    if (isProductSelected) {
-      newSelectedProductIds.delete(productId)
+  const handleClick = (insuranceType: string) => {
+    if (selectedInsuranceTypesSet.has(insuranceType)) {
+      selectedInsuranceTypesSet.delete(insuranceType)
     } else {
-      newSelectedProductIds.add(productId)
+      selectedInsuranceTypesSet.add(insuranceType)
     }
 
-    newSelectedProductIds.forEach((productId) =>
-      searchParams.append(SEARCH_PARAM, productId),
-    )
-
-    history.replace({
-      search: searchParams.toString(),
-    })
+    const newTypes = validateInsuranceTypes([...selectedInsuranceTypesSet])
+    changeInsuranceTypes(newTypes)
   }
 
   return (
@@ -83,7 +77,7 @@ export const Selector = ({
                     price={price}
                     description={description}
                     image={image}
-                    checked={selectedProductIds.has(id)}
+                    checked={selectedInsuranceTypesSet.has(id)}
                     onClick={() => {
                       if (isTheOnlySelectedStandaloneProduct) {
                         inputRef.current?.setCustomValidity(
@@ -114,7 +108,7 @@ export const Selector = ({
                   price={price}
                   description={description}
                   image={image}
-                  checked={selectedProductIds.has(id)}
+                  checked={selectedInsuranceTypesSet.has(id)}
                   onClick={() => handleClick(id)}
                 />
               ),

@@ -1,5 +1,5 @@
-import { useMemo, useCallback } from 'react'
-import { useLocation, useHistory } from 'react-router'
+import { useParams } from 'react-router-dom'
+import { useCallback, useState, useEffect } from 'react'
 import { TypeOfContract } from 'data/graphql'
 
 // TODO: we should get this from giraffe schema
@@ -18,6 +18,10 @@ export enum InsuranceType {
   DANISH_TRAVEL = 'DANISH_TRAVEL',
 }
 
+const INSURANCE_TYPES_EVENT = 'insuranceTypes'
+
+type InsuranceTypesEventData = InsuranceType[] | TypeOfContract[]
+
 const ALL_INSURANCE_TYPES = Object.values(InsuranceType)
 const ALL_CONTRACT_TYPES = Object.values(TypeOfContract)
 const SEARCH_PARAM_NAME = 'type'
@@ -27,7 +31,11 @@ const deserializeSearchParams = (searchParams: URLSearchParams) => {
   return validateInsuranceTypes(matches)
 }
 
-const validateInsuranceTypes = (
+const serializeInsuranceTypes = (types: Array<string>) => types.join(',')
+const deserializeInsuranceTypes = (raw: string) =>
+  validateInsuranceTypes(raw.split(','))
+
+export const validateInsuranceTypes = (
   rawTypes: Array<string>,
 ): InsuranceType[] | TypeOfContract[] =>
   rawTypes.filter(
@@ -36,34 +44,57 @@ const validateInsuranceTypes = (
       ALL_CONTRACT_TYPES.includes((type as unknown) as TypeOfContract),
   ) as Array<InsuranceType>
 
-export const getSelectedInsuranceTypes = () =>
-  deserializeSearchParams(new URLSearchParams(window.location.search))
+const SESSION_STORAGE_PREFIX = 'HEDVIG_'
+const getStorageKey = (quoteCartId: string) =>
+  `${SESSION_STORAGE_PREFIX}${quoteCartId}`
 
 export const useSelectedInsuranceTypes = () => {
-  const location = useLocation()
-  const history = useHistory()
+  const { id: quoteCartId } = useParams()
+  const storageKey = getStorageKey(quoteCartId)
 
-  const searchParams = useMemo(() => new URLSearchParams(location.search), [
-    location.search,
-  ])
-  const insuranceTypes = useMemo(() => deserializeSearchParams(searchParams), [
-    searchParams,
-  ])
+  const [insuranceTypes, setInsuranceTypes] = useState(() => {
+    const raw = window.sessionStorage.getItem(storageKey)
+    if (raw) {
+      const storedInsuranceTypes = deserializeInsuranceTypes(raw)
+      if (storedInsuranceTypes.length > 0) return storedInsuranceTypes
+    }
+
+    const searchParams = new URLSearchParams(location.search)
+    const initialInsuranceTypes = deserializeSearchParams(searchParams)
+    return initialInsuranceTypes
+  })
 
   const changeSelectedInsuranceTypes = useCallback(
-    (newTypes: Array<InsuranceType | TypeOfContract>) => {
-      searchParams.delete(SEARCH_PARAM_NAME)
+    (newTypes: InsuranceType[] | TypeOfContract[]) => {
+      window.sessionStorage.setItem(
+        storageKey,
+        serializeInsuranceTypes(newTypes),
+      )
 
-      for (const type of newTypes) {
-        searchParams.append(SEARCH_PARAM_NAME, type)
-      }
-
-      history.replace({
-        search: searchParams.toString(),
-      })
+      const event = new CustomEvent<InsuranceTypesEventData>(
+        INSURANCE_TYPES_EVENT,
+        {
+          detail: newTypes,
+          bubbles: true,
+        },
+      )
+      document.dispatchEvent(event)
     },
-    [searchParams, history],
+    [storageKey],
   )
+
+  useEffect(() => {
+    const handler = (event: CustomEvent<InsuranceTypesEventData>) => {
+      setInsuranceTypes(event.detail)
+    }
+
+    window.addEventListener(INSURANCE_TYPES_EVENT, handler as EventListener)
+    return () =>
+      window.removeEventListener(
+        INSURANCE_TYPES_EVENT,
+        handler as EventListener,
+      )
+  }, [storageKey])
 
   return [insuranceTypes, changeSelectedInsuranceTypes] as const
 }

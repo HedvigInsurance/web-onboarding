@@ -5,7 +5,7 @@ import { TOP_BAR_Z_INDEX } from 'components/TopBar'
 import { useTextKeys } from 'utils/textKeys'
 import { LARGE_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useFeature, Features } from 'utils/hooks/useFeature'
-import { Button, LinkWithQueryButton } from 'components/buttons'
+import { Button, LinkButton } from 'components/buttons'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 
@@ -78,7 +78,7 @@ export const StickyBottomSidebar: React.FC<Hidable & {
     <Wrapper isVisible={reallyIsVisible} displayNone={displayNone}>
       <CtaWrapper>
         {isConnectPaymentAtSignEnabled ? (
-          <LinkWithQueryButton
+          <LinkButton
             size="sm"
             fullWidth
             to={`/${localePath}/new-member/checkout/details/${quoteCartId}`}
@@ -87,7 +87,7 @@ export const StickyBottomSidebar: React.FC<Hidable & {
             disabled={isLoadingQuoteCart}
           >
             {textKeys.SIDEBAR_PROCEED_BUTTON()}
-          </LinkWithQueryButton>
+          </LinkButton>
         ) : (
           <Button
             size="sm"

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { QuoteCartDocument, QuoteCartQuery } from 'data/graphql'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
-import { getSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
   getSelectedBundleVariant,
   getCampaign,
@@ -17,8 +17,8 @@ import {
 
 export const useTrackSignedCustomerEvent = () => {
   const { isoLocale, adTractionConfig, marketLabel } = useCurrentLocale()
-
   const { quoteCartId } = useQuoteCartIdFromUrl()
+  const [insuranceTypes] = useSelectedInsuranceTypes()
 
   const trackEventHandler = useCallback(
     ({
@@ -37,7 +37,7 @@ export const useTrackSignedCustomerEvent = () => {
 
         const selectedBundleVariant = getSelectedBundleVariant(
           quoteCartQueryData,
-          getSelectedInsuranceTypes(),
+          insuranceTypes,
         )
 
         if (selectedBundleVariant) {
@@ -60,7 +60,7 @@ export const useTrackSignedCustomerEvent = () => {
         trackEventCallback(apolloClient)
       }
     },
-    [quoteCartId, isoLocale, adTractionConfig, marketLabel],
+    [quoteCartId, isoLocale, adTractionConfig, marketLabel, insuranceTypes],
   )
 
   return trackEventHandler
