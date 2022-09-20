@@ -420,6 +420,10 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
                       location.href = `/${pathLocale}/${cleanedPath}`
                     },
                   }}
+                  config={{
+                    insurelyClientId:
+                      window.hedvigClientConfig.insurelyClientId,
+                  }}
                   data={data[1]}
                   resolvers={{
                     graphqlQuery: graphQLQuery(storageState, isoLocale),

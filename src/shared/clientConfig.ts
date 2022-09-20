@@ -39,6 +39,7 @@ export type ClientConfig = {
   appEnvironment: AppEnvironment
   features: FeatureMap
   datadog: RumInitConfiguration
+  insurelyClientId: string
   embarkStory: { NO: string; DK: string }
 } & ClientConfigServerData
 
