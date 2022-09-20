@@ -13,6 +13,7 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
 import { Arrow } from 'components/icons/Arrow'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { useTrackEvent } from 'utils/tracking/gtm/useTrackEvent'
 import { useActiveContractBundles } from '../useActiveContractBundles'
 
 const CrossSellSectionHeader = styled.p({
@@ -42,6 +43,7 @@ export const CrossSells = () => {
   const { crossSells } = useActiveContractBundles()
   const textKeys = useTextKeys()
   const currentLocale = useCurrentLocale()
+  const [trackEvent] = useTrackEvent('cross_sell_click')
 
   if (!crossSells || crossSells.length === 0) return null
 
@@ -55,6 +57,7 @@ export const CrossSells = () => {
           key={crossSell.id}
           href={`/${currentLocale.path}${crossSell.href}`}
           orientation="row"
+          onClick={() => trackEvent({ type: crossSell.type })}
         >
           <ImageFrame>
             <Image src={crossSell.image} />
