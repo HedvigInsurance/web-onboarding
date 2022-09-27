@@ -2234,10 +2234,10 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-5.0.3.tgz#8ddc4516830da89220cc4d52eeaab0896916dd82"
   integrity sha512-0fvSwnDWR2inKPvwiCDq67QC/p02E0j+nTJAG/0O5Zkrt52NLFZDVpprhoAFF9Tn+ZGm6Qr7E6/uiQ5A/mPwmg==
 
-"@hedviginsurance/embark@2.16.0":
-  version "2.16.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.16.0.tgz#e5d0c827b6bc1e240f6eb182daeee0b5329dbf52"
-  integrity sha512-W3AAaFE3VtPO/kLOz4VaHP/cYy+l4rXXaM/48+nbfrpkbzmaKSG+ftHxlG25S478QP70DjnSKc5i2iJR5I9Y5Q==
+"@hedviginsurance/embark@2.17.0":
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.17.0.tgz#959bd427a5b5e57de52f515eb5b24fafbb7a00f4"
+  integrity sha512-r1GTuvgJDRF++OhIE6aG6KUH5x72BZGbsK9Wgt3bFb3yLF/Eh5AmONgw9mK6sY2hzXmICQz1PTIMKJjzvCPa0Q==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
@@ -2267,6 +2267,7 @@
     koa-static "^5.0.0"
     lodash.get "^4.4.2"
     lodash.set "^4.3.2"
+    personnummer "^3.1.4"
     react "^16.13.0"
     react-dom "^16.13.0"
     react-hot-loader "^4.12.19"
@@ -14949,7 +14950,7 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-personnummer@3.1.4:
+personnummer@3.1.4, personnummer@^3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/personnummer/-/personnummer-3.1.4.tgz#e924c983d80096ef99576fdf6dadd746d5519198"
   integrity sha512-Bhc3dosCqMlUuAVxKzHeGGClbhGuBCE5OCAkomf2edraStsrGQlQmq0rla4kVR4a1D0G/HEJCE829lP/LJjd/g==
