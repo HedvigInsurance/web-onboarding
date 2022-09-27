@@ -1751,9 +1751,9 @@ export type Charge = {
 
 export type ChargeEstimation = {
   __typename?: 'ChargeEstimation'
-  charge: MonetaryAmountV2
-  discount: MonetaryAmountV2
   subscription: MonetaryAmountV2
+  discount: MonetaryAmountV2
+  charge: MonetaryAmountV2
 }
 
 export type ChatAction = {
@@ -7850,6 +7850,7 @@ export type PartnerInitWidgetInput = {
   externalMemberId?: Maybe<Scalars['ID']>
   requestId?: Maybe<Scalars['String']>
   market?: Maybe<Market>
+  channel?: Maybe<Scalars['String']>
 }
 
 export type PartnerInitWidgetResult = {
@@ -9851,6 +9852,7 @@ export type SwedishCarInfo = {
   registrationNumber?: Maybe<Scalars['String']>
   personalRegistrationNumber?: Maybe<Scalars['String']>
   currentInsuranceHolderSsn?: Maybe<Scalars['String']>
+  currentInsurer?: Maybe<Scalars['String']>
 }
 
 export enum SwedishCarLineOfBusiness {
@@ -11500,8 +11502,25 @@ export type EditBundledQuoteMutation = { __typename?: 'Mutation' } & {
     | ({ __typename?: 'QuoteCart' } & {
         bundle?: Maybe<
           { __typename?: 'QuoteBundle' } & {
-            quotes: Array<
-              { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
+            possibleVariations: Array<
+              { __typename?: 'QuoteBundleVariant' } & Pick<
+                QuoteBundleVariant,
+                'id' | 'tag'
+              > & {
+                  bundle: { __typename?: 'QuoteBundle' } & Pick<
+                    QuoteBundle,
+                    'displayName'
+                  > & {
+                      bundleCost: {
+                        __typename?: 'InsuranceCost'
+                      } & BundleCostDataFragmentFragment
+                      quotes: Array<
+                        {
+                          __typename?: 'BundledQuote'
+                        } & QuoteDataFragmentFragment
+                      >
+                    }
+                }
             >
           }
         >
@@ -13185,8 +13204,18 @@ export const EditBundledQuoteDocument = gql`
     ) {
       ... on QuoteCart {
         bundle {
-          quotes {
-            ...QuoteDataFragment
+          possibleVariations {
+            id
+            tag(locale: $locale)
+            bundle {
+              displayName(locale: $locale)
+              bundleCost {
+                ...BundleCostDataFragment
+              }
+              quotes {
+                ...QuoteDataFragment
+              }
+            }
           }
         }
       }
@@ -13199,6 +13228,7 @@ export const EditBundledQuoteDocument = gql`
       }
     }
   }
+  ${BundleCostDataFragmentFragmentDoc}
   ${QuoteDataFragmentFragmentDoc}
 `
 export type EditBundledQuoteMutationFn = ApolloReactCommon.MutationFunction<
