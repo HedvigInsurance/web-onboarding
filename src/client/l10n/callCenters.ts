@@ -9,8 +9,8 @@ export type CallCenterData = {
   hrefNumber: string
   opensAt: string
   closesAt: string
-  lunchStartsAt: string
-  lunchEndsAt: string
+  lunchStartsAt?: string
+  lunchEndsAt?: string
 }
 
 export const callCenters: CallCenters = {
@@ -28,8 +28,6 @@ export const callCenters: CallCenters = {
       hrefNumber: 'tel:+46104599200.',
       opensAt: '09',
       closesAt: '16',
-      lunchStartsAt: '12',
-      lunchEndsAt: '13',
     },
   },
   NO: {
@@ -38,16 +36,30 @@ export const callCenters: CallCenters = {
       hrefNumber: 'tel:38 99 41 11',
       opensAt: '09',
       closesAt: '16',
-      lunchStartsAt: '12',
-      lunchEndsAt: '13',
     },
     supportNumber: {
       displayNumber: '38 99 41 11',
       hrefNumber: 'tel:38 99 41 11',
       opensAt: '09',
       closesAt: '16',
-      lunchStartsAt: '12',
-      lunchEndsAt: '13',
+    },
+  },
+  DK: {
+    callCenter: {
+      displayNumber: '+45 78 77 03 51',
+      hrefNumber: 'tel:+4578770351',
+      opensAt: '09',
+      closesAt: '16',
+      lunchStartsAt: '11:30',
+      lunchEndsAt: '13:30',
+    },
+    supportNumber: {
+      displayNumber: '+45 78 77 03 51',
+      hrefNumber: 'tel:+4578770351',
+      opensAt: '09',
+      closesAt: '16',
+      lunchStartsAt: '11:30',
+      lunchEndsAt: '13:30',
     },
   },
 }
