@@ -49,8 +49,11 @@ const Text = styled.p<{ color: Color }>`
   }
 `
 
-const isLunchHour = (currentTime: string, data: CallCenterData): boolean =>
-  currentTime >= data.lunchStartsAt && currentTime < data.lunchEndsAt
+const isLunchHour = (currentTime: string, data: CallCenterData): boolean => {
+  if (!data.lunchStartsAt || !data.lunchEndsAt) return false
+
+  return currentTime >= data.lunchStartsAt && currentTime < data.lunchEndsAt
+}
 
 const isWeekend = (): boolean => {
   const currentDay = getDay(new Date())
