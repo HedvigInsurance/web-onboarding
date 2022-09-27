@@ -48,8 +48,6 @@ type TextInputProps = {
   onChange?: (e: FormEvent<any>) => void
   onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
-  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -62,8 +60,6 @@ export const TextInput: React.FC<TextInputProps> = ({
   onChange,
   onKeyUp,
   onKeyDown,
-  onFocus,
-  onBlur,
 }) => (
   <CheckoutInput
     name={name}
@@ -77,8 +73,6 @@ export const TextInput: React.FC<TextInputProps> = ({
     onChange={onChange}
     onKeyUp={onKeyUp}
     onKeyDown={onKeyDown}
-    onFocus={onFocus}
-    onBlur={onBlur}
   />
 )
 
