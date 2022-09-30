@@ -40,6 +40,7 @@ export type ClientConfig = {
   features: FeatureMap
   datadog: RumInitConfiguration
   insurelyClientId: string
+  insurelyCarClientId: string
   embarkStory: { NO: string; DK: string }
 } & ClientConfigServerData
 

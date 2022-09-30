@@ -26,6 +26,7 @@ import {
   EMBARK_STORY_NO,
   EMBARK_STORY_DK,
   INSURELY_CLIENT_ID,
+  INSURELY_CAR_CLIENT_ID,
 } from './config'
 import { favicons } from './favicons'
 import { getPageMeta } from './meta'
@@ -50,6 +51,7 @@ const clientConfig: ClientConfig = {
   },
   referer: null,
   insurelyClientId: INSURELY_CLIENT_ID,
+  insurelyCarClientId: INSURELY_CAR_CLIENT_ID,
   embarkStory: {
     NO: EMBARK_STORY_NO,
     DK: EMBARK_STORY_DK,
