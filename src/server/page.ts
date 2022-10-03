@@ -25,7 +25,8 @@ import {
   GIRAFFE_HOST,
   EMBARK_STORY_NO,
   EMBARK_STORY_DK,
-  INSURELY_CLIENT_ID,
+  INSURELY_CAR_CLIENT_ID,
+  INSURELY_HOME_CLIENT_ID,
 } from './config'
 import { favicons } from './favicons'
 import { getPageMeta } from './meta'
@@ -49,7 +50,8 @@ const clientConfig: ClientConfig = {
     version: HEROKU_SLUG_COMMIT,
   },
   referer: null,
-  insurelyClientId: INSURELY_CLIENT_ID,
+  insurelyHomeClientId: INSURELY_HOME_CLIENT_ID,
+  insurelyCarClientId: INSURELY_CAR_CLIENT_ID,
   embarkStory: {
     NO: EMBARK_STORY_NO,
     DK: EMBARK_STORY_DK,
