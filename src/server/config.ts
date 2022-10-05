@@ -36,8 +36,8 @@ export const APP_ENVIRONMENT = process.env.APP_ENVIRONMENT ?? 'development'
 export const INSURELY_HOME_CLIENT_ID = process.env.INSURELY_HOME_CLIENT_ID!
 export const INSURELY_CAR_CLIENT_ID = process.env.INSURELY_CAR_CLIENT_ID!
 
-export const EMBARK_STORY_NO = process.env.EMBARK_STORY_NO ?? 'onboarding-NO-v2'
-export const EMBARK_STORY_DK = process.env.EMBARK_STORY_DK ?? 'onboarding-DK'
+export const EMBARK_STORY_NO = process.env.EMBARK_STORY_NO ?? 'onboarding-NO-v3'
+export const EMBARK_STORY_DK = process.env.EMBARK_STORY_DK ?? 'onboarding-DK-v2'
 
 export const FEATURES = (Object.keys(Feature) as Array<Feature>).reduce(
   (featureMap, key) => {
