@@ -1550,8 +1550,6 @@ export type BankIdAuthResponse = {
   autoStartToken: Scalars['String']
 }
 
-export type BankIdExtraInfo = SwedishBankIdExtraInfo | NorwegianBankIdExtraInfo
-
 export enum BankIdStatus {
   Pending = 'pending',
   Failed = 'failed',
@@ -2874,26 +2872,6 @@ export type DataCollectingStatusResponse = {
   token?: Maybe<Scalars['String']>
 }
 
-export type DataCollectingStatusResponseV2 = {
-  __typename?: 'DataCollectingStatusResponseV2'
-  extraInformation?: Maybe<BankIdExtraInfo>
-  id: Scalars['String']
-  insuranceCompany?: Maybe<Scalars['String']>
-  status: DataCollectionStatus
-}
-
-export type DataCollectionPersonalNumberInput = {
-  reference: Scalars['ID']
-  insuranceProvider: Scalars['String']
-  personalNumber: Scalars['String']
-}
-
-export type DataCollectionPhoneNumberInput = {
-  reference: Scalars['ID']
-  insuranceProvider: Scalars['String']
-  phoneNumber: Scalars['String']
-}
-
 export enum DataCollectionStatus {
   Running = 'RUNNING',
   Login = 'LOGIN',
@@ -3759,20 +3737,13 @@ export type ExternalInsuranceProvider = {
   __typename?: 'ExternalInsuranceProvider'
   /** @deprecated Use providerStatusV2 instead */
   providerStatus: Array<ProviderStatus>
-  providerStatusV2: Array<ProviderStatusV2>
   /** @deprecated Use dataCollectionV2 instead */
   dataCollection: Array<InsuranceDataCollection>
-  dataCollectionV2: Array<InsuranceDataCollectionV2>
   /** @deprecated use dataCollectionStatusV2 instead */
   dataCollectionStatus: DataCollectingStatusResponse
-  dataCollectionStatusV2: DataCollectingStatusResponseV2
 }
 
 export type ExternalInsuranceProviderDataCollectionArgs = {
-  reference: Scalars['ID']
-}
-
-export type ExternalInsuranceProviderDataCollectionV2Args = {
   reference: Scalars['ID']
 }
 
@@ -3780,34 +3751,15 @@ export type ExternalInsuranceProviderDataCollectionStatusArgs = {
   reference: Scalars['ID']
 }
 
-export type ExternalInsuranceProviderDataCollectionStatusV2Args = {
-  reference: Scalars['ID']
-}
-
 export type ExternalInsuranceProviderMutation = {
   __typename?: 'ExternalInsuranceProviderMutation'
   /** @deprecated Use initiateDataCollectionWithSwedishPersonalNumber, initiateDataCollectionWithNorwegianPersonalNumber or initiateDataCollectionWithNorwegianPhoneNumber */
   initiateDataCollection: DataCollectionStatus
-  initiateDataCollectionWithSwedishPersonalNumber: DataCollectionStatus
-  initiateDataCollectionWithNorwegianPersonalNumber: DataCollectionStatus
-  initiateDataCollectionWithNorwegianPhoneNumber: DataCollectionStatus
   initiateIframeDataCollection: Scalars['ID']
 }
 
 export type ExternalInsuranceProviderMutationInitiateDataCollectionArgs = {
   input: InitiateDataCollectionInput
-}
-
-export type ExternalInsuranceProviderMutationInitiateDataCollectionWithSwedishPersonalNumberArgs = {
-  input: DataCollectionPersonalNumberInput
-}
-
-export type ExternalInsuranceProviderMutationInitiateDataCollectionWithNorwegianPersonalNumberArgs = {
-  input: DataCollectionPersonalNumberInput
-}
-
-export type ExternalInsuranceProviderMutationInitiateDataCollectionWithNorwegianPhoneNumberArgs = {
-  input: DataCollectionPhoneNumberInput
 }
 
 export type ExternalInsuranceProviderMutationInitiateIframeDataCollectionArgs = {
@@ -4363,23 +4315,6 @@ export type HouseInformation = {
 export type HouseInformationInput = {
   streetAddress: Scalars['String']
   postalNumber: Scalars['String']
-}
-
-export type HouseInsuranceCollection = {
-  __typename?: 'HouseInsuranceCollection'
-  insuranceProvider?: Maybe<Scalars['String']>
-  insuranceHolderAddress?: Maybe<Scalars['String']>
-  insuranceHolderName?: Maybe<Scalars['String']>
-  insuranceName?: Maybe<Scalars['String']>
-  insuranceSubType?: Maybe<Scalars['String']>
-  insuranceType?: Maybe<Scalars['String']>
-  renewalDate?: Maybe<Scalars['LocalDate']>
-  monthlyNetPremium?: Maybe<MonetaryAmountV2>
-  monthlyGrossPremium?: Maybe<MonetaryAmountV2>
-  monthlyDiscount?: Maybe<MonetaryAmountV2>
-  insuranceObjectAddress?: Maybe<Scalars['String']>
-  livingArea?: Maybe<Scalars['Int']>
-  postalCode?: Maybe<Scalars['String']>
 }
 
 export type Icon = {
@@ -5024,6 +4959,7 @@ export type InitiateDataCollectionInput = {
 
 export type InitiateIframeDataCollectionInput = {
   collectionId: Scalars['String']
+  partner?: Maybe<Scalars['String']>
 }
 
 export type InitWidgetInput = {
@@ -5122,10 +5058,6 @@ export type InsuranceDataCollection = {
   monthlyDiscount?: Maybe<MonetaryAmountV2>
 }
 
-export type InsuranceDataCollectionV2 =
-  | PersonTravelInsuranceCollection
-  | HouseInsuranceCollection
-
 export type InsuranceProvider = {
   __typename?: 'InsuranceProvider'
   id: Scalars['String']
@@ -5134,12 +5066,6 @@ export type InsuranceProvider = {
   externalCollectionId?: Maybe<Scalars['String']>
   hasExternalCapabilities: Scalars['Boolean']
   logo: Icon
-}
-
-export enum InsuranceProviderAvailability {
-  Ok = 'OK',
-  Beta = 'BETA',
-  NotImplemented = 'NOT_IMPLEMENTED',
 }
 
 export enum InsuranceStatus {
@@ -7702,11 +7628,6 @@ export type NorwegianBankIdAuthResponse = {
   redirectUrl: Scalars['String']
 }
 
-export type NorwegianBankIdExtraInfo = {
-  __typename?: 'NorwegianBankIdExtraInfo'
-  norwegianBankIdWords?: Maybe<Scalars['String']>
-}
-
 export type NorwegianHomeContentAgreement = AgreementCore & {
   __typename?: 'NorwegianHomeContentAgreement'
   id: Scalars['ID']
@@ -7942,20 +7863,6 @@ export type PersonalInformationInput = {
   personalNumber: Scalars['String']
 }
 
-export type PersonTravelInsuranceCollection = {
-  __typename?: 'PersonTravelInsuranceCollection'
-  insuranceProvider?: Maybe<Scalars['String']>
-  insuranceHolderAddress?: Maybe<Scalars['String']>
-  insuranceHolderName?: Maybe<Scalars['String']>
-  insuranceName?: Maybe<Scalars['String']>
-  insuranceSubType?: Maybe<Scalars['String']>
-  insuranceType?: Maybe<Scalars['String']>
-  renewalDate?: Maybe<Scalars['LocalDate']>
-  monthlyNetPremium?: Maybe<MonetaryAmountV2>
-  monthlyGrossPremium?: Maybe<MonetaryAmountV2>
-  monthlyDiscount?: Maybe<MonetaryAmountV2>
-}
-
 export enum Platform {
   Android = 'Android',
   IOs = 'iOS',
@@ -7989,14 +7896,6 @@ export type ProviderStatus = {
   __typename?: 'ProviderStatus'
   functional: Scalars['Boolean']
   insuranceProvider: Scalars['String']
-}
-
-export type ProviderStatusV2 = {
-  __typename?: 'ProviderStatusV2'
-  functional: Scalars['Boolean']
-  insuranceProvider: Scalars['String']
-  insuranceProviderDisplayName?: Maybe<Scalars['String']>
-  status: InsuranceProviderAvailability
 }
 
 export type PublishLocaleInput = {
@@ -9684,7 +9583,6 @@ export type Subscription = {
   __typename?: 'Subscription'
   /** @deprecated use dataCollectionStatusV2 instead */
   dataCollectionStatus?: Maybe<DataCollectingStatusResponse>
-  dataCollectionStatusV2: DataCollectingStatusResponseV2
   _?: Maybe<Scalars['Boolean']>
   authStatus?: Maybe<AuthEvent>
   quoteCart?: Maybe<QuoteCart>
@@ -9695,10 +9593,6 @@ export type Subscription = {
 }
 
 export type SubscriptionDataCollectionStatusArgs = {
-  reference: Scalars['ID']
-}
-
-export type SubscriptionDataCollectionStatusV2Args = {
   reference: Scalars['ID']
 }
 
@@ -9806,12 +9700,6 @@ export enum SwedishApartmentType {
   Rent = 'RENT',
   StudentBrf = 'STUDENT_BRF',
   Brf = 'BRF',
-}
-
-export type SwedishBankIdExtraInfo = {
-  __typename?: 'SwedishBankIdExtraInfo'
-  autoStartToken?: Maybe<Scalars['ID']>
-  swedishBankIdQrCode?: Maybe<Scalars['String']>
 }
 
 export type SwedishBankIdSession = {
