@@ -3,7 +3,9 @@ query ExternalInsuranceData($reference: ID!) {
   externalInsuranceProvider {
     dataCollection(reference: $reference) {
       renewalDate
-      insuranceProvider
+      insuranceProviderDisplayName
+      exposure
+      coverage
       monthlyPremium {
         currency
         amount

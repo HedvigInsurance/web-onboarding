@@ -7,6 +7,7 @@ import {
   QuoteBundleVariant,
   CheckoutStatus,
   CheckoutMethod,
+  useExternalInsuranceDataQuery,
 } from 'data/graphql'
 import { EventName } from 'utils/tracking/gtm/types'
 import { localePathPattern } from 'l10n/localePathPattern'
@@ -25,6 +26,7 @@ import {
   getCampaign,
   getMonthlyCostDeductionIncentive,
   isCarInsuranceType,
+  getCollectionId,
 } from 'api/quoteCartQuerySelectors'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
@@ -119,9 +121,16 @@ export const OfferPage = ({
     `${localePathPattern}/new-member/sign/${quoteCartId}`,
   )
 
+  const dataCollectionId = getCollectionId(quoteCartQueryData) ?? null
+  const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
+    skip: !dataCollectionId,
+    variables: dataCollectionId ? { reference: dataCollectionId } : undefined,
+  })
+
   const selectedBundleVariant = getSelectedBundleVariant(
     quoteCartQueryData,
     selectedInsuranceTypes,
+    externalInsuranceData,
   )
   const offerData = selectedBundleVariant
     ? getOfferData(selectedBundleVariant.bundle)
@@ -238,6 +247,7 @@ export const OfferPage = ({
         />
         {isInsuranceSelectorVisible && (
           <InsuranceSelector
+            dataCollectionId={dataCollectionId}
             variants={bundleVariants}
             selectedQuoteBundle={selectedBundleVariant}
             onChange={onInsuranceSelectorChange}
