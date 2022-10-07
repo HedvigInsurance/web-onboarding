@@ -12302,6 +12302,17 @@ export type RedeemedCampaignsQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type RegisterDirectDebitMutationVariables = Exact<{
+  clientContext: RegisterDirectDebitClientContext
+}>
+
+export type RegisterDirectDebitMutation = { __typename?: 'Mutation' } & {
+  registerDirectDebit: { __typename?: 'DirectDebitResponse' } & Pick<
+    DirectDebitResponse,
+    'url' | 'orderId'
+  >
+}
+
 export type RemoveCampaignCodeMutationVariables = Exact<{
   quoteCartId: Scalars['ID']
 }>
@@ -14649,6 +14660,60 @@ export type RedeemedCampaignsLazyQueryHookResult = ReturnType<
 export type RedeemedCampaignsQueryResult = ApolloReactCommon.QueryResult<
   RedeemedCampaignsQuery,
   RedeemedCampaignsQueryVariables
+>
+export const RegisterDirectDebitDocument = gql`
+  mutation RegisterDirectDebit(
+    $clientContext: RegisterDirectDebitClientContext!
+  ) {
+    registerDirectDebit(clientContext: $clientContext) {
+      url
+      orderId
+    }
+  }
+`
+export type RegisterDirectDebitMutationFn = ApolloReactCommon.MutationFunction<
+  RegisterDirectDebitMutation,
+  RegisterDirectDebitMutationVariables
+>
+
+/**
+ * __useRegisterDirectDebitMutation__
+ *
+ * To run a mutation, you first call `useRegisterDirectDebitMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterDirectDebitMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerDirectDebitMutation, { data, loading, error }] = useRegisterDirectDebitMutation({
+ *   variables: {
+ *      clientContext: // value for 'clientContext'
+ *   },
+ * });
+ */
+export function useRegisterDirectDebitMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RegisterDirectDebitMutation,
+    RegisterDirectDebitMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RegisterDirectDebitMutation,
+    RegisterDirectDebitMutationVariables
+  >(RegisterDirectDebitDocument, options)
+}
+export type RegisterDirectDebitMutationHookResult = ReturnType<
+  typeof useRegisterDirectDebitMutation
+>
+export type RegisterDirectDebitMutationResult = ApolloReactCommon.MutationResult<
+  RegisterDirectDebitMutation
+>
+export type RegisterDirectDebitMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RegisterDirectDebitMutation,
+  RegisterDirectDebitMutationVariables
 >
 export const RemoveCampaignCodeDocument = gql`
   mutation RemoveCampaignCode($quoteCartId: ID!) {

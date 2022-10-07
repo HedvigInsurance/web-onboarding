@@ -1,0 +1,8 @@
+mutation RegisterDirectDebit(
+  $clientContext: RegisterDirectDebitClientContext!
+) {
+  registerDirectDebit(clientContext: $clientContext) {
+    url
+    orderId
+  }
+}

@@ -3,7 +3,7 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 import { StaticTextKeyProvider } from 'utils/textKeys'
 import { renderComponent, waitFor } from 'test/utils'
-import { REGISTER_DIRECT_DEBIT_MUTATION } from '../containers/RegisterDirectDebitMutation'
+import { RegisterDirectDebitDocument } from 'data/graphql'
 import { TrustlyCheckout } from './TrustlyCheckout'
 
 it('renders without 💥', () => {
@@ -37,7 +37,7 @@ it('opens trustly modal and renders correct iframe url', async () => {
       mocks={[
         {
           request: {
-            query: REGISTER_DIRECT_DEBIT_MUTATION,
+            query: RegisterDirectDebitDocument,
             variables: {
               clientContext: {
                 successUrl: location + '/success',
