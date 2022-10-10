@@ -3,6 +3,7 @@ import { colorsV3 } from '@hedviginsurance/brand'
 import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import React from 'react'
 import { InsuranceCost, InsuranceDataCollection } from 'data/graphql'
+import { useTextKeys } from 'utils/textKeys'
 import { Price } from '../../components'
 
 const Wrapper = styled.div`
@@ -62,6 +63,7 @@ interface Props {
 }
 
 export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
+  const textKeys = useTextKeys()
   const externalInsuranceProvider = externalInsuranceProviders.find(
     (provider: { externalCollectionId?: string }) =>
       provider.externalCollectionId ===
@@ -82,7 +84,10 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
       <Spacer />
       <CompareBox isExternalProvider>
         <CompareBoxTitle>
-          <CompareBoxName>{externalInsuranceProvider?.name}</CompareBoxName>
+          <CompareBoxName>
+            {externalInsuranceProvider?.name ??
+              textKeys.EXTERNAL_INSURANCE_PROVIDER_UNKNOWN_NAME()}
+          </CompareBoxName>
           <Price
             monthlyGross={
               insuranceDataCollection.monthlyPremium || {

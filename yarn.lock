@@ -2234,10 +2234,10 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-5.0.3.tgz#8ddc4516830da89220cc4d52eeaab0896916dd82"
   integrity sha512-0fvSwnDWR2inKPvwiCDq67QC/p02E0j+nTJAG/0O5Zkrt52NLFZDVpprhoAFF9Tn+ZGm6Qr7E6/uiQ5A/mPwmg==
 
-"@hedviginsurance/embark@2.20.0":
-  version "2.20.0"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.20.0.tgz#c94fa5fd0ffce0072c054391f2caee05a0eb1a78"
-  integrity sha512-PA4qLcTGbukKIiMTeB11ooOYsCpyzVnFs2d7ZDURys7W5Nj4aaDICuv5y+edBfigi8Gf8gCLrmCOjwhp26NNkg==
+"@hedviginsurance/embark@2.20.1":
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.20.1.tgz#d1a27209aac627943160d9c77c23ce7c000608ec"
+  integrity sha512-tnKUR2vi/pzz23TypYfGORP4Di+UG3iFSvGr/ou42Ca2H9kAxxmbNNnXM9uR+TFcj0lYMAxchmGDoKBD8H5KeA==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"

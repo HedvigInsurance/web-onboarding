@@ -422,7 +422,8 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
                   }}
                   config={{
                     insurelyClientIds: {
-                      HEDVIG: window.hedvigClientConfig.insurelyHomeClientId,
+                      HEDVIG_HOME:
+                        window.hedvigClientConfig.insurelyHomeClientId,
                       HEDVIG_CAR: window.hedvigClientConfig.insurelyCarClientId,
                     },
                     logLevel:

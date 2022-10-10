@@ -45,6 +45,7 @@ enum EmbarkStory {
 
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
   SwedenQuoteCartSwitcher = 'Web Onboarding SE - Quote Cart Switcher',
+  SwedenQuoteCartSwitcherV2 = 'Web Onboarding SE - Quote Cart Switcher-v2',
   SwedenCar = 'SE-onboarding-car',
   SwedenCarV2 = 'SE-onboarding-car-v2',
 }
@@ -370,7 +371,11 @@ export const routes: Route[] = [
                 case 'home-switcher':
                   return {
                     baseUrl,
-                    name: EmbarkStory.SwedenQuoteCartSwitcher,
+                    name: features[
+                      Feature.HOME_INSURANCE_INSURELY_IFRAME
+                    ]?.includes('SE')
+                      ? EmbarkStory.SwedenQuoteCartSwitcherV2
+                      : EmbarkStory.SwedenQuoteCartSwitcher,
                     quoteCart: true,
                   }
                 case 'car':
