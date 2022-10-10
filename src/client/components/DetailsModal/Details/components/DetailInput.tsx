@@ -245,27 +245,14 @@ export const SwedishApartmentOwnershipTypeInput: React.FC<SwedishApartmentOwners
       label: 'DETAILS_MODULE_TABLE_RESIDENCE_TYPE_CELL_LABEL',
       placeholder: '',
       options: [
-        ...(formikProps.values.data.isStudent
-          ? [
-              {
-                label: 'SIDEBAR_INSURANCE_TYPE_BRF',
-                value: SwedishApartmentType.StudentBrf,
-              },
-              {
-                label: 'SIDEBAR_INSURANCE_TYPE_RENT',
-                value: SwedishApartmentType.StudentRent,
-              },
-            ]
-          : [
-              {
-                label: 'SIDEBAR_INSURANCE_TYPE_BRF',
-                value: SwedishApartmentType.Brf,
-              },
-              {
-                label: 'SIDEBAR_INSURANCE_TYPE_RENT',
-                value: SwedishApartmentType.Rent,
-              },
-            ]),
+        {
+          label: 'SIDEBAR_INSURANCE_TYPE_BRF',
+          value: SwedishApartmentType.Brf,
+        },
+        {
+          label: 'SIDEBAR_INSURANCE_TYPE_RENT',
+          value: SwedishApartmentType.Rent,
+        },
       ],
     }}
     formikProps={formikProps}

@@ -9,7 +9,6 @@ import {
   useQuoteCartQuery,
   UnderwritingLimit,
   BundledQuote,
-  SwedishApartmentType,
 } from 'data/graphql'
 
 import { useTextKeys } from 'utils/textKeys'
@@ -141,23 +140,6 @@ function getFormErrorsFromUnderwritterLimits(
   )
 }
 
-const getSubType = (data: QuoteDetailsInput) => {
-  switch (data.subType) {
-    case SwedishApartmentType.Brf:
-    case SwedishApartmentType.StudentBrf:
-      return data.isStudent
-        ? SwedishApartmentType.StudentBrf
-        : SwedishApartmentType.Brf
-    case SwedishApartmentType.Rent:
-    case SwedishApartmentType.StudentRent:
-      return data.isStudent
-        ? SwedishApartmentType.StudentRent
-        : SwedishApartmentType.Rent
-    default:
-      return data.subType
-  }
-}
-
 type DetailsModalProps = Pick<ModalProps, 'isVisible'> & {
   onClose: () => void
   quoteCartId: string
@@ -266,19 +248,6 @@ export const DetailsModal = ({
                 form.data['squareMeters'] ||
                 data['livingSpace'] ||
                 data['squareMeters']
-              return acc
-            case 'subType':
-              if (marketLabel === 'SE') {
-                acc[key] =
-                  mainQuote.id === quote.id
-                    ? getSubType(form.data)
-                    : getSubType(data)
-              } else {
-                acc[key] =
-                  mainQuote.id === quote.id
-                    ? form.data['subType']
-                    : data['subType']
-              }
               return acc
             case 'id':
             case 'type':
