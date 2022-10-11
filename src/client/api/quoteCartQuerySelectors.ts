@@ -3,7 +3,6 @@ import {
   QuoteBundleVariant,
   BundledQuote,
   TypeOfContract,
-  ExternalInsuranceDataQuery,
 } from 'data/graphql'
 import { InsuranceType } from 'utils/hooks/useSelectedInsuranceTypes'
 import { OfferData } from 'pages/Offer/types'
@@ -12,7 +11,6 @@ import { getBundleVariantFromInsuranceTypesWithFallback } from '../pages/Offer/u
 export function getSelectedBundleVariant(
   quoteCartQuery: QuoteCartQuery | undefined,
   selectedInsuranceTypes: InsuranceType[] | TypeOfContract[],
-  externalInsuranceData?: ExternalInsuranceDataQuery,
 ) {
   const bundleVariants = (quoteCartQuery?.quoteCart?.bundle
     ?.possibleVariations ?? []) as Array<QuoteBundleVariant>
@@ -22,7 +20,6 @@ export function getSelectedBundleVariant(
   return getBundleVariantFromInsuranceTypesWithFallback(
     bundleVariants,
     selectedInsuranceTypes,
-    externalInsuranceData,
   )
 }
 
@@ -104,7 +101,7 @@ export const getAdditionalQuotes = (quoteCartQuery?: QuoteCartQuery) => {
   return quoteCartQuery?.quoteCart.bundle?.additionalQuotes ?? []
 }
 
-export const getCollectionId = (quoteCartQuery?: QuoteCartQuery) => {
+export const getDataCollectionId = (quoteCartQuery?: QuoteCartQuery) => {
   return quoteCartQuery?.quoteCart?.bundle?.possibleVariations[0].bundle
     .quotes[0].dataCollectionId
 }

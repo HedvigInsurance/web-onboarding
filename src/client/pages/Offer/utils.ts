@@ -14,7 +14,6 @@ import {
   SwedishAccidentDetails,
   SwedishApartmentType,
   SwedishCarDetails,
-  ExternalInsuranceDataQuery,
 } from 'data/graphql'
 import { LocaleLabel, locales } from 'l10n/locales'
 import { birthDateFormats } from 'l10n/inputFormats'
@@ -431,7 +430,6 @@ const isBundleVariantMatchingContractTypes = (
 export const getBundleVariantFromInsuranceTypesWithFallback = (
   variants: Array<QuoteBundleVariant>,
   insuranceTypes: Array<InsuranceType> | Array<TypeOfContract>,
-  externalInsuranceData?: ExternalInsuranceDataQuery,
 ) => {
   // For some insurances (like Car), all insurance types are the same between TRAFFIC, HALF, and FULL.
   // In those cases we need to search on TypeOfContract instead.
@@ -454,15 +452,6 @@ export const getBundleVariantFromInsuranceTypesWithFallback = (
   )
 
   if (matchingVariant) return matchingVariant
-
-  const matchingPreviousInsurance = variants.find(
-    (variant) =>
-      variant.bundle.quotes[0].typeOfContract ===
-      externalInsuranceData?.externalInsuranceProvider?.dataCollection?.[0]
-        .coverage,
-  )
-
-  if (matchingPreviousInsurance) return matchingPreviousInsurance
 
   // Fallback to the variant with the fewest quotes
   return [...variants].sort(

@@ -7,7 +7,6 @@ import {
   QuoteBundleVariant,
   CheckoutStatus,
   CheckoutMethod,
-  useExternalInsuranceDataQuery,
 } from 'data/graphql'
 import { EventName } from 'utils/tracking/gtm/types'
 import { localePathPattern } from 'l10n/localePathPattern'
@@ -26,7 +25,7 @@ import {
   getCampaign,
   getMonthlyCostDeductionIncentive,
   isCarInsuranceType,
-  getCollectionId,
+  getDataCollectionId,
 } from 'api/quoteCartQuerySelectors'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
@@ -121,16 +120,11 @@ export const OfferPage = ({
     `${localePathPattern}/new-member/sign/${quoteCartId}`,
   )
 
-  const dataCollectionId = getCollectionId(quoteCartQueryData) ?? null
-  const { data: externalInsuranceData } = useExternalInsuranceDataQuery({
-    skip: !dataCollectionId,
-    variables: dataCollectionId ? { reference: dataCollectionId } : undefined,
-  })
+  const dataCollectionId = getDataCollectionId(quoteCartQueryData) ?? null
 
   const selectedBundleVariant = getSelectedBundleVariant(
     quoteCartQueryData,
     selectedInsuranceTypes,
-    externalInsuranceData,
   )
   const offerData = selectedBundleVariant
     ? getOfferData(selectedBundleVariant.bundle)
@@ -188,20 +182,23 @@ export const OfferPage = ({
     return <CheckoutSuccessRedirect />
   }
 
-  const onInsuranceSelectorChange = (
+  const handleInsuranceSelectorChange = (
     newSelectedBundleVariant: QuoteBundleVariant,
+    automated: boolean = false,
   ) => {
     setSelectedInsuranceTypes(
       isCarInsuranceType(newSelectedBundleVariant)
         ? getTypeOfContractFromBundleVariant(newSelectedBundleVariant)
         : getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
-    trackOfferEvent({
-      eventName: EventName.InsuranceSelectionToggle,
-      options: {
-        switchedFrom: selectedBundleVariant.bundle,
-      },
-    })
+    if (!automated) {
+      trackOfferEvent({
+        eventName: EventName.InsuranceSelectionToggle,
+        options: {
+          switchedFrom: selectedBundleVariant.bundle,
+        },
+      })
+    }
   }
 
   const handleCheckoutUpsellCardAccepted = (
@@ -250,7 +247,7 @@ export const OfferPage = ({
             dataCollectionId={dataCollectionId}
             variants={bundleVariants}
             selectedQuoteBundle={selectedBundleVariant}
-            onChange={onInsuranceSelectorChange}
+            onChange={handleInsuranceSelectorChange}
           />
         )}
         {isProductSelectorEnabled && quoteCartQueryData && (
