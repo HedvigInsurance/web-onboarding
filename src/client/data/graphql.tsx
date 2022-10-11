@@ -497,6 +497,9 @@ export type AppMarketingImageManyWhereInput = {
   OR?: Maybe<Array<AppMarketingImageWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<AppMarketingImageWhereInput>>
+  documentInStages_every?: Maybe<AppMarketingImageWhereStageInput>
+  documentInStages_some?: Maybe<AppMarketingImageWhereStageInput>
+  documentInStages_none?: Maybe<AppMarketingImageWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -684,6 +687,12 @@ export type AppMarketingImageUpsertWithNestedWhereUniqueInput = {
   data: AppMarketingImageUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type AppMarketingImageWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type AppMarketingImageWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -694,6 +703,9 @@ export type AppMarketingImageWhereInput = {
   OR?: Maybe<Array<AppMarketingImageWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<AppMarketingImageWhereInput>>
+  documentInStages_every?: Maybe<AppMarketingImageWhereStageInput>
+  documentInStages_some?: Maybe<AppMarketingImageWhereStageInput>
+  documentInStages_none?: Maybe<AppMarketingImageWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -792,6 +804,20 @@ export type AppMarketingImageWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type AppMarketingImageWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<AppMarketingImageWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<AppMarketingImageWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<AppMarketingImageWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<AppMarketingImageWhereComparatorInput>
 }
 
 /** References AppMarketingImage record uniquely */
@@ -1048,6 +1074,9 @@ export type AssetManyWhereInput = {
   OR?: Maybe<Array<AssetWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<AssetWhereInput>>
+  documentInStages_every?: Maybe<AssetWhereStageInput>
+  documentInStages_some?: Maybe<AssetWhereStageInput>
+  documentInStages_none?: Maybe<AssetWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -1292,6 +1321,12 @@ export type AssetUpsertWithNestedWhereUniqueInput = {
   data: AssetUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type AssetWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type AssetWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -1302,6 +1337,9 @@ export type AssetWhereInput = {
   OR?: Maybe<Array<AssetWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<AssetWhereInput>>
+  documentInStages_every?: Maybe<AssetWhereStageInput>
+  documentInStages_some?: Maybe<AssetWhereStageInput>
+  documentInStages_none?: Maybe<AssetWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -1483,6 +1521,20 @@ export type AssetWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type AssetWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<AssetWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<AssetWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<AssetWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<AssetWhereComparatorInput>
 }
 
 /** References Asset record uniquely */
@@ -2339,6 +2391,9 @@ export type CoreMlModelManyWhereInput = {
   OR?: Maybe<Array<CoreMlModelWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<CoreMlModelWhereInput>>
+  documentInStages_every?: Maybe<CoreMlModelWhereStageInput>
+  documentInStages_some?: Maybe<CoreMlModelWhereStageInput>
+  documentInStages_none?: Maybe<CoreMlModelWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -2505,6 +2560,12 @@ export type CoreMlModelUpsertWithNestedWhereUniqueInput = {
   data: CoreMlModelUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type CoreMlModelWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type CoreMlModelWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -2515,6 +2576,9 @@ export type CoreMlModelWhereInput = {
   OR?: Maybe<Array<CoreMlModelWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<CoreMlModelWhereInput>>
+  documentInStages_every?: Maybe<CoreMlModelWhereStageInput>
+  documentInStages_some?: Maybe<CoreMlModelWhereStageInput>
+  documentInStages_none?: Maybe<CoreMlModelWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -2593,6 +2657,20 @@ export type CoreMlModelWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type CoreMlModelWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<CoreMlModelWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<CoreMlModelWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<CoreMlModelWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<CoreMlModelWhereComparatorInput>
 }
 
 /** References CoreMLModel record uniquely */
@@ -3938,6 +4016,9 @@ export type FaqManyWhereInput = {
   OR?: Maybe<Array<FaqWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<FaqWhereInput>>
+  documentInStages_every?: Maybe<FaqWhereStageInput>
+  documentInStages_some?: Maybe<FaqWhereStageInput>
+  documentInStages_none?: Maybe<FaqWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -4135,6 +4216,12 @@ export type FaqUpsertWithNestedWhereUniqueInput = {
   data: FaqUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type FaqWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type FaqWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -4145,6 +4232,9 @@ export type FaqWhereInput = {
   OR?: Maybe<Array<FaqWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<FaqWhereInput>>
+  documentInStages_every?: Maybe<FaqWhereStageInput>
+  documentInStages_some?: Maybe<FaqWhereStageInput>
+  documentInStages_none?: Maybe<FaqWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -4254,6 +4344,20 @@ export type FaqWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type FaqWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<FaqWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<FaqWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<FaqWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<FaqWhereComparatorInput>
 }
 
 /** References Faq record uniquely */
@@ -4506,6 +4610,9 @@ export type ImportantMessageManyWhereInput = {
   OR?: Maybe<Array<ImportantMessageWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<ImportantMessageWhereInput>>
+  documentInStages_every?: Maybe<ImportantMessageWhereStageInput>
+  documentInStages_some?: Maybe<ImportantMessageWhereStageInput>
+  documentInStages_none?: Maybe<ImportantMessageWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -4749,6 +4856,12 @@ export type ImportantMessageUpsertWithNestedWhereUniqueInput = {
   data: ImportantMessageUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type ImportantMessageWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type ImportantMessageWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -4759,6 +4872,9 @@ export type ImportantMessageWhereInput = {
   OR?: Maybe<Array<ImportantMessageWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<ImportantMessageWhereInput>>
+  documentInStages_every?: Maybe<ImportantMessageWhereStageInput>
+  documentInStages_some?: Maybe<ImportantMessageWhereStageInput>
+  documentInStages_none?: Maybe<ImportantMessageWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -4906,6 +5022,20 @@ export type ImportantMessageWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type ImportantMessageWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ImportantMessageWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ImportantMessageWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ImportantMessageWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<ImportantMessageWhereComparatorInput>
 }
 
 /** References ImportantMessage record uniquely */
@@ -5056,6 +5186,9 @@ export type InsuranceDataCollection = {
   monthlyNetPremium?: Maybe<MonetaryAmountV2>
   monthlyGrossPremium?: Maybe<MonetaryAmountV2>
   monthlyDiscount?: Maybe<MonetaryAmountV2>
+  insuranceProviderDisplayName?: Maybe<Scalars['String']>
+  coverage?: Maybe<Scalars['String']>
+  exposure?: Maybe<Scalars['String']>
 }
 
 export type InsuranceProvider = {
@@ -5371,6 +5504,9 @@ export type KeyGearItemCoverageManyWhereInput = {
   OR?: Maybe<Array<KeyGearItemCoverageWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<KeyGearItemCoverageWhereInput>>
+  documentInStages_every?: Maybe<KeyGearItemCoverageWhereStageInput>
+  documentInStages_some?: Maybe<KeyGearItemCoverageWhereStageInput>
+  documentInStages_none?: Maybe<KeyGearItemCoverageWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -5526,6 +5662,12 @@ export type KeyGearItemCoverageUpsertWithNestedWhereUniqueInput = {
   data: KeyGearItemCoverageUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type KeyGearItemCoverageWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type KeyGearItemCoverageWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -5536,6 +5678,9 @@ export type KeyGearItemCoverageWhereInput = {
   OR?: Maybe<Array<KeyGearItemCoverageWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<KeyGearItemCoverageWhereInput>>
+  documentInStages_every?: Maybe<KeyGearItemCoverageWhereStageInput>
+  documentInStages_some?: Maybe<KeyGearItemCoverageWhereStageInput>
+  documentInStages_none?: Maybe<KeyGearItemCoverageWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -5610,6 +5755,20 @@ export type KeyGearItemCoverageWhereInput = {
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type KeyGearItemCoverageWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<KeyGearItemCoverageWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<KeyGearItemCoverageWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<KeyGearItemCoverageWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<KeyGearItemCoverageWhereComparatorInput>
+}
+
 /** References KeyGearItemCoverage record uniquely */
 export type KeyGearItemCoverageWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
@@ -5625,6 +5784,9 @@ export type KeyManyWhereInput = {
   OR?: Maybe<Array<KeyWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<KeyWhereInput>>
+  documentInStages_every?: Maybe<KeyWhereStageInput>
+  documentInStages_some?: Maybe<KeyWhereStageInput>
+  documentInStages_none?: Maybe<KeyWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -5830,6 +5992,12 @@ export type KeyUpsertWithNestedWhereUniqueInput = {
   data: KeyUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type KeyWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type KeyWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -5840,6 +6008,9 @@ export type KeyWhereInput = {
   OR?: Maybe<Array<KeyWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<KeyWhereInput>>
+  documentInStages_every?: Maybe<KeyWhereStageInput>
+  documentInStages_some?: Maybe<KeyWhereStageInput>
+  documentInStages_none?: Maybe<KeyWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -5953,6 +6124,20 @@ export type KeyWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type KeyWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<KeyWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<KeyWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<KeyWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<KeyWhereComparatorInput>
 }
 
 /** References Key record uniquely */
@@ -6144,6 +6329,9 @@ export type LanguageManyWhereInput = {
   OR?: Maybe<Array<LanguageWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<LanguageWhereInput>>
+  documentInStages_every?: Maybe<LanguageWhereStageInput>
+  documentInStages_some?: Maybe<LanguageWhereStageInput>
+  documentInStages_none?: Maybe<LanguageWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -6359,6 +6547,12 @@ export type LanguageUpsertWithNestedWhereUniqueInput = {
   data: LanguageUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type LanguageWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type LanguageWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -6369,6 +6563,9 @@ export type LanguageWhereInput = {
   OR?: Maybe<Array<LanguageWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<LanguageWhereInput>>
+  documentInStages_every?: Maybe<LanguageWhereStageInput>
+  documentInStages_some?: Maybe<LanguageWhereStageInput>
+  documentInStages_none?: Maybe<LanguageWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -6492,6 +6689,20 @@ export type LanguageWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type LanguageWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<LanguageWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<LanguageWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<LanguageWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<LanguageWhereComparatorInput>
 }
 
 /** References Language record uniquely */
@@ -6694,6 +6905,9 @@ export type MarketingStoryManyWhereInput = {
   OR?: Maybe<Array<MarketingStoryWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<MarketingStoryWhereInput>>
+  documentInStages_every?: Maybe<MarketingStoryWhereStageInput>
+  documentInStages_some?: Maybe<MarketingStoryWhereStageInput>
+  documentInStages_none?: Maybe<MarketingStoryWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -6907,6 +7121,12 @@ export type MarketingStoryUpsertWithNestedWhereUniqueInput = {
   data: MarketingStoryUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type MarketingStoryWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type MarketingStoryWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -6917,6 +7137,9 @@ export type MarketingStoryWhereInput = {
   OR?: Maybe<Array<MarketingStoryWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<MarketingStoryWhereInput>>
+  documentInStages_every?: Maybe<MarketingStoryWhereStageInput>
+  documentInStages_some?: Maybe<MarketingStoryWhereStageInput>
+  documentInStages_none?: Maybe<MarketingStoryWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -7033,6 +7256,20 @@ export type MarketingStoryWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type MarketingStoryWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<MarketingStoryWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<MarketingStoryWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<MarketingStoryWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<MarketingStoryWhereComparatorInput>
 }
 
 /** References MarketingStory record uniquely */
@@ -10078,6 +10315,9 @@ export type TranslationManyWhereInput = {
   OR?: Maybe<Array<TranslationWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<TranslationWhereInput>>
+  documentInStages_every?: Maybe<TranslationWhereStageInput>
+  documentInStages_some?: Maybe<TranslationWhereStageInput>
+  documentInStages_none?: Maybe<TranslationWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -10237,6 +10477,12 @@ export type TranslationUpsertWithNestedWhereUniqueInput = {
   data: TranslationUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type TranslationWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type TranslationWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -10247,6 +10493,9 @@ export type TranslationWhereInput = {
   OR?: Maybe<Array<TranslationWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<TranslationWhereInput>>
+  documentInStages_every?: Maybe<TranslationWhereStageInput>
+  documentInStages_some?: Maybe<TranslationWhereStageInput>
+  documentInStages_none?: Maybe<TranslationWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -10322,6 +10571,20 @@ export type TranslationWhereInput = {
   scheduledIn_every?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_some?: Maybe<ScheduledOperationWhereInput>
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type TranslationWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<TranslationWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<TranslationWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<TranslationWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<TranslationWhereComparatorInput>
 }
 
 /** References Translation record uniquely */
@@ -10621,6 +10884,9 @@ export type UserFeatureManyWhereInput = {
   OR?: Maybe<Array<UserFeatureWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<UserFeatureWhereInput>>
+  documentInStages_every?: Maybe<UserFeatureWhereStageInput>
+  documentInStages_some?: Maybe<UserFeatureWhereStageInput>
+  documentInStages_none?: Maybe<UserFeatureWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -10804,6 +11070,12 @@ export type UserFeatureUpsertWithNestedWhereUniqueInput = {
   data: UserFeatureUpsertInput
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type UserFeatureWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type UserFeatureWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -10814,6 +11086,9 @@ export type UserFeatureWhereInput = {
   OR?: Maybe<Array<UserFeatureWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<UserFeatureWhereInput>>
+  documentInStages_every?: Maybe<UserFeatureWhereStageInput>
+  documentInStages_some?: Maybe<UserFeatureWhereStageInput>
+  documentInStages_none?: Maybe<UserFeatureWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -10912,6 +11187,20 @@ export type UserFeatureWhereInput = {
   scheduledIn_none?: Maybe<ScheduledOperationWhereInput>
 }
 
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type UserFeatureWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<UserFeatureWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<UserFeatureWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<UserFeatureWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<UserFeatureWhereComparatorInput>
+}
+
 /** References UserFeature record uniquely */
 export type UserFeatureWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
@@ -10940,6 +11229,9 @@ export type UserManyWhereInput = {
   OR?: Maybe<Array<UserWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<UserWhereInput>>
+  documentInStages_every?: Maybe<UserWhereStageInput>
+  documentInStages_some?: Maybe<UserWhereStageInput>
+  documentInStages_none?: Maybe<UserWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -11089,6 +11381,12 @@ export type UserUpdateOneInlineInput = {
   disconnect?: Maybe<Scalars['Boolean']>
 }
 
+/** This contains a set of filters that can be used to compare values internally */
+export type UserWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>
+}
+
 /** Identifies documents */
 export type UserWhereInput = {
   /** Contains search across all appropriate fields. */
@@ -11099,6 +11397,9 @@ export type UserWhereInput = {
   OR?: Maybe<Array<UserWhereInput>>
   /** Logical NOT on all given filters combined by AND. */
   NOT?: Maybe<Array<UserWhereInput>>
+  documentInStages_every?: Maybe<UserWhereStageInput>
+  documentInStages_some?: Maybe<UserWhereStageInput>
+  documentInStages_none?: Maybe<UserWhereStageInput>
   id?: Maybe<Scalars['ID']>
   /** All values that are not equal to given value. */
   id_not?: Maybe<Scalars['ID']>
@@ -11211,6 +11512,20 @@ export type UserWhereInput = {
   kind_in?: Maybe<Array<Maybe<UserKind>>>
   /** All values that are not contained in given list. */
   kind_not_in?: Maybe<Array<Maybe<UserKind>>>
+}
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type UserWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<UserWhereStageInput>>
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<UserWhereStageInput>>
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<UserWhereStageInput>>
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<UserWhereComparatorInput>
 }
 
 /** References User record uniquely */
@@ -11458,7 +11773,10 @@ export type ExternalInsuranceDataQuery = { __typename?: 'Query' } & {
       dataCollection: Array<
         { __typename?: 'InsuranceDataCollection' } & Pick<
           InsuranceDataCollection,
-          'renewalDate' | 'insuranceProvider'
+          | 'renewalDate'
+          | 'insuranceProviderDisplayName'
+          | 'exposure'
+          | 'coverage'
         > & {
             monthlyPremium?: Maybe<
               { __typename?: 'MonetaryAmountV2' } & Pick<
@@ -13231,7 +13549,9 @@ export const ExternalInsuranceDataDocument = gql`
     externalInsuranceProvider {
       dataCollection(reference: $reference) {
         renewalDate
-        insuranceProvider
+        insuranceProviderDisplayName
+        exposure
+        coverage
         monthlyPremium {
           currency
           amount

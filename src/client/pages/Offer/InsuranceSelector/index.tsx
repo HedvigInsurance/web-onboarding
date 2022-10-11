@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import styled from '@emotion/styled'
-import { QuoteBundleVariant } from 'data/graphql'
+import { QuoteBundleVariant, useExternalInsuranceDataQuery } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
 import { useFeature } from 'utils/hooks/useFeature'
@@ -22,6 +22,7 @@ import { getUniqueQuotesFromVariantList } from '../utils'
 import { SelectableInsurance, Selector } from './Selector'
 
 interface Props {
+  dataCollectionId: string | null
   variants: QuoteBundleVariant[]
   selectedQuoteBundle: QuoteBundleVariant
   onChange: (bundle: QuoteBundleVariant) => void
@@ -38,6 +39,7 @@ const CompareInsuranceButton = styled(TextButton)`
 `
 
 export const InsuranceSelector = ({
+  dataCollectionId,
   variants,
   selectedQuoteBundle,
   onChange,
@@ -57,6 +59,11 @@ export const InsuranceSelector = ({
     [variants],
   )
 
+  const { data } = useExternalInsuranceDataQuery({
+    skip: !dataCollectionId,
+    variables: dataCollectionId ? { reference: dataCollectionId } : undefined,
+  })
+
   const insurances: SelectableInsurance[] = variants.map(
     ({ id, tag, description, bundle }) => {
       const {
@@ -67,10 +74,17 @@ export const InsuranceSelector = ({
         },
       } = bundle
 
+      const matchesOldInsurance =
+        data?.externalInsuranceProvider?.dataCollection[0].coverage ===
+        bundle.quotes[0].typeOfContract
+      const matchesLabel = matchesOldInsurance
+        ? textKeys.EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL()
+        : ''
+
       return {
         id,
         description: description ?? '',
-        label: tag ?? undefined,
+        label: tag ?? matchesLabel,
         name: displayName,
         price: `${localizeNumber(
           Math.round(Number(amount)),

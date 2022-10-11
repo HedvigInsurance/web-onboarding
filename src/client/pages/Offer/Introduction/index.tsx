@@ -39,7 +39,7 @@ const HeroContentWrapper = styled.div`
   padding-top: 3rem;
 
   ${LARGE_SCREEN_MEDIA_QUERY} {
-    padding-top: 12.5rem;
+    padding-top: 10.5rem;
   }
 `
 

@@ -1,8 +1,11 @@
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { externalInsuranceProviders } from '@hedviginsurance/embark'
 import React from 'react'
-import { InsuranceCost, InsuranceDataCollection } from 'data/graphql'
+import {
+  InsuranceCost,
+  InsuranceDataCollection,
+  TypeOfContract,
+} from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { Price } from '../../components'
 
@@ -30,6 +33,10 @@ const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
   width: 100%;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
 
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
   ${({ isExternalProvider }) =>
     isExternalProvider &&
     `
@@ -39,23 +46,31 @@ const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
   `};
 `
 
-const CompareBoxName = styled.div`
+const CompareBoxName = styled.div<{ isExternalProvider?: boolean }>`
   display: flex;
   align-items: center;
   font-weight: 300;
   line-height: 2rem;
-  font-size: 1.5rem;
+  font-size: ${({ isExternalProvider = false }) =>
+    isExternalProvider ? '1.3rem' : '1.5rem'};
 `
 
 const CompareBoxTitle = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
+  gap: 1rem;
 `
 
 const Spacer = styled.div`
   width: 1.25rem;
 `
+
+const CompareBoxDescription = styled.div({
+  fontSize: '0.875rem',
+  marginTop: '0.5rem',
+  color: '#505050',
+})
 
 interface Props {
   insuranceDataCollection: InsuranceDataCollection
@@ -63,12 +78,7 @@ interface Props {
 }
 
 export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
-  const textKeys = useTextKeys()
-  const externalInsuranceProvider = externalInsuranceProviders.find(
-    (provider: { externalCollectionId?: string }) =>
-      provider.externalCollectionId ===
-      insuranceDataCollection.insuranceProvider?.toUpperCase(),
-  )
+  const translateCoverage = useTranslateCoverage()
 
   return (
     <Wrapper>
@@ -84,9 +94,8 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
       <Spacer />
       <CompareBox isExternalProvider>
         <CompareBoxTitle>
-          <CompareBoxName>
-            {externalInsuranceProvider?.name ??
-              textKeys.EXTERNAL_INSURANCE_PROVIDER_UNKNOWN_NAME()}
+          <CompareBoxName isExternalProvider>
+            {insuranceDataCollection.insuranceProviderDisplayName}
           </CompareBoxName>
           <Price
             monthlyGross={
@@ -103,7 +112,29 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
             }
           />
         </CompareBoxTitle>
+        {insuranceDataCollection.coverage && (
+          <CompareBoxDescription>
+            {translateCoverage(insuranceDataCollection.coverage)}
+          </CompareBoxDescription>
+        )}
       </CompareBox>
     </Wrapper>
   )
+}
+
+const useTranslateCoverage = () => {
+  const textKeys = useTextKeys()
+
+  return (coverage: string) => {
+    switch (coverage) {
+      case TypeOfContract.SeCarFull:
+        return textKeys.CONTRACT_DISPLAY_NAME_SE_CAR_FULL()
+      case TypeOfContract.SeCarHalf:
+        return textKeys.CONTRACT_DISPLAY_NAME_SE_CAR_HALF()
+      case TypeOfContract.SeCarTraffic:
+        return textKeys.CONTRACT_DISPLAY_NAME_SE_CAR_TRAFFIC()
+      default:
+        return coverage
+    }
+  }
 }
