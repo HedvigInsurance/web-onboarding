@@ -25,6 +25,7 @@ import {
   getCampaign,
   getMonthlyCostDeductionIncentive,
   isCarInsuranceType,
+  getDataCollectionId,
 } from 'api/quoteCartQuerySelectors'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
@@ -119,6 +120,8 @@ export const OfferPage = ({
     `${localePathPattern}/new-member/sign/${quoteCartId}`,
   )
 
+  const dataCollectionId = getDataCollectionId(quoteCartQueryData) ?? null
+
   const selectedBundleVariant = getSelectedBundleVariant(
     quoteCartQueryData,
     selectedInsuranceTypes,
@@ -179,20 +182,23 @@ export const OfferPage = ({
     return <CheckoutSuccessRedirect />
   }
 
-  const onInsuranceSelectorChange = (
+  const handleInsuranceSelectorChange = (
     newSelectedBundleVariant: QuoteBundleVariant,
+    automated: boolean = false,
   ) => {
     setSelectedInsuranceTypes(
       isCarInsuranceType(newSelectedBundleVariant)
         ? getTypeOfContractFromBundleVariant(newSelectedBundleVariant)
         : getInsuranceTypesFromBundleVariant(newSelectedBundleVariant),
     )
-    trackOfferEvent({
-      eventName: EventName.InsuranceSelectionToggle,
-      options: {
-        switchedFrom: selectedBundleVariant.bundle,
-      },
-    })
+    if (!automated) {
+      trackOfferEvent({
+        eventName: EventName.InsuranceSelectionToggle,
+        options: {
+          switchedFrom: selectedBundleVariant.bundle,
+        },
+      })
+    }
   }
 
   const handleCheckoutUpsellCardAccepted = (
@@ -238,9 +244,10 @@ export const OfferPage = ({
         />
         {isInsuranceSelectorVisible && (
           <InsuranceSelector
+            dataCollectionId={dataCollectionId}
             variants={bundleVariants}
             selectedQuoteBundle={selectedBundleVariant}
-            onChange={onInsuranceSelectorChange}
+            onChange={handleInsuranceSelectorChange}
           />
         )}
         {isProductSelectorEnabled && quoteCartQueryData && (

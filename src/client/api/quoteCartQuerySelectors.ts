@@ -100,3 +100,8 @@ export const getStandaloneQuotes = (quoteCartQuery?: QuoteCartQuery) => {
 export const getAdditionalQuotes = (quoteCartQuery?: QuoteCartQuery) => {
   return quoteCartQuery?.quoteCart.bundle?.additionalQuotes ?? []
 }
+
+export const getDataCollectionId = (quoteCartQuery?: QuoteCartQuery) => {
+  return quoteCartQuery?.quoteCart?.bundle?.possibleVariations[0].bundle
+    .quotes[0].dataCollectionId
+}

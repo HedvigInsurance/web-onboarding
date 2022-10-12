@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import styled from '@emotion/styled'
-import { QuoteBundleVariant } from 'data/graphql'
+import { QuoteBundleVariant, useExternalInsuranceDataQuery } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
 import { useFeature } from 'utils/hooks/useFeature'
@@ -8,6 +8,7 @@ import { Feature } from 'shared/clientConfig'
 import { TextButton } from 'components/buttons'
 import { hasCar } from 'api/quoteBundleSelectors'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
+import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
 import {
   ContainerWrapper,
   Container,
@@ -20,11 +21,17 @@ import {
 import { ComparisonModal } from '../ComparisonTable/ComparisonModal'
 import { getUniqueQuotesFromVariantList } from '../utils'
 import { SelectableInsurance, Selector } from './Selector'
+import {
+  getInsuranceExposure,
+  getDataCollection,
+  matchVariantAndDataCollection,
+} from './InsuranceSelector.helpers'
 
 interface Props {
+  dataCollectionId: string | null
   variants: QuoteBundleVariant[]
   selectedQuoteBundle: QuoteBundleVariant
-  onChange: (bundle: QuoteBundleVariant) => void
+  onChange: (bundle: QuoteBundleVariant, automated?: boolean) => void
 }
 
 const CompareInsuranceButton = styled(TextButton)`
@@ -38,6 +45,7 @@ const CompareInsuranceButton = styled(TextButton)`
 `
 
 export const InsuranceSelector = ({
+  dataCollectionId,
   variants,
   selectedQuoteBundle,
   onChange,
@@ -57,34 +65,68 @@ export const InsuranceSelector = ({
     [variants],
   )
 
-  const insurances: SelectableInsurance[] = variants.map(
-    ({ id, tag, description, bundle }) => {
-      const {
-        displayName,
-        bundleCost: {
-          monthlyNet: { amount, currency },
-          monthlyGross: { amount: grossAmount, currency: grossCurrency },
-        },
-      } = bundle
+  const exposure = useMemo(() => getInsuranceExposure(variants), [variants])
 
-      return {
-        id,
-        description: description ?? '',
-        label: tag ?? undefined,
-        name: displayName,
-        price: `${localizeNumber(
-          Math.round(Number(amount)),
-        )} ${currency}${localizedPerMonth}`,
-        grossPrice:
-          amount !== grossAmount
-            ? `${Math.round(
-                Number(grossAmount),
-              )} ${grossCurrency}${localizedPerMonth}`
-            : undefined,
-        selected: id === selectedQuoteBundle.id,
+  const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
+  const { data } = useExternalInsuranceDataQuery({
+    skip: !dataCollectionId,
+    variables: dataCollectionId ? { reference: dataCollectionId } : undefined,
+    onCompleted(data) {
+      // Update selected variant based on matching insurance tier
+      if (selectedInsuranceTypes.length === 0) {
+        const matchingDataCollection = getDataCollection(data, exposure)
+        if (matchingDataCollection) {
+          const matchingVariant = variants.find((variant) =>
+            matchVariantAndDataCollection(variant, matchingDataCollection),
+          )
+
+          if (matchingVariant) {
+            onChange(matchingVariant, true)
+          }
+        }
       }
     },
+  })
+
+  const matchingDataCollection = useMemo(
+    () => (data ? getDataCollection(data, exposure) : undefined),
+    [data, exposure],
   )
+  const insurances: SelectableInsurance[] = variants.map((variant) => {
+    const { id, tag, description, bundle } = variant
+    const {
+      displayName,
+      bundleCost: {
+        monthlyNet: { amount, currency },
+        monthlyGross: { amount: grossAmount, currency: grossCurrency },
+      },
+    } = bundle
+
+    const matchesOldInsurance = matchingDataCollection
+      ? matchVariantAndDataCollection(variant, matchingDataCollection)
+      : false
+
+    const matchesLabel = matchesOldInsurance
+      ? textKeys.EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL()
+      : ''
+
+    return {
+      id,
+      description: description ?? '',
+      label: tag ?? matchesLabel,
+      name: displayName,
+      price: `${localizeNumber(
+        Math.round(Number(amount)),
+      )} ${currency}${localizedPerMonth}`,
+      grossPrice:
+        amount !== grossAmount
+          ? `${Math.round(
+              Number(grossAmount),
+            )} ${grossCurrency}${localizedPerMonth}`
+          : undefined,
+      selected: id === selectedQuoteBundle.id,
+    }
+  })
 
   const { title, body } = useGetTranslations(variants)
 
