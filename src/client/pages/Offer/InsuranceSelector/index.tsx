@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import styled from '@emotion/styled'
-import { QuoteBundleVariant, useExternalInsuranceDataQuery } from 'data/graphql'
+import { QuoteBundleVariant, useQuoteCartQuery } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
 import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
 import { useFeature } from 'utils/hooks/useFeature'
@@ -9,6 +9,9 @@ import { TextButton } from 'components/buttons'
 import { hasCar } from 'api/quoteBundleSelectors'
 import { MEDIUM_SCREEN_MEDIA_QUERY } from 'utils/mediaQueries'
 import { useSelectedInsuranceTypes } from 'utils/hooks/useSelectedInsuranceTypes'
+import { useExternalDataCollection } from 'utils/hooks/useExternalDataCollection'
+import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
+import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import {
   ContainerWrapper,
   Container,
@@ -21,14 +24,9 @@ import {
 import { ComparisonModal } from '../ComparisonTable/ComparisonModal'
 import { getUniqueQuotesFromVariantList } from '../utils'
 import { SelectableInsurance, Selector } from './Selector'
-import {
-  getInsuranceExposure,
-  getDataCollection,
-  matchVariantAndDataCollection,
-} from './InsuranceSelector.helpers'
+import { matchVariantAndDataCollection } from './InsuranceSelector.helpers'
 
 interface Props {
-  dataCollectionId: string | null
   variants: QuoteBundleVariant[]
   selectedQuoteBundle: QuoteBundleVariant
   onChange: (bundle: QuoteBundleVariant, automated?: boolean) => void
@@ -45,7 +43,6 @@ const CompareInsuranceButton = styled(TextButton)`
 `
 
 export const InsuranceSelector = ({
-  dataCollectionId,
   variants,
   selectedQuoteBundle,
   onChange,
@@ -65,33 +62,29 @@ export const InsuranceSelector = ({
     [variants],
   )
 
-  const exposure = useMemo(() => getInsuranceExposure(variants), [variants])
-
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
-  const { data } = useExternalInsuranceDataQuery({
-    skip: !dataCollectionId,
-    variables: dataCollectionId ? { reference: dataCollectionId } : undefined,
-    onCompleted(data) {
+
+  const { quoteCartId } = useQuoteCartIdFromUrl()
+  const { isoLocale } = useCurrentLocale()
+
+  const { data: quoteCartQueryData } = useQuoteCartQuery({
+    variables: { id: quoteCartId, locale: isoLocale },
+  })
+  const dataCollection = useExternalDataCollection(quoteCartQueryData, {
+    onCompleted(matchingDataCollection) {
       // Update selected variant based on matching insurance tier
       if (selectedInsuranceTypes.length === 0) {
-        const matchingDataCollection = getDataCollection(data, exposure)
-        if (matchingDataCollection) {
-          const matchingVariant = variants.find((variant) =>
-            matchVariantAndDataCollection(variant, matchingDataCollection),
-          )
+        const matchingVariant = variants.find((variant) =>
+          matchVariantAndDataCollection(variant, matchingDataCollection),
+        )
 
-          if (matchingVariant) {
-            onChange(matchingVariant, true)
-          }
+        if (matchingVariant) {
+          onChange(matchingVariant, true)
         }
       }
     },
   })
 
-  const matchingDataCollection = useMemo(
-    () => (data ? getDataCollection(data, exposure) : undefined),
-    [data, exposure],
-  )
   const insurances: SelectableInsurance[] = variants.map((variant) => {
     const { id, tag, description, bundle } = variant
     const {
@@ -102,8 +95,8 @@ export const InsuranceSelector = ({
       },
     } = bundle
 
-    const matchesOldInsurance = matchingDataCollection
-      ? matchVariantAndDataCollection(variant, matchingDataCollection)
+    const matchesOldInsurance = dataCollection
+      ? matchVariantAndDataCollection(variant, dataCollection)
       : false
 
     const matchesLabel = matchesOldInsurance

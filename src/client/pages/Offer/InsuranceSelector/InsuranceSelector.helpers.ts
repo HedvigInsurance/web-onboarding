@@ -1,27 +1,4 @@
-import {
-  QuoteBundleVariant,
-  ExternalInsuranceDataQuery,
-  InsuranceDataCollection,
-} from 'data/graphql'
-
-/**
- * Only Car is supported
- */
-export const getInsuranceExposure = (variants: QuoteBundleVariant[]) => {
-  const registrationNumber =
-    variants[0]?.bundle.quotes[0].data['registrationNumber']
-  return registrationNumber as string | undefined
-}
-
-export const getDataCollection = (
-  data: ExternalInsuranceDataQuery,
-  exposure?: string,
-) => {
-  const dataCollections = data.externalInsuranceProvider?.dataCollection
-  return dataCollections?.find(
-    (dataCollection) => dataCollection.exposure === exposure,
-  )
-}
+import { QuoteBundleVariant, InsuranceDataCollection } from 'data/graphql'
 
 export const matchVariantAndDataCollection = (
   variant: QuoteBundleVariant,

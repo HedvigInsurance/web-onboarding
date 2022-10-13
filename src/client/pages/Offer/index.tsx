@@ -25,7 +25,6 @@ import {
   getCampaign,
   getMonthlyCostDeductionIncentive,
   isCarInsuranceType,
-  getDataCollectionId,
 } from 'api/quoteCartQuerySelectors'
 import { useTrackOfferEvent } from 'utils/tracking/hooks/useTrackOfferEvent'
 import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
@@ -119,8 +118,6 @@ export const OfferPage = ({
   const checkoutMatch = useRouteMatch(
     `${localePathPattern}/new-member/sign/${quoteCartId}`,
   )
-
-  const dataCollectionId = getDataCollectionId(quoteCartQueryData) ?? null
 
   const selectedBundleVariant = getSelectedBundleVariant(
     quoteCartQueryData,
@@ -244,7 +241,6 @@ export const OfferPage = ({
         />
         {isInsuranceSelectorVisible && (
           <InsuranceSelector
-            dataCollectionId={dataCollectionId}
             variants={bundleVariants}
             selectedQuoteBundle={selectedBundleVariant}
             onChange={handleInsuranceSelectorChange}
