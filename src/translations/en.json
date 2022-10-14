@@ -456,5 +456,6 @@
   "SIDEBAR_SWITCHING_NOTICE_ADDENDUM": "If the expiry date is within a week, you’ll be asked to contact your insurer yourself to cancel it.",
   "SIDEBAR_STARTDATE_CELL_LABEL_SWITCHER": "Start date (expiry of your old insurance)",
   "EXTERNAL_INSURANCE_PROVIDER_UNKNOWN_NAME": "Old insurance",
-  "EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL": "Matches your current coverage"
+  "EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL": "Matches your current insurance",
+  "EXTERNAL_INSURANCE_COMPARE_DATE_EXPIRES": "Expires {value}"
 }

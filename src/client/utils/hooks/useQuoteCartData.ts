@@ -241,6 +241,7 @@ export const useQuoteCartData = () => {
     loading,
     error,
     data: {
+      quoteCartQuery: data,
       priceData,
       quoteDetails: quoteDetailsGroups,
       selectedQuoteBundleVariant,

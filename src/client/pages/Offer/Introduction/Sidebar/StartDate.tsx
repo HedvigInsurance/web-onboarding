@@ -513,7 +513,7 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
   }
 }
 
-const useGetDateLabel = () => {
+export const useGetDateLabel = () => {
   const textKeys = useTextKeys()
   const { isoLocale, marketLabel } = useCurrentLocale()
   const [dateLocale, setDateLocale] = useState<Locale | null>(null)
