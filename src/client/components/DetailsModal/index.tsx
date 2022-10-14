@@ -190,6 +190,8 @@ export const DetailsModal = ({
     numberCoInsured,
     squareMeters,
     livingSpace,
+    subType,
+    ...restMainQuoteData
   } = mainQuoteData
   const initialValues = {
     firstName,
@@ -200,11 +202,14 @@ export const DetailsModal = ({
     phoneNumber,
     startDate,
     data: {
-      ...mainQuoteData,
+      type: mainQuoteType,
+      ...restMainQuoteData,
       ...(!quoteSelector.isCar(mainQuote) && {
         isStudent: bundleSelector.isStudent(selectedQuoteBundle.bundle.quotes),
         householdSize: numberCoInsured + 1,
+        numberCoInsured,
         livingSpace: squareMeters ? squareMeters : livingSpace,
+        subType,
       }),
     },
   } as QuoteInput
