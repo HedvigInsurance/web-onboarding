@@ -456,5 +456,6 @@
   "SIDEBAR_SWITCHING_NOTICE_ADDENDUM": "Om din tidigare försäkring förfaller inom 1 vecka får du själv kontakta ditt försäkringsbolag och säga upp den.",
   "SIDEBAR_STARTDATE_CELL_LABEL_SWITCHER": "Startdatum (när din tidigare försäkring går ut)",
   "EXTERNAL_INSURANCE_PROVIDER_UNKNOWN_NAME": "Gamla försäkringen",
-  "EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL": "Matchar din nuvarande täckning"
+  "EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL": "Matchar försäkringen du har idag",
+  "EXTERNAL_INSURANCE_COMPARE_DATE_EXPIRES": "Löper ut {value}"
 }

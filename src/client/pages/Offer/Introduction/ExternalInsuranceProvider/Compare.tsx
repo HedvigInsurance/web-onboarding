@@ -7,6 +7,7 @@ import {
   TypeOfContract,
 } from 'data/graphql'
 import { useTextKeys } from 'utils/textKeys'
+import { useGetDateLabel } from 'pages/Offer/Introduction/Sidebar/StartDate'
 import { Price } from '../../components'
 
 const Wrapper = styled.div`
@@ -35,6 +36,7 @@ const CompareBox = styled.div<{ isExternalProvider?: boolean }>`
 
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 0.25rem;
 
   ${({ isExternalProvider }) =>
@@ -58,7 +60,7 @@ const CompareBoxName = styled.div<{ isExternalProvider?: boolean }>`
 const CompareBoxTitle = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 1rem;
 `
 
@@ -70,15 +72,23 @@ const CompareBoxDescription = styled.div({
   fontSize: '0.875rem',
   marginTop: '0.5rem',
   color: '#505050',
+
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.25rem',
 })
 
 interface Props {
   insuranceDataCollection: InsuranceDataCollection
   cost: InsuranceCost
+  description?: string
 }
 
-export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
+export const Compare: React.FC<Props> = (props) => {
+  const textKeys = useTextKeys()
+  const { insuranceDataCollection, cost, description } = props
   const translateCoverage = useTranslateCoverage()
+  const getDateLabel = useGetDateLabel()
 
   return (
     <Wrapper>
@@ -90,6 +100,9 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
             monthlyNet={cost.monthlyNet}
           />
         </CompareBoxTitle>
+        {description && (
+          <CompareBoxDescription>{description}</CompareBoxDescription>
+        )}
       </CompareBox>
       <Spacer />
       <CompareBox isExternalProvider>
@@ -112,11 +125,21 @@ export const Compare: React.FC<Props> = ({ insuranceDataCollection, cost }) => {
             }
           />
         </CompareBoxTitle>
-        {insuranceDataCollection.coverage && (
-          <CompareBoxDescription>
-            {translateCoverage(insuranceDataCollection.coverage)}
-          </CompareBoxDescription>
-        )}
+        <CompareBoxDescription>
+          {insuranceDataCollection.renewalDate && (
+            <div>
+              {textKeys.EXTERNAL_INSURANCE_COMPARE_DATE_EXPIRES({
+                value: getDateLabel(
+                  new Date(insuranceDataCollection.renewalDate),
+                ),
+              })}
+            </div>
+          )}
+
+          {insuranceDataCollection.coverage && (
+            <div>{translateCoverage(insuranceDataCollection.coverage)}</div>
+          )}
+        </CompareBoxDescription>
       </CompareBox>
     </Wrapper>
   )

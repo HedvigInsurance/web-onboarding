@@ -3,10 +3,12 @@ import React from 'react'
 import {
   useExternalInsuranceDataQuery,
   useExternalInsuranceDataStatusSubscription,
+  DataCollectionStatus,
 } from 'data/graphql'
 import { OfferData } from 'pages/Offer/types'
 
 import { useTextKeys } from 'utils/textKeys'
+import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { Compare } from './Compare'
 
 interface Props {
@@ -50,6 +52,8 @@ export const ExternalInsuranceProvider: React.FC<Props> = ({
     refetch()
   }, [subscriptionData?.dataCollectionStatus?.status, refetch])
 
+  const { data: quoteCartData } = useQuoteCartData()
+
   if (
     loading ||
     error ||
@@ -60,11 +64,11 @@ export const ExternalInsuranceProvider: React.FC<Props> = ({
   }
 
   switch (subscriptionData?.dataCollectionStatus?.status) {
-    case 'COLLECTING':
+    case DataCollectionStatus.Collecting:
       return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_COLLECTING()}</ErrorBox>
-    case 'COMPLETED_EMPTY':
+    case DataCollectionStatus.CompletedEmpty:
       return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_EMPTY()}</ErrorBox>
-    case 'FAILED':
+    case DataCollectionStatus.Failed:
       return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_FAILED()}</ErrorBox>
   }
 
@@ -74,7 +78,14 @@ export const ExternalInsuranceProvider: React.FC<Props> = ({
     return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_FAILED()}</ErrorBox>
   }
 
+  const bundleDisplayName =
+    quoteCartData?.selectedQuoteBundleVariant.bundle.displayName
+
   return (
-    <Compare cost={offerData.cost} insuranceDataCollection={firstInsurance} />
+    <Compare
+      description={bundleDisplayName}
+      cost={offerData.cost}
+      insuranceDataCollection={firstInsurance}
+    />
   )
 }
