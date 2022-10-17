@@ -54,7 +54,7 @@ interface DateInputProps {
   setOpen: (open: boolean) => void
   date: Date
   setDate: (date: Date | null) => void
-  isCurrentInsurerSwichable: boolean
+  currentInsurerRenewalDate?: Date | null
 }
 
 export const DateInput: React.FC<DateInputProps> = ({
@@ -62,7 +62,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   setOpen,
   date,
   setDate,
-  isCurrentInsurerSwichable,
+  currentInsurerRenewalDate,
 }) => {
   const textKeys = useTextKeys()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -125,11 +125,11 @@ export const DateInput: React.FC<DateInputProps> = ({
           </ButtonWrapper>
         </TopSection>
 
-        {isCurrentInsurerSwichable && (
+        {currentInsurerRenewalDate !== undefined && (
           <AtStartDateContainer>
             <TextButton
               onClick={() => {
-                setDate(null)
+                setDate(currentInsurerRenewalDate)
                 setOpen(false)
               }}
             >
