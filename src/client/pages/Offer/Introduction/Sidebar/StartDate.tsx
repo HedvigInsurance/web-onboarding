@@ -34,7 +34,6 @@ import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { isCarSwitcher } from 'api/quoteBundleSelectors'
 import { Features, useFeature } from 'utils/hooks/useFeature'
 import { isStartDateValidForCarSwitching } from 'utils/isStartDateValidForCarSwitching'
-import { TextButton } from 'components/buttons'
 import { useExternalDataCollection } from 'utils/hooks/useExternalDataCollection'
 import { CancellationOptions } from './CancellationOptions'
 import { TooSoonSwitcherErrorModal } from './TooSoonSwitcherErrorModal'
@@ -187,6 +186,7 @@ const getDateFormat = match<MarketLabel, string>([
 type DateFormProps = {
   startDate: string | null
   currentInsurer?: CurrentInsurer
+  currentInsurerRenewalDate?: Date
   userIsCarSwitcher?: boolean
   dataCollectionId?: string
   quoteDisplayName: string
@@ -202,6 +202,7 @@ type DateFormProps = {
 const DateForm = ({
   startDate,
   currentInsurer,
+  currentInsurerRenewalDate,
   userIsCarSwitcher = false,
   dataCollectionId,
   quoteDisplayName,
@@ -213,12 +214,17 @@ const DateForm = ({
   loading,
   displayLabel,
 }: DateFormProps) => {
-  // We should take car-specific switchable from backend.  So far we don't have Insurely integration for car yet
+  // We should take car-specific switchable from backend
   const isSwitcher = currentInsurer?.switchable || userIsCarSwitcher
+  // ...currently is only knows if home insurance providers are switchable
+  const isCurrentHomeInsuranceSwitchable = currentInsurer?.switchable === true
 
-  // We do not accept null as default value for Car insurances, so even if user is a switcher, we do not include
-  // car switchers in this logic
-  const dateValue = getDefaultDateValue(startDate, !!currentInsurer?.switchable)
+  // We do not accept null as default value for Car insurances,
+  // so even if user is a switcher, we do not include car switchers in this logic
+  const dateValue = getDefaultDateValue(
+    startDate,
+    currentInsurer?.switchable === true,
+  )
 
   const [datePickerOpen, setDatePickerOpen] = useState(false)
 
@@ -230,7 +236,10 @@ const DateForm = ({
       setOpen={setDatePickerOpen}
       date={dateValue || new Date()}
       setDate={onChange}
-      isCurrentInsurerSwichable={isSwitcher}
+      currentInsurerRenewalDate={
+        // For home insurance we create a pending contract with null as start date
+        isCurrentHomeInsuranceSwitchable ? null : currentInsurerRenewalDate
+      }
     />
   )
   return (
@@ -280,7 +289,7 @@ export type StartDateProps = {
   onSelect: (quoteId: string, startDate: Date | null) => Promise<void>
   modal?: boolean
   size?: Size
-  renewalDate?: Date
+  currentInsurerRenewalDate?: Date
 }
 
 export const StartDate = ({
@@ -290,7 +299,7 @@ export const StartDate = ({
   onSelect,
   modal = false,
   size = 'lg',
-  renewalDate,
+  currentInsurerRenewalDate,
 }: StartDateProps) => {
   const [carCancellationEnabled] = useFeature([Features.CAR_CANCELLATION])
   const userIsCarSwitcher =
@@ -299,7 +308,6 @@ export const StartDate = ({
   const [showError, setShowError] = useState(false)
   const [showTooSoonError, setShowToSoonError] = useState(false)
   const [loadingQuoteIds, setLoadingQuoteIds] = useState<Array<string>>([])
-  const getDateLabel = useGetDateLabel()
 
   const handleSelectNewStartDate = async (
     newDateValue: Date | null,
@@ -351,6 +359,7 @@ export const StartDate = ({
           <DateForm
             startDate={singleDateQuote.startDate}
             currentInsurer={singleDateQuote.currentInsurer ?? undefined}
+            currentInsurerRenewalDate={currentInsurerRenewalDate}
             userIsCarSwitcher={userIsCarSwitcher}
             quoteDisplayName={singleDateQuote.displayName}
             dataCollectionId={singleDateQuote.dataCollectionId ?? undefined}
@@ -380,15 +389,12 @@ export const StartDate = ({
               const isItemIndexEven = index % 2 === 0
               const isExpandedFirstItem = index === 0 && !isArrayLengthEven
 
-              const renewalDateISOString = renewalDate
-                ?.toISOString()
-                .slice(0, 10)
-
               return (
                 <DateFormWrapper key={quote.id}>
                   <DateForm
                     startDate={quote.startDate}
                     currentInsurer={quote.currentInsurer ?? undefined}
+                    currentInsurerRenewalDate={currentInsurerRenewalDate}
                     userIsCarSwitcher={userIsCarSwitcher}
                     quoteDisplayName={quote.displayName}
                     dataCollectionId={quote.dataCollectionId ?? undefined}
@@ -418,18 +424,6 @@ export const StartDate = ({
                     loading={loadingQuoteIds.includes(quote.id) || isLoading}
                     displayLabel
                   />
-                  {renewalDate && renewalDateISOString !== quote.startDate && (
-                    <StyledTextButton
-                      disabled={isLoading}
-                      onClick={() =>
-                        handleSelectNewStartDate(renewalDate, [quote.id])
-                      }
-                    >
-                      {`${textKeys.START_DATE_WHEN_OLD_EXPIRES()} - ${getDateLabel(
-                        renewalDate,
-                      )}`}
-                    </StyledTextButton>
-                  )}
                 </DateFormWrapper>
               )
             })}
@@ -507,7 +501,7 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
     selectedQuotes,
     isLoading: isLoading,
     onSelect,
-    renewalDate: matchingDataCollection
+    currentInsurerRenewalDate: matchingDataCollection
       ? new Date(matchingDataCollection.renewalDate)
       : undefined,
   }
@@ -543,13 +537,4 @@ const DateFormWrapper = styled.div({
   flexDirection: 'column',
   gap: '0.5rem',
   width: '100%',
-})
-
-const StyledTextButton = styled(TextButton)({
-  display: 'block',
-
-  '&:disabled': {
-    opacity: 0.5,
-    color: colorsV3.gray900,
-  },
 })
