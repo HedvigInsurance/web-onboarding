@@ -450,8 +450,6 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
     variables: { id: quoteCartId, locale: isoLocale },
   })
 
-  const matchingDataCollection = useExternalDataCollection(quoteCartQueryData)
-
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
   const { bundle: selectedBundle } =
     getSelectedBundleVariant(quoteCartQueryData, selectedInsuranceTypes) ?? {}
@@ -495,6 +493,28 @@ export const useStartDateProps = (): Omit<StartDateProps, 'size' | 'modal'> => {
       ),
     )
   }
+
+  const matchingDataCollection = useExternalDataCollection(quoteCartQueryData, {
+    async onCompleted(data) {
+      // CAR: pre-select current insurance renewal date as start date
+      const isCarAndWithoutStartDate = selectedQuotes.every(
+        (quote) => isCar(quote) && quote.startDate === null,
+      )
+      if (!isCarAndWithoutStartDate) return
+
+      const renewalDate = data.renewalDate
+        ? new Date(data.renewalDate)
+        : undefined
+
+      if (!renewalDate) return
+
+      await Promise.all(
+        selectedQuotes.map((quote) =>
+          onSelect(quote.id, new Date(renewalDate)),
+        ),
+      )
+    },
+  })
 
   return {
     singleDate,
