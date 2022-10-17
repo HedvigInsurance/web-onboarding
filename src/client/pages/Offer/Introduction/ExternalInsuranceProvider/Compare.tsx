@@ -108,7 +108,8 @@ export const Compare: React.FC<Props> = (props) => {
       <CompareBox isExternalProvider>
         <CompareBoxTitle>
           <CompareBoxName isExternalProvider>
-            {insuranceDataCollection.insuranceProviderDisplayName}
+            {insuranceDataCollection.insuranceProviderDisplayName ||
+              textKeys.EXTERNAL_INSURANCE_PROVIDER_UNKNOWN_NAME()}
           </CompareBoxName>
           <Price
             monthlyGross={
