@@ -199,6 +199,11 @@ const Embark = (props: EmbarkProps) => {
         canGoBack={state.history.length > 1}
         historyGoBackListener={(goBack) =>
           history.listen((_: any, action: string) => {
+            // Avoid iOS Safari going back to previous passage for after Insurely BankID redirect
+            if (location.pathname.includes('/price-comparison')) {
+              return
+            }
+
             if (action === 'POP' && state.history.length > 1) {
               goBack()
             }
