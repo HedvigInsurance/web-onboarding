@@ -23,6 +23,7 @@ import {
 } from './client/pages/Landing/landingPageData'
 import { InitiateCarCancellationPage } from './client/pages/IntiateCarCancellation'
 import { Feature } from './shared/clientConfig'
+import { PaymentPage } from './client/pages/Payment/Payment'
 
 enum EmbarkStory {
   DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
@@ -159,6 +160,26 @@ export const routes: Route[] = [
     },
   },
   {
+    path: `${onboardingLocaleBaseRoute}/payment`,
+    serverRouteData: {
+      titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+    },
+    clientRouteData: {
+      Component: PaymentPage,
+      exact: true,
+    },
+  },
+  {
+    path: `${onboardingLocaleBaseRoute}/payment/:status`,
+    serverRouteData: {
+      titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+    },
+    clientRouteData: {
+      Component: TrustlySpinnerPage,
+      exact: true,
+    },
+  },
+  {
     path: `${onboardingLocaleBaseRoute}/connect-payment/direct`,
     serverRouteData: {
       titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
@@ -264,7 +285,9 @@ export const routes: Route[] = [
         const getProps = (): EmbarkRouteProps => {
           const { locale, name } = match.params
           const baseUrl = `/${locale}/new-member/${name}`
-          const landingPageRedirect = { redirect: `/${locale}/new-member` }
+          const landingPageRedirect = {
+            redirect: `/${locale}/new-member`,
+          }
           const features = window.hedvigClientConfig.features
 
           switch (locale) {
@@ -390,7 +413,9 @@ export const routes: Route[] = [
               break
           }
 
-          datadogRum.addError('Unsupported Embark flow', { url: match.url })
+          datadogRum.addError('Unsupported Embark flow', {
+            url: match.url,
+          })
           return landingPageRedirect
         }
 
