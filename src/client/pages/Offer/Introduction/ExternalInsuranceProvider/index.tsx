@@ -1,79 +1,35 @@
-import styled from '@emotion/styled'
 import React from 'react'
-import {
-  useExternalInsuranceDataQuery,
-  useExternalInsuranceDataStatusSubscription,
-  DataCollectionStatus,
-} from 'data/graphql'
+import styled from '@emotion/styled'
+import { useExternalInsuranceDataQuery } from 'data/graphql'
 import { OfferData } from 'pages/Offer/types'
 
 import { useTextKeys } from 'utils/textKeys'
 import { useQuoteCartData } from 'utils/hooks/useQuoteCartData'
 import { Compare } from './Compare'
 
-interface Props {
+type Props = {
   dataCollectionId: string
   offerData: OfferData
 }
 
-const ErrorBox = styled.div`
-  display: flex;
-  padding: 1.25rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  font-weight: 300;
-
-  @media (max-width: 800px) {
-    margin-bottom: 1.25rem;
-    width: 100%;
-  }
-`
-
-export const ExternalInsuranceProvider: React.FC<Props> = ({
+export const ExternalInsuranceProvider = ({
   dataCollectionId,
   offerData,
-}) => {
+}: Props) => {
   const textKeys = useTextKeys()
-  const { loading, error, data, refetch } = useExternalInsuranceDataQuery({
+
+  const { loading, error, data } = useExternalInsuranceDataQuery({
     variables: {
       reference: dataCollectionId,
     },
   })
-
-  const { data: subscriptionData } = useExternalInsuranceDataStatusSubscription(
-    {
-      variables: {
-        reference: dataCollectionId,
-      },
-    },
-  )
-
-  React.useEffect(() => {
-    refetch()
-  }, [subscriptionData?.dataCollectionStatus?.status, refetch])
-
   const { data: quoteCartData } = useQuoteCartData()
 
-  if (
-    loading ||
-    error ||
-    !data ||
-    !subscriptionData?.dataCollectionStatus?.status
-  ) {
+  if (loading || error || !data) {
     return null
   }
 
-  switch (subscriptionData?.dataCollectionStatus?.status) {
-    case DataCollectionStatus.Collecting:
-      return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_COLLECTING()}</ErrorBox>
-    case DataCollectionStatus.CompletedEmpty:
-      return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_EMPTY()}</ErrorBox>
-    case DataCollectionStatus.Failed:
-      return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_FAILED()}</ErrorBox>
-  }
-
   const firstInsurance = data.externalInsuranceProvider?.dataCollection[0]
-
   if (!firstInsurance) {
     return <ErrorBox>{textKeys.EXTERNAL_INSURANCE_FAILED()}</ErrorBox>
   }
@@ -89,3 +45,16 @@ export const ExternalInsuranceProvider: React.FC<Props> = ({
     />
   )
 }
+
+const ErrorBox = styled.div`
+  display: flex;
+  padding: 1.25rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  font-weight: 300;
+
+  @media (max-width: 800px) {
+    margin-bottom: 1.25rem;
+    width: 100%;
+  }
+`

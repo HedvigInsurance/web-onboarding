@@ -24,10 +24,6 @@ import { useOnboardingQuoteCartId } from 'utils/hooks/useOnboardingQuoteCartId'
 import { pushToGTMDataLayer } from 'utils/tracking/gtm/dataLayer'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
-import {
-  resolveExternalInsuranceProviderProviderStatus,
-  resolveExternalInsuranceProviderStartSession,
-} from './externalInsuranceProvider'
 import { graphQLMutation, graphQLQuery } from './graphql'
 import { resolveHouseInformation } from './houseInformation'
 import { resolvePersonalInformation } from './personalInformation'
@@ -444,8 +440,6 @@ export const EmbarkRoot = (props: EmbarkRootProps) => {
                     houseInformation: resolveHouseInformation,
                     createQuote: createQuote(storageState, isoLocale),
                     addressAutocompleteQuery: resolveAddressAutocomplete,
-                    externalInsuranceProviderProviderStatus: resolveExternalInsuranceProviderProviderStatus,
-                    externalInsuranceProviderStartSession: resolveExternalInsuranceProviderStartSession,
                     track: trackPassageData,
                   }}
                   initialStore={initialStore}
