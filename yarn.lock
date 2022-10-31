@@ -2234,10 +2234,10 @@
   resolved "https://registry.yarnpkg.com/@hedviginsurance/brand/-/brand-5.0.3.tgz#8ddc4516830da89220cc4d52eeaab0896916dd82"
   integrity sha512-0fvSwnDWR2inKPvwiCDq67QC/p02E0j+nTJAG/0O5Zkrt52NLFZDVpprhoAFF9Tn+ZGm6Qr7E6/uiQ5A/mPwmg==
 
-"@hedviginsurance/embark@2.23.1":
-  version "2.23.1"
-  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-2.23.1.tgz#dd8040c099d7de444312679e88067ecbd8d933b6"
-  integrity sha512-yt1wzbeh3o8bkhxG2r895ghMYL4fYM5RG5gY/7PEue76aREgb0Xy7yMyHB3b1dwUDNcpXainEX1H8lLJdxTH4w==
+"@hedviginsurance/embark@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@hedviginsurance/embark/-/embark-3.0.0.tgz#7c514bfc047959058d3d6e9331d96dd8a3342a8e"
+  integrity sha512-wm+MnPNYyFJ4E5zbU8z2tu2NO1EGfbeIMRo6HcgOOkmt+j0cA+K54i5dQLykcXlzCXtpHrH0k5xN0XAxsHKL+w==
   dependencies:
     "@emotion/react" "^11.4.1"
     "@emotion/styled" "^11.3.0"
@@ -2253,7 +2253,6 @@
     axios "^0.21.1"
     date-fns "^2.8.1"
     downshift "^6.1.7"
-    eventemitter3 "^4.0.0"
     graphql "^14.6.0"
     graphql-tools "^4.0.7"
     hex-to-rgba "^2.0.1"
@@ -8973,7 +8972,7 @@ eventemitter3@^3.1.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
   integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
 
-eventemitter3@^4.0.0, eventemitter3@^4.0.7:
+eventemitter3@^4.0.0:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==

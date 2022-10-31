@@ -394,11 +394,7 @@ export const routes: Route[] = [
                 case 'home-switcher':
                   return {
                     baseUrl,
-                    name: features[
-                      Feature.HOME_INSURANCE_INSURELY_IFRAME
-                    ]?.includes('SE')
-                      ? EmbarkStory.SwedenQuoteCartSwitcherV2
-                      : EmbarkStory.SwedenQuoteCartSwitcher,
+                    name: EmbarkStory.SwedenQuoteCartSwitcherV2,
                     quoteCart: true,
                   }
                 case 'car':

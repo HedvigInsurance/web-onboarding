@@ -1,16 +1,58 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { externalInsuranceProviders } from '@hedviginsurance/embark'
-import {
-  useExternalInsuranceDataQuery,
-  InsuranceDataCollection,
-} from 'data/graphql'
+import { useExternalInsuranceDataQuery } from 'data/graphql'
 import { OfferQuote } from 'pages/Offer/types'
 import { useTextKeys } from 'utils/textKeys'
 
 type Props = {
   dataCollectionId: OfferQuote['dataCollectionId']
+}
+
+export const StartDateLabelSwitcher = ({ dataCollectionId }: Props) => {
+  const textKeys = useTextKeys()
+
+  const {
+    data: externalInsuranceData,
+    loading,
+  } = useExternalInsuranceDataQuery({
+    variables: {
+      reference: dataCollectionId || '',
+    },
+    skip: !dataCollectionId,
+  })
+
+  // TODO: fix this when implementing Insurely in Norway 👇
+  const firstCurrentInsurance =
+    externalInsuranceData?.externalInsuranceProvider?.dataCollection[0]
+  const renewalDate = firstCurrentInsurance?.renewalDate
+  const currentInsurerName = firstCurrentInsurance?.insuranceProviderDisplayName
+
+  if (loading) {
+    return <Empty />
+  }
+
+  return (
+    <>
+      {renewalDate && (
+        <DataCollectedStartDateWrapper>
+          <DataCollectedStartDateValue>
+            {renewalDate}
+          </DataCollectedStartDateValue>
+          <DataCollectedStartDateDescription>
+            {textKeys.START_DATE_EXTERNAL_PROVIDER_SWITCH({
+              insuranceProvider: currentInsurerName,
+            })}
+          </DataCollectedStartDateDescription>
+        </DataCollectedStartDateWrapper>
+      )}
+      {!renewalDate && (
+        <GenericLabel>
+          {textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()}
+        </GenericLabel>
+      )}
+    </>
+  )
 }
 
 const DataCollectedStartDateWrapper = styled.div`
@@ -39,74 +81,3 @@ const GenericLabel = styled.span`
 const Empty = styled.div`
   width: 100%;
 `
-
-const getValidCurrentInsurerName = (
-  insuranceData?: InsuranceDataCollection,
-): string | null => {
-  if (insuranceData) {
-    const validExternalInsuranceProviders = externalInsuranceProviders.filter(
-      (provider) => provider.externalCollectionId,
-    )
-
-    const currentInsuranceProvider = validExternalInsuranceProviders.find(
-      ({ externalCollectionId }) => {
-        return (
-          externalCollectionId ===
-          insuranceData.insuranceProvider?.toUpperCase()
-        )
-      },
-    )
-
-    return currentInsuranceProvider?.name || null
-  }
-
-  return null
-}
-
-export const StartDateLabelSwitcher: React.FC<Props> = ({
-  dataCollectionId,
-}) => {
-  const {
-    data: externalInsuranceData,
-    loading,
-  } = useExternalInsuranceDataQuery({
-    variables: {
-      reference: dataCollectionId || '',
-    },
-    skip: !dataCollectionId,
-  })
-  const textKeys = useTextKeys()
-
-  // TODO: fix this when implementing Insurely in Norway 👇
-  const firstCurrentInsurance =
-    externalInsuranceData?.externalInsuranceProvider?.dataCollection[0]
-
-  const renewalDate = firstCurrentInsurance?.renewalDate
-  const currentInsurerName = getValidCurrentInsurerName(firstCurrentInsurance)
-
-  if (loading) {
-    return <Empty />
-  }
-
-  return (
-    <>
-      {renewalDate && (
-        <DataCollectedStartDateWrapper>
-          <DataCollectedStartDateValue>
-            {renewalDate}
-          </DataCollectedStartDateValue>
-          <DataCollectedStartDateDescription>
-            {textKeys.START_DATE_EXTERNAL_PROVIDER_SWITCH({
-              insuranceProvider: currentInsurerName,
-            })}
-          </DataCollectedStartDateDescription>
-        </DataCollectedStartDateWrapper>
-      )}
-      {!renewalDate && (
-        <GenericLabel>
-          {textKeys.SIDEBAR_STARTDATE_CELL_VALUE_SWITCHER()}
-        </GenericLabel>
-      )}
-    </>
-  )
-}
