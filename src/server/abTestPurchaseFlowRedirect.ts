@@ -1,6 +1,9 @@
 import { ParameterizedContext } from 'koa'
 import { SavingCookieStorage } from 'shared/sessionStorage'
-import { AB_PURCHASE_FLOW_REDIRECTS } from 'shared/abPurchaseFlowRedirects'
+import {
+  AB_PURCHASE_FLOW_REDIRECTS,
+  abExperimentCookieName,
+} from 'shared/abPurchaseFlowRedirects'
 
 const AB_COOKIE_MAX_AGE = 7 * 24 * 3600 * 1000
 
@@ -21,7 +24,9 @@ export const abTestPurchaseFlowRedirect = (
 
   const logger = ctx.state.getLogger('abTestPurchaseFlow')
 
-  const experimentCookieName = `HEDVIG_EXP_${redirectConfig.optimizeExperimentId}`
+  const experimentCookieName = abExperimentCookieName(
+    redirectConfig.optimizeExperimentId,
+  )
   const cookie = serverCookieStorage.getItem(experimentCookieName)
   let shouldRedirect
   if (cookie) {

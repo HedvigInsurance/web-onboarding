@@ -15,3 +15,6 @@ export const AB_PURCHASE_FLOW_REDIRECTS: AbPurchaseFlowRedirect[] = [
     newFlow: 'car.v2',
   },
 ]
+
+export const abExperimentCookieName = (experimentId: string) =>
+  `HEDVIG_EXP_${experimentId}`
