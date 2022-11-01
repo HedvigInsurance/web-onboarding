@@ -7,24 +7,24 @@ import { ServerCookieStorage } from '../client/utils/storage/ServerCookieStorage
 import { ServerSideRoute } from '../routes'
 import {
   createSession,
+  DEVICE_ID_KEY,
   SavingCookieStorage,
   Session,
-  DEVICE_ID_KEY,
 } from '../shared/sessionStorage'
 
 import {
-  ADYEN_ENVIRONMENT,
   ADYEN_CLIENT_KEY,
+  ADYEN_ENVIRONMENT,
   APP_ENVIRONMENT,
   CONTENT_SERVICE_ENDPOINT,
-  GIRAFFE_WS_ENDPOINT,
-  FEATURES,
-  HEROKU_SLUG_COMMIT,
   DATADOG_APPLICATION_ID,
   DATADOG_CLIENT_TOKEN,
-  GIRAFFE_HOST,
-  EMBARK_STORY_NO,
   EMBARK_STORY_DK,
+  EMBARK_STORY_NO,
+  FEATURES,
+  GIRAFFE_HOST,
+  GIRAFFE_WS_ENDPOINT,
+  HEROKU_SLUG_COMMIT,
   INSURELY_CAR_CLIENT_ID,
   INSURELY_HOME_CLIENT_ID,
 } from './config'
@@ -33,6 +33,7 @@ import { getPageMeta } from './meta'
 import { WithRequestUuid } from './middleware/enhancers'
 import { getClientScripts } from './assets'
 import { allTracking, gtmNoScript } from './tracking'
+import { abTestPurchaseFlowRedirect } from './abTestPurchaseFlowRedirect'
 
 const clientConfig: ClientConfig = {
   adyenEnvironment: ADYEN_ENVIRONMENT,
@@ -153,6 +154,14 @@ export const getPage = (
   const serverCookieStorage = new SavingCookieStorage(
     new ServerCookieStorage(ctx),
   )
+
+  // It would be cleaner to perform A/B redirect in middleware, but we don't have access to params there
+  const { marketLabel } = locales[ctx.params.locale as LocaleLabel] ?? {}
+  if (marketLabel && FEATURES.AB_TEST_PURCHASE_FLOWS.includes(marketLabel)) {
+    if (abTestPurchaseFlowRedirect(ctx, serverCookieStorage)) {
+      return
+    }
+  }
 
   const clientConfigData: ClientConfigServerData = {
     referer: ctx.req.headers.referer ?? null,
