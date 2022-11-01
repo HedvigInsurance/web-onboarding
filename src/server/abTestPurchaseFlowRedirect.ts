@@ -1,24 +1,8 @@
 import { ParameterizedContext } from 'koa'
 import { SavingCookieStorage } from 'shared/sessionStorage'
+import { AB_PURCHASE_FLOW_REDIRECTS } from 'shared/abPurchaseFlowRedirects'
 
 const AB_COOKIE_MAX_AGE = 7 * 24 * 3600 * 1000
-type AbPurchaseFlowRedirect = {
-  // Use in env variables
-  id: string
-  // Take this from Google Optimize
-  optimizeExperimentId: string
-  originalFlow: string
-  newFlow: string
-}
-// Keep short (<15 entries) or refactor to use map lookup
-const AB_PURCHASE_FLOW_REDIRECTS: AbPurchaseFlowRedirect[] = [
-  {
-    id: 'CAR_PRICE_MATCH_V2',
-    optimizeExperimentId: 'LUVcuEu7RVaePDiBz-id_g',
-    originalFlow: 'car',
-    newFlow: 'car.v2',
-  },
-]
 
 export const abTestPurchaseFlowRedirect = (
   ctx: ParameterizedContext,
