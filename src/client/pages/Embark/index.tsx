@@ -22,6 +22,7 @@ import { CampaignCode } from 'utils/campaignCode'
 import { EmbarkStory } from 'utils/embarkStory'
 import { useOnboardingQuoteCartId } from 'utils/hooks/useOnboardingQuoteCartId'
 import { pushToGTMDataLayer } from 'utils/tracking/gtm/dataLayer'
+import { useTrackAbPurchaseFlowRedirect } from 'utils/tracking/hooks/useTrackAbPurchaseFlowRedirect'
 import { StorageContainer } from '../../utils/StorageContainer'
 import { createQuote } from './createQuote'
 import { graphQLMutation, graphQLQuery } from './graphql'
@@ -71,6 +72,8 @@ const Embark = (props: EmbarkProps) => {
     Features.CUSTOMER_SERVICE_PHONE_NUMBER,
     Features.LANGUAGE_PICKER_CLIENT_SIDE_NAVIGATION,
   ])
+
+  useTrackAbPurchaseFlowRedirect()
 
   const history = useHistory<{
     embarkPassageName: string
