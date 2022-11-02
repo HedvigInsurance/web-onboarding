@@ -12,7 +12,7 @@ export const AB_PURCHASE_FLOW_REDIRECTS: AbPurchaseFlowRedirect[] = [
     id: 'CAR_PRICE_MATCH_V2',
     optimizeExperimentId: 'LUVcuEu7RVaePDiBz-id_g',
     originalFlow: 'car',
-    newFlow: 'car.v2',
+    newFlow: 'car-v3',
   },
 ]
 
