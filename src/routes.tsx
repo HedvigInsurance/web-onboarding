@@ -25,26 +25,7 @@ import { InitiateCarCancellationPage } from './client/pages/IntiateCarCancellati
 import { PaymentPage } from './client/pages/Payment/Payment'
 
 enum EmbarkStory {
-  DenmarkContentsWithAddressAutocomplete = 'Web Onboarding DK - Contents With Autocomplete',
-  DenmarkContentsAccidentWithAddressAutocomplete = 'Web Onboarding DK - Danish Contents-Accident With Autocomplete',
-  DenmarkContentsAccidentTravelWithAddressAutocomplete = 'Web Onboarding DK - Danish Contents-Accident-Travel With Autocomplete',
-  DenmarkContentsQuoteCart = 'Web Onboarding DK - Quote Cart Home Content',
-  DenmarkContentsAccidentQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident',
-  DenmarkContentsAccidentTravelQuoteCart = 'Web Onboarding DK - Quote Cart Home Content Accident Travel',
-
-  NorwayContentsNorwegian = 'Web Onboarding NO - Norwegian Contents',
-  NorwayContentsEnglish = 'Web Onboarding NO - English Contents',
-  NorwayTravelNorwegian = 'Web Onboarding NO - Norwegian Travel',
-  NorwayTravelEnglish = 'Web Onboarding NO - English Travel',
-  NorwayComboNorwegian = 'Web Onboarding NO - Norwegian Combo',
-  NorwayComboEnglish = 'Web Onboarding NO - English Combo',
-  NorwayHomeContentEnglishQuoteCart = 'Web Onboarding NO - English Contents Quote Cart',
-  NorwayHomeContentNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Contents Quote Cart',
-  NorwayComboEnglishQuoteCart = 'Web Onboarding NO - English Combo Quote Cart',
-  NorwayComboNorwegianQuoteCart = 'Web Onboarding NO - Norwegian Combo Quote Cart',
-
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
-  SwedenQuoteCartSwitcher = 'Web Onboarding SE - Quote Cart Switcher',
   SwedenQuoteCartSwitcherV2 = 'Web Onboarding SE - Quote Cart Switcher-v2',
   SwedenCarV2 = 'SE-onboarding-car-v2',
 }
@@ -291,41 +272,6 @@ export const routes: Route[] = [
             case 'dk':
             case 'dk-en':
               switch (name) {
-                case 'home':
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.DenmarkContentsWithAddressAutocomplete,
-                  }
-                case 'home-accident':
-                  return {
-                    baseUrl,
-                    name:
-                      EmbarkStory.DenmarkContentsAccidentWithAddressAutocomplete,
-                  }
-                case 'home-accident-travel':
-                  return {
-                    baseUrl,
-                    name:
-                      EmbarkStory.DenmarkContentsAccidentTravelWithAddressAutocomplete,
-                  }
-                case 'home-needer':
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.DenmarkContentsQuoteCart,
-                    quoteCart: true,
-                  }
-                case 'home-accident-needer':
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.DenmarkContentsAccidentQuoteCart,
-                    quoteCart: true,
-                  }
-                case 'home-accident-travel-needer':
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.DenmarkContentsAccidentTravelQuoteCart,
-                    quoteCart: true,
-                  }
                 case 'onboarding':
                   return {
                     baseUrl,
@@ -337,40 +283,6 @@ export const routes: Route[] = [
             case 'no':
             case 'no-en':
               switch (name) {
-                case 'contents':
-                  return {
-                    baseUrl,
-                    name:
-                      locale === 'no'
-                        ? EmbarkStory.NorwayContentsNorwegian
-                        : EmbarkStory.NorwayContentsEnglish,
-                  }
-                case 'combo':
-                  return {
-                    baseUrl,
-                    name:
-                      locale === 'no'
-                        ? EmbarkStory.NorwayComboNorwegian
-                        : EmbarkStory.NorwayComboEnglish,
-                  }
-                case 'home':
-                  return {
-                    baseUrl,
-                    name:
-                      locale === 'no'
-                        ? EmbarkStory.NorwayHomeContentNorwegianQuoteCart
-                        : EmbarkStory.NorwayHomeContentEnglishQuoteCart,
-                    quoteCart: true,
-                  }
-                case 'home-travel':
-                  return {
-                    baseUrl,
-                    name:
-                      locale === 'no'
-                        ? EmbarkStory.NorwayComboNorwegianQuoteCart
-                        : EmbarkStory.NorwayComboEnglishQuoteCart,
-                    quoteCart: true,
-                  }
                 case 'onboarding':
                   return {
                     baseUrl,
