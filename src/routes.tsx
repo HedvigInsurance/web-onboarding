@@ -22,14 +22,13 @@ import {
   LandingPageCanonicalLinks,
 } from './client/pages/Landing/landingPageData'
 import { InitiateCarCancellationPage } from './client/pages/IntiateCarCancellation'
-import { Feature } from './shared/clientConfig'
 import { PaymentPage } from './client/pages/Payment/Payment'
 
 enum EmbarkStory {
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
   SwedenQuoteCartSwitcherV2 = 'Web Onboarding SE - Quote Cart Switcher-v2',
-  SwedenCar = 'SE-onboarding-car',
   SwedenCarV2 = 'SE-onboarding-car-v2',
+  SwedenCarV3 = 'SE-onboarding-car-v3',
 }
 
 export type CanonicalLinksPerLocale = Record<LocalePath, string>
@@ -269,7 +268,6 @@ export const routes: Route[] = [
           const landingPageRedirect = {
             redirect: `/${locale}/new-member`,
           }
-          const features = window.hedvigClientConfig.features
 
           switch (locale) {
             case 'dk':
@@ -312,9 +310,13 @@ export const routes: Route[] = [
                 case 'car':
                   return {
                     baseUrl,
-                    name: features[Feature.CAR_PRICE_MATCHING]?.includes('SE')
-                      ? EmbarkStory.SwedenCarV2
-                      : EmbarkStory.SwedenCar,
+                    name: EmbarkStory.SwedenCarV2,
+                    quoteCart: true,
+                  }
+                case 'car-v3':
+                  return {
+                    baseUrl,
+                    name: EmbarkStory.SwedenCarV3,
                     quoteCart: true,
                   }
               }
