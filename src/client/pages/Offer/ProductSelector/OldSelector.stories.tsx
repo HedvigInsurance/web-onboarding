@@ -2,21 +2,21 @@ import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { TextKeyProvider } from 'utils/textKeys'
-import { Selector } from './Selector'
+import { OldSelector } from './OldSelector'
 
 export default {
-  title: 'Offer/ProductSelector',
-  component: Selector,
+  title: 'Offer/OldProductSelector',
+  component: OldSelector,
   parameters: {
     backgrounds: { default: 'gray100' },
   },
-} as ComponentMeta<typeof Selector>
+} as ComponentMeta<typeof OldSelector>
 
-export const Default: ComponentStory<typeof Selector> = () => {
+export const Default: ComponentStory<typeof OldSelector> = () => {
   return (
     <BrowserRouter>
       <TextKeyProvider locale="en_NO">
-        <Selector
+        <OldSelector
           standaloneProducts={[
             {
               id: 'home-insurance',
