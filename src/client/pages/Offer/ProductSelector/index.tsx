@@ -19,7 +19,7 @@ export const ProductSelector = ({
   ])
 
   if (isTravelAccidentStandaloneEnabled) {
-    return <NewProductSelector />
+    return <NewProductSelector quoteCartQueryData={quoteCartQueryData} />
   }
 
   return <OldProductSelector quoteCartQueryData={quoteCartQueryData} />

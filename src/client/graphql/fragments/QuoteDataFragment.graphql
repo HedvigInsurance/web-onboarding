@@ -21,6 +21,7 @@ fragment QuoteDataFragment on BundledQuote {
   typeOfContract
   insuranceType
   displayName(locale: $locale)
+  description(locale: $locale)
   contractPerils(locale: $locale) {
     title
     description

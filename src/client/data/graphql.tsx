@@ -2140,9 +2140,9 @@ export type Contract = {
    * the pending, future, current or, if terminated, past agreement
    */
   currentAgreement?: Maybe<Agreement>
-  /** The date the contract agreement timeline begin, if it has been activated */
+  /** The date the contract agreement timeline begins, if it has been activated */
   inception?: Maybe<Scalars['LocalDate']>
-  /** The date the contract agreement timelinen end, on if it has been terminated */
+  /** The date the contract agreement timeline ends, on if it has been terminated */
   termination?: Maybe<Scalars['LocalDate']>
   /** An upcoming renewal, present if the member has been notified and the renewal is within 31 days */
   upcomingRenewal?: Maybe<UpcomingRenewal>
@@ -2266,6 +2266,7 @@ export type ContractStatus =
   | TerminatedInFutureStatus
   | TerminatedTodayStatus
   | TerminatedStatus
+  | DeletedStatus
 
 /** All of our CoreML models used in the iOS app */
 export type CoreMlModel = Node & {
@@ -2949,23 +2950,10 @@ export enum DanishTravelLineOfBusiness {
   Student = 'STUDENT',
 }
 
-export type DataCollectingStatusResponse = {
-  __typename?: 'DataCollectingStatusResponse'
-  status: DataCollectionStatus
-  imageValue?: Maybe<Scalars['String']>
-  token?: Maybe<Scalars['String']>
-}
-
-export enum DataCollectionStatus {
-  Running = 'RUNNING',
-  Login = 'LOGIN',
-  Collecting = 'COLLECTING',
-  CompletedPartial = 'COMPLETED_PARTIAL',
-  Completed = 'COMPLETED',
-  CompletedEmpty = 'COMPLETED_EMPTY',
-  Failed = 'FAILED',
-  UserInput = 'USER_INPUT',
-  WaitingForAuthentication = 'WAITING_FOR_AUTHENTICATION',
+/** The contract has been soft-deleted */
+export type DeletedStatus = {
+  __typename?: 'DeletedStatus'
+  isDeleted?: Maybe<Scalars['Boolean']>
 }
 
 export type DirectDebitResponse = {
@@ -4058,31 +4046,16 @@ export type ExchangeTokenSuccessResponse = {
 
 export type ExternalInsuranceProvider = {
   __typename?: 'ExternalInsuranceProvider'
-  /** @deprecated Use providerStatusV2 instead */
-  providerStatus: Array<ProviderStatus>
-  /** @deprecated Use dataCollectionV2 instead */
   dataCollection: Array<InsuranceDataCollection>
-  /** @deprecated use dataCollectionStatusV2 instead */
-  dataCollectionStatus: DataCollectingStatusResponse
 }
 
 export type ExternalInsuranceProviderDataCollectionArgs = {
   reference: Scalars['ID']
 }
 
-export type ExternalInsuranceProviderDataCollectionStatusArgs = {
-  reference: Scalars['ID']
-}
-
 export type ExternalInsuranceProviderMutation = {
   __typename?: 'ExternalInsuranceProviderMutation'
-  /** @deprecated Use initiateDataCollectionWithSwedishPersonalNumber, initiateDataCollectionWithNorwegianPersonalNumber or initiateDataCollectionWithNorwegianPhoneNumber */
-  initiateDataCollection: DataCollectionStatus
   initiateIframeDataCollection: Scalars['ID']
-}
-
-export type ExternalInsuranceProviderMutationInitiateDataCollectionArgs = {
-  input: InitiateDataCollectionInput
 }
 
 export type ExternalInsuranceProviderMutationInitiateIframeDataCollectionArgs = {
@@ -5324,12 +5297,6 @@ export type InitiateCancelOldCarInsuranceInput = {
 export type InitiateCancelOldCarInsuranceResponse = {
   __typename?: 'InitiateCancelOldCarInsuranceResponse'
   url: Scalars['String']
-}
-
-export type InitiateDataCollectionInput = {
-  reference: Scalars['ID']
-  insuranceProvider: Scalars['String']
-  personalNumber: Scalars['String']
 }
 
 export type InitiateIframeDataCollectionInput = {
@@ -8374,12 +8341,6 @@ export enum Project {
 
 export type Provider = Adyen | Trustly
 
-export type ProviderStatus = {
-  __typename?: 'ProviderStatus'
-  functional: Scalars['Boolean']
-  insuranceProvider: Scalars['String']
-}
-
 export type PublishLocaleInput = {
   /** Locales to publish */
   locale: Locale
@@ -8402,6 +8363,7 @@ export type Query = {
   /** Retrieve multiple marketingStories */
   marketingStories: Array<MarketingStory>
   gateway__?: Maybe<Scalars['Boolean']>
+  _service?: Maybe<_Service>
   bankAccount?: Maybe<BankAccount>
   nextChargeDate?: Maybe<Scalars['LocalDate']>
   /** Returns the status for the payin method (Trustly's direct debit for Sweden) (Adyen for Norway) */
@@ -8426,7 +8388,6 @@ export type Query = {
   insuranceCost?: Maybe<InsuranceCost>
   /** Returns whether a member is eligible to create a claim, i.e. if a member has an active contract */
   isEligibleToCreateClaim: Scalars['Boolean']
-  _service?: Maybe<_Service>
   balance: Balance
   chargeEstimation: ChargeEstimation
   chargeHistory: Array<Charge>
@@ -10070,8 +10031,6 @@ export type SubmitAdyenRedirectionResponse = {
 
 export type Subscription = {
   __typename?: 'Subscription'
-  /** @deprecated use dataCollectionStatusV2 instead */
-  dataCollectionStatus?: Maybe<DataCollectingStatusResponse>
   _?: Maybe<Scalars['Boolean']>
   authStatus?: Maybe<AuthEvent>
   quoteCart?: Maybe<QuoteCart>
@@ -10079,10 +10038,6 @@ export type Subscription = {
   message: Message
   currentChatResponse?: Maybe<ChatResponse>
   chatState: ChatState
-}
-
-export type SubscriptionDataCollectionStatusArgs = {
-  reference: Scalars['ID']
 }
 
 export type SubscriptionQuoteCartArgs = {
@@ -12393,6 +12348,9 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
   > & {
       bundle?: Maybe<
         { __typename?: 'QuoteBundle' } & {
+          quotes: Array<
+            { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
+          >
           standaloneQuotes: Array<
             { __typename?: 'BundledQuote' } & StandaloneQuoteFragment
           >
@@ -12706,6 +12664,7 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
   | 'typeOfContract'
   | 'insuranceType'
   | 'displayName'
+  | 'description'
   | 'data'
 > & {
     currentInsurer?: Maybe<
@@ -13041,6 +13000,7 @@ export const QuoteDataFragmentFragmentDoc = gql`
     typeOfContract
     insuranceType
     displayName(locale: $locale)
+    description(locale: $locale)
     contractPerils(locale: $locale) {
       title
       description
@@ -14481,6 +14441,9 @@ export const QuoteCartDocument = gql`
     quoteCart(id: $id) {
       id
       bundle {
+        quotes {
+          ...QuoteDataFragment
+        }
         standaloneQuotes {
           ...StandaloneQuote
         }
@@ -14514,10 +14477,10 @@ export const QuoteCartDocument = gql`
       }
     }
   }
+  ${QuoteDataFragmentFragmentDoc}
   ${StandaloneQuoteFragmentDoc}
   ${AdditionalQuoteFragmentDoc}
   ${BundleCostDataFragmentFragmentDoc}
-  ${QuoteDataFragmentFragmentDoc}
   ${CampaignDataFragmentDoc}
 `
 
