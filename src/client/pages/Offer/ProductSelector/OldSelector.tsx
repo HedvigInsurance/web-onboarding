@@ -17,17 +17,17 @@ export type Product = {
   image: string
 }
 
-export type SelectorProps = {
+export type OldSelectorProps = {
   className?: string
   standaloneProducts: Array<Product>
   additionalProducts: Array<Product>
 }
 
-export const Selector = ({
+export const OldSelector = ({
   className,
   standaloneProducts,
   additionalProducts,
-}: SelectorProps) => {
+}: OldSelectorProps) => {
   const textKeys = useTextKeys()
   const inputRef = useRef<HTMLInputElement | null>(null)
 

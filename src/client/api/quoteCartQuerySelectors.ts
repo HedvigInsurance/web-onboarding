@@ -67,16 +67,9 @@ export function isPaymentConnected(quoteCartQuery: QuoteCartQuery | undefined) {
 }
 
 export function getAllQuotes(quoteCartQuery: QuoteCartQuery | undefined) {
-  const possibleVariations = getPossibleVariations(quoteCartQuery)
-
-  const quoteMap: Record<string, BundledQuote> = {}
-  possibleVariations.forEach((variation) => {
-    variation.bundle.quotes.forEach((quote) => {
-      quoteMap[quote.id] = quote
-    })
-  })
-
-  return Object.values(quoteMap)
+  return (quoteCartQuery?.quoteCart?.bundle?.quotes ?? []) as Array<
+    BundledQuote
+  >
 }
 
 export const isCarInsuranceType = (

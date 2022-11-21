@@ -374,11 +374,11 @@
   "START_SCREEN_OPTION_SWITCH_USP_3": "Fast and easy to switch to Hedvig",
   "START_SCREEN_FOOTER_TOS": "",
   "START_SCREEN_LOADER": "Hedvig.\n100% digital.\nFlexible help.\nFast service.\nAll in one app.\nHassle-free.",
-  "START_SCREEN_SUBMIT_BUTTON": "Continue",
+  "START_SCREEN_SUBMIT_BUTTON": "Get a quote in 30 seconds",
   "DETAILS_MODULE_BODY": "Please make sure that the information below is correct.",
   "CLOSE": "Close",
   "START_SCREEN_PERSONAL_NUMBER_INPUT_TITLE": "Write your personal number with 10 digits, YYMMDDXXXX",
-  "LANDING_PAGE_HEADLINE": "Get a personal quote",
+  "LANDING_PAGE_HEADLINE": "Select the insurances to get an offer for",
   "LANDING_PAGE_SUBHEADING": "Choose the add-ons you’d like with your Home Insurance, and in the next step, we’ll ask you a few follow-up questions.",
   "LANDING_PAGE_SUBHEADING_EDIT": "You can edit your selection when you get a quote.",
   "LANDING_PAGE_SECTION_TITLE_MAIN": "Main Coverage",
@@ -407,7 +407,7 @@
   "3D_SECURE_ERROR_BUTTON": "OK",
   "3D_SECURE_ERROR_HEADING": "Your card couldn’t be authenticated",
   "CHECKOUT_PAYMENT_ADYEN_SETUP_DONE_MESSAGE": "Payment connected!",
-  "LANDING_PAGE_MISSING_MAIN_COVERAGE_ERROR": "At least one main coverage must be selected to continue",
+  "LANDING_PAGE_MISSING_MAIN_COVERAGE_ERROR": "Select at least one insurance to continue",
   "OPEN_COMPARISON_MODAL": "Compare our insurance policies",
   "COMPARISON_MODEL_HEADER": "Which coverage suits you?",
   "DETAILS_MODULE_TABLE_CITY_CELL_LABEL": "City",
@@ -457,5 +457,9 @@
   "SIDEBAR_STARTDATE_CELL_LABEL_SWITCHER": "Start date (expiry of your old insurance)",
   "EXTERNAL_INSURANCE_PROVIDER_UNKNOWN_NAME": "Old insurance",
   "EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL": "Matches your current coverage",
-  "EXTERNAL_INSURANCE_COMPARE_DATE_EXPIRES": ""
+  "EXTERNAL_INSURANCE_COMPARE_DATE_EXPIRES": "",
+  "AFTER_SIGN_PAYMENT_MESSAGE": "",
+  "PERILS_DIALOG_TITLE": "Included in {{insurance}}",
+  "INSURANCE_CARD_SEE_COVERAGE": "See coverage",
+  "INSURANCE_SELECTOR_HEADLINE": "Your insurance choices"
 }
