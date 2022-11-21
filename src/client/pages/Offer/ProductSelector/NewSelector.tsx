@@ -39,18 +39,18 @@ export const NewSelector = ({ products }: NewSelectorProps) => {
   return (
     <CardGrid>
       {products.map((product) => {
-        const istTheOnlyProductSelected =
+        const isTheOnlyProductSelected =
           selectedInsuranceTypesSet.size === 1 &&
           selectedInsuranceTypesSet.has(product.id)
 
         return (
           <ProductCard
             key={product.id}
-            ref={istTheOnlyProductSelected ? checkboxRef : undefined}
+            ref={isTheOnlyProductSelected ? checkboxRef : undefined}
             product={product}
             checked={selectedInsuranceTypesSet.has(product.id)}
             onChange={() => {
-              if (istTheOnlyProductSelected) {
+              if (isTheOnlyProductSelected) {
                 checkboxRef.current?.setCustomValidity(
                   textKeys.OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR(),
                 )

@@ -2,7 +2,6 @@ import React, { useMemo } from 'react'
 import { QuoteCartQuery } from 'data/graphql'
 import { getAllQuotes } from 'api/quoteCartQuerySelectors'
 import { useTextKeys } from 'utils/textKeys'
-import { useLocalizeNumber } from 'l10n/useLocalizeNumber'
 import {
   ContainerWrapper,
   Container,
@@ -20,7 +19,6 @@ export const NewProductSelector = ({
 }: NewProductSelectorProps) => {
   const textKeys = useTextKeys()
   const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
-  const localizeNumber = useLocalizeNumber()
 
   const products = useMemo(() => {
     return getAllQuotes(quoteCartQueryData).map(
@@ -29,13 +27,11 @@ export const NewProductSelector = ({
           id: insuranceType,
           name: displayName,
           description,
-          price: `${localizeNumber(Math.round(Number(price.amount)))} ${
-            price.currency
-          }${localizedPerMonth}`,
+          price: `${price.amount} ${price.currency}${localizedPerMonth}`,
         }
       },
     )
-  }, [quoteCartQueryData, localizeNumber, localizedPerMonth])
+  }, [quoteCartQueryData, localizedPerMonth])
 
   if (products.length === 0) return null
 
