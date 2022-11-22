@@ -10,12 +10,17 @@ import { QuoteInput } from '../types'
 import {
   DetailInput,
   TextInput,
+  AreaInput,
+  ZipcodeInput,
   BooleanInput,
+  HomeOwnershipTypeInput,
   BirthDateInput,
 } from './components/DetailInput'
 import { Content, ContentColumn } from './components/Details.styles'
 
-export const getDanishValidationSchema = (textKeys: TextKeyMap) => {
+export const getNorwegianHomeContentsValidationSchema = (
+  textKeys: TextKeyMap,
+) => {
   return Yup.object().shape({
     firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
@@ -26,21 +31,28 @@ export const getDanishValidationSchema = (textKeys: TextKeyMap) => {
       )
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     data: Yup.object({
+      street: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      zipCode: Yup.string().matches(
+        /^[0-9]{4}$/,
+        textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+      ),
+      livingSpace: Yup.number()
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       householdSize: Yup.number()
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       isStudent: Yup.boolean(),
+      subType: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     }).required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
   })
 }
 
-type DanishHomeDetailsProps = {
+export const NorwegianHomeContentsDetails: React.FC<{
   formikProps: FormikProps<QuoteInput>
-}
-
-export const DanishDetails = ({ formikProps }: DanishHomeDetailsProps) => {
+}> = ({ formikProps }) => {
   const { birthDate: birthDateFormat } = useCurrentLocale()
-
   return (
     <Content>
       <ContentColumn>
@@ -64,6 +76,21 @@ export const DanishDetails = ({ formikProps }: DanishHomeDetailsProps) => {
       </ContentColumn>
       <ContentColumn>
         <InputGroup>
+          <TextInput
+            name="data.street"
+            label="DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL"
+            formikProps={formikProps}
+          />
+          <ZipcodeInput
+            name="data.zipCode"
+            market="NO"
+            formikProps={formikProps}
+          />
+          <AreaInput
+            name="data.livingSpace"
+            label="DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT"
+            formikProps={formikProps}
+          />
           <DetailInput
             name="data.householdSize"
             field={{
@@ -76,6 +103,10 @@ export const DanishDetails = ({ formikProps }: DanishHomeDetailsProps) => {
           <BooleanInput
             name="data.isStudent"
             label="DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL"
+            formikProps={formikProps}
+          />
+          <HomeOwnershipTypeInput
+            name="data.subType"
             formikProps={formikProps}
           />
         </InputGroup>
