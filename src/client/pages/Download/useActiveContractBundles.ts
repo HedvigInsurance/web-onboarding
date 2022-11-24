@@ -9,9 +9,9 @@ const RELEVANT_CROSS_SELL_TYPES = new Set<CrossSellType>([
 ])
 
 const CROSS_SELL_URLS: Partial<Record<CrossSellType, string>> = {
-  [CrossSellType.Car]: '/new-member/car?code=getcar20',
-  [CrossSellType.HomeContent]: '/new-member/home-insurance?code=gethome20',
-  [CrossSellType.House]: '/new-member/home-insurance?code=gethome20',
+  [CrossSellType.Car]: '/new-member/car?code=getcar200',
+  [CrossSellType.HomeContent]: '/new-member/home-insurance?code=gethome200',
+  [CrossSellType.House]: '/new-member/home-insurance?code=gethome200',
 }
 
 export const useActiveContractBundles = () => {
