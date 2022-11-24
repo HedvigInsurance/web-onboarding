@@ -36,7 +36,7 @@ export const exchangeTokenMiddleware: Router.IMiddleware<
   try {
     const accessToken = await exchangeAuthorizationCode(authorizationCode)
     const session = createSession(new ServerCookieStorage(ctx))
-    session.setSession(accessToken)
+    session.setSession({ token: accessToken })
   } catch (err) {
     if (err.isAxiosError) {
       throw new Error(
