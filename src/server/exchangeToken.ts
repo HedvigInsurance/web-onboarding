@@ -6,7 +6,7 @@ import { ServerCookieStorage } from 'utils/storage/ServerCookieStorage'
 import { WithLoggerState } from './middleware/enhancers'
 
 enum SearchParams {
-  AuthorizationCode = 'authorizationCode',
+  AuthorizationCode = 'authorization_code',
   Next = 'next',
 }
 
