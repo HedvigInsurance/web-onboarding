@@ -10,12 +10,14 @@ import { QuoteInput } from '../types'
 import {
   DetailInput,
   TextInput,
+  AreaInput,
   BooleanInput,
+  HomeOwnershipTypeInput,
   BirthDateInput,
 } from './components/DetailInput'
 import { Content, ContentColumn } from './components/Details.styles'
 
-export const getDanishValidationSchema = (textKeys: TextKeyMap) => {
+export const getDanishHomeContentsValidationSchema = (textKeys: TextKeyMap) => {
   return Yup.object().shape({
     firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
@@ -26,21 +28,23 @@ export const getDanishValidationSchema = (textKeys: TextKeyMap) => {
       )
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     data: Yup.object({
+      livingSpace: Yup.number()
+        .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
+        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       householdSize: Yup.number()
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       isStudent: Yup.boolean(),
+      subType: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     }).required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
   })
 }
 
-type DanishHomeDetailsProps = {
+export const DanishHomeContentsDetails: React.FC<{
   formikProps: FormikProps<QuoteInput>
-}
-
-export const DanishDetails = ({ formikProps }: DanishHomeDetailsProps) => {
+}> = ({ formikProps }) => {
   const { birthDate: birthDateFormat } = useCurrentLocale()
-
   return (
     <Content>
       <ContentColumn>
@@ -64,6 +68,11 @@ export const DanishDetails = ({ formikProps }: DanishHomeDetailsProps) => {
       </ContentColumn>
       <ContentColumn>
         <InputGroup>
+          <AreaInput
+            name="data.livingSpace"
+            label="DETAILS_MODULE_TABLE_SIZE_CELL_LABEL_APARTMENT"
+            formikProps={formikProps}
+          />
           <DetailInput
             name="data.householdSize"
             field={{
@@ -76,6 +85,10 @@ export const DanishDetails = ({ formikProps }: DanishHomeDetailsProps) => {
           <BooleanInput
             name="data.isStudent"
             label="DETAILS_MODULE_TABLE_STUDENT_CELL_LABEL"
+            formikProps={formikProps}
+          />
+          <HomeOwnershipTypeInput
+            name="data.subType"
             formikProps={formikProps}
           />
         </InputGroup>

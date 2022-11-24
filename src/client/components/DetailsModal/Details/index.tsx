@@ -13,7 +13,6 @@ import {
   SwedishHouseDetails,
   getSwedishHouseValidationSchema,
 } from './SwedishHouseDetails'
-
 import {
   SwedishCarDetails,
   getSwedishCarValidationSchema,
@@ -22,18 +21,25 @@ import {
 import {
   NorwegianHomeContentsDetails,
   getNorwegianHomeContentsValidationSchema,
-} from './NorwegianDetails'
-
+} from './NorwegianHomeDetails'
 import {
   NorwegianHouseDetails,
   getNorwegianHouseValidationSchema,
 } from './NorwegianHouseDetails'
+import {
+  NorwegianDetails,
+  getNorwegianValidationSchema,
+} from './NorwegianDetails'
 
-import { DanishDetails, getDanishValidationSchema } from './DanishDetails'
+import {
+  DanishHomeContentsDetails,
+  getDanishHomeContentsValidationSchema,
+} from './DanishHomeDetails'
 import {
   DanishHouseDetails,
   getDanishHouseValidationSchema,
 } from './DanishHouseDetails'
+import { DanishDetails, getDanishValidationSchema } from './DanishDetails'
 
 export const getValidationSchema = (
   market: MarketLabel,
@@ -41,9 +47,11 @@ export const getValidationSchema = (
   textKeys: TextKeyMap,
 ) => {
   const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
-  const isNorwegianHouse = type === InsuranceType.NORWEGIAN_HOUSE
-  const isDanishHouse = type === InsuranceType.DANISH_HOUSE
   const isSwedishCar = type === InsuranceType.SWEDISH_CAR
+  const isDanishHome = type === InsuranceType.DANISH_HOME_CONTENT
+  const isDanishHouse = type === InsuranceType.DANISH_HOUSE
+  const isNorwegianHome = type === InsuranceType.NORWEGIAN_HOME_CONTENT
+  const isNorwegianHouse = type === InsuranceType.NORWEGIAN_HOUSE
 
   switch (market) {
     case 'SE':
@@ -53,13 +61,19 @@ export const getValidationSchema = (
         ? getSwedishHouseValidationSchema(textKeys)
         : getSwedishApartmentValidationSchema(textKeys)
     case 'NO':
-      return isNorwegianHouse
-        ? getNorwegianHouseValidationSchema(textKeys)
-        : getNorwegianHomeContentsValidationSchema(textKeys)
+      if (isNorwegianHouse) {
+        return getNorwegianHouseValidationSchema(textKeys)
+      } else if (isNorwegianHome) {
+        return getNorwegianHomeContentsValidationSchema(textKeys)
+      }
+      return getNorwegianValidationSchema(textKeys)
     case 'DK':
-      return isDanishHouse
-        ? getDanishHouseValidationSchema(textKeys)
-        : getDanishValidationSchema(textKeys)
+      if (isDanishHouse) {
+        return getDanishHouseValidationSchema(textKeys)
+      } else if (isDanishHome) {
+        return getDanishHomeContentsValidationSchema(textKeys)
+      }
+      return getDanishValidationSchema(textKeys)
     default:
       throw 'Unknown market'
   }
@@ -71,9 +85,11 @@ export const Details: React.FC<{
   formikProps: FormikProps<QuoteInput>
 }> = ({ market, type, formikProps }) => {
   const isSwedishHouse = type === InsuranceType.SWEDISH_HOUSE
-  const isNorwegianHouse = type === InsuranceType.NORWEGIAN_HOUSE
-  const isDanishHouse = type === InsuranceType.DANISH_HOUSE
   const isSwedishCar = type === InsuranceType.SWEDISH_CAR
+  const isDanishHome = type === InsuranceType.DANISH_HOME_CONTENT
+  const isDanishHouse = type === InsuranceType.DANISH_HOUSE
+  const isNorwegianHome = type === InsuranceType.NORWEGIAN_HOME_CONTENT
+  const isNorwegianHouse = type === InsuranceType.NORWEGIAN_HOUSE
 
   switch (market) {
     case 'SE':
@@ -85,17 +101,19 @@ export const Details: React.FC<{
         <SwedishApartmentDetails formikProps={formikProps} />
       )
     case 'NO':
-      return isNorwegianHouse ? (
-        <NorwegianHouseDetails formikProps={formikProps} />
-      ) : (
-        <NorwegianHomeContentsDetails formikProps={formikProps} />
-      )
+      if (isNorwegianHouse) {
+        return <NorwegianHouseDetails formikProps={formikProps} />
+      } else if (isNorwegianHome) {
+        return <NorwegianHomeContentsDetails formikProps={formikProps} />
+      }
+      return <NorwegianDetails formikProps={formikProps} />
     case 'DK':
-      return isDanishHouse ? (
-        <DanishHouseDetails formikProps={formikProps} />
-      ) : (
-        <DanishDetails formikProps={formikProps} />
-      )
+      if (isDanishHouse) {
+        return <DanishHouseDetails formikProps={formikProps} />
+      } else if (isDanishHome) {
+        return <DanishHomeContentsDetails formikProps={formikProps} />
+      }
+      return <DanishDetails formikProps={formikProps} />
 
     default:
       return null

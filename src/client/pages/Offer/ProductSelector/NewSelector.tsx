@@ -52,7 +52,7 @@ export const NewSelector = ({ products }: NewSelectorProps) => {
             onChange={() => {
               if (isTheOnlyProductSelected) {
                 checkboxRef.current?.setCustomValidity(
-                  textKeys.OFFER_PAGE_MISSING_MAIN_COVERAGE_ERROR(),
+                  textKeys.OFFER_PAGE_MISSING_INSURANCE_SELECTION_ERROR(),
                 )
                 checkboxRef.current?.reportValidity()
               } else {

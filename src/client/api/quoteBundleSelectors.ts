@@ -72,15 +72,7 @@ export const getMainQuote = (bundle: QuoteBundle) => {
     )
     const mainQuoteInBundle = houseQuote || homeContentsQuote
 
-    if (!mainQuoteInBundle) {
-      throw new Error(
-        `Bundle offer ${JSON.stringify(
-          bundle,
-        )} is missing a home/house quote".`,
-      )
-    }
-
-    return mainQuoteInBundle
+    return mainQuoteInBundle ?? bundle.quotes[0]
   }
 
   return bundle.quotes[0]

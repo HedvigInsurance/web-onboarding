@@ -461,5 +461,7 @@
   "AFTER_SIGN_PAYMENT_MESSAGE": "Välkommen till Hedvig! Saknas bara en sak innan vi är klara; koppla autogiro för dina månadsbetalningar.",
   "PERILS_DIALOG_TITLE": "Ingår i {{insurance}}",
   "INSURANCE_CARD_SEE_COVERAGE": "Se täckning",
-  "INSURANCE_SELECTOR_HEADLINE": "Dina försäkringsval"
+  "INSURANCE_SELECTOR_HEADLINE": "Dina försäkringsval",
+  "LANDING_PAGE_SUBMIT_BUTTON": "Fortsätt",
+  "OFFER_PAGE_MISSING_INSURANCE_SELECTION_ERROR": "Välj minst en försäkring för att fortsätta"
 }
