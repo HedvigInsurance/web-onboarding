@@ -30,6 +30,7 @@ import {
 } from './middleware/redirects'
 import { getPage } from './page'
 import { quoteCartSessionMiddleware } from './middleware/quoteCart'
+import { exchangeTokenMiddleware } from './exchangeToken'
 
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8040)
 
@@ -59,6 +60,8 @@ if (process.env.FORCE_HOST) {
   router.use(forceHost({ host: process.env.FORCE_HOST! }))
 }
 
+router.get('/new-member/exchange-token', exchangeTokenMiddleware)
+
 router.use('/new-member(.*)', redirectEmptyLanguageToSweden)
 router.use('/en/new-member(.*)', redirectEnLanguageToSweden)
 
@@ -86,11 +89,11 @@ if (process.env.USE_AUTH) {
   )
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const basicAuth = require('koa-basic-auth')
-  const basicAuthMidleware = basicAuth({
+  const basicAuthMiddleware = basicAuth({
     name: notNullable(process.env.AUTH_NAME),
     pass: notNullable(process.env.AUTH_PASS),
   })
-  app.use(basicAuthMidleware)
+  app.use(basicAuthMiddleware)
 } else {
   appLogger.info('Not using any auth, server is open to the public')
 }
