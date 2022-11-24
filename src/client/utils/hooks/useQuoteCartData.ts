@@ -12,12 +12,12 @@ import {
   getSelectedBundleVariant,
   getCampaign,
   getPossibleVariations,
+  getAllQuotes,
   getCheckoutStatus,
 } from 'api/quoteCartQuerySelectors'
 import {
   typeOfResidenceTextKeys,
   HomeInsuranceTypeOfContract,
-  getQuoteIdsFromBundleVariant,
 } from 'pages/Offer/utils'
 import { GenericQuoteData } from '../../pages/Offer/types'
 import { formatPostalNumber } from '../postalNumbers'
@@ -202,6 +202,7 @@ export const useQuoteCartData = () => {
     variables: { id: quoteCartId, locale: isoLocale },
   })
 
+  const allQuotes = getAllQuotes(data)
   const bundleVariants = getPossibleVariations(data)
   const [selectedInsuranceTypes] = useSelectedInsuranceTypes()
 
@@ -215,8 +216,6 @@ export const useQuoteCartData = () => {
   const prices = selectedQuoteBundleVariant?.bundle.quotes.map((item) => {
     return { displayName: item.displayName, price: item.price.amount }
   })
-
-  const quoteIds = getQuoteIdsFromBundleVariant(selectedQuoteBundleVariant)
 
   const mainQuote = getMainQuote(selectedQuoteBundleVariant.bundle)
 
@@ -246,7 +245,7 @@ export const useQuoteCartData = () => {
       quoteDetails: quoteDetailsGroups,
       selectedQuoteBundleVariant,
       quoteCartId,
-      quoteIds,
+      allQuotes,
       bundleVariants,
       mainQuote,
       checkoutStatus: getCheckoutStatus(data),
