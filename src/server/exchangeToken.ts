@@ -16,7 +16,7 @@ export const exchangeTokenMiddleware: Router.IMiddleware<
 > = async (ctx: ParameterizedContext) => {
   const nextPath = ctx.URL.searchParams.get(SearchParams.Next)
   if (!nextPath) {
-    return ctx.throw(400, `Search param ${SearchParams.Next} is required`)
+    throw new Error(`Search param ${SearchParams.Next} is required`)
   }
   // Safe way of building redirect URL.  We don't want to redirect to external site
   const nextUrl = new URL('', ctx.URL)
@@ -28,8 +28,7 @@ export const exchangeTokenMiddleware: Router.IMiddleware<
     SearchParams.AuthorizationCode,
   )
   if (!authorizationCode) {
-    return ctx.throw(
-      400,
+    throw new Error(
       `Search param ${SearchParams.AuthorizationCode} is required`,
     )
   }
@@ -40,7 +39,11 @@ export const exchangeTokenMiddleware: Router.IMiddleware<
     session.setSession(accessToken)
   } catch (err) {
     if (err.isAxiosError) {
-      return ctx.throw(err.response.status, JSON.stringify(err.response.data))
+      throw new Error(
+        `Failed to exchange authorization_code to token.  HTTP${
+          err.response.status
+        }, ${JSON.stringify(err.response.data)}`,
+      )
     } else {
       throw err
     }
