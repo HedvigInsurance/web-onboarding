@@ -60,8 +60,6 @@ if (process.env.FORCE_HOST) {
   router.use(forceHost({ host: process.env.FORCE_HOST! }))
 }
 
-router.get('/new-member/exchange-token', exchangeTokenMiddleware)
-
 router.use('/new-member(.*)', redirectEmptyLanguageToSweden)
 router.use('/en/new-member(.*)', redirectEnLanguageToSweden)
 
@@ -104,17 +102,17 @@ router.get('/panic-room', async () => {
   )
 })
 
-router.get(
-  localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
-  handleVippsRedirect,
-)
-
 router.post('/new-member/_report-csp-violation', (ctx) => {
   ;(ctx.state.getLogger('cspViolation') as Logger).error(
     `CSP VIOLATION: ${JSON.stringify(ctx.request.body)}`,
   )
   ctx.status = 204
 })
+
+router.get(
+  localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
+  handleVippsRedirect,
+)
 
 router.post(
   localePathPattern + '/new-member/connect-payment/adyen-callback',
@@ -124,6 +122,11 @@ router.post(
 router.post(
   localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
   handleNewAdyen3dsPostRedirect,
+)
+
+router.get(
+  localePathPattern + '/new-member/exchange-token',
+  exchangeTokenMiddleware,
 )
 
 app.use(quoteCartSessionMiddleware)
