@@ -30,6 +30,7 @@ import {
 } from './middleware/redirects'
 import { getPage } from './page'
 import { quoteCartSessionMiddleware } from './middleware/quoteCart'
+import { exchangeTokenMiddleware } from './exchangeToken'
 
 const getPort = () => (process.env.PORT ? Number(process.env.PORT) : 8040)
 
@@ -86,11 +87,11 @@ if (process.env.USE_AUTH) {
   )
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const basicAuth = require('koa-basic-auth')
-  const basicAuthMidleware = basicAuth({
+  const basicAuthMiddleware = basicAuth({
     name: notNullable(process.env.AUTH_NAME),
     pass: notNullable(process.env.AUTH_PASS),
   })
-  app.use(basicAuthMidleware)
+  app.use(basicAuthMiddleware)
 } else {
   appLogger.info('Not using any auth, server is open to the public')
 }
@@ -101,17 +102,17 @@ router.get('/panic-room', async () => {
   )
 })
 
-router.get(
-  localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
-  handleVippsRedirect,
-)
-
 router.post('/new-member/_report-csp-violation', (ctx) => {
   ;(ctx.state.getLogger('cspViolation') as Logger).error(
     `CSP VIOLATION: ${JSON.stringify(ctx.request.body)}`,
   )
   ctx.status = 204
 })
+
+router.get(
+  localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
+  handleVippsRedirect,
+)
 
 router.post(
   localePathPattern + '/new-member/connect-payment/adyen-callback',
@@ -121,6 +122,11 @@ router.post(
 router.post(
   localePathPattern + '/new-member/connect-payment/adyen-cps-callback',
   handleNewAdyen3dsPostRedirect,
+)
+
+router.get(
+  localePathPattern + '/new-member/exchange-token',
+  exchangeTokenMiddleware,
 )
 
 app.use(quoteCartSessionMiddleware)
