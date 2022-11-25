@@ -84,7 +84,8 @@ export const CheckoutDetails = () => {
 
   const priceData = data.priceData
   const quoteDetails = data.quoteDetails
-  const allQuotes = data.selectedQuoteBundleVariant.bundle.quotes
+  const allQuotes = data.allQuotes
+  const selectedQuotes = data.selectedQuoteBundleVariant.bundle.quotes
   const paymentPageLink = `/${localePath}/new-member/checkout/payment/${quoteCartId}`
 
   return (
@@ -96,7 +97,7 @@ export const CheckoutDetails = () => {
           groups={quoteDetails}
           onEditInfoButtonClick={() => setDetailsModalIsOpen(true)}
         />
-        <DocumentLinks allQuotes={allQuotes} />
+        <DocumentLinks allQuotes={selectedQuotes} />
         <CheckoutIntercomVariation />
       </PageSection>
       <DetailsModal
