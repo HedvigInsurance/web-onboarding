@@ -31,10 +31,10 @@ export const ProductCard = forwardRef<HTMLInputElement, ProductCardProps>(
 
     return (
       <Card selected={checked} onClick={handleClick}>
-        <header>
+        <Header>
           <Heading>{product.name}</Heading>
           <Subheading>{product.price}</Subheading>
-        </header>
+        </Header>
         <Description>{product.description}</Description>
         <CheckboxWrapper>
           <Checkbox
@@ -86,6 +86,12 @@ const Card = styled.li<{ selected: boolean }>(({ selected }) => ({
     padding: '16px',
   },
 }))
+
+const Header = styled.header({
+  [MEDIA_QUERIES.mediumScreen]: {
+    paddingRight: '1.75rem',
+  },
+})
 
 const Heading = styled.h1({
   all: 'unset',
