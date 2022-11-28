@@ -12,6 +12,7 @@ import {
   TextInput,
   BooleanInput,
   BirthDateInput,
+  ZipcodeInput,
 } from './components/DetailInput'
 import { Content, ContentColumn } from './components/Details.styles'
 
@@ -26,6 +27,11 @@ export const getNorwegianValidationSchema = (textKeys: TextKeyMap) => {
       )
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     data: Yup.object({
+      street: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+      zipCode: Yup.string().matches(
+        /^[0-9]{4}$/,
+        textKeys.GENERIC_ERROR_INPUT_FORMAT(),
+      ),
       householdSize: Yup.number()
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
@@ -64,6 +70,16 @@ export const NorwegianDetails = ({ formikProps }: NorwegianDetailsProps) => {
       </ContentColumn>
       <ContentColumn>
         <InputGroup>
+          <TextInput
+            name="data.street"
+            label="DETAILS_MODULE_TABLE_ADDRESS_CELL_LABEL"
+            formikProps={formikProps}
+          />
+          <ZipcodeInput
+            name="data.zipCode"
+            market="NO"
+            formikProps={formikProps}
+          />
           <DetailInput
             name="data.householdSize"
             field={{
