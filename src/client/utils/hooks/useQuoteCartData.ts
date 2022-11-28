@@ -51,7 +51,8 @@ const getHomeDetails = (mainQuote: BundledQuote) => {
       street === `${street}, ${formattedFloor}${apartmentString}`
     }
   }
-  return [
+
+  const baseDetails: DetailsGroup = [
     {
       label: 'CHECKOUT_DETAILS_ADDRESS',
       value: { value: street },
@@ -62,25 +63,29 @@ const getHomeDetails = (mainQuote: BundledQuote) => {
         value: zipCode && formatPostalNumber(zipCode),
       },
     },
-    {
+  ]
+
+  const area = livingSpace || squareMeters
+  if (area) {
+    baseDetails.push({
       label: 'CHECKOUT_DETAILS_LIVING_SPACE',
       value: {
-        value: livingSpace || squareMeters,
+        value: area,
         suffix: 'CHECKOUT_DETAILS_SQM_SUFFIX',
       },
-    },
-    {
-      label: 'CHECKOUT_DETAILS_RESIDENCE_TYPE',
-      value: {
-        textKey:
-          typeOfResidenceTextKeys[
-            typeOfContract as HomeInsuranceTypeOfContract
-          ],
-      },
-    },
+    })
+  }
 
-    ...getHouseDetails(mainQuote.data),
-  ]
+  const residenceTextKey =
+    typeOfResidenceTextKeys[typeOfContract as HomeInsuranceTypeOfContract]
+  if (residenceTextKey) {
+    baseDetails.push({
+      label: 'CHECKOUT_DETAILS_RESIDENCE_TYPE',
+      value: { textKey: residenceTextKey },
+    })
+  }
+
+  return [...baseDetails, ...getHouseDetails(mainQuote.data)]
 }
 
 const getHouseDetails = (data: GenericQuoteData) => {
