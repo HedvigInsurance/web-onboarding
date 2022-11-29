@@ -13,8 +13,12 @@ export const getCheckoutDetailsValidationSchema = (
   textKeys: TextKeyMap,
 ) =>
   Yup.object().shape({
-    firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-    lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    firstName: Yup.string()
+      .nullable(true)
+      .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    lastName: Yup.string()
+      .nullable(true)
+      .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     email: Yup.string()
       .email(textKeys.GENERIC_ERROR_INPUT_FORMAT())
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),

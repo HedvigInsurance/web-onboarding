@@ -18,8 +18,8 @@ import { Content, ContentColumn } from './components/Details.styles'
 
 export const getNorwegianValidationSchema = (textKeys: TextKeyMap) => {
   return Yup.object().shape({
-    firstName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
-    lastName: Yup.string().required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
+    firstName: Yup.string().nullable(true),
+    lastName: Yup.string().nullable(true),
     birthDate: Yup.string()
       .matches(
         birthDateFormats.backEndDefault,
