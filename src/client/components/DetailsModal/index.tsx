@@ -334,6 +334,7 @@ export const DetailsModal = ({
               <ModalFooter>
                 <ButtonGroup fullWidth>
                   <Button
+                    type="button"
                     background={colorsV3.white}
                     foreground={colorsV3.black}
                     border
