@@ -27,7 +27,7 @@ export const getDanishValidationSchema = (textKeys: TextKeyMap) => {
       .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
     data: Yup.object({
       householdSize: Yup.number()
-        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .min(1, textKeys.INVALID_FIELD())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       isStudent: Yup.boolean(),
     }).required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),

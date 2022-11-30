@@ -30,7 +30,7 @@ export const getSwedishHouseValidationSchema = (textKeys: TextKeyMap) => {
         .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       householdSize: Yup.number()
-        .min(1, textKeys.GENERIC_ERROR_INPUT_FORMAT())
+        .min(1, textKeys.INVALID_FIELD())
         .required(textKeys.GENERIC_ERROR_INPUT_REQUIRED()),
       ancillaryArea: Yup.number()
         .typeError(textKeys.GENERIC_ERROR_INPUT_REQUIRED())
