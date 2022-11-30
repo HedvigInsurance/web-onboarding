@@ -227,69 +227,74 @@ export const DetailsModal = ({
         delete form[k as keyof QuoteInput],
     )
 
-    for (const quote of allQuotes) {
-      const { id: quoteId, data } = quote
-      const payload = {
-        ...form,
-        data: Object.keys(data).reduce<
-          Partial<QuoteDetailsInput & QuoteDataCommon>
-        >((acc, key) => {
-          switch (key) {
-            case 'numberCoInsured':
-              acc[key] =
-                typeof form.data.householdSize === 'number'
-                  ? form.data.householdSize - 1
-                  : data[key]
-              return acc
-            case 'livingSpace':
-            case 'squareMeters':
-              acc.squareMeters =
-                form.data['livingSpace'] ||
-                form.data['squareMeters'] ||
-                data['livingSpace'] ||
-                data['squareMeters']
-              acc.livingSpace =
-                form.data['livingSpace'] ||
-                form.data['squareMeters'] ||
-                data['livingSpace'] ||
-                data['squareMeters']
-              return acc
-            case 'id':
-            case 'type':
-            case 'typeOfContract':
-              acc[key] = data[key]
-              return acc
-            default: {
-              const formValue = form.data[key as keyof QuoteDetailsInput]
-              acc[key as keyof QuoteDetailsInput] =
-                formValue !== undefined && formValue !== null
-                  ? formValue
-                  : data[key]
-              return acc
+    return await Promise.all(
+      allQuotes.map(async (quote) => {
+        const { id: quoteId, data } = quote
+        const payload = {
+          ...form,
+          data: Object.keys(data).reduce<
+            Partial<QuoteDetailsInput & QuoteDataCommon>
+          >((acc, key) => {
+            switch (key) {
+              case 'numberCoInsured':
+                acc[key] =
+                  typeof form.data.householdSize === 'number'
+                    ? form.data.householdSize - 1
+                    : data[key]
+                return acc
+              case 'livingSpace':
+              case 'squareMeters':
+                acc.squareMeters =
+                  form.data['livingSpace'] ||
+                  form.data['squareMeters'] ||
+                  data['livingSpace'] ||
+                  data['squareMeters']
+                acc.livingSpace =
+                  form.data['livingSpace'] ||
+                  form.data['squareMeters'] ||
+                  data['livingSpace'] ||
+                  data['squareMeters']
+                return acc
+              case 'id':
+              case 'type':
+              case 'typeOfContract':
+                acc[key] = data[key]
+                return acc
+              default: {
+                const formValue = form.data[key as keyof QuoteDetailsInput]
+                acc[key as keyof QuoteDetailsInput] =
+                  formValue !== undefined && formValue !== null
+                    ? formValue
+                    : data[key]
+                return acc
+              }
             }
-          }
-        }, {}),
-      }
+          }, {}),
+        }
 
-      await editQuote({
-        variables: {
-          quoteCartId,
-          quoteId,
-          locale: isoLocale,
-          payload,
-        },
-      })
-    }
+        return await editQuote({
+          variables: {
+            quoteCartId,
+            quoteId,
+            locale: isoLocale,
+            payload,
+          },
+        })
+      }),
+    )
   }
 
   const onSubmit = async (
     form: QuoteInput,
     { setErrors }: FormikHelpers<QuoteInput>,
   ) => {
-    await editQuotes(form)
-    const limits = getLimitsHitFromEditQuoteMutation(editQuoteData)
+    const results = await editQuotes(form)
 
-    if (limits.length) {
+    const limits = results
+      .map((result) => getLimitsHitFromEditQuoteMutation(result.data))
+      .flat()
+
+    if (limits.length > 0) {
       const errors = getFormErrorsFromUnderwritterLimits(
         limits,
         textKeys.INVALID_FIELD(),
