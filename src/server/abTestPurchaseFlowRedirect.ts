@@ -24,6 +24,14 @@ export const abTestPurchaseFlowRedirect = (
 
   const logger = ctx.state.getLogger('abTestPurchaseFlow')
 
+  const newFlowWeight = getRedirectWeight(redirectConfig.id)
+  if (newFlowWeight === 0) {
+    logger.info(
+      `Skipping experiment id=${redirectConfig.id} for name=${redirectConfig.originalFlow} due to zero weight`,
+    )
+    return false
+  }
+
   const experimentCookieName = abExperimentCookieName(
     redirectConfig.optimizeExperimentId,
   )
@@ -35,14 +43,6 @@ export const abTestPurchaseFlowRedirect = (
       `Found experiment cookie, id=${redirectConfig.optimizeExperimentId} shouldRedirect=${shouldRedirect}`,
     )
   } else {
-    const newFlowWeight = getRedirectWeight(redirectConfig.id)
-    if (newFlowWeight === 0) {
-      logger.info(
-        `Skipping experiment id=${redirectConfig.id} for name=${redirectConfig.originalFlow} due to zero weight`,
-      )
-      return false
-    }
-
     const variant = Math.random() * 100 < newFlowWeight ? 1 : 0
     logger.info(
       `AB redirect id: ${redirectConfig.id} new variant weight: ${newFlowWeight}, selected variant: ${variant}`,
