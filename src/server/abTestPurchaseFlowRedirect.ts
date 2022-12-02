@@ -49,6 +49,7 @@ export const abTestPurchaseFlowRedirect = (
     shouldRedirect = variant === 1
     ctx.cookies.set(experimentCookieName, String(variant), {
       expires: new Date(Date.now() + AB_COOKIE_MAX_AGE),
+      httpOnly: false,
     })
   }
 
