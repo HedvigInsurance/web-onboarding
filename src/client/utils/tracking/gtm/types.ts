@@ -31,6 +31,7 @@ export enum TrackableContractCategory {
 }
 
 export enum EventName {
+  ExperimentImpression = 'experiment_impression',
   OfferCreated = 'offer_created',
   SignedCustomer = 'signed_customer',
   InsuranceSelectionToggle = 'insurance_selection_toggle',
