@@ -12,11 +12,9 @@ import { trackExperimentImpression } from 'utils/tracking/gtm/trackExperimentImp
 export const useTrackAbPurchaseFlowRedirect = () => {
   const [abTestPurchaseFlows] = useFeature([Feature.AB_TEST_PURCHASE_FLOWS])
   const { params } = useRouteMatch<any>()
-  const isFirstPage =
-    typeof params.name === 'string' && typeof params.id === 'undefined'
 
   useEffect(() => {
-    if (!abTestPurchaseFlows || !isFirstPage) {
+    if (!abTestPurchaseFlows) {
       return
     }
     const redirectConfig = AB_PURCHASE_FLOW_REDIRECTS.find(
@@ -34,5 +32,5 @@ export const useTrackAbPurchaseFlowRedirect = () => {
       const variant = parseInt(cookieVariant, 10) || 0
       trackExperimentImpression(redirectConfig.optimizeExperimentId, variant)
     }
-  }, [abTestPurchaseFlows, isFirstPage, params.name])
+  }, [abTestPurchaseFlows, params.name])
 }
