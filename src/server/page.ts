@@ -158,7 +158,7 @@ export const getPage = (
   // It would be cleaner to perform A/B redirect in middleware, but we don't have access to params there
   const { marketLabel } = locales[ctx.params.locale as LocaleLabel] ?? {}
   if (marketLabel && FEATURES.AB_TEST_PURCHASE_FLOWS.includes(marketLabel)) {
-    if (abTestPurchaseFlowRedirect(ctx, serverCookieStorage)) {
+    if (abTestPurchaseFlowRedirect(ctx)) {
       return
     }
   }
