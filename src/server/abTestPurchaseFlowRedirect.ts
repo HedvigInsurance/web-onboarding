@@ -1,5 +1,4 @@
 import { ParameterizedContext } from 'koa'
-import { SavingCookieStorage } from 'shared/sessionStorage'
 import {
   AB_PURCHASE_FLOW_REDIRECTS,
   abExperimentCookieName,
@@ -9,7 +8,6 @@ const AB_COOKIE_MAX_AGE = 7 * 24 * 3600 * 1000
 
 export const abTestPurchaseFlowRedirect = (
   ctx: ParameterizedContext,
-  serverCookieStorage: SavingCookieStorage,
 ): boolean => {
   const isFirstPage = ctx.params.id === undefined
   if (!isFirstPage) {
@@ -35,7 +33,7 @@ export const abTestPurchaseFlowRedirect = (
   const experimentCookieName = abExperimentCookieName(
     redirectConfig.optimizeExperimentId,
   )
-  const cookie = serverCookieStorage.getItem(experimentCookieName)
+  const cookie = ctx.cookies.get(experimentCookieName)
   let shouldRedirect
   if (cookie) {
     shouldRedirect = parseInt(cookie, 10) === 1
@@ -49,7 +47,7 @@ export const abTestPurchaseFlowRedirect = (
       experimentCookieName,
     )
     shouldRedirect = variant === 1
-    serverCookieStorage.setItem(experimentCookieName, String(variant), {
+    ctx.cookies.set(experimentCookieName, String(variant), {
       expires: new Date(Date.now() + AB_COOKIE_MAX_AGE),
     })
   }
