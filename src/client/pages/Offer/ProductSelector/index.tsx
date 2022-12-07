@@ -1,26 +1,53 @@
-import React from 'react'
-import { useFeature, Features } from 'utils/hooks/useFeature'
+import React, { useMemo } from 'react'
+import { QuoteCartQuery } from 'data/graphql'
+import { getAllQuotes } from 'api/quoteCartQuerySelectors'
+import { useTextKeys } from 'utils/textKeys'
 import {
-  OldProductSelector,
-  OldProductSelectorProps,
-} from './OldProductSelector'
-import {
-  NewProductSelector,
-  NewProductSelectorProps,
-} from './NewProductSelector'
+  ContainerWrapper,
+  Container,
+  HeadingWrapper,
+  HeadingBlack,
+  Column,
+  ColumnSpacing,
+} from '../components'
+import { Selector } from './Selector'
 
-type ProductSelectorProps = OldProductSelectorProps & NewProductSelectorProps
+export type ProductSelectorProps = { quoteCartQueryData: QuoteCartQuery }
 
 export const ProductSelector = ({
   quoteCartQueryData,
 }: ProductSelectorProps) => {
-  const [isTravelAccidentStandaloneEnabled] = useFeature([
-    Features.OFFER_PAGE_TRAVEL_ACCIDENT_STANDALONE,
-  ])
+  const textKeys = useTextKeys()
+  const localizedPerMonth = textKeys.SIDEBAR_PRICE_SUFFIX_INTERVAL()
 
-  if (isTravelAccidentStandaloneEnabled) {
-    return <NewProductSelector quoteCartQueryData={quoteCartQueryData} />
-  }
+  const products = useMemo(() => {
+    return getAllQuotes(quoteCartQueryData).map(
+      ({ insuranceType, displayName, description, price }) => {
+        return {
+          id: insuranceType,
+          name: displayName,
+          description,
+          price: `${price.amount} ${price.currency}${localizedPerMonth}`,
+        }
+      },
+    )
+  }, [quoteCartQueryData, localizedPerMonth])
 
-  return <OldProductSelector quoteCartQueryData={quoteCartQueryData} />
+  if (products.length === 0) return null
+
+  return (
+    <ContainerWrapper>
+      <Container>
+        <Column>
+          <HeadingWrapper>
+            <HeadingBlack>
+              {textKeys.INSURANCE_SELECTOR_HEADLINE()}
+            </HeadingBlack>
+          </HeadingWrapper>
+          <Selector products={products} />
+        </Column>
+        <ColumnSpacing />
+      </Container>
+    </ContainerWrapper>
+  )
 }
