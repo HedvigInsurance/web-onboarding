@@ -2738,7 +2738,7 @@ export type CrossSellInfoArgs = {
   locale: Locale
 }
 
-export type CrossSellAction = CrossSellChat | CrossSellEmbark
+export type CrossSellAction = CrossSellChat | CrossSellEmbark | CrossSellWeb
 
 export type CrossSellChat = {
   __typename?: 'CrossSellChat'
@@ -2795,6 +2795,11 @@ export enum CrossSellType {
   HomeContent = 'HOME_CONTENT',
   House = 'HOUSE',
   Car = 'CAR',
+}
+
+export type CrossSellWeb = {
+  __typename?: 'CrossSellWeb'
+  url: Scalars['String']
 }
 
 export type CurrentInsurer = {
@@ -10825,6 +10830,8 @@ export enum TypeOfContract {
   SeHouse = 'SE_HOUSE',
   SeApartmentBrf = 'SE_APARTMENT_BRF',
   SeApartmentRent = 'SE_APARTMENT_RENT',
+  SeApartmentBrfTrial = 'SE_APARTMENT_BRF_TRIAL',
+  SeApartmentRentTrial = 'SE_APARTMENT_RENT_TRIAL',
   SeApartmentStudentBrf = 'SE_APARTMENT_STUDENT_BRF',
   SeApartmentStudentRent = 'SE_APARTMENT_STUDENT_RENT',
   SeAccident = 'SE_ACCIDENT',
@@ -12351,12 +12358,6 @@ export type QuoteCartQuery = { __typename?: 'Query' } & {
           quotes: Array<
             { __typename?: 'BundledQuote' } & QuoteDataFragmentFragment
           >
-          standaloneQuotes: Array<
-            { __typename?: 'BundledQuote' } & StandaloneQuoteFragment
-          >
-          additionalQuotes: Array<
-            { __typename?: 'BundledQuote' } & AdditionalQuoteFragment
-          >
           possibleVariations: Array<
             { __typename?: 'QuoteBundleVariant' } & Pick<
               QuoteBundleVariant,
@@ -12598,16 +12599,6 @@ export type UpdatePickedLocaleMutation = { __typename?: 'Mutation' } & {
   updatePickedLocale: { __typename?: 'Member' } & Pick<Member, 'id'>
 }
 
-export type AdditionalQuoteFragment = { __typename?: 'BundledQuote' } & Pick<
-  BundledQuote,
-  'id' | 'insuranceType' | 'displayName' | 'description'
-> & {
-    price: { __typename?: 'MonetaryAmountV2' } & Pick<
-      MonetaryAmountV2,
-      'amount' | 'currency'
-    >
-  }
-
 export type BundleCostDataFragmentFragment = {
   __typename?: 'InsuranceCost'
 } & Pick<InsuranceCost, 'freeUntil'> & {
@@ -12776,16 +12767,6 @@ export type QuoteDataFragmentFragment = { __typename?: 'BundledQuote' } & Pick<
         >)
   }
 
-export type StandaloneQuoteFragment = { __typename?: 'BundledQuote' } & Pick<
-  BundledQuote,
-  'id' | 'insuranceType' | 'displayName' | 'description'
-> & {
-    price: { __typename?: 'MonetaryAmountV2' } & Pick<
-      MonetaryAmountV2,
-      'amount' | 'currency'
-    >
-  }
-
 export const QuoteDataFragmentDoc = gql`
   fragment QuoteData on BundledQuote {
     id
@@ -12919,18 +12900,6 @@ export const BundleCostDataFragmentDoc = gql`
       currency
     }
     monthlyNet {
-      amount
-      currency
-    }
-  }
-`
-export const AdditionalQuoteFragmentDoc = gql`
-  fragment AdditionalQuote on BundledQuote {
-    id
-    insuranceType
-    displayName(locale: $locale)
-    description(locale: $locale)
-    price {
       amount
       currency
     }
@@ -13097,18 +13066,6 @@ export const QuoteDataFragmentFragmentDoc = gql`
         coInsured
         isStudent
       }
-    }
-  }
-`
-export const StandaloneQuoteFragmentDoc = gql`
-  fragment StandaloneQuote on BundledQuote {
-    id
-    insuranceType
-    displayName(locale: $locale)
-    description(locale: $locale)
-    price {
-      amount
-      currency
     }
   }
 `
@@ -14444,12 +14401,6 @@ export const QuoteCartDocument = gql`
         quotes {
           ...QuoteDataFragment
         }
-        standaloneQuotes {
-          ...StandaloneQuote
-        }
-        additionalQuotes {
-          ...AdditionalQuote
-        }
         possibleVariations {
           id
           tag(locale: $locale)
@@ -14478,8 +14429,6 @@ export const QuoteCartDocument = gql`
     }
   }
   ${QuoteDataFragmentFragmentDoc}
-  ${StandaloneQuoteFragmentDoc}
-  ${AdditionalQuoteFragmentDoc}
   ${BundleCostDataFragmentFragmentDoc}
   ${CampaignDataFragmentDoc}
 `

@@ -5,12 +5,6 @@ query QuoteCart($id: ID!, $locale: Locale!) {
       quotes {
         ...QuoteDataFragment
       }
-      standaloneQuotes {
-        ...StandaloneQuote
-      }
-      additionalQuotes {
-        ...AdditionalQuote
-      }
       possibleVariations {
         id
         tag(locale: $locale)
