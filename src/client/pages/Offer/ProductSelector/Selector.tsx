@@ -8,11 +8,11 @@ import { useTextKeys } from 'utils/textKeys'
 import { MEDIA_QUERIES } from 'utils/mediaQueries'
 import { ProductCard, Product } from './ProductCard'
 
-export type NewSelectorProps = {
+export type SelectorProps = {
   products: Array<Product>
 }
 
-export const NewSelector = ({ products }: NewSelectorProps) => {
+export const Selector = ({ products }: SelectorProps) => {
   const checkboxRef = useRef<HTMLInputElement | null>(null)
 
   const textKeys = useTextKeys()
