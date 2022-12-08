@@ -305,6 +305,9 @@ export const typeOfResidenceTextKeys: Record<
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
   [TypeOfContract.SeApartmentStudentBrf]:
     'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+  [TypeOfContract.SeApartmentBrfTrial]:
+    'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_APARTMENT',
+  [TypeOfContract.SeApartmentRentTrial]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_RENT',
   [TypeOfContract.SeHouse]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
   [TypeOfContract.NoHouse]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
   [TypeOfContract.DkHouse]: 'CHECKOUT_DETAILS_RESIDENCE_TYPE_OWN_HOUSE',
