@@ -2,6 +2,7 @@ import { Provider } from 'constate'
 import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch, useHistory } from 'react-router-dom'
+import { useTrackNewSiteExperiment } from 'utils/tracking/hooks/useTrackNewSiteExperiment'
 import { routes } from '../routes'
 import { TextKeyProvider } from './utils/textKeys'
 import { useTrackPageViewEvent } from './utils/tracking/hooks/useTrackPageViewEvent'
@@ -19,9 +20,11 @@ const isProductionEnvironment =
   window.hedvigClientConfig.appEnvironment === 'production'
 
 export const App: React.ComponentType<StorageState> = ({ session }) => {
+  useTrackPageViewEvent()
+  useTrackNewSiteExperiment()
+
   const { isoLocale } = useCurrentLocale()
   const history = useHistory()
-  useTrackPageViewEvent()
 
   return (
     <>
