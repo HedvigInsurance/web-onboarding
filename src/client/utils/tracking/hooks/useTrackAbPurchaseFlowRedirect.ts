@@ -25,11 +25,11 @@ export const useTrackAbPurchaseFlowRedirect = () => {
     if (!redirectConfig) {
       return
     }
-    const cookieVariant = new CookieStorage().getItem(
+    const variantCookie = new CookieStorage().getItem(
       abExperimentCookieName(redirectConfig.optimizeExperimentId),
     )
-    if (typeof cookieVariant === 'string') {
-      const variant = parseInt(cookieVariant, 10) || 0
+    if (typeof variantCookie === 'string') {
+      const variant = parseInt(variantCookie, 10) || 0
       trackExperimentImpression(redirectConfig.optimizeExperimentId, variant)
     }
   }, [abTestPurchaseFlows, params.name])
