@@ -14,12 +14,15 @@ export const exchangeTokenMiddleware: Router.IMiddleware<
   WithLoggerState,
   any
 > = async (ctx: ParameterizedContext) => {
+  const logger = ctx.state.getLogger('exchangeTokenMiddleware')
+
   const nextPath = ctx.URL.searchParams.get(SearchParams.Next)
   if (!nextPath) {
     throw new Error(`Search param ${SearchParams.Next} is required`)
   }
-  // Safe way of building redirect URL.  We don't want to redirect to external site
+  // Safe way of building redirect URL. We don't want to redirect to external site
   const nextUrl = new URL('', ctx.URL)
+  nextUrl.host = process.env.HOST_URL || nextUrl.host
   nextUrl.pathname = nextPath
   nextUrl.searchParams.delete(SearchParams.Next)
   nextUrl.searchParams.delete(SearchParams.AuthorizationCode)
@@ -39,11 +42,9 @@ export const exchangeTokenMiddleware: Router.IMiddleware<
     session.setSession({ token: accessToken })
   } catch (err) {
     if (err.isAxiosError) {
-      throw new Error(
-        `Failed to exchange authorization_code to token.  HTTP${
-          err.response.status
-        }, ${JSON.stringify(err.response.data)}`,
-      )
+      const message = `Failed to exchange authorization_code to token: HTTP${err.response.status}`
+      logger.error(message, err)
+      throw new Error(message)
     } else {
       throw err
     }
