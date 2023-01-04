@@ -28,7 +28,6 @@ enum EmbarkStory {
   SwedenQuoteCartNeeder = 'Web Onboarding SE - Quote Cart Needer',
   SwedenQuoteCartSwitcherV2 = 'Web Onboarding SE - Quote Cart Switcher-v2',
   SwedenCarV2 = 'SE-onboarding-car-v2',
-  SwedenCarV3 = 'SE-onboarding-car-v3',
 }
 
 export type CanonicalLinksPerLocale = Record<LocalePath, string>
@@ -311,12 +310,6 @@ export const routes: Route[] = [
                   return {
                     baseUrl,
                     name: EmbarkStory.SwedenCarV2,
-                    quoteCart: true,
-                  }
-                case 'car-v3':
-                  return {
-                    baseUrl,
-                    name: EmbarkStory.SwedenCarV3,
                     quoteCart: true,
                   }
               }
