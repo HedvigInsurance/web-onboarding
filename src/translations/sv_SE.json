@@ -444,7 +444,7 @@
   "SIDEBAR_SWITCHING_NOTICE_HEADING": "Redan försäkrad? Att byta är enkelt",
   "SIDEBAR_SWITCHING_NOTICE_BODY": "Efter att du tecknat Hedvig, följ bara länken vi mejlar till dig och godkänn bytet med BankID.",
   "SIDEBAR_SWITCHING_NOTICE_LINK": "Läs mer",
-  "DOWNLOAD_PAGE_CAR_SWITCHER_SECTION_HEADING": "Din tidigare försäkring",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_SECTION_HEADING": "Din gamla försäkring",
   "DOWNLOAD_PAGE_CAR_SWITCHER_HEADING": "Så säger du upp din tidigare försäkring",
   "DOWNLOAD_PAGE_CAR_SWITCHER_BODY": "Klicka bara på länken du fått via mejl och följ instruktionerna. Frågor? Skriv till oss i chatten i appen, vi är glada att hjälpa till.",
   "INITIATE_CAR_CANCELLATION_PAGE_TITLE": "Uppsägning av nuvarande försäkring | Hedvig",
@@ -463,5 +463,10 @@
   "INSURANCE_CARD_SEE_COVERAGE": "Se täckning",
   "INSURANCE_SELECTOR_HEADLINE": "Dina försäkringsval",
   "LANDING_PAGE_SUBMIT_BUTTON": "Fortsätt",
-  "OFFER_PAGE_MISSING_INSURANCE_SELECTION_ERROR": "Välj minst en försäkring för att fortsätta"
+  "OFFER_PAGE_MISSING_INSURANCE_SELECTION_ERROR": "Välj minst en försäkring för att fortsätta",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_BUTTON": "Säg upp min försäkring",
+  "SIDEBAR_SWITCHING_BANKSIGNERING_NOTICE_BODY": "Efter att du tecknat Hedvig kan du enkelt avsluta din nuvarande försäkring med BankID.",
+  "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_HEADING": "Säg upp din gamla försäkring",
+  "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_BODY": "Godkänn uppsägningen av din nuvarande bilförsäkring med BankID. Din nya försäkring hos Hedvig aktiveras samma dag som den gamla går ut.",
+  "OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V3": "Vi ser att din bil redan är försäkrad med ett annat försäkringsbolag. Oroa dig inte, det är enkelt att byta.\n\n1. Teckna en bilförsäkring med Hedvig\n2. Godkänn uppsägningen av din nuvarande bilförsäkring med BankID.\n3. Vi kontaktar ditt tidigare försäkringsbolag och säger upp din försäkring åt dig.\n4. Klart! Din nya bilförsäkring med Hedvig aktiveras automatiskt samma dag som din tidigare går ut.\n\nObservera: om din nuvarande bilförsäkring går ut inom 1 vecka behöver du själv kontakta ditt försäkringsbolag för att säga upp den."
 }

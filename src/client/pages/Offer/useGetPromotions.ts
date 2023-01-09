@@ -41,7 +41,7 @@ export const useGetPromotions = (quotes: BundledQuote[]): Promotion[] => {
     const carSwitchingPromo = {
       id: PromotionTypes.SWITCH,
       headingText: textKeys.OFFER_SWITCH_PROMOTION_HEADING_CAR(),
-      bodyText: textKeys.OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V2(),
+      bodyText: textKeys.OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V3(),
       imageUrl: '/new-member-assets/offer/switch-promotion.jpg',
     }
 

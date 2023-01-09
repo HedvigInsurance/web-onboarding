@@ -36,8 +36,7 @@ export type TypeOfContractExcludedUnused = Exclude<
   | TypeOfContract.SeCarTraffic
   | TypeOfContract.SeQasaLongTermRental
   | TypeOfContract.SeQasaShortTermRental
-  | TypeOfContract.SeApartmentBrfTrial
-  | TypeOfContract.SeApartmentRentTrial
+  | TypeOfContract.SeGroupApartmentRent
 >
 
 /**

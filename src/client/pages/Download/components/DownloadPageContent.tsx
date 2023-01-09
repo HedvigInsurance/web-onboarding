@@ -10,6 +10,7 @@ import { Features, useFeature } from 'utils/hooks/useFeature'
 import { useActiveContractBundles } from 'pages/Download/useActiveContractBundles'
 import { TypeOfContract } from 'data/graphql'
 import { Feature } from 'shared/clientConfig'
+import { useSendDatadogAction } from 'src/client/utils/tracking/hooks/useSendDatadogAction'
 import { GetAppButtons } from './GetAppButtons'
 import { SwitchingNotice } from './SwitchingNotice'
 import { useGetImageUrl } from './useGetImageUrl'
@@ -106,12 +107,25 @@ export const DownloadPageContent = ({
     Feature.CAR_CANCELLATION,
   ])
 
-  const { contracts = [] } = useActiveContractBundles()
+  const sendDatadogAction = useSendDatadogAction()
+  const { contracts = [] } = useActiveContractBundles({
+    onCompleted: (data) => {
+      const carSwitchingContract = data.activeContractBundles
+        .flatMap((bundle) => bundle.contracts)
+        .find(
+          (contract) =>
+            isCarContract(contract) && contract.switchedFromInsuranceProvider,
+        )
+
+      if (carCancellationEnabled && carSwitchingContract) {
+        sendDatadogAction('car_switching_notice')
+      }
+    },
+  })
   const carSwitchingContract = contracts.find(
     (contract) =>
       isCarContract(contract) && contract.switchedFromInsuranceProvider,
   )
-  const isCarSwitcher = carCancellationEnabled && !!carSwitchingContract
   return (
     <>
       <HeadlineWrapper imageUrl={imageUrl}>
@@ -128,8 +142,11 @@ export const DownloadPageContent = ({
       </HeadlineWrapper>
 
       <AdditionalContentWrapper>
-        {isCarSwitcher && (
-          <SwitchingNotice inception={carSwitchingContract?.inception} />
+        {carCancellationEnabled && carSwitchingContract && (
+          <SwitchingNotice
+            contractId={carSwitchingContract.id}
+            inceptionDate={carSwitchingContract.inception}
+          />
         )}
         {crossSellEnabled && <CrossSells />}
       </AdditionalContentWrapper>

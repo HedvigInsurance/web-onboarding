@@ -8,6 +8,7 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { Page } from 'components/utils/Page'
 import { ErrorHeading, ErrorModal, ErrorText } from 'components/ErrorModal'
 import { useTextKeys } from 'utils/textKeys'
+import { useSendDatadogAction } from 'src/client/utils/tracking/hooks/useSendDatadogAction'
 
 const CenteredWrapper = styled.div({
   width: '100%',
@@ -23,26 +24,30 @@ export const InitiateCarCancellationPage = () => {
   const queryParams = new URLSearchParams(search)
   const contractId = queryParams.get('contractId')
 
+  const sendDatadogAction = useSendDatadogAction()
   const [
     initiateCarCancellationMutation,
-    { data, loading, error },
+    { loading, error },
   ] = useInitiateCarCancellationMutation({
     variables: {
       input: {
         contractId: contractId || '',
       },
     },
+
+    onCompleted(data) {
+      if (data.initiateCancelOldCarInsurance?.url) {
+        sendDatadogAction('car_switching_redirect')
+        window.location.href = data.initiateCancelOldCarInsurance.url
+      } else {
+        sendDatadogAction('car_switching_redirect_failed')
+      }
+    },
   })
 
   useEffect(() => {
     initiateCarCancellationMutation()
   }, [initiateCarCancellationMutation])
-
-  useEffect(() => {
-    if (data?.initiateCancelOldCarInsurance?.url) {
-      window.location.href = data.initiateCancelOldCarInsurance.url
-    }
-  }, [data])
 
   return (
     <Page>

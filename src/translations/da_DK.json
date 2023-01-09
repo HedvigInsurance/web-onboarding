@@ -378,7 +378,7 @@
   "DETAILS_MODULE_BODY": "Kontrollér, at denne information om dig stemmer overens.",
   "CLOSE": "Luk",
   "START_SCREEN_PERSONAL_NUMBER_INPUT_TITLE": "",
-  "LANDING_PAGE_HEADLINE": "Vælge forsikringer at få en priseføreslage førdan",
+  "LANDING_PAGE_HEADLINE": "Vælg forsikring(er) og få et tilbud",
   "LANDING_PAGE_SUBHEADING": "Vælg de tillægsydelser, du ønsker til din indboforsikring, og i det næste trin stiller vi dig et par opfølgende spørgsmål.",
   "LANDING_PAGE_SUBHEADING_EDIT": "",
   "LANDING_PAGE_SECTION_TITLE_MAIN": "Hovedforsikring",
@@ -463,5 +463,10 @@
   "INSURANCE_CARD_SEE_COVERAGE": "Se dækning",
   "INSURANCE_SELECTOR_HEADLINE": "Dine forsikring valg",
   "LANDING_PAGE_SUBMIT_BUTTON": "Fortsæt",
-  "OFFER_PAGE_MISSING_INSURANCE_SELECTION_ERROR": "Vælg mindst en forsikring for at fortsætte"
+  "OFFER_PAGE_MISSING_INSURANCE_SELECTION_ERROR": "Vælg mindst en forsikring for at fortsætte",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_BUTTON": "",
+  "SIDEBAR_SWITCHING_BANKSIGNERING_NOTICE_BODY": "",
+  "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_HEADING": "",
+  "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_BODY": "",
+  "OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V3": ""
 }

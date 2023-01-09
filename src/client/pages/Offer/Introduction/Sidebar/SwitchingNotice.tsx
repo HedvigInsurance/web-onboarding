@@ -25,7 +25,7 @@ export const SwitchingNotice = ({ isDateValid }: Props) => {
       <Notice.Header>
         {textKeys.SIDEBAR_SWITCHING_NOTICE_HEADING()}
       </Notice.Header>
-      <p>{textKeys.SIDEBAR_SWITCHING_NOTICE_BODY()}</p>
+      <p>{textKeys.SIDEBAR_SWITCHING_BANKSIGNERING_NOTICE_BODY()}</p>
       {!isDateValid && <p>{textKeys.SIDEBAR_SWITCHING_NOTICE_ADDENDUM()}</p>}
 
       <StyledLink to={PromotionTypes.SWITCH} smooth={true} duration={500}>
