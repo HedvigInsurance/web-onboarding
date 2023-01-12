@@ -1,5 +1,6 @@
 import React, { useEffect, ReactEventHandler } from 'react'
 import styled from '@emotion/styled'
+import { colorsV3 } from '@hedviginsurance/brand'
 import { SUCCESS_SUFFIX, FAIL_SUFFIX } from './Payment.constants'
 
 type TrustlyIframeProps = {
@@ -42,8 +43,12 @@ export const TrustlyIframe = (props: TrustlyIframeProps) => {
 
 const Iframe = styled.iframe({
   width: '100%',
-  minHeight: '500px',
+  minHeight: 500,
   height: 'calc(100vh - 2rem)',
-  maxHeight: '798px',
+  maxHeight: 798,
+  maxWidth: 600,
   border: 'none',
+  boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
+  marginInline: 'auto',
+  backgroundColor: colorsV3.white,
 })
