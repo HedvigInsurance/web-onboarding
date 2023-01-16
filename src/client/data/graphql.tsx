@@ -8680,8 +8680,6 @@ export type Quote = CompleteQuote
 export type QuoteBundle = {
   __typename?: 'QuoteBundle'
   quotes: Array<BundledQuote>
-  standaloneQuotes: Array<BundledQuote>
-  additionalQuotes: Array<BundledQuote>
   bundleCost: InsuranceCost
   appConfiguration: QuoteBundleAppConfiguration
   displayName: Scalars['String']
@@ -10830,8 +10828,6 @@ export enum TypeOfContract {
   SeHouse = 'SE_HOUSE',
   SeApartmentBrf = 'SE_APARTMENT_BRF',
   SeApartmentRent = 'SE_APARTMENT_RENT',
-  SeApartmentBrfTrial = 'SE_APARTMENT_BRF_TRIAL',
-  SeApartmentRentTrial = 'SE_APARTMENT_RENT_TRIAL',
   SeApartmentStudentBrf = 'SE_APARTMENT_STUDENT_BRF',
   SeApartmentStudentRent = 'SE_APARTMENT_STUDENT_RENT',
   SeAccident = 'SE_ACCIDENT',
@@ -10839,6 +10835,7 @@ export enum TypeOfContract {
   SeCarTraffic = 'SE_CAR_TRAFFIC',
   SeCarHalf = 'SE_CAR_HALF',
   SeCarFull = 'SE_CAR_FULL',
+  SeGroupApartmentRent = 'SE_GROUP_APARTMENT_RENT',
   SeQasaShortTermRental = 'SE_QASA_SHORT_TERM_RENTAL',
   SeQasaLongTermRental = 'SE_QASA_LONG_TERM_RENTAL',
   NoHouse = 'NO_HOUSE',
@@ -11787,7 +11784,10 @@ export type ActiveContractBundlesQuery = { __typename?: 'Query' } & {
       contracts: Array<
         { __typename?: 'Contract' } & Pick<
           Contract,
-          'typeOfContract' | 'inception' | 'switchedFromInsuranceProvider'
+          | 'id'
+          | 'typeOfContract'
+          | 'inception'
+          | 'switchedFromInsuranceProvider'
         >
       >
       potentialCrossSells: Array<
@@ -13073,6 +13073,7 @@ export const ActiveContractBundlesDocument = gql`
   query ActiveContractBundles($locale: Locale!) {
     activeContractBundles {
       contracts {
+        id
         typeOfContract
         inception
         switchedFromInsuranceProvider

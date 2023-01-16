@@ -444,7 +444,7 @@
   "SIDEBAR_SWITCHING_NOTICE_HEADING": "Already insured? Switching is simple",
   "SIDEBAR_SWITCHING_NOTICE_BODY": "After signing up for Hedvig, simply follow the link we email you and authorize the switch using BankID.",
   "SIDEBAR_SWITCHING_NOTICE_LINK": "Learn more",
-  "DOWNLOAD_PAGE_CAR_SWITCHER_SECTION_HEADING": "Your previous insurance",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_SECTION_HEADING": "Your old insurance",
   "DOWNLOAD_PAGE_CAR_SWITCHER_HEADING": "How to cancel your previous insurance",
   "DOWNLOAD_PAGE_CAR_SWITCHER_BODY": "Simply click the link you’ll have in your inbox shortly and follow the instructions. Questions? Chat with us in the app, and we’ll be happy to help.",
   "INITIATE_CAR_CANCELLATION_PAGE_TITLE": "Cancel your old car insurance | Hedvig",
@@ -463,5 +463,10 @@
   "INSURANCE_CARD_SEE_COVERAGE": "See coverage",
   "INSURANCE_SELECTOR_HEADLINE": "Your insurance choices",
   "LANDING_PAGE_SUBMIT_BUTTON": "Continue",
-  "OFFER_PAGE_MISSING_INSURANCE_SELECTION_ERROR": "Select at least one insurance to continue"
+  "OFFER_PAGE_MISSING_INSURANCE_SELECTION_ERROR": "Select at least one insurance to continue",
+  "DOWNLOAD_PAGE_CAR_SWITCHER_BUTTON": "Cancel my insurance",
+  "SIDEBAR_SWITCHING_BANKSIGNERING_NOTICE_BODY": "After signing up for Hedvig, you can easily cancel your current insurance with BankID.",
+  "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_HEADING": "Cancel your old insurance",
+  "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_BODY": "Approve the cancellation of your current car insurance with BankID. Your new insurance with Hedvig is activated on the day your old one expires.",
+  "OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V3": "We noted that your car is already insured with another company. Don’t worry – switching is quick and easy. Here’s how it works:\n\n1. Sign a car insurance with Hedvig. \n2. Approve the cancellation of your current car insurance, using mobile BankID.\n3. We’ll contact your old insurer and cancel the policy on your behalf.\n4. All done! Your new car insurance with Hedvig is automatically activated on the day your previous one expires. \n\nPlease note: if your current insurance expires within 1 week, you’ll need to contact the insurer yourself to cancel it."
 }
