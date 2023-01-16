@@ -8,7 +8,7 @@ import { LoadingDots } from 'components/LoadingDots/LoadingDots'
 import { Page } from 'components/utils/Page'
 import { ErrorHeading, ErrorModal, ErrorText } from 'components/ErrorModal'
 import { useTextKeys } from 'utils/textKeys'
-import { useSendDatadogAction } from 'src/client/utils/tracking/hooks/useSendDatadogAction'
+import { useSendDatadogAction } from 'utils/tracking/hooks/useSendDatadogAction'
 
 const CenteredWrapper = styled.div({
   width: '100%',
