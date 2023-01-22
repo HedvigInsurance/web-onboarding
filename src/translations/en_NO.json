@@ -469,5 +469,11 @@
   "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_HEADING": "Cancel your old insurance",
   "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_BODY": "Approve the cancellation of your current car insurance with BankID. Your new insurance with Hedvig is activated on the day your old one expires.",
   "OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V3": "We noted that your car is already insured with another company. Don’t worry – switching is quick and easy. Here’s how it works:\n\n1. Sign a car insurance with Hedvig. \n2. Approve the cancellation of your current car insurance, using mobile BankID.\n3. We’ll contact your old insurer and cancel the policy on your behalf.\n4. All done! Your new car insurance with Hedvig is automatically activated on the day your previous one expires. \n\nPlease note: if your current insurance expires within 1 week, you’ll need to contact the insurer yourself to cancel it.",
-  "AFTER_SIGN_PAYMENT_HELP_LINK": "Help"
+  "AFTER_SIGN_PAYMENT_HELP_LINK": "Help",
+  "BREADCRUMB_CHECKOUT": "",
+  "BREADCRUMB_PAYMENT": "",
+  "BREADCRUMB_SWITCHING_ASSISTANT": "",
+  "BREADCRUMB_CONFIRMATION": "",
+  "AFTER_SIGN_PAYMENT_FOOTNOTE": "",
+  "AFTER_SIGN_PAYMENT_SUCCESS_MESSAGE": ""
 }

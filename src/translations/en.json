@@ -458,7 +458,7 @@
   "EXTERNAL_INSURANCE_PROVIDER_UNKNOWN_NAME": "Old insurance",
   "EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL": "Matches your current insurance",
   "EXTERNAL_INSURANCE_COMPARE_DATE_EXPIRES": "Expires {value}",
-  "AFTER_SIGN_PAYMENT_MESSAGE": "Welcome to Hedvig! Just one more thing to do before relaxing; connect direct debit for your monthly payments.",
+  "AFTER_SIGN_PAYMENT_MESSAGE": "Connect direct debit. Payments happen monthly on the 27th.",
   "PERILS_DIALOG_TITLE": "Included in {{insurance}}",
   "INSURANCE_CARD_SEE_COVERAGE": "See coverage",
   "INSURANCE_SELECTOR_HEADLINE": "Your insurance choices",
@@ -469,5 +469,11 @@
   "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_HEADING": "Cancel your old insurance",
   "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_BODY": "Approve the cancellation of your current car insurance with BankID. Your new insurance with Hedvig is activated on the day your old one expires.",
   "OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V3": "We noted that your car is already insured with another company. Don’t worry – switching is quick and easy. Here’s how it works:\n\n1. Sign a car insurance with Hedvig. \n2. Approve the cancellation of your current car insurance, using mobile BankID.\n3. We’ll contact your old insurer and cancel the policy on your behalf.\n4. All done! Your new car insurance with Hedvig is automatically activated on the day your previous one expires. \n\nPlease note: if your current insurance expires within 1 week, you’ll need to contact the insurer yourself to cancel it.",
-  "AFTER_SIGN_PAYMENT_HELP_LINK": "Help"
+  "AFTER_SIGN_PAYMENT_HELP_LINK": "Help",
+  "BREADCRUMB_CHECKOUT": "Checkout",
+  "BREADCRUMB_PAYMENT": "Payment",
+  "BREADCRUMB_SWITCHING_ASSISTANT": "Switching",
+  "BREADCRUMB_CONFIRMATION": "Confirmation",
+  "AFTER_SIGN_PAYMENT_FOOTNOTE": "Safe payments with Trustly.",
+  "AFTER_SIGN_PAYMENT_SUCCESS_MESSAGE": "Direct debit connected"
 }
