@@ -458,7 +458,7 @@
   "EXTERNAL_INSURANCE_PROVIDER_UNKNOWN_NAME": "Gamla försäkringen",
   "EXTERNAL_INSURANCE_COVERAGE_MATCH_LABEL": "Matchar försäkringen du har idag",
   "EXTERNAL_INSURANCE_COMPARE_DATE_EXPIRES": "Löper ut {value}",
-  "AFTER_SIGN_PAYMENT_MESSAGE": "Välkommen till Hedvig! Saknas bara en sak innan vi är klara; koppla autogiro för dina månadsbetalningar.",
+  "AFTER_SIGN_PAYMENT_MESSAGE": "Koppla autogiro. Betalning dras månadsvis, den 27:e.",
   "PERILS_DIALOG_TITLE": "Ingår i {{insurance}}",
   "INSURANCE_CARD_SEE_COVERAGE": "Se täckning",
   "INSURANCE_SELECTOR_HEADLINE": "Dina försäkringsval",
@@ -469,5 +469,11 @@
   "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_HEADING": "Säg upp din gamla försäkring",
   "DOWNLOAD_PAGE_BANKSIGNERING_SWITCHER_BODY": "Godkänn uppsägningen av din nuvarande bilförsäkring med BankID. Din nya försäkring hos Hedvig aktiveras samma dag som den gamla går ut.",
   "OFFER_SWITCH_PROMOTION_PARAGRAPH_CAR_V3": "Vi ser att din bil redan är försäkrad med ett annat försäkringsbolag. Oroa dig inte, det är enkelt att byta.\n\n1. Teckna en bilförsäkring med Hedvig\n2. Godkänn uppsägningen av din nuvarande bilförsäkring med BankID.\n3. Vi kontaktar ditt tidigare försäkringsbolag och säger upp din försäkring åt dig.\n4. Klart! Din nya bilförsäkring med Hedvig aktiveras automatiskt samma dag som din tidigare går ut.\n\nObservera: om din nuvarande bilförsäkring går ut inom 1 vecka behöver du själv kontakta ditt försäkringsbolag för att säga upp den.",
-  "AFTER_SIGN_PAYMENT_HELP_LINK": "Hjälp"
+  "AFTER_SIGN_PAYMENT_HELP_LINK": "Hjälp",
+  "BREADCRUMB_CHECKOUT": "Checkout",
+  "BREADCRUMB_PAYMENT": "Betalning",
+  "BREADCRUMB_SWITCHING_ASSISTANT": "Bytesprocess",
+  "BREADCRUMB_CONFIRMATION": "Bekräftelse",
+  "AFTER_SIGN_PAYMENT_FOOTNOTE": "Säker betalning med Trustly.",
+  "AFTER_SIGN_PAYMENT_SUCCESS_MESSAGE": "Autogiro kopplat"
 }
