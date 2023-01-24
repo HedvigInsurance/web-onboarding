@@ -52,7 +52,13 @@ export const PaymentPage = () => {
             <HedvigLogo width={78} />
           </HeaderLogo>
           <HeaderBreadcrumbs>
-            <Breadcrumbs />
+            <Breadcrumbs
+              nextStep={
+                redirectURL?.includes('/switching')
+                  ? 'switching'
+                  : 'confirmation'
+              }
+            />
           </HeaderBreadcrumbs>
           <HeaderBack>
             <HeaderLink

@@ -2,13 +2,21 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { useTextKeys } from 'utils/textKeys'
 
-export const Breadcrumbs = () => {
+type Props = {
+  nextStep: 'switching' | 'confirmation'
+}
+
+export const Breadcrumbs = ({ nextStep }: Props) => {
   const textKeys = useTextKeys()
   return (
     <Root>
       <Step>{textKeys.BREADCRUMB_CHECKOUT()}</Step>
       <Step active>{textKeys.BREADCRUMB_PAYMENT()}</Step>
-      <Step>{textKeys.BREADCRUMB_CONFIRMATION()}</Step>
+      <Step>
+        {nextStep === 'confirmation'
+          ? textKeys.BREADCRUMB_CONFIRMATION()
+          : textKeys.BREADCRUMB_SWITCHING_ASSISTANT()}
+      </Step>
     </Root>
   )
 }
