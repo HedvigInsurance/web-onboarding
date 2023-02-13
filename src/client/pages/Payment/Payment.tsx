@@ -77,9 +77,7 @@ export const PaymentPage = () => {
           </LargeParagraph>
           {!redirectURL ? (
             <SmallParagraph>{textKeys.GENERIC_ERROR_HEADING()}</SmallParagraph>
-          ) : showSuccess ? (
-            <SmallParagraph>Hello!</SmallParagraph>
-          ) : (
+          ) : showSuccess ? null : (
             trustlyURL && (
               <Space y={0.75}>
                 <TrustlyIframe
