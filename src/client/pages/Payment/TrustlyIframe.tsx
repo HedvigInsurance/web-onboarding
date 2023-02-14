@@ -42,9 +42,15 @@ export const TrustlyIframe = (props: TrustlyIframeProps) => {
 }
 
 const Iframe = styled.iframe({
+  display: 'block',
+
   width: '100%',
-  height: 512,
   maxWidth: 600,
+
+  minHeight: 500,
+  height: '60vh',
+  maxHeight: 800,
+
   border: 'none',
   boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
   marginInline: 'auto',
