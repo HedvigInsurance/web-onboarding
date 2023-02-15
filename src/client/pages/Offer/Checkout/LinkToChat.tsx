@@ -2,6 +2,8 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { TextButton } from 'components/buttons'
 import { useTextKeys } from 'utils/textKeys'
+import { useFeature } from 'utils/hooks/useFeature'
+import { Feature } from 'shared/clientConfig'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -11,6 +13,9 @@ const Wrapper = styled.div`
 
 export const LinkToChat = () => {
   const textKeys = useTextKeys()
+
+  const [enabled] = useFeature([Feature.INTERCOM])
+  if (!enabled) return null
 
   return (
     <Wrapper>

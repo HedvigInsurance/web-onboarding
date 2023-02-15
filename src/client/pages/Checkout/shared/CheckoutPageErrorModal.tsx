@@ -9,6 +9,8 @@ import { ErrorModal } from 'components/ErrorModal'
 import { Headline } from 'components/Headline/Headline'
 import { Button, TextButton, LinkButton } from 'components/buttons'
 import { LoadingDots } from 'components/LoadingDots/LoadingDots'
+import { Feature } from 'shared/clientConfig'
+import { useFeature } from 'utils/hooks/useFeature'
 import { landingRoute } from '../../../../routes'
 
 const { gray700, gray900 } = colorsV3
@@ -55,6 +57,7 @@ export const CheckoutPageErrorModal = () => {
   const textKeys = useTextKeys()
   const { go } = useHistory()
   const { path: localePath } = useCurrentLocale()
+  const [intercomEnabled] = useFeature([Feature.INTERCOM])
 
   const reloadPage = () => {
     setIsReloading(true)
@@ -68,10 +71,15 @@ export const CheckoutPageErrorModal = () => {
           {textKeys.CHECKOUT_PAGE_ERROR_MODAL_HEADING()}
         </Headline>
         <Text>
-          {textKeys.CHECKOUT_PAGE_ERROR_MODAL_BODY()}{' '}
-          <InlineTextButton onClick={openIntercomChat}>
-            {textKeys.CHECKOUT_PAGE_ERROR_MODAL_OPEN_CHAT()}.
-          </InlineTextButton>
+          {textKeys.CHECKOUT_PAGE_ERROR_MODAL_BODY()}
+          {intercomEnabled && (
+            <>
+              {' '}
+              <InlineTextButton onClick={openIntercomChat}>
+                {textKeys.CHECKOUT_PAGE_ERROR_MODAL_OPEN_CHAT()}.
+              </InlineTextButton>
+            </>
+          )}
         </Text>
         <ButtonsContainer>
           <Button background={gray900} onClick={reloadPage}>

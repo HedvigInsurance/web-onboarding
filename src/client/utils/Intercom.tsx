@@ -7,6 +7,8 @@ import { Variation, useVariation } from 'utils/hooks/useVariation'
 import { useTextKeys } from 'utils/textKeys'
 
 import { localePathPattern } from 'l10n/localePathPattern'
+import { Feature } from 'shared/clientConfig'
+import { useFeature } from './hooks/useFeature'
 const intercomBtnSelector = '.intercom-lightweight-app-launcher'
 
 declare global {
@@ -71,6 +73,9 @@ const TextLink = styled.a`
 `
 const TextLinkVariation = () => {
   const textKeys = useTextKeys()
+
+  const [enabled] = useFeature([Feature.INTERCOM])
+  if (!enabled) return null
 
   return (
     <TextLink onClick={() => window?.Intercom('show')}>
