@@ -16,6 +16,8 @@ import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { ModalProps } from 'components/ModalNew'
 import { useQuoteCartIdFromUrl } from 'utils/hooks/useQuoteCartIdFromUrl'
 import { openIntercomChat } from 'utils/intercom.helpers'
+import { Feature } from 'shared/clientConfig'
+import { useFeature } from 'utils/hooks/useFeature'
 
 const InlineTextButton = styled(TextButton)`
   display: inline;
@@ -41,6 +43,7 @@ export const CheckoutErrorModal = ({
   const { path: localePath } = useCurrentLocale()
   const history = useHistory()
   const { quoteCartId } = useQuoteCartIdFromUrl()
+  const [intercomEnabled] = useFeature([Feature.INTERCOM])
 
   const goToOfferPage = () =>
     history.replace(`/${localePath}/new-member/offer/${quoteCartId}`)
@@ -54,9 +57,13 @@ export const CheckoutErrorModal = ({
         ) : (
           <>
             {textKeys.CHECKOUT_ERROR_TEXT_PART_1()}{' '}
-            <InlineTextButton onClick={openIntercomChat}>
-              {textKeys.CHECKOUT_ERROR_TEXT_PART_2()}
-            </InlineTextButton>{' '}
+            {intercomEnabled && (
+              <>
+                <InlineTextButton onClick={openIntercomChat}>
+                  {textKeys.CHECKOUT_ERROR_TEXT_PART_2()}
+                </InlineTextButton>{' '}
+              </>
+            )}
             <ReactMarkdown source={textKeys.CHECKOUT_ERROR_TEXT_PART_3()} />
           </>
         )}

@@ -3,6 +3,7 @@ import React from 'react'
 import { hot } from 'react-hot-loader'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { useTrackNewSiteExperiment } from 'utils/tracking/hooks/useTrackNewSiteExperiment'
+import { Feature } from 'shared/clientConfig'
 import { routes } from '../routes'
 import { TextKeyProvider } from './utils/textKeys'
 import { useTrackPageViewEvent } from './utils/tracking/hooks/useTrackPageViewEvent'
@@ -15,6 +16,7 @@ import {
   WithStorageProps,
 } from './utils/StorageContainer'
 import { useCurrentLocale } from './l10n/useCurrentLocale'
+import { useFeature } from './utils/hooks/useFeature'
 
 const isProductionEnvironment =
   window.hedvigClientConfig.appEnvironment === 'production'
@@ -22,6 +24,7 @@ const isProductionEnvironment =
 export const App: React.ComponentType<StorageState> = ({ session }) => {
   useTrackPageViewEvent()
   useTrackNewSiteExperiment()
+  const [intercomEnabled] = useFeature([Feature.INTERCOM])
 
   const { isoLocale } = useCurrentLocale()
   const history = useHistory()
@@ -65,7 +68,7 @@ export const App: React.ComponentType<StorageState> = ({ session }) => {
           </StorageContext.Provider>
         </Provider>
       </TextKeyProvider>
-      <Intercom />
+      {intercomEnabled && <Intercom />}
     </>
   )
 }
