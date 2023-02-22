@@ -46,7 +46,7 @@ export const PaymentPage = () => {
 
   return (
     <SessionTokenGuard>
-      <Wrapper y={{ base: 1.5, largeScreen: 2.5 }}>
+      <Wrapper y={{ base: 2.5 }}>
         <PageHeader>
           <HeaderLogo>
             <HedvigLogo width={78} />
@@ -71,7 +71,7 @@ export const PaymentPage = () => {
           </HeaderBack>
         </PageHeader>
 
-        <Content y={{ base: 2, largeScreen: 3 }}>
+        <Content y={{ base: 2.5 }}>
           <LargeParagraph>
             {textKeys.AFTER_SIGN_PAYMENT_MESSAGE()}
           </LargeParagraph>
