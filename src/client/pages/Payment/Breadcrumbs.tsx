@@ -29,7 +29,7 @@ const Root = styled.ul({
 })
 
 const Step = styled.li<{ active?: boolean }>(({ active }) => ({
-  fontSize: '1rem',
+  fontSize: '0.875rem',
   borderRadius: 8,
   height: '2rem',
   display: 'flex',
@@ -37,7 +37,7 @@ const Step = styled.li<{ active?: boolean }>(({ active }) => ({
 
   color: 'hsl(0, 0%, 71%)',
   ...(active && {
-    backgroundColor: 'hsl(0, 0%, 92%)',
+    backgroundColor: 'hsl(0, 0%, 88%)',
     color: 'hsl(0, 0%, 7%)',
     paddingInline: '0.75rem',
   }),
