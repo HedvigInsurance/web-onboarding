@@ -1,9 +1,14 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
+import { datadogRum } from '@datadog/browser-rum'
 import { useRegisterDirectDebitMutation } from 'data/graphql'
 import { SUCCESS_SUFFIX, FAIL_SUFFIX } from './Payment.constants'
 
-export const useCreateTrustlyURL = () => {
+type Params = {
+  onError: () => void
+}
+
+export const useCreateTrustlyURL = ({ onError }: Params) => {
   const { pathname } = useLocation()
   const baseURL = `${window.location.origin}${pathname}`
   const [registerDirectDebit, { data }] = useRegisterDirectDebitMutation({
@@ -12,6 +17,10 @@ export const useCreateTrustlyURL = () => {
         successUrl: [baseURL, SUCCESS_SUFFIX].join(''),
         failureUrl: [baseURL, FAIL_SUFFIX].join(''),
       },
+    },
+    onError: (error) => {
+      datadogRum.addError(error, { message: 'Failed to create Trustly URL' })
+      onError()
     },
   })
 

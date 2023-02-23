@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { colorsV3 } from '@hedviginsurance/brand'
-import { SessionTokenGuard } from 'containers/SessionTokenGuard'
 import { HedvigLogo } from 'components/icons/HedvigLogo'
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { useTextKeys } from 'utils/textKeys'
@@ -23,7 +22,13 @@ export const PaymentPage = () => {
   const textKeys = useTextKeys()
   const { path: pathLocale } = useCurrentLocale()
   const redirectURL = useStoredRedirectURL()
-  const [, trustlyURL] = useCreateTrustlyURL()
+
+  const [, trustlyURL] = useCreateTrustlyURL({
+    onError: () => {
+      if (!redirectURL) return
+      handleFail(redirectURL)
+    },
+  })
 
   const [showSuccess, setShowSuccess] = useState(false)
   const handleSuccess = (baseRedirectURL: string) => {
@@ -45,55 +50,49 @@ export const PaymentPage = () => {
   }
 
   return (
-    <SessionTokenGuard>
-      <Wrapper y={2.5}>
-        <PageHeader>
-          <HeaderLogo>
-            <HedvigLogo width={78} />
-          </HeaderLogo>
-          <HeaderBreadcrumbs>
-            <Breadcrumbs
-              nextStep={
-                redirectURL?.includes('/switching')
-                  ? 'switching'
-                  : 'confirmation'
-              }
-            />
-          </HeaderBreadcrumbs>
-          <HeaderBack>
-            <HeaderLink
-              href={CUSTOMER_SERVIVE_URL[pathLocale]}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {textKeys.AFTER_SIGN_PAYMENT_HELP_LINK()}
-            </HeaderLink>
-          </HeaderBack>
-        </PageHeader>
+    <Wrapper y={2.5}>
+      <PageHeader>
+        <HeaderLogo>
+          <HedvigLogo width={78} />
+        </HeaderLogo>
+        <HeaderBreadcrumbs>
+          <Breadcrumbs
+            nextStep={
+              redirectURL?.includes('/switching') ? 'switching' : 'confirmation'
+            }
+          />
+        </HeaderBreadcrumbs>
+        <HeaderBack>
+          <HeaderLink
+            href={CUSTOMER_SERVIVE_URL[pathLocale]}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {textKeys.AFTER_SIGN_PAYMENT_HELP_LINK()}
+          </HeaderLink>
+        </HeaderBack>
+      </PageHeader>
 
-        <Content y={2.5}>
-          <LargeParagraph>
-            {textKeys.AFTER_SIGN_PAYMENT_MESSAGE()}
-          </LargeParagraph>
-          {!redirectURL ? (
-            <SmallParagraph>{textKeys.GENERIC_ERROR_HEADING()}</SmallParagraph>
-          ) : showSuccess ? null : (
-            trustlyURL && (
-              <Space y={0.75}>
-                <TrustlyIframe
-                  url={trustlyURL}
-                  onSuccess={() => handleSuccess(redirectURL)}
-                  onFail={() => handleFail(redirectURL)}
-                />
-                <SmallParagraph>
-                  {textKeys.AFTER_SIGN_PAYMENT_FOOTNOTE()}
-                </SmallParagraph>
-              </Space>
-            )
-          )}
-        </Content>
-      </Wrapper>
-    </SessionTokenGuard>
+      <Content y={2.5}>
+        <LargeParagraph>{textKeys.AFTER_SIGN_PAYMENT_MESSAGE()}</LargeParagraph>
+        {!redirectURL ? (
+          <SmallParagraph>{textKeys.GENERIC_ERROR_HEADING()}</SmallParagraph>
+        ) : showSuccess ? null : (
+          trustlyURL && (
+            <Space y={0.75}>
+              <TrustlyIframe
+                url={trustlyURL}
+                onSuccess={() => handleSuccess(redirectURL)}
+                onFail={() => handleFail(redirectURL)}
+              />
+              <SmallParagraph>
+                {textKeys.AFTER_SIGN_PAYMENT_FOOTNOTE()}
+              </SmallParagraph>
+            </Space>
+          )
+        )}
+      </Content>
+    </Wrapper>
   )
 }
 
