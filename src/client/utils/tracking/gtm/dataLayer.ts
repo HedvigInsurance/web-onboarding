@@ -3,6 +3,7 @@ import { AppEnvironment } from 'shared/clientConfig'
 export type GTMUserProperties = {
   market: string
   environment: AppEnvironment
+  siteVersion: string
 }
 
 export type GTMOfferBase = {
