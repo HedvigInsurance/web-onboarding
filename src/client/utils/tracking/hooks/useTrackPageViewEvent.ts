@@ -18,6 +18,7 @@ export const useTrackPageViewEvent = () => {
       userProperties: {
         environment,
         market,
+        siteVersion: 'old',
       },
     })
   }, [environment, market])
