@@ -10,7 +10,7 @@ export type AbTestConfig = {
 }
 
 export const newSiteAbTest: AbTestConfig = {
-  optimizeExperimentId: 'wmRyD1ofQYSQ5LL5BEH9nw',
+  optimizeExperimentId: 'mr_3juNyS1yRodkUannTjA',
   cookies: {
     variant: {
       name: 'HEDVIG_EXP_NEW_SITE',
