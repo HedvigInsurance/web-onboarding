@@ -36,15 +36,16 @@ export const apolloClient = (() => {
   }
 
   const cookieStorage = new CookieStorage()
-  const authorizationToken = createSession<Session>(cookieStorage).getSession()!
-    .token
+
+  const authToken = createSession<Session>(cookieStorage).getSession()!.token
+  const authorizationHeaderValue = `Bearer ${authToken}`
 
   const subscriptionClient = new SubscriptionClient(
     window.hedvigClientConfig.giraffeWsEndpoint,
     {
       reconnect: true,
       connectionParams: () => ({
-        Authorization: authorizationToken,
+        Authorization: authorizationHeaderValue,
       }),
     },
   )
@@ -56,7 +57,7 @@ export const apolloClient = (() => {
     credentials: 'omit',
     uri: window.hedvigClientConfig.giraffeEndpoint,
     headers: {
-      authorization: authorizationToken,
+      Authorization: authorizationHeaderValue,
       'hedvig-device-id': cookieStorage.getItem(DEVICE_ID_KEY),
       'accept-language': locale.isoLocale,
     },
