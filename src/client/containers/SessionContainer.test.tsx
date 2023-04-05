@@ -130,5 +130,7 @@ it('creates a new session', async () => {
     true,
     true,
   )
-  expect(apolloClient!.httpLink.options.headers.authorization).toBe('abc123')
+  expect(apolloClient!.httpLink.options.headers.authorization).toBe(
+    'Bearer abc123',
+  )
 })

@@ -13,6 +13,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { datadogRum } from '@datadog/browser-rum'
 import { getLocaleParamFromPath, getCurrentLocale } from 'l10n/useCurrentLocale'
+import { getAuthorizationHeader } from 'utils/authorization'
 import possibleTypes from '../../possibleGraphqlTypes.json'
 import { createSession, Session, DEVICE_ID_KEY } from '../shared/sessionStorage'
 
@@ -26,6 +27,14 @@ export interface ApolloClientUtils {
   ): Promise<T | undefined>
 }
 
+const getAuthorizationHeaders = () => {
+  const cookieStorage = new CookieStorage()
+  const authToken = createSession<Session>(cookieStorage).getSession()!.token
+  return {
+    ...(authToken && { Authorization: getAuthorizationHeader(authToken) }),
+  }
+}
+
 export const apolloClient = (() => {
   if (typeof window === 'undefined') {
     return undefined
@@ -36,15 +45,13 @@ export const apolloClient = (() => {
   }
 
   const cookieStorage = new CookieStorage()
-  const authorizationToken = createSession<Session>(cookieStorage).getSession()!
-    .token
 
   const subscriptionClient = new SubscriptionClient(
     window.hedvigClientConfig.giraffeWsEndpoint,
     {
       reconnect: true,
       connectionParams: () => ({
-        Authorization: authorizationToken,
+        ...getAuthorizationHeaders(),
       }),
     },
   )
@@ -56,7 +63,7 @@ export const apolloClient = (() => {
     credentials: 'omit',
     uri: window.hedvigClientConfig.giraffeEndpoint,
     headers: {
-      authorization: authorizationToken,
+      ...getAuthorizationHeaders(),
       'hedvig-device-id': cookieStorage.getItem(DEVICE_ID_KEY),
       'accept-language': locale.isoLocale,
     },

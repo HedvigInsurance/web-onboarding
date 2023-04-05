@@ -12,6 +12,7 @@ import {
 import { useCurrentLocale } from 'l10n/useCurrentLocale'
 import { Storage, StorageContainer, StorageState } from 'utils/StorageContainer'
 import { Feature } from 'shared/clientConfig'
+import { getAuthorizationHeader } from 'utils/authorization'
 import {
   apolloClient as realApolloClient,
   ApolloClientUtils,
@@ -60,8 +61,9 @@ export const setupSession = async (
   await afterTick(() => {
     apolloClientUtils!.subscriptionClient.close(true, true)
     storage.setToken(sessionResult.data.createSessionV2.token)
-    apolloClientUtils.httpLink.options.headers.authorization =
-      sessionResult.data.createSessionV2.token
+    apolloClientUtils.httpLink.options.headers.authorization = getAuthorizationHeader(
+      sessionResult.data.createSessionV2.token,
+    )
   })
   await apolloClientUtils.client.mutate<
     // eslint-disable-next-line  @typescript-eslint/ban-types
@@ -104,7 +106,9 @@ export const setupQuoteCartSession = async ({
       ...((storage.session.getSession() || {}) as any),
       token: accessToken,
     })
-    apolloClientUtils.httpLink.options.headers.authorization = accessToken
+    apolloClientUtils.httpLink.options.headers.authorization = getAuthorizationHeader(
+      accessToken,
+    )
   })
 
   const memberResult = await apolloClientUtils.client.query({
