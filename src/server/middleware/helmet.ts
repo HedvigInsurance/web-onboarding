@@ -136,6 +136,7 @@ export const helmet = koaHelmet({
         'www.linkedin.com',
         'https://bat.bing.com',
         'c.clarity.ms',
+        'https://*.amazonaws.com',
       ],
       // Datadog RUM (Session Replay)
       workerSrc: ['blob:'],
