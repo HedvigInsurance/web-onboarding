@@ -4,7 +4,6 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import Router from 'koa-router'
 import { Logger } from 'typescript-logging'
-import proxy from 'koa-server-http-proxy'
 import { notNullable } from 'utils/nullables'
 import { routes } from '../routes'
 import { localePathPattern } from '../client/l10n/localePathPattern'
@@ -43,16 +42,6 @@ app.proxy = true
 appLogger.info(`Booting server on ${getPort()} 👢`)
 appLogger.info(
   `Using giraffe at http:"${GIRAFFE_HOST}" ws:"${GIRAFFE_WS_ENDPOINT}" 🦒`,
-)
-
-app.use(
-  proxy('/new-member/graphql', {
-    target: GIRAFFE_HOST,
-    changeOrigin: true,
-    pathRewrite: {
-      '/new-member/graphql': '/graphql',
-    },
-  }),
 )
 
 if (process.env.FORCE_HOST) {

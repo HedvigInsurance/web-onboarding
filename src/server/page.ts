@@ -40,7 +40,7 @@ const clientConfig: ClientConfig = {
   adyenClientKey: ADYEN_CLIENT_KEY,
   contentServiceEndpoint: CONTENT_SERVICE_ENDPOINT,
   giraffeHost: GIRAFFE_HOST,
-  giraffeEndpoint: '/new-member/graphql',
+  giraffeEndpoint: `${GIRAFFE_HOST}/graphql`,
   giraffeWsEndpoint: GIRAFFE_WS_ENDPOINT,
   appEnvironment: APP_ENVIRONMENT as ClientConfig['appEnvironment'],
   features: FEATURES,
