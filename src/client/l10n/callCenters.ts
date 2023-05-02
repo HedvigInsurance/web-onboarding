@@ -16,16 +16,14 @@ export type CallCenterData = {
 export const callCenters: CallCenters = {
   SE: {
     callCenter: {
-      displayNumber: '075-101 20 00',
-      hrefNumber: 'tel:0751012000',
+      displayNumber: '010-45 99 200',
+      hrefNumber: 'tel:+46104599200',
       opensAt: '09',
-      closesAt: '18',
-      lunchStartsAt: '12',
-      lunchEndsAt: '13',
+      closesAt: '16',
     },
     supportNumber: {
       displayNumber: '010-45 99 200',
-      hrefNumber: 'tel:+46104599200.',
+      hrefNumber: 'tel:+46104599200',
       opensAt: '09',
       closesAt: '16',
     },
