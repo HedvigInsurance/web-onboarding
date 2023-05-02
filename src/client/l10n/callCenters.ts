@@ -20,12 +20,16 @@ export const callCenters: CallCenters = {
       hrefNumber: 'tel:+46104599200',
       opensAt: '09',
       closesAt: '16',
+      lunchStartsAt: '12',
+      lunchEndsAt: '13',
     },
     supportNumber: {
       displayNumber: '010-45 99 200',
       hrefNumber: 'tel:+46104599200',
       opensAt: '09',
       closesAt: '16',
+      lunchStartsAt: '12',
+      lunchEndsAt: '13',
     },
   },
   NO: {
