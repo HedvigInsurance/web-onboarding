@@ -16,6 +16,15 @@ export const exchangeTokenMiddleware: Router.IMiddleware<
 > = async (ctx: ParameterizedContext) => {
   const logger = ctx.state.getLogger('exchangeTokenMiddleware')
 
+  if (ctx.req.method === 'HEAD') {
+    logger.info(
+      'Ignoring HEAD request to token exchange to avoid wasting exchange code',
+    )
+    ctx.status = 204
+    ctx.body = ''
+    return
+  }
+
   const nextPath = ctx.URL.searchParams.get(SearchParams.Next)
   if (!nextPath) {
     throw new Error(`Search param ${SearchParams.Next} is required`)
