@@ -14,6 +14,7 @@ import { Landing } from './client/pages/Landing/Landing'
 import { SignLoading } from './client/pages/SignLoading'
 import { OfferPage } from './client/pages/Offer'
 import { CheckoutDetails } from './client/pages/Checkout/CheckoutDetails/CheckoutDetails'
+import { ExchangeTokenPage } from './client/pages/ExchangeToken/index'
 import { Checkout } from './client/pages/Checkout/CheckoutPayment'
 import { Confirmation } from './client/pages/Confirmation'
 import { LocalePath } from './client/components/utils/CurrentLocale'
@@ -249,6 +250,16 @@ export const routes: Route[] = [
     },
     clientRouteData: {
       Component: Checkout,
+      exact: true,
+    },
+  },
+  {
+    path: `${onboardingLocaleBaseRoute}/exchange-token`,
+    serverRouteData: {
+      titleTextKey: 'ONBOARDING_CONNECT_DD_PAGE_TITLE',
+    },
+    clientRouteData: {
+      Component: ExchangeTokenPage,
       exact: true,
     },
   },

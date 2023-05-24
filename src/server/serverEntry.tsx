@@ -114,7 +114,7 @@ router.post(
 )
 
 router.get(
-  localePathPattern + '/new-member/exchange-token',
+  localePathPattern + '/new-member/exchange-auth-token',
   exchangeTokenMiddleware,
 )
 
